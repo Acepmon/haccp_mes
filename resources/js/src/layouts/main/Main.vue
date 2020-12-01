@@ -117,7 +117,7 @@
 <script>
 import BackToTop           from 'vue-backtotop'
 import HNavMenu            from '@/layouts/components/horizontal-nav-menu/HorizontalNavMenu.vue'
-// import navMenuItems        from '@/layouts/components/vertical-nav-menu/navMenuItems.js'
+import navMenuItems        from '@/layouts/components/vertical-nav-menu/navMenuItems.js'
 import TheNavbarHorizontal from '@/layouts/components/navbar/TheNavbarHorizontal.vue'
 import TheNavbarVertical   from '@/layouts/components/navbar/TheNavbarVertical.vue'
 import TheFooter           from '@/layouts/components/TheFooter.vue'
@@ -138,6 +138,7 @@ export default {
       footerType        : themeConfig.footerType  || 'static',
       hideScrollToTop   : themeConfig.hideScrollToTop,
       isNavbarDark      : false,
+      navMenuItems,
       navbarColor       : themeConfig.navbarColor || '#fff',
       navbarType        : themeConfig.navbarType  || 'floating',
       routerTransition  : themeConfig.routerTransition || 'none',
@@ -188,7 +189,6 @@ export default {
     },
     verticalNavMenuWidth () { return this.$store.state.verticalNavMenuWidth },
     windowWidth ()          { return this.$store.state.windowWidth },
-    navMenuItems () { return this.$store.state.menuItems },
   },
   methods: {
     changeRouteTitle (title) {
