@@ -19,7 +19,7 @@ class CreateLoginHistTable extends Migration
             $table->string('logout_dtm', 14)->nullable()->comment('Format: YYYYMMDDHHMISS');
             $table->string('ip_addr', 20)->nullable();
 
-            $table->primary(['user_id', 'login_dtm']);
+            $table->index(['user_id', 'login_dtm']);
         });
     }
 

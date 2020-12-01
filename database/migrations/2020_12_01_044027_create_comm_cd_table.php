@@ -20,7 +20,7 @@ class CreateCommCdTable extends Migration
             $table->string('reg_id', 15)->nullable();
             $table->string('reg_dtm', 14)->nullable();
 
-            $table->primary(['comm1_cd', 'comm2_cd']);
+            $table->index(['comm1_cd', 'comm2_cd']);
         });
     }
 

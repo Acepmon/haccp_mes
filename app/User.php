@@ -33,4 +33,11 @@ class User extends Authenticatable
     protected $hidden = [
         'user_pw',
     ];
+
+    public const STATUS_ACTIVE = 'Y';
+    public const STATUS_INACTIVE = 'N';
+    public const STATUS_ARRAY = [
+        self::STATUS_ACTIVE,
+        self::STATUS_INACTIVE
+    ];
 }

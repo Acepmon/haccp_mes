@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             'user_pw' => Hash::make('password'),
             'user_nm' => 'Administrator',
             'email' => env('ADMIN_EMAIL', null),
-            'role_cd' => 'A10AA',
+            'role_cd' => 'AA',
             'user_sts_yn' => 'Y',
         ]);
     }
