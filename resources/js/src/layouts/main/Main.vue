@@ -13,7 +13,7 @@
 
     <v-nav-menu
       :navMenuItems = "navMenuItems"
-      title         = "Vuexy"
+      title         = "복을만드는사람들"
       parent        = ".layout--main" />
 
     <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
@@ -117,7 +117,7 @@
 <script>
 import BackToTop           from 'vue-backtotop'
 import HNavMenu            from '@/layouts/components/horizontal-nav-menu/HorizontalNavMenu.vue'
-import navMenuItems        from '@/layouts/components/vertical-nav-menu/navMenuItems.js'
+// import navMenuItems        from '@/layouts/components/vertical-nav-menu/navMenuItems.js'
 import TheNavbarHorizontal from '@/layouts/components/navbar/TheNavbarHorizontal.vue'
 import TheNavbarVertical   from '@/layouts/components/navbar/TheNavbarVertical.vue'
 import TheFooter           from '@/layouts/components/TheFooter.vue'
@@ -140,7 +140,6 @@ export default {
       isNavbarDark      : false,
       navbarColor       : themeConfig.navbarColor || '#fff',
       navbarType        : themeConfig.navbarType  || 'floating',
-      navMenuItems,
       routerTransition  : themeConfig.routerTransition || 'none',
       routeTitle        : this.$route.meta.pageTitle
     }
@@ -188,7 +187,8 @@ export default {
       }
     },
     verticalNavMenuWidth () { return this.$store.state.verticalNavMenuWidth },
-    windowWidth ()          { return this.$store.state.windowWidth }
+    windowWidth ()          { return this.$store.state.windowWidth },
+    navMenuItems () { return this.$store.state.menuItems },
   },
   methods: {
     changeRouteTitle (title) {

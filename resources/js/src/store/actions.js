@@ -17,6 +17,9 @@ const actions = {
     updateVerticalNavMenuWidth({ commit }, width) {
       commit('UPDATE_VERTICAL_NAV_MENU_WIDTH', width)
     },
+    updateVerticalNavMenuItems({ commmit }, items) {
+      commit('UPDATE_VERTICAL_NAV_MENU_ITEMS', items)
+    },
 
     // VxAutoSuggest
     updateStarredPage({ commit }, payload) {

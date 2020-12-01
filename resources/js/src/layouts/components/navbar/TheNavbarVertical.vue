@@ -19,15 +19,51 @@
         <!-- SM - OPEN SIDEBAR BUTTON -->
         <feather-icon class="sm:inline-flex xl:hidden cursor-pointer p-2" icon="MenuIcon" @click.stop="showSidebar" />
 
-        <bookmarks :navbarColor="navbarColor" v-if="windowWidth >= 992" />
+        <!-- <vs-navbar-title>
+          <router-link to="/">복을만드는사람들</router-link>
+        </vs-navbar-title> -->
+
+        <vs-navbar-item index="0">
+          <router-link to="/information-mgmt">정보관리</router-link>
+        </vs-navbar-item>
+
+        <vs-navbar-item index="0">
+          <router-link to="/purchase-mgmt">구매관리</router-link>
+        </vs-navbar-item>
+
+        <vs-navbar-item index="0">
+          <router-link to="/order-process">주문처리</router-link>
+        </vs-navbar-item>
+
+        <vs-navbar-item index="0">
+          <router-link to="/production-mgmt">생산관리</router-link>
+        </vs-navbar-item>
+
+        <vs-navbar-item index="0">
+          <router-link to="/shipping-mgmt">출하관리</router-link>
+        </vs-navbar-item>
+
+        <vs-navbar-item index="0">
+          <router-link to="/haccp-monitor">HACCP모니터링</router-link>
+        </vs-navbar-item>
+
+        <vs-navbar-item index="0">
+          <router-link to="/data-mgmt">자료관리</router-link>
+        </vs-navbar-item>
+
+        <!-- <bookmarks :navbarColor="navbarColor" v-if="windowWidth >= 992" /> -->
 
         <vs-spacer />
 
-        <search-bar class="mr-4" />
+        <!-- <search-bar class="mr-4" />
 
-        <notification-drop-down />
+        <notification-drop-down /> -->
 
         <profile-drop-down />
+
+        <vs-navbar-item index="0" class="ml-5 text-danger cursor-pointer">
+          <span @click="logout">로그아웃</span>
+        </vs-navbar-item>
 
       </vs-navbar>
     </div>
@@ -79,6 +115,13 @@ export default {
   methods: {
     showSidebar () {
       this.$store.commit('TOGGLE_IS_VERTICAL_NAV_MENU_ACTIVE', true)
+    },
+
+    logout () {
+      localStorage.removeItem('userInfo')
+
+      // This is just for demo Purpose. If user clicks on logout -> redirect
+      this.$router.push('/pages/login').catch(() => {})
     }
   }
 }

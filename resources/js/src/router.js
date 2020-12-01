@@ -41,6 +41,41 @@ const router = new Router({
                 name: 'page-2',
                 component: () => import('./views/Page2.vue')
               },
+              {
+                path: '/information-mgmt',
+                name: 'information-management',
+                component: () => import('./views/InformationMgmt.vue')
+              },
+              {
+                path: '/purchase-mgmt',
+                name: 'purchase-management',
+                component: () => import('./views/PurchaseMgmt.vue')
+              },
+              {
+                path: '/order-process',
+                name: 'order-process',
+                component: () => import('./views/OrderProcess.vue')
+              },
+              {
+                path: '/production-mgmt',
+                name: 'production-management',
+                component: () => import('./views/ProductionMgmt.vue')
+              },
+              {
+                path: '/shipping-mgmt',
+                name: 'shipping-management',
+                component: () => import('./views/ShippingMgmt.vue')
+              },
+              {
+                path: '/haccp-monitor',
+                name: 'haccp-monitor',
+                component: () => import('./views/HaccpMonitor.vue')
+              },
+              {
+                path: '/data-mgmt',
+                name: 'data-management',
+                component: () => import('./views/DataMgmt.vue')
+              },
             ],
         },
     // =============================================================================

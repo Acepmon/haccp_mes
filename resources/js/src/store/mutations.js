@@ -32,6 +32,9 @@ const mutations = {
   UPDATE_VERTICAL_NAV_MENU_WIDTH(state, width) {
     state.verticalNavMenuWidth = width
   },
+  UPDATE_VERTICAL_NAV_MENU_ITEMS(state, items) {
+    state.menuItems = items
+  },
 
 
   // VxAutoSuggest
