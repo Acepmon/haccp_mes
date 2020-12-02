@@ -30,7 +30,7 @@ Route::group([
 
 Route::group([
     'namespace' => 'API',
-    'middleware' => 'auth:api',
+    // 'middleware' => 'auth:api',
 ], function () {
     Route::apiResource('user', 'UserController');
     Route::apiResource('login_hist', 'LoginHistController');
