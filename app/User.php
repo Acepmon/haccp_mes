@@ -8,8 +8,9 @@ use App\Events\UserUpdated;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
@@ -49,4 +50,24 @@ class User extends Authenticatable
         'updated' => UserUpdated::class,
         'deleted' => UserDeleted::class,
     ];
+
+    public function username()
+    {
+        return $this->user_id;
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->user_pw;
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }

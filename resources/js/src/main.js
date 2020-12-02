@@ -13,7 +13,6 @@ import App from './App.vue'
 
 // Vuesax Component Framework
 import Vuesax from 'vuesax'
-
 Vue.use(Vuesax)
 
 
@@ -50,6 +49,10 @@ Vue.use(VueHammer)
 import 'prismjs'
 import 'prismjs/themes/prism-tomorrow.css'
 
+// Auth
+import * as VueAuth from '@websanova/vue-auth'
+import auth from './../auth'
+Vue.use(VueAuth, auth)
 
 // Vue select css
 // Note: In latest version you have to add it separately

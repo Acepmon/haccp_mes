@@ -34,47 +34,74 @@ const router = new Router({
               {
                 path: '/',
                 name: 'home',
-                component: () => import('./views/Home.vue')
+                component: () => import('./views/Home.vue'),
+                meta: {
+                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
+                }
               },
               {
                 path: '/page2',
                 name: 'page-2',
-                component: () => import('./views/Page2.vue')
+                component: () => import('./views/Page2.vue'),
+                meta: {
+                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
+                }
               },
               {
                 path: '/information-mgmt',
                 name: 'information-management',
-                component: () => import('./views/InformationMgmt.vue')
+                component: () => import('./views/InformationMgmt.vue'),
+                meta: {
+                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
+                }
               },
               {
                 path: '/purchase-mgmt',
                 name: 'purchase-management',
-                component: () => import('./views/PurchaseMgmt.vue')
+                component: () => import('./views/PurchaseMgmt.vue'),
+                meta: {
+                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
+                }
               },
               {
                 path: '/order-process',
                 name: 'order-process',
-                component: () => import('./views/OrderProcess.vue')
+                component: () => import('./views/OrderProcess.vue'),
+                meta: {
+                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
+                }
               },
               {
                 path: '/production-mgmt',
                 name: 'production-management',
-                component: () => import('./views/ProductionMgmt.vue')
+                component: () => import('./views/ProductionMgmt.vue'),
+                meta: {
+                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
+                }
               },
               {
                 path: '/shipping-mgmt',
                 name: 'shipping-management',
-                component: () => import('./views/ShippingMgmt.vue')
+                component: () => import('./views/ShippingMgmt.vue'),
+                meta: {
+                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
+                }
               },
               {
                 path: '/haccp-monitor',
                 name: 'haccp-monitor',
-                component: () => import('./views/HaccpMonitor.vue')
+                component: () => import('./views/HaccpMonitor.vue'),
+                meta: {
+                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
+                }
               },
               {
                 path: '/data-mgmt',
                 name: 'data-management',
-                component: () => import('./views/DataMgmt.vue')
+                component: () => import('./views/DataMgmt.vue'),
+                meta: {
+                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
+                }
               },
             ],
         },
@@ -89,21 +116,26 @@ const router = new Router({
         // PAGES
         // =============================================================================
               {
-                path: '/pages/login',
-                name: 'page-login',
+                path: '/login',
+                name: 'login',
                 component: () => import('@/views/pages/Login.vue')
               },
               {
-                path: '/pages/error-404',
-                name: 'page-error-404',
+                path: '/error-404',
+                name: 'error-404',
                 component: () => import('@/views/pages/Error404.vue')
+              },
+              {
+                path: '/error-403',
+                name: 'error-403',
+                component: () => import('@/views/pages/Error403.vue')
               },
             ]
         },
         // Redirect to 404 page, if no match found
         {
             path: '*',
-            redirect: '/pages/error-404'
+            redirect: '/error-404'
         }
     ],
 })
