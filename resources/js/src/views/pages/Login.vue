@@ -28,36 +28,38 @@
                   <p>Welcome back, please login to your account.</p>
                 </div>
 
-                <div>
-                  <vs-input
-                      name="userId"
-                      icon-no-border
-                      icon="icon icon-user"
-                      icon-pack="feather"
-                      label-placeholder="User ID"
-                      v-model="userId"
-                      class="w-full"/>
+                <!-- <form ref="form"> -->
+                  <div>
+                    <vs-input
+                        name="userId"
+                        icon-no-border
+                        icon="icon icon-user"
+                        icon-pack="feather"
+                        label-placeholder="User ID"
+                        v-model="userId"
+                        class="w-full"/>
 
-                  <vs-input
-                      type="password"
-                      name="password"
-                      icon-no-border
-                      icon="icon icon-lock"
-                      icon-pack="feather"
-                      label-placeholder="Password"
-                      v-model="password"
-                      class="w-full mt-6" />
+                    <vs-input
+                        type="password"
+                        name="password"
+                        icon-no-border
+                        icon="icon icon-lock"
+                        icon-pack="feather"
+                        label-placeholder="Password"
+                        v-model="password"
+                        class="w-full mt-6" />
 
-                  <div class="flex flex-wrap justify-between mt-5">
-                      <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox>
-                      <!-- <router-link to="">Forgot Password?</router-link> -->
+                    <div class="flex flex-wrap justify-between mt-5">
+                        <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox>
+                        <!-- <router-link to="">Forgot Password?</router-link> -->
+                    </div>
+                    <!-- <vs-button  type="border">Register</vs-button> -->
+                    <vs-button @click="submit" class="float-left my-3 mb-5">Login</vs-button>
+
+                    <vs-divider></vs-divider>
+
                   </div>
-                  <!-- <vs-button  type="border">Register</vs-button> -->
-                  <vs-button @click="login" class="float-left my-3 mb-5">Login</vs-button>
-
-                  <vs-divider></vs-divider>
-
-                </div>
+                <!-- </form> -->
 
               </div>
             </div>
@@ -69,6 +71,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default{
   data() {
     return {
@@ -79,26 +83,18 @@ export default{
   },
 
   methods: {
-    login() {
-      console.log(this.$auth)
-      // get the redirect object
-      var redirect = this.$auth.redirect()
-      var app = this
-      this.$auth.login({
-        params: {
-          user_id: app.userId,
-          user_pw: app.password
-        },
-        success: function() {
-          // handle redirection
-          const redirectTo = redirect ? redirect.from.name : 'home'
-          this.$router.push({name: redirectTo})
-        },
-        error: function() {
-          app.has_error = true
-        },
-        rememberMe: app.checkbox_remember_me,
-        fetchUser: true
+    submit() {
+      axios.post('/login', {
+        user_id: this.userId,
+        user_pw: this.password
+      }).then((res) => {
+        if (res.data.success) {
+          this.$router.push({ path: '/' })
+        }
+      }).catch((err) => {
+        if (!err.response.data.success) {
+          alert(err.response.data.message)
+        }
       })
     }
   }

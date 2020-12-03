@@ -121,7 +121,7 @@ export default {
       localStorage.removeItem('userInfo')
 
       // This is just for demo Purpose. If user clicks on logout -> redirect
-      this.$router.push('/pages/login').catch(() => {})
+      this.$router.push('/login').catch(() => {})
     }
   }
 }

@@ -13,4 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/{any}', 'ApplicationController')->where('any', '.*');
+Route::get('/login', 'LoginController@login')->name('login');
+Route::post('/login', 'LoginController@auth')->name('auth');
+Route::post('/logout', 'LoginController@logout')->name('logout');
+Route::get('/{any}', 'ApplicationController')->where('any', '.*')->middleware('auth');
