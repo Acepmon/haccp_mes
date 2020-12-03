@@ -19,33 +19,33 @@
 		></vs-breadcrumb>
 
 		<vx-card class="mt-5">
-			<vx-card-title class="h2">기본정보</vx-card-title>
+			<h2 class="mb-5">기본정보</h2>
 
 			<vs-table stripe :data="data">
 
 				<vs-tr>
 					<vs-th class="h5 py-5 text-center">회사명</vs-th>
-					<vs-td></vs-td>
+					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
 				</vs-tr>
 				<vs-tr>
 					<vs-th class="h5 py-5 text-center">사업자등록번호</vs-th>
-					<vs-td></vs-td>
+					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
 				</vs-tr>
 				<vs-tr>
 					<vs-th class="h5 py-5 text-center">대표명</vs-th>
-					<vs-td></vs-td>
+					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
 				</vs-tr>
 				<vs-tr>
 					<vs-th class="h5 py-5 text-center">전화번호</vs-th>
-					<vs-td></vs-td>
+					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
 				</vs-tr>
 				<vs-tr>
 					<vs-th class="h5 py-5 text-center">팩스번호</vs-th>
-					<vs-td></vs-td>
+					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
 				</vs-tr>
 				<vs-tr>
 					<vs-th class="h5 py-5 text-center">홈페이지</vs-th>
-					<vs-td></vs-td>
+					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
 				</vs-tr>
 
 			</vs-table>
