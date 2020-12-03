@@ -1,3 +1,3 @@
 <template>
-	<h4>data mgmt</h4>
+	<h4>page 1-3.</h4>
 </template>

@@ -22,99 +22,52 @@ const router = new Router({
     routes: [
 
         {
-    // =============================================================================
-    // MAIN LAYOUT ROUTES
-    // =============================================================================
+        // =============================================================================
+        // MAIN LAYOUT ROUTES
+        // =============================================================================
             path: '',
             component: () => import('./layouts/main/Main.vue'),
             children: [
-        // =============================================================================
-        // Theme Routes
-        // =============================================================================
+            // =============================================================================
+            // Theme Routes
+            // =============================================================================
               {
                 path: '/',
                 name: 'home',
-                component: () => import('./views/Home.vue'),
-                meta: {
-                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
-                }
+                component: () => import('./views/Home.vue')
               },
               {
-                path: '/page2',
-                name: 'page-2',
-                component: () => import('./views/Page2.vue'),
-                meta: {
-                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
-                }
+                path: '/example',
+                name: 'example',
+                component: () => import('./views/Example.vue')
               },
               {
-                path: '/information-mgmt',
-                name: 'information-management',
-                component: () => import('./views/InformationMgmt.vue'),
-                meta: {
-                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
-                }
+                path: '/1/1',
+                name: '회사정보등록',
+                component: () => import('./views/Page-1-1.vue')
               },
               {
-                path: '/purchase-mgmt',
-                name: 'purchase-management',
-                component: () => import('./views/PurchaseMgmt.vue'),
-                meta: {
-                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
-                }
+                path: '/1/2',
+                name: '생산담당자등록',
+                component: () => import('./views/Page-1-2.vue')
               },
               {
-                path: '/order-process',
-                name: 'order-process',
-                component: () => import('./views/OrderProcess.vue'),
-                meta: {
-                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
-                }
-              },
-              {
-                path: '/production-mgmt',
-                name: 'production-management',
-                component: () => import('./views/ProductionMgmt.vue'),
-                meta: {
-                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
-                }
-              },
-              {
-                path: '/shipping-mgmt',
-                name: 'shipping-management',
-                component: () => import('./views/ShippingMgmt.vue'),
-                meta: {
-                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
-                }
-              },
-              {
-                path: '/haccp-monitor',
-                name: 'haccp-monitor',
-                component: () => import('./views/HaccpMonitor.vue'),
-                meta: {
-                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
-                }
-              },
-              {
-                path: '/data-mgmt',
-                name: 'data-management',
-                component: () => import('./views/DataMgmt.vue'),
-                meta: {
-                  auth: {redirect: {name: 'login'}, forbiddenRedirect: '/error-403'}
-                }
-              },
+                path: '/1/3',
+                name: 'HACCP담당자등록',
+                component: () => import('./views/Page-1-3.vue')
+              }
             ],
         },
-    // =============================================================================
-    // FULL PAGE LAYOUTS
-    // =============================================================================
+        // =============================================================================
+        // FULL PAGE LAYOUTS
+        // =============================================================================
         {
             path: '',
             component: () => import('@/layouts/full-page/FullPage.vue'),
             children: [
-        // =============================================================================
-        // PAGES
-        // =============================================================================
+              // =============================================================================
+              // PAGES
+              // =============================================================================
               {
                 path: '/login',
                 name: 'login',

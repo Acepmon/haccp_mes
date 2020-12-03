@@ -23,106 +23,106 @@ export default [
   {
     url: "/1",
     name: "정보관리",
-    slug: "home",
+    slug: "정보관리",
     submenu: [
       {
-        url: "/1",
+        url: "/1/1",
         name: "회사정보등록",
-        slug: "home",
+        slug: "회사정보등록",
       },
       {
-        url: "/2",
+        url: "/1/2",
         name: "생산담당자등록",
-        slug: "home",
+        slug: "생산담당자등록",
       },
       {
-        url: "/3",
+        url: "/1/3",
         name: "HACCP담당자등록",
-        slug: "home",
+        slug: "HACCP담당자등록",
       },
       {
-        url: "/4",
+        url: "/1/4",
         name: "HACCP서류등록",
         slug: "home",
         submenu: [
           {
-            url: "/1",
+            url: "/1/4/1",
             name: "HACCP 기준서 등록",
             slug: "home",
           },
           {
-            url: "/2",
+            url: "/1/4/2",
             name: "식품위생서류 등록",
             slug: "home",
           },
           {
-            url: "/3",
+            url: "/1/4/3",
             name: "HACCP 이행점검표",
             slug: "home",
           }
         ]
       },
       {
-        url: "/5",
+        url: "/1/5",
         name: "원/부자재 기준",
         slug: "home",
         submenu: [
           {
-            url: "/1",
+            url: "/1/5/1",
             name: "가공원료 기준등록",
             slug: "home",
           },
           {
-            url: "/2",
+            url: "/1/5/2",
             name: "원료 기준등록",
             slug: "home",
           },
           {
-            url: "/3",
+            url: "/1/5/3",
             name: "부자재 기준등록",
             slug: "home",
           }
         ]
       },
       {
-        url: "/6",
+        url: "/1/6",
         name: "생산제품등록",
         slug: "home",
       },
       {
-        url: "/7",
+        url: "/1/7",
         name: "원료배합비율",
         slug: "home",
       },
       {
-        url: "/8",
+        url: "/1/8",
         name: "공정순서관리",
         slug: "home",
         submenu: [
           {
-            url: "/1",
+            url: "/1/8/1",
             name: "전처리공정등록",
             slug: "home",
           },
           {
-            url: "/2",
+            url: "/1/8/2",
             name: "제조공정등록",
             slug: "home",
           }
         ]
       },
       {
-        url: "/9",
+        url: "/1/9",
         name: "구매기업정보등록",
         slug: "home",
       },
       {
-        url: "/10",
+        url: "/1/10",
         name: "납품기업정보등록",
         slug: "home",
       },
       {
-        url: "/11",
+        url: "/1/11",
         name: "정보보호관리",
         slug: "home",
       }
