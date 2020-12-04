@@ -14,9 +14,11 @@ class LoginHistController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $loginHist = LoginHist::paginate();
+        $with = array_filter(explode(',', $request->input('with')));
+        $limit = $request->input('limit', 15);
+        $loginHist = LoginHist::with($with)->paginate($limit);
 
         return LoginHistResource::collection($loginHist);
     }

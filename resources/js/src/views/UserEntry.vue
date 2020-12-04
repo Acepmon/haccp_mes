@@ -49,7 +49,7 @@
                 <vs-button @click="excel()" class="mx-1" color="dark" type="border" :disabled="datas.length <= 0">To Excel</vs-button>
             </div>
 
-            <vs-table stripe pagination max-items="10" :data="datas" v-model="selected" @selected="handleSelected">
+            <vs-table stripe pagination description max-items="10" :data="datas" v-model="selected" @selected="handleSelected">
 				<template slot="thead">
 					<vs-th>No</vs-th>
 					<vs-th>User ID</vs-th>
@@ -64,8 +64,8 @@
 				<template slot-scope="{data}">
 					<vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
 
-						<vs-td :data="indextr">
-							{{ indextr }}
+						<vs-td :data="(indextr + 1)">
+							{{ (indextr + 1) }}
 						</vs-td>
 
 						<vs-td :data="data[indextr].user_id">
@@ -137,19 +137,19 @@ export default {
                 })
         },
         fetchRoles: function (page, limit) {
-            axios.get(`/api/comm_cd/roles`)
+            axios.get(`/api/comm_cd/roles?page=${page}&limit=${limit}`)
                 .then((res) => {
                     this.roles = res.data.data
                 })
         },
         fetchApprovals: function (page, limit) {
-            axios.get(`/api/comm_cd/approvals`)
+            axios.get(`/api/comm_cd/approvals?page=${page}&limit=${limit}`)
                 .then((res) => {
                     this.approvals = res.data.data
                 })
         },
         fetchJobs: function (page, limit) {
-            axios.get(`/api/comm_cd/jobs`)
+            axios.get(`/api/comm_cd/jobs?page=${page}&limit=${limit}`)
                 .then((res) => {
                     this.jobs = res.data.data
                 })
