@@ -14,9 +14,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate();
+        $with = array_filter(explode(',', $request->input('with')));
+        $limit = $request->input('limit', 15);
+        $users = User::with($with)->paginate($limit);
 
         return UserResource::collection($users);
     }

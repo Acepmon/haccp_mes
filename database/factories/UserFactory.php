@@ -21,6 +21,8 @@ use Illuminate\Support\Str;
 
 $factory->define(User::class, function (Faker $faker) {
     $role = CommCd::where('comm1_cd', 'A10')->whereNotIn('comm2_cd', ['$$'])->inRandomOrder()->first();
+    $job = CommCd::where('comm1_cd', 'Z10')->whereNotIn('comm2_cd', ['$$'])->inRandomOrder()->first();
+    $appr = CommCd::where('comm1_cd', 'B10')->whereNotIn('comm2_cd', ['$$'])->inRandomOrder()->first();
 
     return [
         'user_id' => Str::limit($faker->unique()->userName, 15, ''),
@@ -28,6 +30,8 @@ $factory->define(User::class, function (Faker $faker) {
         'user_nm' => Str::limit($faker->firstNameMale, 20, ''),
         'email' => $faker->email,
         'role_cd' => $role->comm2_cd,
+        'job_cd' => $job->comm2_cd,
+        'appr_cd' => $appr->comm2_cd,
         'user_sts_yn' => User::STATUS_ARRAY[array_rand(User::STATUS_ARRAY)],
         'reg_id' => Str::limit($faker->unique()->userName, 15, ''),
         'reg_dtm' => now()->subHours(rand(24, 168))->format('YmdHis'),

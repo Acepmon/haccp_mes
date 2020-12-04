@@ -45,6 +45,10 @@ class User extends Authenticatable implements JWTSubject
         self::STATUS_INACTIVE
     ];
 
+    protected $casts = [
+        // 'reg_dtm' => 'datetime:Y-m-d',
+    ];
+
     protected $dispatchesEvents = [
         'created' => UserCreated::class,
         'updated' => UserUpdated::class,
@@ -69,5 +73,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function role()
+    {
+        return $this->belongsTo('App\CommCd', 'role_cd', 'comm2_cd')->where('comm1_cd', 'A10')->whereNotIn('comm2_cd', ['$$']);
     }
 }

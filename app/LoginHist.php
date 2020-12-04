@@ -20,4 +20,9 @@ class LoginHist extends Model
         'updated' => LoginHistUpdated::class,
         'deleted' => LoginHistDeleted::class,
     ];
+
+    protected $casts = [
+        // 'login_dtm' => 'datetime',
+        // 'logout_dtm' => 'datetime',
+    ];
 }

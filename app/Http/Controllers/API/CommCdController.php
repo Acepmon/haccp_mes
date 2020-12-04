@@ -21,6 +21,30 @@ class CommCdController extends Controller
         return CommCdResource::collection($commCd);
     }
 
+    public function roles(Request $request)
+    {
+        $limit = $request->input('limit', 15);
+        $commCd = CommCd::where('comm1_cd', 'A10')->whereNotIn('comm2_cd', ['$$'])->paginate($limit);
+
+        return CommCdResource::collection($commCd);
+    }
+
+    public function jobs(Request $request)
+    {
+        $limit = $request->input('limit', 15);
+        $commCd = CommCd::where('comm1_cd', 'Z10')->whereNotIn('comm2_cd', ['$$'])->paginate($limit);
+
+        return CommCdResource::collection($commCd);
+    }
+
+    public function approvals(Request $request)
+    {
+        $limit = $request->input('limit', 15);
+        $commCd = CommCd::where('comm1_cd', 'B10')->whereNotIn('comm2_cd', ['$$'])->paginate($limit);
+
+        return CommCdResource::collection($commCd);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

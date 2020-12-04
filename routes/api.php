@@ -30,9 +30,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
     'namespace' => 'API',
+    'as' => 'api.'
     // 'middleware' => 'auth:api',
 ], function () {
     Route::apiResource('user', 'UserController');
     Route::apiResource('login_hist', 'LoginHistController');
     Route::apiResource('comm_cd', 'CommCdController')->except(['show']);
+    Route::get('comm_cd/roles', 'CommCdController@roles')->name('comm_cd.roles');
+    Route::get('comm_cd/jobs', 'CommCdController@jobs')->name('comm_cd.jobs');
+    Route::get('comm_cd/approvals', 'CommCdController@approvals')->name('comm_cd.approvals');
 });
