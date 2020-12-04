@@ -51,6 +51,14 @@
           <router-link to="/data-mgmt">자료관리</router-link>
         </vs-navbar-item>
 
+        <vs-navbar-item index="0">
+          <router-link to="/user-entry">User Entry</router-link>
+        </vs-navbar-item>
+
+        <vs-navbar-item index="0">
+          <router-link to="/login-history">Login History</router-link>
+        </vs-navbar-item>
+
         <!-- <bookmarks :navbarColor="navbarColor" v-if="windowWidth >= 992" /> -->
 
         <vs-spacer />

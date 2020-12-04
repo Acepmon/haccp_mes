@@ -29,5 +29,7 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->email,
         'role_cd' => $role->comm2_cd,
         'user_sts_yn' => User::STATUS_ARRAY[array_rand(User::STATUS_ARRAY)],
+        'reg_id' => Str::limit($faker->unique()->userName, 15, ''),
+        'reg_dtm' => now()->subHours(rand(24, 168))->format('YmdHis'),
     ];
 });

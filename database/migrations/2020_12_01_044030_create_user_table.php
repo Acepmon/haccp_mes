@@ -20,6 +20,8 @@ class CreateUserTable extends Migration
             $table->string('email', 50)->nullable();
             $table->string('role_cd', 10)->nullable();
             $table->char('user_sts_yn', 1)->nullable()->comment('User Status (Y = active, N = inactive)');
+            $table->string('reg_id', 15)->nullable();
+            $table->string('reg_dtm', 14)->nullable();
 
             $table->primary('user_id');
         });

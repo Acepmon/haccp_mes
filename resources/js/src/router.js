@@ -55,6 +55,16 @@ const router = new Router({
                 path: '/1/3',
                 name: 'HACCP담당자등록',
                 component: () => import('./views/Page-1-3.vue')
+              },
+              {
+                path: '/user-entry',
+                name: 'User Entry',
+                component: () => import('./views/UserEntry.vue')
+              },
+              {
+                path: '/login-history',
+                name: 'Login History',
+                component: () => import('./views/LoginHistory.vue')
               }
             ],
         },
