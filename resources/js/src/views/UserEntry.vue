@@ -10,40 +10,42 @@
                 <vs-button @click="remove()" class="mx-1" color="dark" type="border" :disabled="!isSelected">Delete</vs-button>
             </div>
 
-            <div class="flex flex-wrap">
-                <div class="w-full sm:w-1/2 mb-4 px-1">
-                    <vs-input class="w-full" label="User ID" v-model="selected.user_id" required />
+            <form ref="form">
+                <div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                        <vs-input class="w-full" label="User ID" v-model="selected.user_id" description-text="Maximum of 15 characters allowed" />
+                    </div>
+                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                        <vs-input class="w-full" label="User Password" v-model="selected.user_pw" type="password" />
+                    </div>
+                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                        <vs-input class="w-full" label="User Name" v-model="selected.user_nm" description-text="Maximum of 20 characters allowed" />
+                    </div>
+                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                        <vs-input class="w-full" label="User e-Mail" v-model="selected.email" type="email" :success="validEmail" success-text="Email valid" />
+                    </div>
+                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                        <vs-select class="w-full" label="Role Name" v-model="selected.role_cd">
+                            <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in roles"></vs-select-item>
+                        </vs-select>
+                    </div>
+                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                        <vs-select class="w-full" label="Use Status" v-model="selected.user_sts_yn">
+                            <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item, index) in status"></vs-select-item>
+                        </vs-select>
+                    </div>
+                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                        <vs-select class="w-full" label="Approval" v-model="selected.appr_cd">
+                            <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in approvals"></vs-select-item>
+                        </vs-select>
+                    </div>
+                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                        <vs-select class="w-full" label="Job" v-model="selected.job_cd">
+                            <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in jobs"></vs-select-item>
+                        </vs-select>
+                    </div>
                 </div>
-                <div class="w-full sm:w-1/2 mb-4 px-1">
-                    <vs-input class="w-full" label="User Password" v-model="selected.user_pw" type="password" />
-                </div>
-                <div class="w-full sm:w-1/2 mb-4 px-1">
-                    <vs-input class="w-full" label="User Name" v-model="selected.user_nm" />
-                </div>
-                <div class="w-full sm:w-1/2 mb-4 px-1">
-                    <vs-input class="w-full" label="User e-Mail" v-model="selected.email" type="email" />
-                </div>
-                <div class="w-full sm:w-1/2 mb-4 px-1">
-                    <vs-select class="w-full" label="Role Name" v-model="selected.role_cd">
-                        <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in roles"></vs-select-item>
-                    </vs-select>
-                </div>
-                <div class="w-full sm:w-1/2 mb-4 px-1">
-                    <vs-select class="w-full" label="Use Status" v-model="selected.user_sts_yn">
-                        <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item, index) in status"></vs-select-item>
-                    </vs-select>
-                </div>
-                <div class="w-full sm:w-1/2 mb-4 px-1">
-                    <vs-select class="w-full" label="Approval" v-model="selected.appr_cd">
-                        <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in approvals"></vs-select-item>
-                    </vs-select>
-                </div>
-                <div class="w-full sm:w-1/2 mb-4 px-1">
-                    <vs-select class="w-full" label="Job" v-model="selected.job_cd">
-                        <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in jobs"></vs-select-item>
-                    </vs-select>
-                </div>
-            </div>
+            </form>
 
             <div class="flex flex-wrap justify-end mb-5">
                 <vs-button @click="excel()" class="mx-1" color="dark" type="border" :disabled="datas.length <= 0">To Excel</vs-button>
@@ -126,7 +128,12 @@ export default {
                 user_sts_yn: null,
             },
             isSelected: false,
-            datas: []
+            datas: [],
+        }
+    },
+    computed: {
+        validEmail() {
+            return this.selected.email != null ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.selected.email) : false
         }
     },
     methods: {
@@ -156,13 +163,69 @@ export default {
         },
         handleSelected(tr) {
             this.isSelected = true
-            this.selected.user_pw = '1234'
+            this.selected.user_pw = '****'
 		},
         add: function () {
-            alert('add')
+            console.log(this.selected)
+            axios.post(`/api/user`, this.selected)
+                .then((res) => {
+                    console.log(res)
+                    if (res.data.success) {
+                        this.$vs.notify({
+                            color: 'success',
+                            position: 'top-right',
+                            title: `New User`,
+                            text: `Successfully added new user record`
+                        })
+                        this.fetchUsers(1, 1000)
+                        this.selected = {
+                            user_id: null,
+                            user_pw: null,
+                            user_nm: null,
+                            email: null,
+                            role_cd: null,
+                            appr_cd: null,
+                            job_cd: null,
+                            user_sts_yn: null
+                        }
+                    }
+                })
+                .catch((err) => {
+                    if (err.response.data) {
+                        console.log(err.response.data.errors)
+                    }
+                })
         },
         save: function () {
-            alert('save')
+            console.log(this.selected)
+            axios.post(`/api/user/${this.selected.user_id}`, {...this.selected, '_method': 'PUT'})
+                .then((res) => {
+                    console.log(res)
+                    if (res.data.success) {
+                        this.$vs.notify({
+                            color: 'success',
+                            position: 'top-right',
+                            title: `Saved User`,
+                            text: `Successfully updated user record`
+                        })
+                        this.fetchUsers(1, 1000)
+                        this.selected = {
+                            user_id: null,
+                            user_pw: null,
+                            user_nm: null,
+                            email: null,
+                            role_cd: null,
+                            appr_cd: null,
+                            job_cd: null,
+                            user_sts_yn: null
+                        }
+                    }
+                })
+                .catch((err) => {
+                    if (err.response.data) {
+                        console.log(err.response.data.errors)
+                    }
+                })
         },
         query: function () {
             this.fetchUsers(1, 0)
@@ -178,7 +241,7 @@ export default {
         this.fetchRoles(1, 0)
         this.fetchApprovals(1, 0)
         this.fetchJobs(1, 0)
-        this.fetchUsers(1, 0)
+        this.fetchUsers(1, 1000)
     }
 }
 </script>

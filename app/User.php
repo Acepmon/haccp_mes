@@ -26,7 +26,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'user_id', 'user_nm', 'user_pw', 'email', 'role_cd', 'user_sts_yn'
+        'user_id', 'user_nm', 'user_pw', 'email', 'role_cd', 'appr_cd', 'job_cd', 'user_sts_yn', 'reg_id', 'reg_dtm',
     ];
 
     /**
