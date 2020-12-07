@@ -33,10 +33,13 @@ Route::group([
     'as' => 'api.'
     // 'middleware' => 'auth:api',
 ], function () {
+    Route::get('user/download', 'UserController@download')->name('user.download');
     Route::apiResource('user', 'UserController');
+
     Route::apiResource('login_hist', 'LoginHistController');
-    Route::apiResource('comm_cd', 'CommCdController')->except(['show']);
+
     Route::get('comm_cd/roles', 'CommCdController@roles')->name('comm_cd.roles');
     Route::get('comm_cd/jobs', 'CommCdController@jobs')->name('comm_cd.jobs');
     Route::get('comm_cd/approvals', 'CommCdController@approvals')->name('comm_cd.approvals');
+    Route::apiResource('comm_cd', 'CommCdController')->except(['show']);
 });

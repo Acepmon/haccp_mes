@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exports\UserExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -129,5 +131,10 @@ class UserController extends Controller
             'success' => true,
             'results' => __('Successfully deleted user record.')
         ]);
+    }
+
+    public function download(Request $request)
+    {
+        return Excel::download(new UserExport(), 'USER-' . now()->format('Y-m-d') . '.xlsx');
     }
 }

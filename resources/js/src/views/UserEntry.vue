@@ -260,7 +260,7 @@ export default {
                 })
         },
         excel: function () {
-            alert('excel')
+            window.location.href = '/api/user/download'
         }
     },
     created () {
