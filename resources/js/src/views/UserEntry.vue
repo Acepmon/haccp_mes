@@ -166,7 +166,6 @@ export default {
             this.selected.user_pw = '****'
 		},
         add: function () {
-            console.log(this.selected)
             axios.post(`/api/user`, this.selected)
                 .then((res) => {
                     console.log(res)
@@ -197,7 +196,6 @@ export default {
                 })
         },
         save: function () {
-            console.log(this.selected)
             axios.post(`/api/user/${this.selected.user_id}`, {...this.selected, '_method': 'PUT'})
                 .then((res) => {
                     console.log(res)
@@ -231,7 +229,35 @@ export default {
             this.fetchUsers(1, 0)
         },
         remove: function () {
-            alert('remove')
+            var sUserId = this.selected.user_id
+            axios.post(`/api/user/${sUserId}`, {'_method': 'DELETE'})
+                .then((res) => {
+                    console.log(res)
+                    if (res.data.success) {
+                        this.$vs.notify({
+                            color: 'success',
+                            position: 'top-right',
+                            title: `Deleted user`,
+                            text: `Successfully deleted user record`
+                        })
+                        this.fetchUsers(1, 1000)
+                        this.selected = {
+                            user_id: null,
+                            user_pw: null,
+                            user_nm: null,
+                            email: null,
+                            role_cd: null,
+                            appr_cd: null,
+                            job_cd: null,
+                            user_sts_yn: null
+                        }
+                    }
+                })
+                .catch((err) => {
+                    if (err.response.data) {
+                        console.log(err.response.data.errors)
+                    }
+                })
         },
         excel: function () {
             alert('excel')

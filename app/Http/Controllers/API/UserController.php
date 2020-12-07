@@ -122,6 +122,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::where('user_id', $id)->first();
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'results' => __('Successfully deleted user record.')
+        ]);
     }
 }
