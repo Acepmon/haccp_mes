@@ -7,8 +7,8 @@
                 <div class="w-full sm:w-1/3 mb-4 px-1">
 					<p>Date</p>
 					<div class="flex flex-row">
-						<datepicker :format="filter.format" placeholder="Date from" class="pr-1" v-model="filter.from"></datepicker>
-						<datepicker :format="filter.format" placeholder="Date to" class="pl-1" v-model="filter.to"></datepicker>
+						<datepicker :language="ko" :format="filter.format" placeholder="Date from" class="pr-1" v-model="filter.from"></datepicker>
+						<datepicker :language="ko" :format="filter.format" placeholder="Date to" class="pl-1" v-model="filter.to"></datepicker>
 					</div>
                 </div>
                 <div class="w-full sm:w-1/3 mb-4 px-1">
@@ -41,8 +41,8 @@
 							{{ data[indextr].user_id }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].user.user_nm">
-							{{ data[indextr].user.user_nm }}
+						<vs-td :data="data[indextr].user_nm">
+							{{ data[indextr].user_nm }}
 						</vs-td>
 
 						<vs-td :data="data[indextr].ip_addr">
@@ -65,8 +65,11 @@
 </template>
 
 <script>
+import moment from 'moment'
 import axios from 'axios'
 import Datepicker from 'vuejs-datepicker';
+import {en, ko, mn} from 'vuejs-datepicker/dist/locale'
+import loginHist from '@/services/loginHist'
 
 export default {
 	components: {
@@ -74,6 +77,9 @@ export default {
 	},
     data() {
         return {
+			en: en,
+			ko: ko,
+			mn: mn,
 			filter: {
 				format: 'yyyy-MM-dd',
 				from: null,
@@ -85,18 +91,6 @@ export default {
         }
     },
     methods: {
-        fetchLoginHistory: function (page, limit, from = null, to = null, keyword = null) {
-            axios.get(`/api/login_hist?with=user&page=${page}&limit=${limit}&from=${from}&to=${to}&keyword=${keyword}`)
-                .then((res) => {
-					this.datas = res.data.data
-					this.total = res.data.meta.total
-					console.log(this.total)
-                })
-		},
-		handleSearch(searching) {
-			let _print = `The user searched for: ${searching}\n`
-			this.$refs.pre.appendChild(document.createTextNode(_print))
-		},
 		handleChangePage(page) {
 			let _print = `The user changed the page to: ${page}\n`
 			this.$refs.pre.appendChild(document.createTextNode(_print))
@@ -106,11 +100,25 @@ export default {
 			this.$refs.pre.appendChild(document.createTextNode(_print))
 		},
         query: function () {
-            this.fetchLoginHistory(1, 0, this.filter.from, this.filter.to, this.filter.keyword)
+			let from = this.filter.from != null ? moment(this.filter.from).format('YYYY-MM-DD') : ''
+			let to = this.filter.to != null ? moment(this.filter.to).format('YYYY-MM-DD') : ''
+			let keyword = this.filter.keyword != null ? this.filter.keyword : ''
+
+			loginHist.fetch({
+				from: from,
+				to: to,
+				keyword: keyword
+			}).then((res) => {
+				this.datas = res.data.data
+				console.log(this.datas)
+			})
         },
     },
     created () {
-        this.fetchLoginHistory(1, 0)
+		loginHist.fetch().then((res) => {
+			this.datas = res.data.data
+			console.log(this.datas)
+		})
     }
 }
 </script>

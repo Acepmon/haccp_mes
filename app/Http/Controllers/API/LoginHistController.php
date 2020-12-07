@@ -32,20 +32,22 @@ class LoginHistController extends Controller
 
         $loginHist = LoginHist::query();
 
-        if ($request->has('from')) {
-            $from = $request->input('from');
-            $loginHist = $loginHist->whereDate('reg_dtm', '>=', $from);
-        }
-
-        if ($request->has('to')) {
-            $to = $request->input('to');
-            $loginHist = $loginHist->whereDate('reg_dtm', '>=', $to);
-        }
-
-        if ($request->has('keyword')) {
+        if ($request->has('keyword') && !empty($request->input('keyword'))) {
             $keyword = $request->input('keyword');
             $loginHist = $loginHist->where('user_id', 'LIKE', '%' . $keyword . '%');
-            $loginHist = $loginHist->where('user_nm', 'LIKE', '%' . $keyword . '%');
+            $loginHist = $loginHist->orWhereHas('user', function ($query) use ($keyword) {
+                return $query->where('user_nm', 'LIKE', '%' . $keyword . '%');
+            });
+        }
+
+        if ($request->has('from') && !empty($request->input('from'))) {
+            $from = $request->input('from');
+            $loginHist = $loginHist->whereDate('login_dtm', '>=', now()->parse($from)->format('YmdHis'));
+        }
+
+        if ($request->has('to') && !empty($request->input('to'))) {
+            $to = $request->input('to');
+            $loginHist = $loginHist->whereDate('login_dtm', '<=', now()->parse($to)->format('YmdHis'));
         }
 
         $loginHist = $loginHist->with($with)->orderBy($sort, $order)->paginate($limit);
