@@ -64,7 +64,7 @@ const router = new Router({
               {
                 path: '/login-history',
                 name: 'Login History',
-                component: () => import('./views/LoginHistory.vue')
+                component: () => import('./views/LoginHist.vue')
               }
             ],
         },

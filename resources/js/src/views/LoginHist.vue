@@ -105,6 +105,7 @@ export default {
 				limit: this.pagination.limit
 			}
 		},
+
 		filterParam: function () {
 			return {
 				from: this.filter.from != null ? moment(this.filter.from).format('YYYY-MM-DD') : '',
@@ -112,6 +113,7 @@ export default {
 				keyword: this.filter.keyword != null ? this.filter.keyword : '',
 			}
 		},
+
 		sortParam: function () {
 			return {
 				sort: this.sorting.sort != null ? this.sorting.sort : 'login_dtm',
@@ -123,15 +125,18 @@ export default {
 		overallIndex: function (index) {
 			return (this.pagination.page * this.pagination.limit)-this.pagination.limit + index + 1
 		},
+
 		handleChangePage(page) {
 			this.pagination.page = page
 			this.query()
 		},
+
 		handleSort(sort, order) {
 			this.sorting.sort = sort
 			this.sorting.order = order
 			this.query()
 		},
+
         query: function () {
 			api.fetch({
 				...this.paginationParam,
@@ -143,7 +148,8 @@ export default {
 				this.pagination.page = res.data.meta.current_page
 			})
 		},
-    },
+	},
+
     created () {
 		this.query()
     }
