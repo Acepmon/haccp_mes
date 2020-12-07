@@ -7,8 +7,8 @@
                 <div class="w-full sm:w-1/3 mb-4 px-1">
 					<p>Date</p>
 					<div class="flex flex-row">
-						<datepicker :language="ko" :format="filter.format" placeholder="Date from" class="pr-1" v-model="filter.from"></datepicker>
-						<datepicker :language="ko" :format="filter.format" placeholder="Date to" class="pl-1" v-model="filter.to"></datepicker>
+						<datepicker :language="ko" :format="format" placeholder="Date from" class="pr-1" v-model="filter.from"></datepicker>
+						<datepicker :language="ko" :format="format" placeholder="Date to" class="pl-1" v-model="filter.to"></datepicker>
 					</div>
                 </div>
                 <div class="w-full sm:w-1/3 mb-4 px-1">
@@ -20,41 +20,41 @@
                 </div>
             </div>
 
-            <vs-table stripe pagination description sst max-items="10" :data="datas" :total="total">
+            <vs-table stripe pagination description sst :max-items="pagination.limit" :data="datas" :total="pagination.total" @change-page="handleChangePage" @sort="handleSort">
 				<template slot="thead">
 					<vs-th>No</vs-th>
-					<vs-th>User ID</vs-th>
-					<vs-th>User Name</vs-th>
-					<vs-th>IP Address</vs-th>
-					<vs-th>Login Date</vs-th>
-					<vs-th>Logout Date</vs-th>
+					<vs-th sort-key="user_id">User ID</vs-th>
+					<vs-th sort-key="user_name">User Name</vs-th>
+					<vs-th sort-key="ip_addr">IP Address</vs-th>
+					<vs-th sort-key="login_dtm">Login Date</vs-th>
+					<vs-th sort-key="logout_dtm">Logout Date</vs-th>
 				</template>
 
 				<template slot-scope="{data}">
-					<vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+					<vs-tr :data="tr" :key="index" v-for="(tr, index) in data">
 
-						<vs-td :data="(indextr + 1)">
-							{{ (indextr + 1) }}
+						<vs-td :data="(overallIndex(index))">
+							{{ (overallIndex(index)) }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].user_id">
-							{{ data[indextr].user_id }}
+						<vs-td :data="data[index].user_id">
+							{{ data[index].user_id }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].user_nm">
-							{{ data[indextr].user_nm }}
+						<vs-td :data="data[index].user_nm">
+							{{ data[index].user_nm }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].ip_addr">
-							{{ data[indextr].ip_addr }}
+						<vs-td :data="data[index].ip_addr">
+							{{ data[index].ip_addr }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].login_dtm">
-							{{ data[indextr].login_dtm }}
+						<vs-td :data="data[index].login_dtm">
+							{{ data[index].login_dtm }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].logout_dtm">
-							{{ data[indextr].logout_dtm }}
+						<vs-td :data="data[index].logout_dtm">
+							{{ data[index].logout_dtm }}
 						</vs-td>
 
 					</vs-tr>
@@ -80,44 +80,77 @@ export default {
 			en: en,
 			ko: ko,
 			mn: mn,
+			format: 'yyyy-MM-dd',
 			filter: {
-				format: 'yyyy-MM-dd',
 				from: null,
 				to: null,
 				keyword: null
 			},
+			pagination: {
+				page: 1,
+				limit: 15,
+				total: 0,
+			},
+			sorting: {
+				sort: 'login_dtm',
+				order: 'asc'
+			},
 			datas: [],
-			total: 15
         }
-    },
-    methods: {
-		handleChangePage(page) {
-			let _print = `The user changed the page to: ${page}\n`
-			this.$refs.pre.appendChild(document.createTextNode(_print))
+	},
+	computed: {
+		paginationParam: function () {
+			return {
+				page: this.pagination.page,
+				limit: this.pagination.limit
+			}
 		},
-		handleSort(key, active) {
-			let _print = `the user ordered: ${key} ${active}\n`
-			this.$refs.pre.appendChild(document.createTextNode(_print))
+		filterParam: function () {
+			return {
+				from: this.filter.from != null ? moment(this.filter.from).format('YYYY-MM-DD') : '',
+				to: this.filter.to != null ? moment(this.filter.to).format('YYYY-MM-DD') : '',
+				keyword: this.filter.keyword != null ? this.filter.keyword : '',
+			}
+		},
+		sortParam: function () {
+			return {
+				sort: this.sorting.sort != null ? this.sorting.sort : 'login_dtm',
+				order: this.sorting.order != null ? this.sorting.order : 'asc',
+			}
+		}
+	},
+    methods: {
+		overallIndex: function (index) {
+			return (this.pagination.page * this.pagination.limit)-this.pagination.limit + index + 1
+		},
+		handleChangePage(page) {
+			this.pagination.page = page
+			this.query()
+		},
+		handleSort(sort, order) {
+			this.sorting.sort = sort
+			this.sorting.order = order
+			this.query()
 		},
         query: function () {
-			let from = this.filter.from != null ? moment(this.filter.from).format('YYYY-MM-DD') : ''
-			let to = this.filter.to != null ? moment(this.filter.to).format('YYYY-MM-DD') : ''
-			let keyword = this.filter.keyword != null ? this.filter.keyword : ''
-
 			loginHist.fetch({
-				from: from,
-				to: to,
-				keyword: keyword
+				...this.paginationParam,
+				...this.filterParam,
+				...this.sortParam
 			}).then((res) => {
 				this.datas = res.data.data
-				console.log(this.datas)
+				this.pagination.total = res.data.meta.total
+				this.pagination.page = res.data.meta.current_page
 			})
-        },
+		},
     },
     created () {
-		loginHist.fetch().then((res) => {
+		loginHist.fetch({
+			...this.paginationParam,
+			...this.sortParam
+		}).then((res) => {
 			this.datas = res.data.data
-			console.log(this.datas)
+			this.pagination.total = res.data.meta.total
 		})
     }
 }

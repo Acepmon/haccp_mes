@@ -22,14 +22,6 @@ class LoginHistController extends Controller
             'keyword' => 'nullable|string'
         ]);
 
-        $with = array_filter(explode(',', $request->input('with')));
-        $limit = $request->input('limit', 15);
-        $sort = $request->input('sort', 'login_dtm');
-        $order = $request->input('order', 'desc');
-        
-        $to = $request->input('to');
-        $keyword = $request->input('keyword');
-
         $loginHist = LoginHist::query();
 
         if ($request->has('keyword') && !empty($request->input('keyword'))) {
@@ -49,6 +41,11 @@ class LoginHistController extends Controller
             $to = $request->input('to');
             $loginHist = $loginHist->whereDate('login_dtm', '<=', now()->parse($to)->format('YmdHis'));
         }
+
+        $with = array_filter(explode(',', $request->input('with')));
+        $limit = $request->input('limit', 50);
+        $sort = $request->input('sort', 'login_dtm');
+        $order = $request->input('order', 'asc');
 
         $loginHist = $loginHist->with($with)->orderBy($sort, $order)->paginate($limit);
 
