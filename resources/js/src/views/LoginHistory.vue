@@ -85,8 +85,8 @@ export default {
         }
     },
     methods: {
-        fetchLoginHistory: function (page, limit) {
-            axios.get(`/api/login_hist?with=user&page=${page}&limit=${limit}`)
+        fetchLoginHistory: function (page, limit, from = null, to = null, keyword = null) {
+            axios.get(`/api/login_hist?with=user&page=${page}&limit=${limit}&from=${from}&to=${to}&keyword=${keyword}`)
                 .then((res) => {
 					this.datas = res.data.data
 					this.total = res.data.meta.total
@@ -106,7 +106,7 @@ export default {
 			this.$refs.pre.appendChild(document.createTextNode(_print))
 		},
         query: function () {
-            this.fetchLoginHistory(1, 0)
+            this.fetchLoginHistory(1, 0, this.filter.from, this.filter.to, this.filter.keyword)
         },
     },
     created () {

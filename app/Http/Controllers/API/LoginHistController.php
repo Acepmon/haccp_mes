@@ -16,9 +16,39 @@ class LoginHistController extends Controller
      */
     public function index(Request $request)
     {
+        $request->validate([
+            'from' => 'nullable|date_format:Y-m-d',
+            'to' => 'nullable|date_format:Y-m-d',
+            'keyword' => 'nullable|string'
+        ]);
+
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
-        $loginHist = LoginHist::with($with)->paginate($limit);
+        $sort = $request->input('sort', 'login_dtm');
+        $order = $request->input('order', 'desc');
+        
+        $to = $request->input('to');
+        $keyword = $request->input('keyword');
+
+        $loginHist = LoginHist::query();
+
+        if ($request->has('from')) {
+            $from = $request->input('from');
+            $loginHist = $loginHist->whereDate('reg_dtm', '>=', $from);
+        }
+
+        if ($request->has('to')) {
+            $to = $request->input('to');
+            $loginHist = $loginHist->whereDate('reg_dtm', '>=', $to);
+        }
+
+        if ($request->has('keyword')) {
+            $keyword = $request->input('keyword');
+            $loginHist = $loginHist->where('user_id', 'LIKE', '%' . $keyword . '%');
+            $loginHist = $loginHist->where('user_nm', 'LIKE', '%' . $keyword . '%');
+        }
+
+        $loginHist = $loginHist->with($with)->orderBy($sort, $order)->paginate($limit);
 
         return LoginHistResource::collection($loginHist);
     }
