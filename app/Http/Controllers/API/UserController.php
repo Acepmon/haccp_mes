@@ -19,14 +19,16 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $items = User::query();
+
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
         $sort = $request->input('sort', 'reg_dtm');
-        $order = $request->input('order', 'desc');
+        $order = $request->input('order', 'asc');
 
-        $users = User::with($with)->orderBy($sort, $order)->paginate($limit);
+        $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
 
-        return UserResource::collection($users);
+        return UserResource::collection($items);
     }
 
     /**

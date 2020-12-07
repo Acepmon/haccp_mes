@@ -69,7 +69,7 @@ import moment from 'moment'
 import axios from 'axios'
 import Datepicker from 'vuejs-datepicker';
 import {en, ko, mn} from 'vuejs-datepicker/dist/locale'
-import loginHist from '@/services/loginHist'
+import api from '@/services/login_hist'
 
 export default {
 	components: {
@@ -133,7 +133,7 @@ export default {
 			this.query()
 		},
         query: function () {
-			loginHist.fetch({
+			api.fetch({
 				...this.paginationParam,
 				...this.filterParam,
 				...this.sortParam
@@ -145,13 +145,7 @@ export default {
 		},
     },
     created () {
-		loginHist.fetch({
-			...this.paginationParam,
-			...this.sortParam
-		}).then((res) => {
-			this.datas = res.data.data
-			this.pagination.total = res.data.meta.total
-		})
+		this.query()
     }
 }
 </script>

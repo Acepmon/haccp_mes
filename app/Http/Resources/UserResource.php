@@ -21,13 +21,20 @@ class UserResource extends JsonResource
             'user_nm' => $this->user_nm,
             'email' => $this->email,
             'role_cd' => $this->role_cd,
+            'role_nm' => $this->whenLoaded('role', function () {
+                return $this->role->comm2_nm;
+            }),
             'appr_cd' => $this->appr_cd,
+            'appr_nm' => $this->whenLoaded('appr', function () {
+                return $this->appr->comm2_nm;
+            }),
             'job_cd' => $this->job_cd,
+            'job_nm' => $this->whenLoaded('job', function () {
+                return $this->job->comm2_nm;
+            }),
             'user_sts_yn' => $this->user_sts_yn,
             'reg_id' => $this->reg_id,
             'reg_dtm' => Carbon::parse($this->reg_dtm)->format('Y-m-d'),
-
-            'role' => new CommCdResource($this->whenLoaded('role')),
         ];
     }
 }

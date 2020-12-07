@@ -79,4 +79,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo('App\CommCd', 'role_cd', 'comm2_cd')->where('comm1_cd', 'A10')->whereNotIn('comm2_cd', ['$$']);
     }
+
+    public function appr()
+    {
+        return $this->belongsTo('App\CommCd', 'appr_cd', 'comm2_cd')->where('comm1_cd', 'B10')->whereNotIn('comm2_cd', ['$$']);
+    }
+
+    public function job()
+    {
+        return $this->belongsTo('App\CommCd', 'job_cd', 'comm2_cd')->where('comm1_cd', 'Z10')->whereNotIn('comm2_cd', ['$$']);
+    }
 }

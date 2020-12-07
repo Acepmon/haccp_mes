@@ -51,51 +51,51 @@
                 <vs-button @click="excel()" class="mx-1" color="dark" type="border" :disabled="datas.length <= 0">To Excel</vs-button>
             </div>
 
-            <vs-table stripe pagination description max-items="10" :data="datas" v-model="selected" @selected="handleSelected">
+            <vs-table stripe pagination description sst :max-items="pagination.limit" :data="datas" :total="pagination.total" @change-page="handleChangePage" @sort="handleSort" v-model="selected" @selected="handleSelected">
 				<template slot="thead">
 					<vs-th>No</vs-th>
-					<vs-th>User ID</vs-th>
-					<vs-th>User Password</vs-th>
-					<vs-th>User Name</vs-th>
-					<vs-th>e-Mail</vs-th>
-					<vs-th>Role Name</vs-th>
-					<vs-th>Registration ID</vs-th>
-                    <vs-th>Registration Date</vs-th>
+					<vs-th sort-key="user_id">User ID</vs-th>
+					<vs-th sort-key="user_pw">User Password</vs-th>
+					<vs-th sort-key="user_nm">User Name</vs-th>
+					<vs-th sort-key="email">e-Mail</vs-th>
+					<vs-th sort-key="role_cd">Role Name</vs-th>
+					<vs-th sort-key="reg_id">Registration ID</vs-th>
+                    <vs-th sort-key="reg_dtm">Registration Date</vs-th>
 				</template>
 
 				<template slot-scope="{data}">
-					<vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+					<vs-tr :data="tr" :key="index" v-for="(tr, index) in data">
 
-						<vs-td :data="(indextr + 1)">
-							{{ (indextr + 1) }}
+						<vs-td :data="(overallIndex(index))">
+							{{ (overallIndex(index)) }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].user_id">
-							{{ data[indextr].user_id }}
+						<vs-td :data="data[index].user_id">
+							{{ data[index].user_id }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].user_pw">
-							{{ data[indextr].user_pw }}
+						<vs-td :data="data[index].user_pw">
+							{{ data[index].user_pw }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].user_nm">
-							{{ data[indextr].user_nm }}
+						<vs-td :data="data[index].user_nm">
+							{{ data[index].user_nm }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].email">
-							{{ data[indextr].email }}
+						<vs-td :data="data[index].email">
+							{{ data[index].email }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].role.comm2_nm">
-							{{ data[indextr].role.comm2_nm }}
+						<vs-td :data="data[index].role_nm">
+							{{ data[index].role_nm }}
 						</vs-td>
 
-						<vs-td :data="data[indextr].reg_id">
-							{{ data[indextr].reg_id }}
+						<vs-td :data="data[index].reg_id">
+							{{ data[index].reg_id }}
 						</vs-td>
 
-                        <vs-td :data="data[indextr].reg_dtm">
-							{{ data[indextr].reg_dtm }}
+                        <vs-td :data="data[index].reg_dtm">
+							{{ data[index].reg_dtm }}
 						</vs-td>
 
 					</vs-tr>
@@ -107,6 +107,9 @@
 
 <script>
 import axios from 'axios'
+import comm_cd from '@/services/comm_cd'
+import api from '@/services/user'
+
 export default {
     data() {
         return {
@@ -129,46 +132,75 @@ export default {
             },
             isSelected: false,
             datas: [],
+
+            pagination: {
+				page: 1,
+				limit: 15,
+				total: 0,
+			},
+			sorting: {
+				sort: 'reg_dtm',
+				order: 'asc'
+			},
         }
     },
     computed: {
         validEmail() {
             return this.selected.email != null ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.selected.email) : false
-        }
+        },
+
+        paginationParam: function () {
+			return {
+				page: this.pagination.page,
+				limit: this.pagination.limit
+			}
+        },
+
+		sortParam: function () {
+			return {
+				sort: this.sorting.sort != null ? this.sorting.sort : 'login_dtm',
+				order: this.sorting.order != null ? this.sorting.order : 'asc',
+			}
+		}
     },
     methods: {
-        fetchUsers: function (page, limit) {
-            axios.get(`/api/user?with=role&page=${page}&limit=${limit}`)
-                .then((res) => {
-                    this.datas = res.data.data
-                })
-        },
-        fetchRoles: function (page, limit) {
-            axios.get(`/api/comm_cd/roles?page=${page}&limit=${limit}`)
-                .then((res) => {
-                    this.roles = res.data.data
-                })
-        },
-        fetchApprovals: function (page, limit) {
-            axios.get(`/api/comm_cd/approvals?page=${page}&limit=${limit}`)
-                .then((res) => {
-                    this.approvals = res.data.data
-                })
-        },
-        fetchJobs: function (page, limit) {
-            axios.get(`/api/comm_cd/jobs?page=${page}&limit=${limit}`)
-                .then((res) => {
-                    this.jobs = res.data.data
-                })
-        },
-        handleSelected(tr) {
+        overallIndex: function (index) {
+			return (this.pagination.page * this.pagination.limit)-this.pagination.limit + index + 1
+		},
+
+        handleSelected: function (tr) {
             this.isSelected = true
             this.selected.user_pw = '****'
+        },
+
+        handleChangePage(page) {
+			this.pagination.page = page
+			this.query()
 		},
+
+        handleSort(sort, order) {
+			this.sorting.sort = sort
+			this.sorting.order = order
+			this.query()
+        },
+
+        clearSelected: function () {
+            this.isSelected = false
+            this.selected = {
+                user_id: null,
+                user_pw: null,
+                user_nm: null,
+                email: null,
+                role_cd: null,
+                appr_cd: null,
+                job_cd: null,
+                user_sts_yn: null
+            }
+        },
+
         add: function () {
-            axios.post(`/api/user`, this.selected)
+            api.post(this.selected)
                 .then((res) => {
-                    console.log(res)
                     if (res.data.success) {
                         this.$vs.notify({
                             color: 'success',
@@ -176,29 +208,15 @@ export default {
                             title: `New User`,
                             text: `Successfully added new user record`
                         })
-                        this.fetchUsers(1, 1000)
-                        this.selected = {
-                            user_id: null,
-                            user_pw: null,
-                            user_nm: null,
-                            email: null,
-                            role_cd: null,
-                            appr_cd: null,
-                            job_cd: null,
-                            user_sts_yn: null
-                        }
-                    }
-                })
-                .catch((err) => {
-                    if (err.response.data) {
-                        console.log(err.response.data.errors)
+                        this.query()
+                        this.clearSelected()
                     }
                 })
         },
+
         save: function () {
-            axios.post(`/api/user/${this.selected.user_id}`, {...this.selected, '_method': 'PUT'})
+            api.put(this.selected.user_id, this.selected)
                 .then((res) => {
-                    console.log(res)
                     if (res.data.success) {
                         this.$vs.notify({
                             color: 'success',
@@ -206,33 +224,27 @@ export default {
                             title: `Saved User`,
                             text: `Successfully updated user record`
                         })
-                        this.fetchUsers(1, 1000)
-                        this.selected = {
-                            user_id: null,
-                            user_pw: null,
-                            user_nm: null,
-                            email: null,
-                            role_cd: null,
-                            appr_cd: null,
-                            job_cd: null,
-                            user_sts_yn: null
-                        }
-                    }
-                })
-                .catch((err) => {
-                    if (err.response.data) {
-                        console.log(err.response.data.errors)
+                        this.query()
+                        this.clearSelected()
                     }
                 })
         },
+
         query: function () {
-            this.fetchUsers(1, 0)
+            api.fetch({
+                ...this.paginationParam,
+			    ...this.sortParam
+            }).then((res) => {
+                this.datas = res.data.data
+                this.pagination.total = res.data.meta.total
+				this.pagination.page = res.data.meta.current_page
+            })
         },
+
         remove: function () {
             var sUserId = this.selected.user_id
-            axios.post(`/api/user/${sUserId}`, {'_method': 'DELETE'})
+            api.delete(sUserId)
                 .then((res) => {
-                    console.log(res)
                     if (res.data.success) {
                         this.$vs.notify({
                             color: 'success',
@@ -240,34 +252,30 @@ export default {
                             title: `Deleted user`,
                             text: `Successfully deleted user record`
                         })
-                        this.fetchUsers(1, 1000)
-                        this.selected = {
-                            user_id: null,
-                            user_pw: null,
-                            user_nm: null,
-                            email: null,
-                            role_cd: null,
-                            appr_cd: null,
-                            job_cd: null,
-                            user_sts_yn: null
-                        }
-                    }
-                })
-                .catch((err) => {
-                    if (err.response.data) {
-                        console.log(err.response.data.errors)
+                        this.query()
+                        this.clearSelected()
                     }
                 })
         },
+
         excel: function () {
-            window.location.href = '/api/user/download'
+            window.location.href = api.downloadUrl()
         }
     },
     created () {
-        this.fetchRoles(1, 0)
-        this.fetchApprovals(1, 0)
-        this.fetchJobs(1, 0)
-        this.fetchUsers(1, 1000)
+        comm_cd.fetchRoles({limit: 0}).then((res) => {
+            this.roles = res.data.data
+        })
+
+        comm_cd.fetchApprovals({limit: 0}).then((res) => {
+            this.approvals = res.data.data
+        })
+
+        comm_cd.fetchJobs({limit: 0}).then((res) => {
+            this.jobs = res.data.data
+        })
+
+        this.query()
     }
 }
 </script>
