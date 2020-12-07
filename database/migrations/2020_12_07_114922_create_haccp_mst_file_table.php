@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommCdTable extends Migration
+class CreateHaccpMstFileTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateCommCdTable extends Migration
      */
     public function up()
     {
-        $path = database_path("migrations/comm_cd.sql");
+        $path = database_path("migrations/haccp_mst_file.sql");
         $sql = file_get_contents($path);
         DB::unprepared($sql);
     }
@@ -26,6 +26,6 @@ class CreateCommCdTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comm_cd');
+        Schema::dropIfExists('haccp_mst_file');
     }
 }

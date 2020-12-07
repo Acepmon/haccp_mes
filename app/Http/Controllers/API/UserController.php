@@ -40,7 +40,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|string|max:15|unique:user,user_id',
+            'user_id' => 'required|string|max:15|unique:user,USER_ID',
             'user_pw' => 'nullable|string|max:100',
             'user_nm' => 'nullable|string|max:20',
             'email' => 'nullable|string|email|max:50',
@@ -51,14 +51,15 @@ class UserController extends Controller
         ]);
 
         $user = User::create([
-            'user_id' => $request->input('user_id'),
-            'user_pw' => Hash::make($request->input('user_pw')),
-            'user_nm' => $request->input('user_nm'),
-            'email' => $request->input('email'),
-            'role_cd' => $request->input('role_cd'),
-            'appr_cd' => $request->input('appr_cd'),
-            'job_cd' => $request->input('job_cd'),
-            'user_sts_yn' => $request->input('user_sts_yn'),
+            'USER_ID' => $request->input('user_id'),
+            'USER_PW' => Hash::make($request->input('user_pw')),
+            'USER_NM' => $request->input('user_nm'),
+            'EMAIL' => $request->input('email'),
+            'ROLE_CD' => $request->input('role_cd'),
+            'APPR_CD' => $request->input('appr_cd'),
+            'JOB_CD' => $request->input('job_cd'),
+            'USER_STS_YN' => $request->input('user_sts_yn'),
+            'REG_DTM' => now()->format('YmdHis')
         ]);
 
         return response()->json([
@@ -90,7 +91,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'user_id' => 'required|string|max:15|unique:user,user_id,' . $id . ',user_id',
+            'user_id' => 'required|string|max:15|unique:user,USER_ID,' . $id . ',USER_ID',
             'user_pw' => 'nullable|string|max:100',
             'user_nm' => 'nullable|string|max:20',
             'email' => 'nullable|string|email|max:50',
@@ -100,16 +101,16 @@ class UserController extends Controller
             'user_sts_yn' => 'nullable|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
 
-        $user = User::where('user_id', $id)->first();
+        $user = User::where('USER_ID', $id)->first();
         $user->update([
-            'user_id' => $request->input('user_id'),
-            'user_pw' => Hash::make($request->input('user_pw')),
-            'user_nm' => $request->input('user_nm'),
-            'email' => $request->input('email'),
-            'role_cd' => $request->input('role_cd'),
-            'appr_cd' => $request->input('appr_cd'),
-            'job_cd' => $request->input('job_cd'),
-            'user_sts_yn' => $request->input('user_sts_yn'),
+            'USER_ID' => $request->input('user_id'),
+            'USER_PW' => Hash::make($request->input('user_pw')),
+            'USER_NM' => $request->input('user_nm'),
+            'EMAIL' => $request->input('email'),
+            'ROLE_CD' => $request->input('role_cd'),
+            'APPR_CD' => $request->input('appr_cd'),
+            'JOB_CD' => $request->input('job_cd'),
+            'USER_STS_YN' => $request->input('user_sts_yn'),
         ]);
 
         return response()->json([
@@ -126,7 +127,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::where('user_id', $id)->first();
+        $user = User::where('USER_ID', $id)->first();
         $user->delete();
 
         return response()->json([

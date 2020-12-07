@@ -26,25 +26,25 @@ class LoginHistController extends Controller
 
         if ($request->has('keyword') && !empty($request->input('keyword'))) {
             $keyword = $request->input('keyword');
-            $items = $items->where('user_id', 'LIKE', '%' . $keyword . '%');
+            $items = $items->where('USER_ID', 'LIKE', '%' . $keyword . '%');
             $items = $items->orWhereHas('user', function ($query) use ($keyword) {
-                return $query->where('user_nm', 'LIKE', '%' . $keyword . '%');
+                return $query->where('USER_NM', 'LIKE', '%' . $keyword . '%');
             });
         }
 
         if ($request->has('from') && !empty($request->input('from'))) {
             $from = $request->input('from');
-            $items = $items->whereDate('login_dtm', '>=', now()->parse($from)->format('YmdHis'));
+            $items = $items->whereDate('LOGIN_DTM', '>=', now()->parse($from)->format('YmdHis'));
         }
 
         if ($request->has('to') && !empty($request->input('to'))) {
             $to = $request->input('to');
-            $items = $items->whereDate('login_dtm', '<=', now()->parse($to)->format('YmdHis'));
+            $items = $items->whereDate('LOGIN_DTM', '<=', now()->parse($to)->format('YmdHis'));
         }
 
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 50);
-        $sort = $request->input('sort', 'login_dtm');
+        $sort = $request->input('sort', 'LOGIN_DTM');
         $order = $request->input('order', 'asc');
 
         $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
@@ -71,7 +71,7 @@ class LoginHistController extends Controller
      */
     public function show($id)
     {
-        $loginHist = LoginHist::where('user_id', $id)->paginate();
+        $loginHist = LoginHist::where('USER_ID', $id)->paginate();
 
         return LoginHistResource::collection($loginHist);
     }

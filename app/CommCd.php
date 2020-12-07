@@ -15,6 +15,14 @@ class CommCd extends Model
     protected $keyType = 'string';
     public $timestamps = false;
 
+    protected $fillable = [
+        'COMM1_CD',
+        'COMM2_CD',
+        'COMM2_NM',
+        'REG_ID',
+        'REG_DTM',
+    ];
+
     protected $dispatchesEvents = [
         'created' => CommCdCreated::class,
         'updated' => CommCdUpdated::class,

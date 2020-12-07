@@ -54,13 +54,13 @@
             <vs-table stripe pagination description sst :max-items="pagination.limit" :data="datas" :total="pagination.total" @change-page="handleChangePage" @sort="handleSort" v-model="selected" @selected="handleSelected">
 				<template slot="thead">
 					<vs-th>No</vs-th>
-					<vs-th sort-key="user_id">User ID</vs-th>
-					<vs-th sort-key="user_pw">User Password</vs-th>
-					<vs-th sort-key="user_nm">User Name</vs-th>
-					<vs-th sort-key="email">e-Mail</vs-th>
-					<vs-th sort-key="role_cd">Role Name</vs-th>
-					<vs-th sort-key="reg_id">Registration ID</vs-th>
-                    <vs-th sort-key="reg_dtm">Registration Date</vs-th>
+					<vs-th sort-key="user_id">사용자 ID</vs-th>
+					<vs-th sort-key="user_nm">이름</vs-th>
+					<vs-th sort-key="user_pw">비밀번호</vs-th>
+					<vs-th sort-key="email">이메일</vs-th>
+					<vs-th sort-key="appr_cd">담당업무</vs-th>
+					<vs-th sort-key="role_cd">메뉴접근권한</vs-th>
+                    <vs-th sort-key="reg_dtm">등록일시</vs-th>
 				</template>
 
 				<template slot-scope="{data}">
@@ -74,24 +74,24 @@
 							{{ data[index].user_id }}
 						</vs-td>
 
-						<vs-td :data="data[index].user_pw">
-							{{ data[index].user_pw }}
-						</vs-td>
-
 						<vs-td :data="data[index].user_nm">
 							{{ data[index].user_nm }}
+						</vs-td>
+
+						<vs-td :data="data[index].user_pw">
+							{{ data[index].user_pw }}
 						</vs-td>
 
 						<vs-td :data="data[index].email">
 							{{ data[index].email }}
 						</vs-td>
 
-						<vs-td :data="data[index].role_nm">
-							{{ data[index].role_nm }}
+                        <vs-td :data="data[index].appr_nm">
+							{{ data[index].appr_nm }}
 						</vs-td>
 
-						<vs-td :data="data[index].reg_id">
-							{{ data[index].reg_id }}
+						<vs-td :data="data[index].role_nm">
+							{{ data[index].role_nm }}
 						</vs-td>
 
                         <vs-td :data="data[index].reg_dtm">
@@ -170,7 +170,6 @@ export default {
 
         handleSelected: function (tr) {
             this.isSelected = true
-            this.selected.user_pw = '****'
         },
 
         handleChangePage(page) {

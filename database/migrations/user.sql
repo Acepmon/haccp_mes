@@ -1,0 +1,13 @@
+CREATE TABLE `USER` (
+	`USER_ID`     VARCHAR(15)  NOT NULL COMMENT '사용자 ID', -- USER_ID
+	`USER_PW`     VARCHAR(200) NULL     COMMENT '비밀번호', -- USER_PW 
+	`USER_NM`     VARCHAR(60)  NULL     COMMENT '사용자이름', -- USER_NM 
+	`EMAIL`       VARCHAR(40)  NULL     COMMENT '이메일', -- EMAIL 
+	`ROLE_CD`     VARCHAR(10)  NULL     COMMENT '사용권한code', -- ROLE_CD
+	`JOB_CD`      VARCHAR(10)  NULL     COMMENT '작업권한code', -- JOB_CD
+	`APPR_CD`     VARCHAR(10)  NULL     COMMENT '결재권한code', -- APPR_CD 
+	`USER_STS_YN` CHAR(1)      NULL     COMMENT '사용상태YN', -- USER_STS_YN
+	`REG_DTM`     VARCHAR(14)  NULL     COMMENT '등록일시', -- REG_DTM
+	PRIMARY KEY(USER_ID)
+)
+COMMENT 'User';

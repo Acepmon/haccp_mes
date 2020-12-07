@@ -16,13 +16,13 @@ class LoginHistResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'user_id' => $this->user_id,
+            'user_id' => $this->USER_ID,
             'user_nm' => $this->whenLoaded('user', function () {
-                return $this->user->user_nm;
+                return $this->user->USER_NM;
             }),
-            'login_dtm' => Carbon::parse($this->login_dtm)->format('Y-m-d'),
-            'logout_dtm' => Carbon::parse($this->logout_dtm)->format('Y-m-d'),
-            'ip_addr' => $this->ip_addr,
+            'login_dtm' => Carbon::parse($this->LOGIN_DTM)->format('Y-m-d'),
+            'logout_dtm' => Carbon::parse($this->LOGOUT_DTM)->format('Y-m-d'),
+            'ip_addr' => $this->IP_ADDR,
         ];
     }
 }

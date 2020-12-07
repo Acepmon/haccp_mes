@@ -22,12 +22,12 @@ class LoginHist extends Model
     ];
 
     protected $casts = [
-        // 'login_dtm' => 'datetime',
-        // 'logout_dtm' => 'datetime',
+        // 'LOGIN_DTM' => 'datetime',
+        // 'LOGOUT_DTM' => 'datetime',
     ];
 
     public function user()
     {
-        return $this->belongsTo('App\User', 'user_id', 'user_id');
+        return $this->belongsTo('App\User', 'USER_ID', 'USER_ID');
     }
 }

@@ -16,36 +16,32 @@ class UserExport implements FromCollection, WithHeadings, WithStyles, WithMappin
     */
     public function collection()
     {
-        return User::orderBy('reg_dtm', 'desc')->get();
+        return User::orderBy('REG_DTM', 'desc')->get();
     }
 
     public function map($user): array
     {
         return [
-            $user->user_id,
-            $user->user_nm,
-            $user->email,
-            $user->role_cd,
-            $user->job_cd,
-            $user->appr_cd,
-            $user->user_sts_yn,
-            $user->reg_id,
-            now()->parse($user->reg_dtm)->format('Y-m-d')
+            $user->USER_ID,
+            $user->USER_NM,
+            $user->USER_PW,
+            $user->EMAIL,
+            $user->APPR_CD,
+            $user->ROLE_CD,
+            now()->parse($user->REG_DTM)->format('Y-m-d')
         ];
     }
 
     public function headings(): array
     {
         return [
-            'User ID',
-            'User Name',
-            'Email',
-            'Role CD',
-            'Job CD',
-            'APPR_CD',
-            'STATUS',
-            'Register ID',
-            'Register Date'
+            '사용자 ID',
+            '이름',
+            '비밀번호',
+            '이메일',
+            '메뉴접근권한',
+            '담당업무',
+            '등록일시',
         ];
     }
 

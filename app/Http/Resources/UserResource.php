@@ -17,24 +17,24 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'user_id' => $this->user_id,
-            'user_nm' => $this->user_nm,
-            'email' => $this->email,
-            'role_cd' => $this->role_cd,
+            'user_id' => $this->USER_ID,
+            'user_nm' => $this->USER_NM,
+            'user_pw' => $this->USER_PW,
+            'email' => $this->EMAIL,
+            'role_cd' => $this->ROLE_CD,
             'role_nm' => $this->whenLoaded('role', function () {
-                return $this->role->comm2_nm;
+                return $this->role->COMM2_NM;
             }),
             'appr_cd' => $this->appr_cd,
             'appr_nm' => $this->whenLoaded('appr', function () {
-                return $this->appr->comm2_nm;
+                return $this->appr->COMM2_NM;
             }),
             'job_cd' => $this->job_cd,
             'job_nm' => $this->whenLoaded('job', function () {
-                return $this->job->comm2_nm;
+                return $this->job->COMM2_NM;
             }),
-            'user_sts_yn' => $this->user_sts_yn,
-            'reg_id' => $this->reg_id,
-            'reg_dtm' => Carbon::parse($this->reg_dtm)->format('Y-m-d'),
+            'user_sts_yn' => $this->USER_STS_YN,
+            'reg_dtm' => Carbon::parse($this->REG_DTM)->format('Y-m-d'),
         ];
     }
 }

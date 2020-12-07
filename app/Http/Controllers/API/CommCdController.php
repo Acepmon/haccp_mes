@@ -33,22 +33,7 @@ class CommCdController extends Controller
     {
         $limit = $request->input('limit', 15);
         $paginate = $request->input('paginate', true);
-        $items = CommCd::where('comm1_cd', 'A10')->whereNotIn('comm2_cd', ['$$']);
-
-        if ($paginate) {
-            $items = $items->paginate($limit);
-        } else {
-            $items = $items->get();
-        }
-
-        return CommCdResource::collection($items);
-    }
-
-    public function jobs(Request $request)
-    {
-        $limit = $request->input('limit', 15);
-        $paginate = $request->input('paginate', true);
-        $items = CommCd::where('comm1_cd', 'Z10')->whereNotIn('comm2_cd', ['$$']);
+        $items = CommCd::where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$']);
 
         if ($paginate) {
             $items = $items->paginate($limit);
@@ -63,7 +48,22 @@ class CommCdController extends Controller
     {
         $limit = $request->input('limit', 15);
         $paginate = $request->input('paginate', true);
-        $items = CommCd::where('comm1_cd', 'B10')->whereNotIn('comm2_cd', ['$$']);
+        $items = CommCd::where('COMM1_CD', 'A20')->whereNotIn('COMM2_CD', ['$$']);
+
+        if ($paginate) {
+            $items = $items->paginate($limit);
+        } else {
+            $items = $items->get();
+        }
+
+        return CommCdResource::collection($items);
+    }
+
+    public function jobs(Request $request)
+    {
+        $limit = $request->input('limit', 15);
+        $paginate = $request->input('paginate', true);
+        $items = CommCd::where('COMM1_CD', 'A30')->whereNotIn('COMM2_CD', ['$$']);
 
         if ($paginate) {
             $items = $items->paginate($limit);

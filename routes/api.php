@@ -39,7 +39,7 @@ Route::group([
     Route::apiResource('login_hist', 'LoginHistController');
 
     Route::get('comm_cd/roles', 'CommCdController@roles')->name('comm_cd.roles');
-    Route::get('comm_cd/jobs', 'CommCdController@jobs')->name('comm_cd.jobs');
     Route::get('comm_cd/approvals', 'CommCdController@approvals')->name('comm_cd.approvals');
-    Route::apiResource('comm_cd', 'CommCdController')->except(['show']);
+    Route::get('comm_cd/jobs', 'CommCdController@jobs')->name('comm_cd.jobs');
+    Route::apiResource('comm_cd', 'CommCdController')->except(['show', 'store', 'destroy', 'update']);
 });

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateLoginHistTable extends Migration
@@ -13,14 +14,9 @@ class CreateLoginHistTable extends Migration
      */
     public function up()
     {
-        Schema::create('login_hist', function (Blueprint $table) {
-            $table->string('user_id', 15);
-            $table->string('login_dtm', 14)->comment('Format: YYYYMMDDHHMISS');
-            $table->string('logout_dtm', 14)->nullable()->comment('Format: YYYYMMDDHHMISS');
-            $table->string('ip_addr', 20)->nullable();
-
-            $table->index(['user_id', 'login_dtm']);
-        });
+        $path = database_path("migrations/login_hist.sql");
+        $sql = file_get_contents($path);
+        DB::unprepared($sql);
     }
 
     /**

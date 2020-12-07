@@ -15,7 +15,7 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
 
     protected $table = 'user';
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'USER_ID';
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
@@ -26,7 +26,15 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'user_id', 'user_nm', 'user_pw', 'email', 'role_cd', 'appr_cd', 'job_cd', 'user_sts_yn', 'reg_id', 'reg_dtm',
+        'USER_ID',
+        'USER_NM',
+        'USER_PW',
+        'EMAIL',
+        'ROLE_CD',
+        'APPR_CD',
+        'JOB_CD',
+        'USER_STS_YN',
+        'REG_DTM',
     ];
 
     /**
@@ -35,7 +43,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'user_pw',
+        // 'USER_PW',
     ];
 
     public const STATUS_ACTIVE = 'Y';
@@ -57,12 +65,12 @@ class User extends Authenticatable implements JWTSubject
 
     public function username()
     {
-        return $this->user_id;
+        return $this->USER_ID;
     }
 
     public function getAuthPassword()
     {
-        return $this->user_pw;
+        return $this->USER_PW;
     }
 
     public function getJWTIdentifier()
@@ -77,16 +85,16 @@ class User extends Authenticatable implements JWTSubject
 
     public function role()
     {
-        return $this->belongsTo('App\CommCd', 'role_cd', 'comm2_cd')->where('comm1_cd', 'A10')->whereNotIn('comm2_cd', ['$$']);
+        return $this->belongsTo('App\CommCd', 'ROLE_CD', 'COMM2_CD')->where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$']);
     }
 
     public function appr()
     {
-        return $this->belongsTo('App\CommCd', 'appr_cd', 'comm2_cd')->where('comm1_cd', 'B10')->whereNotIn('comm2_cd', ['$$']);
+        return $this->belongsTo('App\CommCd', 'APPR_CD', 'COMM2_CD')->where('COMM1_CD', 'B10')->whereNotIn('COMM2_CD', ['$$']);
     }
 
     public function job()
     {
-        return $this->belongsTo('App\CommCd', 'job_cd', 'comm2_cd')->where('comm1_cd', 'Z10')->whereNotIn('comm2_cd', ['$$']);
+        return $this->belongsTo('App\CommCd', 'JOB_CD', 'COMM2_CD')->where('COMM1_CD', 'Z10')->whereNotIn('COMM2_CD', ['$$']);
     }
 }
