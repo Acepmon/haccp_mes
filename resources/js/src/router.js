@@ -37,11 +37,6 @@ const router = new Router({
                 component: () => import('./views/Home.vue')
               },
               {
-                path: '/example',
-                name: 'example',
-                component: () => import('./views/Example.vue')
-              },
-              {
                 path: '/1',
                 name: '정보관리',
                 redirect: '/1/1'
@@ -70,7 +65,37 @@ const router = new Router({
                 path: '/login-history',
                 name: 'Login History',
                 component: () => import('./views/LoginHist.vue')
-              }
+              },
+              {
+                path: '/2',
+                name: '구매관리',
+                component: () => import('./views/Example.vue')
+              },
+              {
+                path: '/3',
+                name: '주문처리',
+                component: () => import('./views/Example.vue')
+              },
+              {
+                path: '/4',
+                name: '생산관리',
+                component: () => import('./views/Example.vue')
+              },
+              {
+                path: '/5',
+                name: '출하관리',
+                component: () => import('./views/Example.vue')
+              },
+              {
+                path: '/6',
+                name: 'HACCP모니터링',
+                component: () => import('./views/Example.vue')
+              },
+              {
+                path: '/7',
+                name: '자료관리',
+                component: () => import('./views/Example.vue')
+              },
             ],
         },
         // =============================================================================

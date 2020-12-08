@@ -24,7 +24,7 @@
         :to="to"
         :target="target" >
           <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
-          <!-- <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" /> -->
+          <feather-icon v-else-if="icon" :class="{'w-3 h-3': iconSmall}" :icon="icon" />
           <slot />
       </router-link>
 
