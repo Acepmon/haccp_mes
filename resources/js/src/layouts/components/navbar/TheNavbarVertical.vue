@@ -80,6 +80,7 @@
 
 
 <script>
+import axios from 'axios'
 import Bookmarks            from './components/Bookmarks.vue'
 import SearchBar            from './components/SearchBar.vue'
 import NotificationDropDown from './components/NotificationDropDown.vue'
@@ -126,10 +127,13 @@ export default {
     },
 
     logout () {
-      localStorage.removeItem('userInfo')
+      axios.post('/logout')
+        .then((res) => {
+          localStorage.removeItem('userInfo')
 
-      // This is just for demo Purpose. If user clicks on logout -> redirect
-      this.$router.push('/login').catch(() => {})
+          // This is just for demo Purpose. If user clicks on logout -> redirect
+          this.$router.push('/login').catch(() => {})
+        })
     }
   }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +46,10 @@ class AuthController extends Controller
         ];
 
         if ($token = $this->guard()->attempt($credentials)) {
-            return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
+            return response()->json([
+                'status' => 'success',
+                'result' => new UserResource(Auth::user()),
+            ], 200)->header('Authorization', $token);
         }
 
         return response()->json(['error' => 'login_error'], 401);

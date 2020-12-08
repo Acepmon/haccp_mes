@@ -15,6 +15,13 @@ class LoginHist extends Model
     protected $keyType = 'string';
     public $timestamps = false;
 
+    protected $fillable = [
+        'USER_ID',
+        'LOGIN_DTM',
+        'LOGOUT_DTM',
+        'IP_ADDR',
+    ];
+
     protected $dispatchesEvents = [
         'created' => LoginHistCreated::class,
         'updated' => LoginHistUpdated::class,

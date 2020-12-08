@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   computed: {
     activeUserInfo () {
@@ -42,10 +44,13 @@ export default {
   },
   methods: {
     logout () {
-      localStorage.removeItem('userInfo')
+      axios.post('/logout')
+        .then((res) => {
+          localStorage.removeItem('userInfo')
 
-      // This is just for demo Purpose. If user clicks on logout -> redirect
-      this.$router.push('/pages/login').catch(() => {})
+          // This is just for demo Purpose. If user clicks on logout -> redirect
+          this.$router.push('/login').catch(() => {})
+        })
     }
   }
 }

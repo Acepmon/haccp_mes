@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import auth from '@/services/auth'
 
 export default{
   data() {
@@ -84,11 +84,32 @@ export default{
 
   methods: {
     submit() {
-      axios.post('/login', {
-        user_id: this.userId,
-        user_pw: this.password
-      }).then((res) => {
+      auth.login(this.userId, this.password).then((res) => {
         if (res.data.success) {
+          // let authResult = res.data.result
+
+          // this.idToken = authResult.idToken
+          // this.profile = authResult.idTokenPayload
+
+          // // Convert the JWT expiry time from seconds to milliseconds
+          // this.tokenExpiry = new Date(this.profile.exp * 1000)
+          // localStorage.setItem(tokenExpiryKey, this.tokenExpiry)
+          // localStorage.setItem(localStorageKey, 'true')
+
+          // store.commit('UPDATE_USER_INFO', {
+          //   displayName: this.profile.name,
+          //   email: this.profile.email,
+          //   photoURL: this.profile.picture,
+          //   providerId: this.profile.sub.substr(0, this.profile.sub.indexOf('|')),
+          //   uid: this.profile.sub
+          // })
+
+          // this.emit(loginEvent, {
+          //   loggedIn: true,
+          //   profile: authResult.idTokenPayload,
+          //   state: authResult.appState || {}
+          // })
+
           this.$router.push({ path: '/' })
         }
       }).catch((err) => {
