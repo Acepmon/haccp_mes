@@ -23,40 +23,8 @@
           <router-link to="/">복을만드는사람들</router-link>
         </vs-navbar-title> -->
 
-        <vs-navbar-item index="0">
-          <router-link to="/information-mgmt">정보관리</router-link>
-        </vs-navbar-item>
-
-        <vs-navbar-item index="0">
-          <router-link to="/purchase-mgmt">구매관리</router-link>
-        </vs-navbar-item>
-
-        <vs-navbar-item index="0">
-          <router-link to="/order-process">주문처리</router-link>
-        </vs-navbar-item>
-
-        <vs-navbar-item index="0">
-          <router-link to="/production-mgmt">생산관리</router-link>
-        </vs-navbar-item>
-
-        <vs-navbar-item index="0">
-          <router-link to="/shipping-mgmt">출하관리</router-link>
-        </vs-navbar-item>
-
-        <vs-navbar-item index="0">
-          <router-link to="/haccp-monitor">HACCP모니터링</router-link>
-        </vs-navbar-item>
-
-        <vs-navbar-item index="0">
-          <router-link to="/data-mgmt">자료관리</router-link>
-        </vs-navbar-item>
-
-        <vs-navbar-item index="0">
-          <router-link to="/user-entry">User Entry</router-link>
-        </vs-navbar-item>
-
-        <vs-navbar-item index="0">
-          <router-link to="/login-history">Login History</router-link>
+        <vs-navbar-item :index="index" v-for="(item, index) in menuItemsUpdated" :key="index">
+          <router-link :to="item.url" v-text="item.name"></router-link>
         </vs-navbar-item>
 
         <!-- <bookmarks :navbarColor="navbarColor" v-if="windowWidth >= 992" /> -->
@@ -85,7 +53,7 @@ import Bookmarks            from './components/Bookmarks.vue'
 import SearchBar            from './components/SearchBar.vue'
 import NotificationDropDown from './components/NotificationDropDown.vue'
 import ProfileDropDown      from './components/ProfileDropDown.vue'
-
+import navMenuItems         from './../vertical-nav-menu/navMenuItems'
 export default {
   name: 'the-navbar-vertical',
   props: {
@@ -119,7 +87,22 @@ export default {
       if      (this.verticalNavMenuWidth === 'default') return 'navbar-default'
       else if (this.verticalNavMenuWidth === 'reduced') return 'navbar-reduced'
       else if (this.verticalNavMenuWidth)               return 'navbar-full'
-    }
+    },
+
+    menuItemsUpdated () {
+      const clone = navMenuItems.slice()
+
+      for (const [index, item] of navMenuItems.entries()) {
+        if (item.header && item.items.length && (index || 1)) {
+          const i = clone.findIndex(ix => ix.header === item.header)
+          for (const [subIndex, subItem] of item.items.entries()) {
+            clone.splice(i + 1 + subIndex, 0, subItem)
+          }
+        }
+      }
+
+      return clone
+    },
   },
   methods: {
     showSidebar () {

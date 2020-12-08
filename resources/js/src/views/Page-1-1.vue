@@ -56,7 +56,7 @@
 				<form>
 					<div class="vx-row">
 						<div class="vx-col">
-							<vs-input v-model="disabled1" label-placeholder="" disabled />
+							<vs-input v-model="address.disabled1" label-placeholder="" disabled />
 						</div>
 						<div class="vx-col">
 							<!-- search button -->
@@ -65,12 +65,12 @@
 					</div>
 					<div class="vx-row">
 						<div class="vx-col">
-							<vs-input v-model="disabled2" label-placeholder="" disabled />
+							<vs-input v-model="address.disabled2" label-placeholder="" disabled />
 						</div>
 					</div>
 					<div class="vx-row">
 						<div class="vx-col">
-							<vs-input v-model="addressDetails" label-placeholder="상세주소" />
+							<vs-input v-model="address.addressDetails" label-placeholder="상세주소" />
 						</div>
 					</div>
 				</form>

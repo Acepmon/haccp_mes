@@ -178,7 +178,14 @@ export default {
         }
       }
 
-      return clone
+      let currPath = this.$route.path
+      for (let item of this.navMenuItems) {
+        if (currPath.startsWith(item.showSubmenuOn)) {
+          return item.submenu
+        }
+      }
+
+      return []
     },
     isVerticalNavMenuActive: {
       get ()    { return this.$store.state.isVerticalNavMenuActive },

@@ -20,8 +20,6 @@ class LoginController extends Controller
         ];
 
         if (Auth::attempt($credentials)) {
-
-            dd(session()->all());
             // Authentication passed...
             return response()->json([
                 'success' => true,

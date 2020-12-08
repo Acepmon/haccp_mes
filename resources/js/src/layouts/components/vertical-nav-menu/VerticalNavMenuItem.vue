@@ -24,13 +24,13 @@
         :to="to"
         :target="target" >
           <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
-          <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" />
+          <!-- <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" /> -->
           <slot />
       </router-link>
 
       <a v-else :target="target" :href="href" tabindex="-1">
         <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
-        <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" />
+        <!-- <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" /> -->
         <slot />
       </a>
   </div>

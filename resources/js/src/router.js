@@ -42,6 +42,11 @@ const router = new Router({
                 component: () => import('./views/Example.vue')
               },
               {
+                path: '/1',
+                name: '정보관리',
+                redirect: '/1/1'
+              },
+              {
                 path: '/1/1',
                 name: '회사정보등록',
                 component: () => import('./views/Page-1-1.vue')
