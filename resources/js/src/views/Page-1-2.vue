@@ -1,6 +1,6 @@
 <template>
 	<div>
-        <!-- <vx-card>
+        <vx-card>
             <form ref="form">
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 mb-4 px-1">
@@ -115,7 +115,7 @@
                     </div>
                 </div>
             </form>
-        </vx-card> -->
+        </vx-card>
 
 		<vx-card class="mt-5">
             <div class="flex flex-wrap justify-end mb-5">
@@ -141,7 +141,7 @@
                         <vs-input class="w-full" label="User e-Mail" v-model="selected.email" type="email" :success="validEmail" success-text="Email valid" />
                     </div>
                     <div class="w-full sm:w-1/2 mb-4 px-1">
-                        <vs-select class="w-full" label="Role Name" v-model="selected.role_cd">
+                        <vs-select class="w-full" label="Role Name" v-model="selected.role_cd" multiple>
                             <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in roles"></vs-select-item>
                         </vs-select>
                     </div>
@@ -241,7 +241,7 @@ export default {
                 user_pw: null,
                 user_nm: null,
                 email: null,
-                role_cd: null,
+                role_cd: [],
                 appr_cd: null,
                 job_cd: null,
                 user_sts_yn: null,

@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             'user_nm' => $this->USER_NM,
             'user_pw' => $this->USER_PW,
             'email' => $this->EMAIL,
-            'role_cd' => $this->ROLE_CD,
+            'role_cd' => explode(',', $this->ROLE_CD),
             'role_nm' => $this->whenLoaded('role', function () {
                 return $this->role->COMM2_NM;
             }),

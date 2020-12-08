@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(User::class, function (Faker $faker) {
-    $role = CommCd::where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$'])->inRandomOrder()->first();
+    $roles = CommCd::where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$'])->inRandomOrder()->take(3)->pluck('COMM2_CD');
     $appr = CommCd::where('COMM1_CD', 'A20')->whereNotIn('COMM2_CD', ['$$'])->inRandomOrder()->first();
     $job = CommCd::where('COMM1_CD', 'A30')->whereNotIn('COMM2_CD', ['$$'])->inRandomOrder()->first();
 
@@ -29,7 +29,7 @@ $factory->define(User::class, function (Faker $faker) {
         'USER_PW' => Hash::make('password'),
         'USER_NM' => Str::limit($faker->firstNameMale, 20, ''),
         'EMAIL' => $faker->email,
-        'ROLE_CD' => $role->COMM2_CD,
+        'ROLE_CD' => implode(',', $roles->toArray()),
         'APPR_CD' => $appr->COMM2_CD,
         'JOB_CD' => $job->COMM2_CD,
         'USER_STS_YN' => User::STATUS_ARRAY[array_rand(User::STATUS_ARRAY)],
