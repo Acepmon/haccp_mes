@@ -2,39 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\LoginHist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function login()
-    {
+    public function login () {
         return view('application');
     }
 
-    public function auth(Request $request)
+    public function authenticate(Request $request)
     {
-        $credentials = [
-            'user_id' => $request->input('user_id'),
-            'password' => $request->input('user_pw')
-        ];
-
+        $credentials = $request->only('USER_ID', 'password');
         if (Auth::attempt($credentials)) {
             // Authentication passed...
-            return response()->json([
+            return response([
                 'success' => true,
-                'message' => __('Authenticated!')
-            ], 200);
+                'result' => Auth::user()
+            ]);
         }
 
-        return response()->json([
+        // Authentication failed...
+        return response([
             'success' => false,
-            'message' => __('User ID or password is wrong!')
-        ], 500);
+            'result' => 'Authentication failed'
+        ]);
     }
 
     public function logout()
     {
+        if (LoginHist::where('USER_ID', Auth::user()->USER_ID)->exists()) {
+            LoginHist::where('USER_ID', Auth::user()->USER_ID)->update([
+                'LOGOUT_DTM' => now()->format('YmdHis'),
+            ]);
+        }
+
         Auth::logout();
 
         return redirect()->intended();

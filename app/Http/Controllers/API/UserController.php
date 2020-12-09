@@ -44,8 +44,8 @@ class UserController extends Controller
             'user_pw' => 'nullable|string|max:100',
             'user_nm' => 'nullable|string|max:20',
             'email' => 'nullable|string|email|max:50',
-            'role_cd' => 'nullable|string|max:10',
-            'appr_cd' => 'nullable|string|max:10',
+            'role_cd' => 'nullable|array',
+            'appr_cd' => 'nullable|array',
             'job_cd' => 'nullable|string|max:10',
             'user_sts_yn' => 'nullable|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
@@ -55,8 +55,8 @@ class UserController extends Controller
             'USER_PW' => Hash::make($request->input('user_pw')),
             'USER_NM' => $request->input('user_nm'),
             'EMAIL' => $request->input('email'),
-            'ROLE_CD' => $request->input('role_cd'),
-            'APPR_CD' => $request->input('appr_cd'),
+            'ROLE_CD' => implode(',', $request->input('role_cd')),
+            'APPR_CD' => implode(',', $request->input('appr_cd')),
             'JOB_CD' => $request->input('job_cd'),
             'USER_STS_YN' => $request->input('user_sts_yn'),
             'REG_DTM' => now()->format('YmdHis')
@@ -95,8 +95,8 @@ class UserController extends Controller
             'user_pw' => 'nullable|string|max:100',
             'user_nm' => 'nullable|string|max:20',
             'email' => 'nullable|string|email|max:50',
-            'role_cd' => 'nullable|string|max:10',
-            'appr_cd' => 'nullable|string|max:10',
+            'role_cd' => 'nullable|array',
+            'appr_cd' => 'nullable|array',
             'job_cd' => 'nullable|string|max:10',
             'user_sts_yn' => 'nullable|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
@@ -107,8 +107,8 @@ class UserController extends Controller
             'USER_PW' => Hash::make($request->input('user_pw')),
             'USER_NM' => $request->input('user_nm'),
             'EMAIL' => $request->input('email'),
-            'ROLE_CD' => $request->input('role_cd'),
-            'APPR_CD' => $request->input('appr_cd'),
+            'ROLE_CD' => implode(',', $request->input('role_cd')),
+            'APPR_CD' => implode(',', $request->input('appr_cd')),
             'JOB_CD' => $request->input('job_cd'),
             'USER_STS_YN' => $request->input('user_sts_yn'),
         ]);

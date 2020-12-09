@@ -11,6 +11,8 @@
 <template>
   <div class="layout--main" :class="[layoutTypeClass, navbarClasses, footerClasses, {'no-scroll': isAppPage}]">
 
+    <auto-logout></auto-logout>
+
     <v-nav-menu
       :navMenuItems = "navMenuItems"
       title         = "복을만드는사람들"
@@ -125,6 +127,7 @@ import TheFooter           from '@/layouts/components/TheFooter.vue'
 import themeConfig         from '@/../themeConfig.js'
 import VNavMenu            from '@/layouts/components/vertical-nav-menu/VerticalNavMenu.vue'
 import MultiDocumentNav    from '../components/MultiDocumentNav.vue'
+import AutoLogout          from '../components/AutoLogout.vue'
 
 export default {
   components: {
@@ -134,7 +137,8 @@ export default {
     TheNavbarHorizontal,
     TheNavbarVertical,
     VNavMenu,
-    MultiDocumentNav
+    MultiDocumentNav,
+    AutoLogout
   },
   data () {
     return {

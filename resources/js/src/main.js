@@ -18,6 +18,7 @@ Vue.use(Vuesax)
 
 // axios
 import axios from './axios.js'
+axios.defaults.withCredentials = true
 Vue.prototype.$http = axios
 
 // Filters

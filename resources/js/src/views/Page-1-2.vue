@@ -318,22 +318,20 @@ export default {
             }
         },
 
-        clearSelected: function () {
+        clearSelected () {
             this.isSelected = false
-            this.selected = {
-                user_id: null,
-                user_pw: null,
-                user_pw_confirmation: null,
-                user_nm: null,
-                email: null,
-                role_cd: null,
-                appr_cd: null,
-                job_cd: null,
-                user_sts_yn: null
-            }
+            this.selected.user_id = null,
+            this.selected.user_pw = null,
+            this.selected.user_pw_confirmation = null,
+            this.selected.user_nm = null,
+            this.selected.email = null,
+            this.selected.role_cd = [],
+            this.selected.appr_cd = [],
+            this.selected.job_cd = null,
+            this.selected.user_sts_yn = null
         },
 
-        add: function () {
+        add () {
             api.post(this.selected)
                 .then((res) => {
                     if (res.data.success) {
@@ -349,7 +347,7 @@ export default {
                 })
         },
 
-        save: function () {
+        save () {
             this.$vs.dialog({
                 type: 'confirm',
                 color: 'success',
@@ -357,7 +355,7 @@ export default {
                 text: this.$t('SaveUser'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
-                accept: function () {
+                accept: () => {
                     api.put(this.selected.user_id, this.selected).then((res) => {
                         if (res.data.success) {
                             this.$vs.notify({
@@ -374,7 +372,7 @@ export default {
             })
         },
 
-        query: function () {
+        query () {
             api.fetch({
                 ...this.paginationParam,
 			    ...this.sortParam
@@ -397,7 +395,7 @@ export default {
             })
         },
 
-        remove: function () {
+        remove () {
             var sUserId = this.selected.user_id
             this.$vs.dialog({
                 type: 'confirm',
@@ -406,24 +404,25 @@ export default {
                 text: this.$t('DeleteUser'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
-                accept: function () {
+                accept: () => {
                     api.delete(sUserId).then((res) => {
                         if (res.data.success) {
+                            this.clearSelected()
+                            this.query()
+
                             this.$vs.notify({
                                 color: 'success',
                                 position: 'top-right',
                                 title: this.$t('DeletedUser'),
                                 text: this.$t('SuccessDeletedUser')
                             })
-                            this.query()
-                            this.clearSelected()
                         }
                     })
                 }
             })
         },
 
-        excel: function () {
+        excel () {
             window.location.href = api.downloadUrl()
         }
     },

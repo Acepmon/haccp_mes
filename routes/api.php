@@ -14,24 +14,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::middleware('auth:sanctum')->get('/session', function (Request $request) {
+//     return $request->user();
+// });
+
+// Route::group([
+//     'namespace' => 'API',
+//     'prefix' => 'auth'
+// ], function () {
+//     Route::post('register', 'AuthController@register');
+//     Route::post('login', 'AuthController@login');
+//     Route::get('refresh', 'AuthController@refresh');
+
+//     Route::group(['middleware' => 'auth:api'], function () {
+//         Route::get('user', 'AuthController@user');
+//         Route::post('logout', 'AuthController@logout');
+//     });
+// });
+
 Route::group([
     'namespace' => 'API',
-    'prefix' => 'auth'
-], function () {
-    Route::post('register', 'AuthController@register');
-    Route::post('login', 'AuthController@login');
-    Route::get('refresh', 'AuthController@refresh');
-
-    Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('user', 'AuthController@user');
-        Route::post('logout', 'AuthController@logout');
-    });
-});
-
-Route::group([
-    'namespace' => 'API',
-    'as' => 'api.'
-    // 'middleware' => 'auth:api',
+    'as' => 'api.',
+    'middleware' => 'auth:sanctum',
 ], function () {
     Route::get('user/download', 'UserController@download')->name('user.download');
     Route::apiResource('user', 'UserController');

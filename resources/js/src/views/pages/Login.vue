@@ -30,33 +30,35 @@
 
                 <!-- <form ref="form"> -->
                   <div>
-                    <vs-input
-                        name="userId"
-                        icon-no-border
-                        icon="icon icon-user"
-                        icon-pack="feather"
-                        label-placeholder="User ID"
-                        v-model="userId"
-                        class="w-full"/>
+                    <form action="#" @submit.prevent="handleLogin">
+                      <vs-input
+                          name="userId"
+                          icon-no-border
+                          icon="icon icon-user"
+                          icon-pack="feather"
+                          label-placeholder="User ID"
+                          v-model="formData.USER_ID"
+                          class="w-full"/>
 
-                    <vs-input
-                        type="password"
-                        name="password"
-                        icon-no-border
-                        icon="icon icon-lock"
-                        icon-pack="feather"
-                        label-placeholder="Password"
-                        v-model="password"
-                        class="w-full mt-6" />
+                      <vs-input
+                          type="password"
+                          name="password"
+                          icon-no-border
+                          icon="icon icon-lock"
+                          icon-pack="feather"
+                          label-placeholder="Password"
+                          v-model="formData.password"
+                          class="w-full mt-6" />
 
-                    <div class="flex flex-wrap justify-between mt-5">
-                        <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox>
-                        <!-- <router-link to="">Forgot Password?</router-link> -->
-                    </div>
-                    <!-- <vs-button  type="border">Register</vs-button> -->
-                    <vs-button @click="submit" class="float-left my-3 mb-5">Login</vs-button>
+                      <div class="flex flex-wrap justify-between mt-5">
+                          <!-- <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox> -->
+                          <!-- <router-link to="">Forgot Password?</router-link> -->
+                      </div>
+                      <!-- <vs-button  type="border">Register</vs-button> -->
+                      <vs-button @click="handleLogin" class="float-left my-3 mb-5">Login</vs-button>
 
-                    <vs-divider></vs-divider>
+                      <vs-divider></vs-divider>
+                    </form>
 
                   </div>
                 <!-- </form> -->
@@ -72,50 +74,42 @@
 
 <script>
 import auth from '@/services/auth'
+import axios from 'axios'
 
 export default{
   data() {
     return {
-      userId: "",
-      password: "",
+      formData: {
+        USER_ID: "",
+        password: "",
+      },
       checkbox_remember_me: false,
     }
   },
 
   methods: {
     submit() {
-      auth.login(this.userId, this.password).then((res) => {
+      auth.login(this.formData).then((res) => {
         if (res.data.success) {
-          // let authResult = res.data.result
-
-          // this.idToken = authResult.idToken
-          // this.profile = authResult.idTokenPayload
-
-          // // Convert the JWT expiry time from seconds to milliseconds
-          // this.tokenExpiry = new Date(this.profile.exp * 1000)
-          // localStorage.setItem(tokenExpiryKey, this.tokenExpiry)
-          // localStorage.setItem(localStorageKey, 'true')
-
-          // store.commit('UPDATE_USER_INFO', {
-          //   displayName: this.profile.name,
-          //   email: this.profile.email,
-          //   photoURL: this.profile.picture,
-          //   providerId: this.profile.sub.substr(0, this.profile.sub.indexOf('|')),
-          //   uid: this.profile.sub
-          // })
-
-          // this.emit(loginEvent, {
-          //   loggedIn: true,
-          //   profile: authResult.idTokenPayload,
-          //   state: authResult.appState || {}
-          // })
-
+          
           this.$router.push({ path: '/' })
         }
       }).catch((err) => {
         if (!err.response.data.success) {
           alert(err.response.data.message)
         }
+      })
+    },
+
+    handleLogin () {
+      axios.get('/sanctum/csrf-cookie').then((res) => {
+        axios.post('/auth', this.formData, {headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}).then((res) => {
+          if (res.data.success) {
+            localStorage.setItem('loggedIn', res.data.result)
+
+            this.$router.push({path: '/'})
+          }
+        })
       })
     }
   }
