@@ -1,6 +1,7 @@
 // en, kr
 export default {
   en: {
+    Warning: 'Warning',
     Add: 'Add',
     Save: 'Save',
     Query: 'Query',
@@ -20,8 +21,10 @@ export default {
     EmailValid: 'Email valid',
     Accept: 'Accept',
     Cancel: 'Cancel',
+    TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.'
   },
   kr: {
+    Warning: '경고',
     Add: '추가',
     Save: '저장',
     Query: '조회',
@@ -41,5 +44,6 @@ export default {
     EmailValid: 'Email valid',
     Accept: '동의하기',
     Cancel: '취소',
+    TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.'
   }
 }

@@ -15,28 +15,44 @@
       {'vs-sidebar-item-active'            : activeLink},
       {'disabled-item pointer-events-none' : isDisabled}
     ]" >
+      <template v-if="tabExceeded">
+        <a
+          tabindex="-1"
+          exact
+          :class="[{'router-link-active': activeLink}]"
+          class="cursor-pointer"
+          @click="showExceededDialog"
+          :target="target" >
+            <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
+            <feather-icon v-else-if="icon" :class="{'w-3 h-3': iconSmall}" :icon="icon" />
+            <slot />
+        </a>
+      </template>
 
-      <router-link
-        tabindex="-1"
-        v-if="to"
-        exact
-        :class="[{'router-link-active': activeLink}]"
-        :to="to"
-        :target="target" >
+      <template v-else>
+        <router-link
+          tabindex="-1"
+          v-if="to"
+          exact
+          :class="[{'router-link-active': activeLink}]"
+          :to="to"
+          :target="target" >
+            <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
+            <feather-icon v-else-if="icon" :class="{'w-3 h-3': iconSmall}" :icon="icon" />
+            <slot />
+        </router-link>
+
+        <a v-else :target="target" :href="href" tabindex="-1">
           <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
-          <feather-icon v-else-if="icon" :class="{'w-3 h-3': iconSmall}" :icon="icon" />
+          <!-- <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" /> -->
           <slot />
-      </router-link>
-
-      <a v-else :target="target" :href="href" tabindex="-1">
-        <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
-        <!-- <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" /> -->
-        <slot />
-      </a>
+        </a>
+      </template>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 export default {
   name: 'v-nav-menu-item',
   props: {
@@ -54,6 +70,19 @@ export default {
   computed: {
     activeLink () {
       return !!((this.to === this.$route.path || this.$route.meta.parent === this.slug) && this.to)
+    },
+    ...mapGetters({
+      tabExceeded: 'mdn/tabExceeded',
+    })
+  },
+  methods: {
+    showExceededDialog () {
+      this.$vs.dialog({
+        color: 'warning',
+        title: this.$t('Warning'),
+        text: this.$t('TabLimitReached'),
+        acceptText: this.$t('Accept')
+      })
     }
   }
 }

@@ -15,7 +15,7 @@ const mdn = {
     state: () => ({
         activeTab: 0,
         tabs: [],
-        maxTabs: 2
+        maxTabs: 5
     }),
 
     mutations: {
@@ -67,6 +67,10 @@ const mdn = {
                 }
             }
             return false
+        },
+
+        tabExceeded: (state) => {
+            return state.tabs.length >= state.maxTabs
         },
 
         getTabs: (state) => {
