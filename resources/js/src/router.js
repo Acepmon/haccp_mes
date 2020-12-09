@@ -45,40 +45,84 @@ const router = new Router({
               {
                 path: '/1/1',
                 name: '회사정보등록',
-                component: {
-                  created () {
-                    this.$store.dispatch('mdn/addTab', {path: '/1/1', value: 'page-1-1', label: '회사정보등록', component: 'page-1-1'})
-                  }
-                }
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/1', value: 'page-1-1', label: '회사정보등록', component: 'page-1-1'}) } }
               },
               {
                 path: '/1/2',
                 name: '생산담당자등록',
-                component: {
-                  created () {
-                    this.$store.dispatch('mdn/addTab', {path: '/1/2', value: 'page-1-2', label: '생산담당자등록', component: 'page-1-2'})
-                  }
-                }
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/2', value: 'page-1-2', label: '생산담당자등록', component: 'page-1-2'}) } }
               },
               {
                 path: '/1/3',
                 name: 'HACCP담당자등록',
-                component: {
-                  created () {
-                    this.$store.dispatch('mdn/addTab', {path: '/1/3', value: 'page-1-3', label: 'HACCP담당자등록', component: 'page-1-3'})
-                  }
-                }
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/3', value: 'page-1-3', label: 'HACCP담당자등록', component: 'page-1-3'}) } }
               },
               {
-                path: '/user-entry',
-                name: 'User Entry',
-                component: () => import('./views/UserEntry.vue')
+                path: '/1/4/1',
+                name: 'HACCP 기준서 등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/4/1', value: 'page-1-4-1', label: 'HACCP 기준서 등록', component: 'page-1-4-1'}) } }
               },
               {
-                path: '/login-history',
-                name: 'Login History',
-                component: () => import('./views/LoginHist.vue')
+                path: '/1/4/2',
+                name: '식품위생서류 등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/4/2', value: 'page-1-4-2', label: '식품위생서류 등록', component: 'page-1-4-2'}) } }
               },
+              {
+                path: '/1/4/3',
+                name: 'HACCP 이행점검표',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/4/3', value: 'page-1-4-3', label: 'HACCP 이행점검표', component: 'page-1-4-3'}) } }
+              },
+              {
+                path: '/1/5/1',
+                name: '가공원료 기준등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/5/1', value: 'page-1-5-1', label: '가공원료 기준등록', component: 'page-1-5-1'}) } }
+              },
+              {
+                path: '/1/5/2',
+                name: '원료 기준등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/5/2', value: 'page-1-5-2', label: '원료 기준등록', component: 'page-1-5-2'}) } }
+              },
+              {
+                path: '/1/5/3',
+                name: '부자재 기준등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/5/3', value: 'page-1-5-3', label: '부자재 기준등록', component: 'page-1-5-3'}) } }
+              },
+              {
+                path: '/1/6',
+                name: 'HACCP담당자등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/6', value: 'page-1-6', label: 'HACCP담당자등록', component: 'page-1-6'}) } }
+              },
+              {
+                path: '/1/7',
+                name: '회사정보등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/7', value: 'page-1-7', label: '회사정보등록', component: 'page-1-7'}) } }
+              },
+              {
+                path: '/1/8/1',
+                name: '전처리공정등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/8/1', value: 'page-1-8-1', label: '전처리공정등록', component: 'page-1-8-1'}) } }
+              },
+              {
+                path: '/1/8/2',
+                name: '제조공정등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/8/2', value: 'page-1-8-2', label: '제조공정등록', component: 'page-1-8-2'}) } }
+              },
+              {
+                path: '/1/9',
+                name: '구매기업정보등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/9', value: 'page-1-9', label: '구매기업정보등록', component: 'page-1-9'}) } }
+              },
+              {
+                path: '/1/10',
+                name: '납품기업정보등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/10', value: 'page-1-10', label: '납품기업정보등록', component: 'page-1-10'}) } }
+              },
+              {
+                path: '/1/11',
+                name: '정보보호관리',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/11', value: 'page-1-11', label: '정보보호관리', component: 'page-1-11'}) } }
+              },
+
               {
                 path: '/2',
                 name: '구매관리',
@@ -108,6 +152,17 @@ const router = new Router({
                 path: '/7',
                 name: '자료관리',
                 component: () => import('./views/Example.vue')
+              },
+
+              {
+                path: '/user-entry',
+                name: 'User Entry',
+                component: () => import('./views/UserEntry.vue')
+              },
+              {
+                path: '/login-history',
+                name: 'Login History',
+                component: () => import('./views/LoginHist.vue')
               },
             ],
         },
