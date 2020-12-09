@@ -1,26 +1,34 @@
 <template>
 	<div>
         <vx-card>
+            <div class="flex flex-wrap justify-end mb-2">
+                <vs-button @click="add()" class="mx-1" color="dark" type="border" :disabled="isSelected">{{ $t('Add') }}</vs-button>
+                <vs-button @click="save()" class="mx-1" color="dark" type="border" :disabled="!isSelected">{{ $t('Save') }}</vs-button>
+                <vs-button @click="query()" class="mx-1" color="dark" type="border">{{ $t('Query') }}</vs-button>
+                <vs-button @click="remove()" class="mx-1" color="dark" type="border" :disabled="!isSelected">{{ $t('Delete') }}</vs-button>
+                <vs-button @click="closeTab()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
+            </div>
+
             <form ref="form">
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-6">
+                        <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 휴대폰번호(ID)</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input />
+                                <vs-input v-model="selected.user_id" />
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-6">
+                        <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 이름</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input />
+                                <vs-input v-model="selected.user_nm" />
                             </div>
                         </div>
                     </div>
@@ -28,23 +36,23 @@
 
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-6">
+                        <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 비밀번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input />
+                                <vs-input v-model="selected.user_pw" type="password" />
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-6">
+                        <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span>비밀번호확인</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input />
+                                <vs-input v-model="selected.user_pw_confirmation" type="password" />
                             </div>
                         </div>
                     </div>
@@ -52,12 +60,12 @@
 
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-6">
+                        <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span>이메일</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input />
+                                <vs-input v-model="selected.email" type="email" :success="validEmail" :success-text="$t('EmailValid')" />
                             </div>
                         </div>
                     </div>
@@ -65,13 +73,22 @@
 
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-6">
+                        <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 메뉴접근권한</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                                <vs-button color="primary" class="px-3 ml-1 mt-1" type="border" icon-pack="feather" icon="icon-check">원/부자재관리</vs-button>
-                                <vs-button color="dark" disabled type="border" class="px-3 ml-1 mt-1">생산관리</vs-button>
+                                <vs-button 
+                                    v-for="(role, index) in roles"
+                                    :key="index"
+                                    @click="toggleRole(role.comm2_cd)"
+                                    :color="selectedRoleHas(role.comm2_cd) ? 'primary' : 'dark'"
+                                    class="px-3 mt-1 flex-shrink-0"
+                                    :class="{'ml-1': index != 0}"
+                                    type="border">
+                                        <vs-icon v-if="selectedRoleHas(role.comm2_cd)" icon-pack="feather" icon="icon-check" />
+                                        <span v-text="role.comm2_nm"></span>
+                                    </vs-button>
                             </div>
                         </div>
                     </div>
@@ -79,13 +96,22 @@
 
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-6">
+                        <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 담당업무</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                                <vs-button color="primary" class="px-3 ml-1 mt-1" type="border" icon-pack="feather" icon="icon-check">원/부자재관리</vs-button>
-                                <vs-button color="dark" disabled type="border" class="px-3 ml-1 mt-1">생산관리</vs-button>
+                                <vs-button 
+                                    v-for="(appr, index) in approvals"
+                                    :key="index"
+                                    @click="toggleApproval(appr.comm2_cd)"
+                                    :color="selectedApprovalHas(appr.comm2_cd) ? 'primary' : 'dark'"
+                                    class="px-3 mt-1 flex-shrink-0"
+                                    :class="{'ml-1': index != 0}"
+                                    type="border">
+                                        <vs-icon v-if="selectedApprovalHas(appr.comm2_cd)" icon-pack="feather" icon="icon-check" />
+                                        <span v-text="appr.comm2_nm"></span>
+                                    </vs-button>
                             </div>
                         </div>
                     </div>
@@ -93,130 +119,91 @@
 
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-6">
+                        <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 업무권한</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select></vs-select>
+                                <vs-select v-model="selected.job_cd">
+                                    <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in jobs"></vs-select-item>
+                                </vs-select>
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-6">
+                        <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 사용여부</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select></vs-select>
+                                <vs-select v-model="selected.user_sts_yn">
+                                    <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item, index) in status"></vs-select-item>
+                                </vs-select>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
-        </vx-card>
 
-		<vx-card class="mt-5">
-            <div class="flex flex-wrap justify-end mb-5">
-                <vs-button @click="add()" class="mx-1" color="dark" type="border" :disabled="isSelected">Add</vs-button>
-                <vs-button @click="save()" class="mx-1" color="dark" type="border" :disabled="!isSelected">Save</vs-button>
-                <vs-button @click="query()" class="mx-1" color="dark" type="border">Query</vs-button>
-                <vs-button @click="close()" class="mx-1" color="dark" type="border">Close</vs-button>
-                <vs-button @click="remove()" class="mx-1" color="dark" type="border" :disabled="!isSelected">Delete</vs-button>
+            <vs-divider/>
+
+            <div class="flex flex-wrap justify-end mb-2">
+                <vs-button @click="excel()" class="mx-1" color="dark" type="border" :disabled="datas.length <= 0">{{ $t('ToExcel') }}</vs-button>
             </div>
 
-            <form ref="form">
-                <div class="flex flex-wrap">
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
-                        <vs-input class="w-full" label="User ID" v-model="selected.user_id" description-text="Maximum of 15 characters allowed" />
-                    </div>
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
-                        <vs-input class="w-full" label="User Password" v-model="selected.user_pw" type="password" />
-                    </div>
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
-                        <vs-input class="w-full" label="User Name" v-model="selected.user_nm" description-text="Maximum of 20 characters allowed" />
-                    </div>
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
-                        <vs-input class="w-full" label="User e-Mail" v-model="selected.email" type="email" :success="validEmail" success-text="Email valid" />
-                    </div>
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
-                        <vs-select class="w-full" label="Role Name" v-model="selected.role_cd" multiple>
-                            <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in roles"></vs-select-item>
-                        </vs-select>
-                    </div>
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
-                        <vs-select class="w-full" label="Use Status" v-model="selected.user_sts_yn">
-                            <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item, index) in status"></vs-select-item>
-                        </vs-select>
-                    </div>
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
-                        <vs-select class="w-full" label="Approval" v-model="selected.appr_cd">
-                            <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in approvals"></vs-select-item>
-                        </vs-select>
-                    </div>
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
-                        <vs-select class="w-full" label="Job" v-model="selected.job_cd">
-                            <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in jobs"></vs-select-item>
-                        </vs-select>
-                    </div>
-                </div>
-            </form>
+            <div class="overflow-y-auto" style="max-height: 300px;">
+                <vs-table stripe pagination description sst :max-items="pagination.limit" :data="datas" :total="pagination.total" @change-page="handleChangePage" @sort="handleSort" v-model="selected" @selected="handleSelected">
+                    <template slot="thead">
+                        <vs-th>No</vs-th>
+                        <vs-th sort-key="user_id">사용자 ID</vs-th>
+                        <vs-th sort-key="user_nm">이름</vs-th>
+                        <vs-th sort-key="user_pw">비밀번호</vs-th>
+                        <vs-th sort-key="email">이메일</vs-th>
+                        <vs-th sort-key="appr_cd">담당업무</vs-th>
+                        <vs-th sort-key="role_cd">메뉴접근권한</vs-th>
+                        <vs-th sort-key="reg_dtm">등록일시</vs-th>
+                    </template>
 
-            <div class="flex flex-wrap justify-end mb-5">
-                <vs-button @click="excel()" class="mx-1" color="dark" type="border" :disabled="datas.length <= 0">To Excel</vs-button>
+                    <template slot-scope="{data}">
+                        <vs-tr :data="tr" :key="index" v-for="(tr, index) in data">
+
+                            <vs-td :data="(overallIndex(index))">
+                                {{ (overallIndex(index)) }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].user_id">
+                                {{ data[index].user_id }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].user_nm">
+                                {{ data[index].user_nm }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].user_pw">
+                                {{ data[index].user_pw }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].email">
+                                {{ data[index].email }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].appr_nm">
+                                {{ data[index].appr_nm }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].role_nm">
+                                {{ data[index].role_nm }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].reg_dtm">
+                                {{ data[index].reg_dtm }}
+                            </vs-td>
+
+                        </vs-tr>
+                    </template>
+                </vs-table>
             </div>
-
-            <vs-table stripe pagination description sst :max-items="pagination.limit" :data="datas" :total="pagination.total" @change-page="handleChangePage" @sort="handleSort" v-model="selected" @selected="handleSelected">
-				<template slot="thead">
-					<vs-th>No</vs-th>
-					<vs-th sort-key="user_id">사용자 ID</vs-th>
-					<vs-th sort-key="user_nm">이름</vs-th>
-					<vs-th sort-key="user_pw">비밀번호</vs-th>
-					<vs-th sort-key="email">이메일</vs-th>
-					<vs-th sort-key="appr_cd">담당업무</vs-th>
-					<vs-th sort-key="role_cd">메뉴접근권한</vs-th>
-                    <vs-th sort-key="reg_dtm">등록일시</vs-th>
-				</template>
-
-				<template slot-scope="{data}">
-					<vs-tr :data="tr" :key="index" v-for="(tr, index) in data">
-
-						<vs-td :data="(overallIndex(index))">
-							{{ (overallIndex(index)) }}
-						</vs-td>
-
-						<vs-td :data="data[index].user_id">
-							{{ data[index].user_id }}
-						</vs-td>
-
-						<vs-td :data="data[index].user_nm">
-							{{ data[index].user_nm }}
-						</vs-td>
-
-						<vs-td :data="data[index].user_pw">
-							{{ data[index].user_pw }}
-						</vs-td>
-
-						<vs-td :data="data[index].email">
-							{{ data[index].email }}
-						</vs-td>
-
-                        <vs-td :data="data[index].appr_nm">
-							{{ data[index].appr_nm }}
-						</vs-td>
-
-						<vs-td :data="data[index].role_nm">
-							{{ data[index].role_nm }}
-						</vs-td>
-
-                        <vs-td :data="data[index].reg_dtm">
-							{{ data[index].reg_dtm }}
-						</vs-td>
-
-					</vs-tr>
-				</template>
-			</vs-table>
         </vx-card>
 	</div>
 </template>
@@ -225,6 +212,7 @@
 import axios from 'axios'
 import comm_cd from '@/services/comm_cd'
 import api from '@/services/user'
+import {mapActions} from 'vuex';
 
 export default {
     data() {
@@ -239,10 +227,11 @@ export default {
             selected: {
                 user_id: null,
                 user_pw: null,
+                user_pw_confirmation: null,
                 user_nm: null,
                 email: null,
                 role_cd: [],
-                appr_cd: null,
+                appr_cd: [],
                 job_cd: null,
                 user_sts_yn: null,
             },
@@ -280,6 +269,10 @@ export default {
 		}
     },
     methods: {
+        ...mapActions({
+            removeTab: 'mdn/removeTab',
+        }),
+
         overallIndex: function (index) {
 			return (this.pagination.page * this.pagination.limit)-this.pagination.limit + index + 1
 		},
@@ -299,11 +292,38 @@ export default {
 			this.query()
         },
 
+        selectedRoleHas(comm2_cd) {
+            return this.selected.role_cd.includes(comm2_cd)
+        },
+
+        toggleRole(comm2_cd) {
+            if (!this.selectedRoleHas(comm2_cd)) {
+                this.selected.role_cd.push(comm2_cd)
+            } else {
+                let index = this.selected.role_cd.indexOf(comm2_cd)
+                this.selected.role_cd.splice(index, 1)
+            }
+        },
+
+        selectedApprovalHas(comm2_cd) {
+            return this.selected.appr_cd.includes(comm2_cd)
+        },
+
+        toggleApproval(comm2_cd) {
+            if (!this.selectedApprovalHas(comm2_cd)) {
+                this.selected.appr_cd.push(comm2_cd)
+            } else {
+                let index = this.selected.appr_cd.indexOf(comm2_cd)
+                this.selected.appr_cd.splice(index, 1)
+            }
+        },
+
         clearSelected: function () {
             this.isSelected = false
             this.selected = {
                 user_id: null,
                 user_pw: null,
+                user_pw_confirmation: null,
                 user_nm: null,
                 email: null,
                 role_cd: null,
@@ -320,8 +340,8 @@ export default {
                         this.$vs.notify({
                             color: 'success',
                             position: 'top-right',
-                            title: `New User`,
-                            text: `Successfully added new user record`
+                            title: this.$t('AddedUser'),
+                            text: this.$t('SuccessAddedUser')
                         })
                         this.query()
                         this.clearSelected()
@@ -331,23 +351,25 @@ export default {
 
         save: function () {
             this.$vs.dialog({
+                type: 'confirm',
                 color: 'success',
-                title: 'Confirmation',
-                text: 'Save user record?',
+                title: this.$t('Confirmation'),
+                text: this.$t('SaveUser'),
+                acceptText: this.$t('Accept'),
+                cancelText: this.$t('Cancel'),
                 accept: function () {
-                    api.put(this.selected.user_id, this.selected)
-                        .then((res) => {
-                            if (res.data.success) {
-                                this.$vs.notify({
-                                    color: 'success',
-                                    position: 'top-right',
-                                    title: `Saved User`,
-                                    text: `Successfully updated user record`
-                                })
-                                this.query()
-                                this.clearSelected()
-                            }
-                        })
+                    api.put(this.selected.user_id, this.selected).then((res) => {
+                        if (res.data.success) {
+                            this.$vs.notify({
+                                color: 'success',
+                                position: 'top-right',
+                                title: this.$t('SavedUser'),
+                                text: this.$t('SuccessSavedUser')
+                            })
+                            this.query()
+                            this.clearSelected()
+                        }
+                    })
                 }
             })
         },
@@ -363,37 +385,40 @@ export default {
             })
         },
 
-        close: function () {
+        closeTab () {
             this.$vs.dialog({
+                type: 'confirm',
                 color: 'dark',
-                title: 'Confirmation',
-                text: 'Close document?',
-                accept: function () {
-                    alert('Alerted')
-                }
+                title: this.$t('Confirmation'),
+                text: this.$t('CloseDocument'),
+                acceptText: this.$t('Accept'),
+                cancelText: this.$t('Cancel'),
+                accept: () => this.removeTab('page-1-2')
             })
         },
 
         remove: function () {
             var sUserId = this.selected.user_id
             this.$vs.dialog({
+                type: 'confirm',
                 color: 'danger',
-                title: 'Confirmation',
-                text: 'Delete user record?',
+                title: this.$t('Confirmation'),
+                text: this.$t('DeleteUser'),
+                acceptText: this.$t('Accept'),
+                cancelText: this.$t('Cancel'),
                 accept: function () {
-                    api.delete(sUserId)
-                        .then((res) => {
-                            if (res.data.success) {
-                                this.$vs.notify({
-                                    color: 'success',
-                                    position: 'top-right',
-                                    title: `Deleted user`,
-                                    text: `Successfully deleted user record`
-                                })
-                                this.query()
-                                this.clearSelected()
-                            }
-                        })
+                    api.delete(sUserId).then((res) => {
+                        if (res.data.success) {
+                            this.$vs.notify({
+                                color: 'success',
+                                position: 'top-right',
+                                title: this.$t('DeletedUser'),
+                                text: this.$t('SuccessDeletedUser')
+                            })
+                            this.query()
+                            this.clearSelected()
+                        }
+                    })
                 }
             })
         },

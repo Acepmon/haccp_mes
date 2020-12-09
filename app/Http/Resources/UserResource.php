@@ -22,14 +22,9 @@ class UserResource extends JsonResource
             'user_pw' => $this->USER_PW,
             'email' => $this->EMAIL,
             'role_cd' => explode(',', $this->ROLE_CD),
-            'role_nm' => $this->whenLoaded('role', function () {
-                return $this->role->COMM2_NM;
-            }),
-            'appr_cd' => $this->appr_cd,
-            'appr_nm' => $this->whenLoaded('appr', function () {
-                return $this->appr->COMM2_NM;
-            }),
-            'job_cd' => $this->job_cd,
+            'appr_cd' => explode(',', $this->APPR_CD),
+
+            'job_cd' => $this->JOB_CD,
             'job_nm' => $this->whenLoaded('job', function () {
                 return $this->job->COMM2_NM;
             }),

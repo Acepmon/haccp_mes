@@ -31,6 +31,8 @@
 
         <vs-spacer />
 
+        <i18n class="mr-5" />
+
         <!-- <search-bar class="mr-4" />
 
         <notification-drop-down /> -->
@@ -51,6 +53,7 @@
 import axios from 'axios'
 import Bookmarks            from './components/Bookmarks.vue'
 import SearchBar            from './components/SearchBar.vue'
+import I18n                 from './components/I18n.vue'
 import NotificationDropDown from './components/NotificationDropDown.vue'
 import ProfileDropDown      from './components/ProfileDropDown.vue'
 import navMenuItems         from './../vertical-nav-menu/navMenuItems'
@@ -63,6 +66,7 @@ export default {
     }
   },
   components: {
+    I18n,
     Bookmarks,
     SearchBar,
     NotificationDropDown,

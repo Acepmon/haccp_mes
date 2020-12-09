@@ -24,7 +24,7 @@
                         size="small"
                         icon="close"
                         class="ml-2"
-                        @click="removeTab(tab)"
+                        @click="closeTab(tab)"
                     ></vs-button>
                 </div>
             </vs-button>
@@ -104,7 +104,18 @@ export default {
             addTab: 'mdn/addTab',
             removeTab: 'mdn/removeTab',
             routeTo: 'mdn/tabRouteTo',
-        })
+        }),
+        closeTab (tab) {
+            this.$vs.dialog({
+                type: 'confirm',
+                color: 'dark',
+                title: this.$t('Confirmation'),
+                text: this.$t('CloseDocument'),
+                acceptText: this.$t('Accept'),
+                cancelText: this.$t('Cancel'),
+                accept: () => this.removeTab(tab)
+            })
+        }
     },
 }
 </script>
