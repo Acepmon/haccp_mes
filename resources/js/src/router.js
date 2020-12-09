@@ -35,12 +35,12 @@ const router = new Router({
                 path: '/',
                 name: 'home',
                 // component: () => import('./views/Home.vue')
-                redirect: '/1/1'
+                redirect: '/1'
               },
               {
                 path: '/1',
                 name: '정보관리',
-                redirect: '/1/1'
+                component: () => import('./views/Empty.vue')
               },
               {
                 path: '/1/1',
@@ -89,13 +89,13 @@ const router = new Router({
               },
               {
                 path: '/1/6',
-                name: 'HACCP담당자등록',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/6', value: 'page-1-6', label: 'HACCP담당자등록', component: 'page-1-6'}) } }
+                name: '생산제품등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/6', value: 'page-1-6', label: '생산제품등록', component: 'page-1-6'}) } }
               },
               {
                 path: '/1/7',
-                name: '회사정보등록',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/7', value: 'page-1-7', label: '회사정보등록', component: 'page-1-7'}) } }
+                name: '원료배합비율',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/7', value: 'page-1-7', label: '원료배합비율', component: 'page-1-7'}) } }
               },
               {
                 path: '/1/8/1',
@@ -126,32 +126,32 @@ const router = new Router({
               {
                 path: '/2',
                 name: '구매관리',
-                component: () => import('./views/Example.vue')
+                component: () => import('./views/Empty.vue')
               },
               {
                 path: '/3',
                 name: '주문처리',
-                component: () => import('./views/Example.vue')
+                component: () => import('./views/Empty.vue')
               },
               {
                 path: '/4',
                 name: '생산관리',
-                component: () => import('./views/Example.vue')
+                component: () => import('./views/Empty.vue')
               },
               {
                 path: '/5',
                 name: '출하관리',
-                component: () => import('./views/Example.vue')
+                component: () => import('./views/Empty.vue')
               },
               {
                 path: '/6',
                 name: 'HACCP모니터링',
-                component: () => import('./views/Example.vue')
+                component: () => import('./views/Empty.vue')
               },
               {
                 path: '/7',
                 name: '자료관리',
-                component: () => import('./views/Example.vue')
+                component: () => import('./views/Empty.vue')
               },
 
               {

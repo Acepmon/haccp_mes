@@ -7,6 +7,8 @@
  * - tabActive : boolean
  */
 
+import router from '@/router'
+
 const mdn = {
     namespaced: true,
 
@@ -46,6 +48,7 @@ const mdn = {
             }
         }
     },
+
     getters: {
         getTabIndex: (state) => (value) => {
             for (let index = 0; index < state.tabs.length; index++) {
@@ -72,8 +75,18 @@ const mdn = {
 
         getLastTab: (state) => {
             if (state.tabs.length > 0) {
-                state.activeTab = state.tabs[state.tabs.length - 1].value
+                return state.tabs[state.tabs.length - 1]
             }
+
+            return null
+        },
+
+        getFirstTab: (state) => {
+            if (state.tabs.length > 0) {
+                return state.tabs[0]
+            }
+
+            return null
         },
 
         getActive: (state) => {
@@ -90,20 +103,28 @@ const mdn = {
             return 'tab-empty'
         }
     },
+
     actions: {
         addTab({commit, getters, state}, tab) {
             if (!getters.tabExists({value: tab.value})) {
                 commit('ADD_TAB', tab)
             }
 
-            commit('SET_ACTIVE_TAB', tab)
+            if (state.activeTab != tab.value) {
+                commit('SET_ACTIVE_TAB', tab)
+            }
         },
 
         removeTab({commit, getters}, tab) {
-            commit('REMOVE_TAB', getters.getTabIndex(tab.value))
-            this.$router.push({
-                path: getters.getLastTab.path
-            })
+            commit('REMOVE_TAB', {index: getters.getTabIndex(tab.value)})
+
+            if (getters.getLastTab) {
+                router.push({
+                    path: getters.getLastTab.path
+                }).catch(() => {})
+            } else {
+                router.push({ path: '/1' }).catch(() => {})
+            }
         },
 
         gotoTab({commit, getters}, tab) {
@@ -118,6 +139,12 @@ const mdn = {
 
         gotoFirst() {
             commit('SET_ACTIVE_FIRST')
+        },
+
+        tabRouteTo(context, tab) {
+            if (router.history.current.path != tab.path) {
+                router.push({path: tab.path}).catch(() => {})
+            }
         }
     }
 }
