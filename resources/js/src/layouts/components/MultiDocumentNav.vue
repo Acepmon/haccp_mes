@@ -14,17 +14,16 @@
                 :color="activeTab == tab.value ? 'primary' : 'dark'"
                 :style="activeTab == tab.value ? 'border-color: inherit' : ''"
                 @click="routeTo({path: tab.path})"
-                class="py-1 pr-2 pl-5 flex-shrink-0"
+                class="py-2 pr-2 pl-5 flex-shrink-0"
             >
                 <div class="flex flex-row">
                     <span v-text="tab.label" :class="activeTab == tab.value ? 'text-primary font-semibold' : ''"></span>
                     <vs-button 
                         :type="activeTab == tab.value ? 'flat' : 'flat'"
                         :color="activeTab == tab.value ? 'primary' : 'dark'"
-                        size="small" 
+                        size="small"
                         icon="close"
                         class="ml-2"
-                        style="margin-top: -5px;"
                         @click="removeTab(tab)"
                     ></vs-button>
                 </div>
