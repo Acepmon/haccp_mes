@@ -27,11 +27,10 @@ class LogSuccessfulLogout
      */
     public function handle(Logout $event)
     {
-        LoginHist::create([
-            'USER_ID' => $event->user->user_id,
-            'LOGIN_DTM' => null,
-            'LOGOUT_DTM' => now()->format('YmdHis'),
-            'IP_ADDR' => request()->ip(),
-        ]);
+        if (LoginHist::where('user_id', $event->user->user_id)->exists()) {
+            LoginHist::where('user_id', $event->user->user_id)->latest()->update([
+                'LOGOUT_DTM' => now()->format('YmdHis'),
+            ]);
+        }
     }
 }
