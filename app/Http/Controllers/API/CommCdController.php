@@ -6,9 +6,24 @@ use App\CommCd;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CommCdResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CommCdController extends Controller
 {
+    public function code(Request $request)
+    {
+        $cd1 = $request->input('cd1');
+        $cd2 = $request->input('cd2');
+
+        if ($request->has('cd2')) {
+            $items = DB::select('select haccp_mes.get_codename(?, ?) as comm2_nm', [$cd1, $cd2]);
+        } else {
+            $items = DB::select('call haccp_mes.get_codelist(?)', [$cd1]);
+        }
+
+        return response()->json($items);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,51 +34,6 @@ class CommCdController extends Controller
         $limit = $request->input('limit', 15);
         $paginate = $request->input('paginate', true);
         $items = CommCd::query();
-
-        if ($paginate) {
-            $items = $items->paginate($limit);
-        } else {
-            $items = $items->get();
-        }
-
-        return CommCdResource::collection($items);
-    }
-
-    public function roles(Request $request)
-    {
-        $limit = $request->input('limit', 15);
-        $paginate = $request->input('paginate', true);
-        $items = CommCd::where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$']);
-
-        if ($paginate) {
-            $items = $items->paginate($limit);
-        } else {
-            $items = $items->get();
-        }
-
-        return CommCdResource::collection($items);
-    }
-
-    public function approvals(Request $request)
-    {
-        $limit = $request->input('limit', 15);
-        $paginate = $request->input('paginate', true);
-        $items = CommCd::where('COMM1_CD', 'A20')->whereNotIn('COMM2_CD', ['$$']);
-
-        if ($paginate) {
-            $items = $items->paginate($limit);
-        } else {
-            $items = $items->get();
-        }
-
-        return CommCdResource::collection($items);
-    }
-
-    public function jobs(Request $request)
-    {
-        $limit = $request->input('limit', 15);
-        $paginate = $request->input('paginate', true);
-        $items = CommCd::where('COMM1_CD', 'A30')->whereNotIn('COMM2_CD', ['$$']);
 
         if ($paginate) {
             $items = $items->paginate($limit);

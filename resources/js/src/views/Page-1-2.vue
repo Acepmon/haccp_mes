@@ -428,16 +428,16 @@ export default {
         }
     },
     created () {
-        comm_cd.fetchRoles({limit: 0}).then((res) => {
-            this.roles = res.data.data
+        comm_cd.fetch({cd1: 'A10'}).then((res) => {
+            this.roles = res.data
         })
 
-        comm_cd.fetchApprovals({limit: 0}).then((res) => {
-            this.approvals = res.data.data
+        comm_cd.fetch({cd1: 'A20'}).then((res) => {
+            this.approvals = res.data
         })
 
-        comm_cd.fetchJobs({limit: 0}).then((res) => {
-            this.jobs = res.data.data
+        comm_cd.fetch({cd1: 'A30'}).then((res) => {
+            this.jobs = res.data
         })
 
         this.query()
