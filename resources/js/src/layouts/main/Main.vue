@@ -50,7 +50,7 @@
 
       <div class="content-wrapper">
 
-        <div class="router-view">
+        <div class="router-view pl-0">
           <div class="router-content">
 
             <transition :name="routerTransition">
@@ -96,13 +96,14 @@
             </transition>
 
             <div class="content-area__content">
+              <multi-document-nav></multi-document-nav>
 
               <back-to-top bottom="5%" :right="$vs.rtl ? 'calc(100% - 2.2rem - 38px)' : '30px'" visibleoffset="500" v-if="!hideScrollToTop">
                 <vs-button icon-pack="feather" icon="icon-arrow-up" class="shadow-lg btn-back-to-top" />
               </back-to-top>
 
               <transition :name="routerTransition" mode="out-in">
-                <router-view @changeRouteTitle="changeRouteTitle" @setAppClasses="(classesStr) => $emit('setAppClasses', classesStr)" />
+                <router-view @changeRouteTitle="changeRouteTitle" @setAppClasses="(classesStr) => $emit(setAppClassEvent, classesStr)" />
               </transition>
             </div>
           </div>
@@ -123,6 +124,7 @@ import TheNavbarVertical   from '@/layouts/components/navbar/TheNavbarVertical.v
 import TheFooter           from '@/layouts/components/TheFooter.vue'
 import themeConfig         from '@/../themeConfig.js'
 import VNavMenu            from '@/layouts/components/vertical-nav-menu/VerticalNavMenu.vue'
+import MultiDocumentNav    from '../components/MultiDocumentNav.vue'
 
 export default {
   components: {
@@ -131,7 +133,8 @@ export default {
     TheFooter,
     TheNavbarHorizontal,
     TheNavbarVertical,
-    VNavMenu
+    VNavMenu,
+    MultiDocumentNav
   },
   data () {
     return {
@@ -142,7 +145,8 @@ export default {
       navbarColor       : themeConfig.navbarColor || '#fff',
       navbarType        : themeConfig.navbarType  || 'floating',
       routerTransition  : themeConfig.routerTransition || 'none',
-      routeTitle        : this.$route.meta.pageTitle
+      routeTitle        : this.$route.meta.pageTitle,
+      setAppClassEvent  : 'setAppClasses'
     }
   },
   watch: {

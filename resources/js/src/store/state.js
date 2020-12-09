@@ -67,22 +67,7 @@ const state = {
 
     // Can be used to get current window with
     // Note: Above breakpoint state is for internal use of sidebar & navbar component
-    windowWidth: null,
-    
-    menuItems: [
-      {
-        url: "/",
-        name: "Home",
-        slug: "home",
-        icon: "HomeIcon",
-      },
-      {
-        url: "/page2",
-        name: "Page 2",
-        slug: "page2",
-        icon: "FileIcon",
-      }
-    ],
+    windowWidth: null
 }
 
 export default state

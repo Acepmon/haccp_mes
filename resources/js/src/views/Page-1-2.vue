@@ -3,7 +3,7 @@
         <vx-card>
             <form ref="form">
                 <div class="flex flex-wrap">
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                    <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-6">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 휴대폰번호(ID)</span>
@@ -14,7 +14,7 @@
                         </div>
                     </div>
 
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                    <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-6">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 이름</span>
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="flex flex-wrap">
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                    <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-6">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 비밀번호</span>
@@ -38,7 +38,7 @@
                         </div>
                     </div>
 
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                    <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-6">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span>비밀번호확인</span>
@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="flex flex-wrap">
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                    <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-6">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span>이메일</span>
@@ -64,12 +64,12 @@
                 </div>
 
                 <div class="flex flex-wrap">
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                    <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-6">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 메뉴접근권한</span>
                             </div>
-                            <div class="vx-col sm:w-2/3 w-full">
+                            <div class="vx-col sm:w-2/3 w-full flex flex-row">
                                 <vs-button color="primary" class="px-3 ml-1 mt-1" type="border" icon-pack="feather" icon="icon-check">원/부자재관리</vs-button>
                                 <vs-button color="dark" disabled type="border" class="px-3 ml-1 mt-1">생산관리</vs-button>
                             </div>
@@ -78,12 +78,12 @@
                 </div>
 
                 <div class="flex flex-wrap">
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                    <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-6">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 담당업무</span>
                             </div>
-                            <div class="vx-col sm:w-2/3 w-full">
+                            <div class="vx-col sm:w-2/3 w-full flex flex-row">
                                 <vs-button color="primary" class="px-3 ml-1 mt-1" type="border" icon-pack="feather" icon="icon-check">원/부자재관리</vs-button>
                                 <vs-button color="dark" disabled type="border" class="px-3 ml-1 mt-1">생산관리</vs-button>
                             </div>
@@ -92,7 +92,7 @@
                 </div>
 
                 <div class="flex flex-wrap">
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                    <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-6">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 업무권한</span>
@@ -103,7 +103,7 @@
                         </div>
                     </div>
 
-                    <div class="w-full sm:w-1/2 mb-4 px-1">
+                    <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-6">
                             <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
                                 <span><span class="text-danger">*</span> 사용여부</span>

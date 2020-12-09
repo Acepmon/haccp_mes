@@ -34,7 +34,8 @@ const router = new Router({
               {
                 path: '/',
                 name: 'home',
-                component: () => import('./views/Home.vue')
+                // component: () => import('./views/Home.vue')
+                redirect: '/1/1'
               },
               {
                 path: '/1',
@@ -44,17 +45,29 @@ const router = new Router({
               {
                 path: '/1/1',
                 name: '회사정보등록',
-                component: () => import('./views/Page-1-1.vue')
+                component: {
+                  created () {
+                    this.$store.dispatch('mdn/addTab', {path: '/1/1', value: 'page-1-1', label: '회사정보등록', component: 'page-1-1'})
+                  }
+                }
               },
               {
                 path: '/1/2',
                 name: '생산담당자등록',
-                component: () => import('./views/Page-1-2.vue')
+                component: {
+                  created () {
+                    this.$store.dispatch('mdn/addTab', {path: '/1/2', value: 'page-1-2', label: '생산담당자등록', component: 'page-1-2'})
+                  }
+                }
               },
               {
                 path: '/1/3',
                 name: 'HACCP담당자등록',
-                component: () => import('./views/Page-1-3.vue')
+                component: {
+                  created () {
+                    this.$store.dispatch('mdn/addTab', {path: '/1/3', value: 'page-1-3', label: 'HACCP담당자등록', component: 'page-1-3'})
+                  }
+                }
               },
               {
                 path: '/user-entry',
