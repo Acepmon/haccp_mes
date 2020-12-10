@@ -17,7 +17,7 @@ class WorkerResource extends JsonResource
         return [
             'worker_id' => $this->WORKER_ID,
             'worker_nm' => $this->WORKER_NM,
-            'tel_no' => $this->TEL_N0,
+            'tel_no' => $this->TEL_NO,
             'work_cd' => $this->WORK_CD,
             'health_chk_dt' => now()->parse($this->HEALTH_CHK_DT)->format('Y-m-d'),
             'role_cd' => $this->ROLE_CD,

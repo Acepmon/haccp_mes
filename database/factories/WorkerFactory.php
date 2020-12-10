@@ -13,7 +13,7 @@ $factory->define(Worker::class, function (Faker $faker) {
 
     return [
         'WORKER_NM' => Str::limit($faker->name, 60, ''),
-        'TEL_NO' => rand(11111111, 99999999),
+        'TEL_NO' => '' . rand(11111111, 99999999),
         'WORK_CD' => $work->COMM2_CD,
         'HEALTH_CHK_DT' => now()->addDays(rand(1, 50))->format('Ymd'),
         'ROLE_CD' => $role->COMM2_CD,

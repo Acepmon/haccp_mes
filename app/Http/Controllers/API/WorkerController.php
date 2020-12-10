@@ -47,7 +47,7 @@ class WorkerController extends Controller
             'worker_nm' => 'required|string|max:60',
             'tel_no' => 'required|string|max:20',
             'work_cd' => 'nullable|string|max:10',
-            'health_chk_dt' => 'nullable|string|max:8',
+            'health_chk_dt' => 'nullable|string|date_format:Y-m-d',
             'role_cd' => 'nullable|string|max:10',
             'remark' => 'nullable|string|max:100',
         ]);
@@ -56,7 +56,7 @@ class WorkerController extends Controller
             'WORKER_NM' => $request->input('worker_nm'),
             'TEL_NO' => $request->input('tel_no'),
             'WORK_CD' => $request->input('work_cd'),
-            'HEALTH_CHK_DT' => $request->input('health_chk_dt'),
+            'HEALTH_CHK_DT' => now()->parse($request->input('health_chk_dt'))->format('Ymd'),
             'ROLE_CD' => $request->input('role_cd'),
             'REMARK' => $request->input('remark'),
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
@@ -77,7 +77,7 @@ class WorkerController extends Controller
      */
     public function show($id)
     {
-        $item = Worker::find($id);
+        $item = Worker::where('WORKER_ID', $id)->first();
 
         if (!$item) {
             return response()->json([
@@ -101,7 +101,7 @@ class WorkerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = Worker::find($id);
+        $item = Worker::where('WORKER_ID', $id)->first();
 
         if (!$item) {
             return response()->json([
@@ -114,7 +114,7 @@ class WorkerController extends Controller
             'worker_nm' => 'required|string|max:60',
             'tel_no' => 'required|string|max:20',
             'work_cd' => 'nullable|string|max:10',
-            'health_chk_dt' => 'nullable|string|max:8',
+            'health_chk_dt' => 'nullable|string|date_format:Y-m-d',
             'role_cd' => 'nullable|string|max:10',
             'remark' => 'nullable|string|max:100',
         ]);
@@ -123,7 +123,7 @@ class WorkerController extends Controller
             'WORKER_NM' => $request->input('worker_nm'),
             'TEL_NO' => $request->input('tel_no'),
             'WORK_CD' => $request->input('work_cd'),
-            'HEALTH_CHK_DT' => $request->input('health_chk_dt'),
+            'HEALTH_CHK_DT' => now()->parse($request->input('health_chk_dt'))->format('Ymd'),
             'ROLE_CD' => $request->input('role_cd'),
             'REMARK' => $request->input('remark'),
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
@@ -144,7 +144,7 @@ class WorkerController extends Controller
      */
     public function destroy($id)
     {
-        $item = Worker::find($id);
+        $item = Worker::where('WORKER_ID', $id)->first();
 
         if (!$item) {
             return response()->json([

@@ -10,7 +10,82 @@
             </div>
 
 			<form action="#">
-				<!--  -->
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span><span class="text-danger">*</span> 이름</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="worker.worker_nm" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span><span class="text-danger">*</span> 휴대폰번호</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="worker.tel_no" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>업무구분</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-select v-model="worker.role_cd">
+                                    <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in roles"></vs-select-item>
+                                </vs-select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>업무내용</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="worker.remark" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>보건증갱신일자</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+								<!-- <datepicker :language="ko" format="" v-model="worker.health_chk_dt"></datepicker> -->
+								<flat-pickr :config="configdateTimePicker" v-model="worker.health_chk_dt"></flat-pickr>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>정/부 구분</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-select v-model="worker.work_cd">
+                                    <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in works"></vs-select-item>
+                                </vs-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 			</form>
 
 			<vs-divider/>
@@ -81,10 +156,20 @@ import axios from 'axios'
 import comm_cd from '@/services/comm_cd'
 import api from '@/services/worker'
 import {mapActions} from 'vuex';
+import flatPickr from 'vue-flatpickr-component';
+import 'flatpickr/dist/flatpickr.css';
+import {Korean as KoreanLocale} from 'flatpickr/dist/l10n/ko.js';
 
 export default {
+	components: {
+		flatPickr
+	},
+
 	data () {
 		return {
+			configdateTimePicker: {
+				locale: KoreanLocale,
+			},
 			worker: {
 				worker_id: null,
 				worker_nm: null,
@@ -96,6 +181,8 @@ export default {
 				reg_id: null,
 				reg_dtm: null,
 			},
+			roles: [],
+			works: [],
 			workers: [],
 			pagination: {
 				page: 1,
@@ -106,6 +193,22 @@ export default {
 				sort: 'reg_dtm',
 				order: 'desc'
 			},
+		}
+	},
+
+	computed: {
+		paginationParam: function () {
+			return {
+				page: this.pagination.page,
+				limit: this.pagination.limit
+			}
+        },
+
+		sortParam: function () {
+			return {
+				sort: this.sorting.sort != null ? this.sorting.sort : 'login_dtm',
+				order: this.sorting.order != null ? this.sorting.order : 'asc',
+			}
 		}
 	},
 
@@ -144,15 +247,84 @@ export default {
 		},
 
 		add () {
-			// 
+			this.spinner()
+
+			api.post(this.worker).then((res) => {
+				this.spinner(false)
+				
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('AddedWorker'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+					this.query()
+					this.clear()
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+        				icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		save () {
-			// 
+			this.spinner()
+
+			api.put(this.worker.worker_id, this.worker).then((res) => {
+				this.spinner(false)
+
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('SavedWorker'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+					this.query()
+					this.clear()
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+        				icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		query () {
 			this.spinner()
+
 			api.fetch({
                 ...this.paginationParam,
 			    ...this.sortParam
@@ -163,6 +335,14 @@ export default {
 				this.pagination.page = res.data.meta.current_page
             }).catch(() => {
 				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
 			})
 		},
 
@@ -178,7 +358,41 @@ export default {
         },
 
 		remove () {
-			// 
+			this.spinner()
+
+			api.delete(this.worker.worker_id).then((res) => {
+				this.spinner(false)
+
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('DeletedWorker'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+					this.clear()
+					this.query()
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+						icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		excel () {
@@ -205,7 +419,7 @@ export default {
                 text: this.$t('AddWorker'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
-                accept: () => this.save()
+                accept: () => this.add()
             })
 		},
 
@@ -232,6 +446,18 @@ export default {
                 accept: () => this.remove()
             })
 		}
+	},
+
+	created () {
+		comm_cd.fetch({cd1: 'A00'}).then((res) => {
+            this.roles = res.data
+        })
+
+        comm_cd.fetch({cd1: 'A05'}).then((res) => {
+            this.works = res.data
+		})
+
+		this.query()
 	}
 }
 </script>
