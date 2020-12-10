@@ -287,9 +287,37 @@ export default {
 				scale: 0.6
 			})
 
-			setTimeout( ()=> {
+			api.post(this.comp_info).then((res) => {
 				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
-			}, 3000);
+
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('SavedCompInfo'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+        				icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		saveDialog () {
@@ -325,6 +353,14 @@ export default {
 					})
 				} else {
 					this.comp_info = res.data.data
+
+					if (res.data.data.haccp_user == null) {
+						this.comp_info.haccp_user = {
+							user_id: null,
+							user_nm: null,
+							email: null,
+						}
+					}
 				}
 			}).catch((err) => {
 				this.$vs.loading.close('#div-with-loading > .con-vs-loading')

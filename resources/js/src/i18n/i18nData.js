@@ -24,6 +24,7 @@ export default {
     Cancel: 'Cancel',
     TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.',
     SaveCompInfo: 'Save company info?',
+    SavedCompInfo: 'Successfully saved company info',
     DeleteCompInfo: 'Delete company info?',
     DeletedCompInfo: 'Successfully deleted company info'
   },
@@ -51,6 +52,8 @@ export default {
     Cancel: '취소',
     TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.',
     SaveCompInfo: 'Save company info?',
+    SavedCompInfo: 'Successfully saved company info',
+    DeleteCompInfo: 'Delete company info?',
     DeletedCompInfo: 'Successfully deleted company info'
   }
 }
