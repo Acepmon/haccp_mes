@@ -24,9 +24,13 @@
               <div class="p-8 login-tabs-container">
 
                 <div class="vx-card__title mb-4">
-                  <h4 class="mb-4">Login</h4>
+                  <h4 class="mb-4">{{ $t('Login') }}</h4>
                   <p>Welcome back, please login to your account.</p>
                 </div>
+
+                <vs-alert class="mb-4" :active="resError" color="danger" icon-pack="feather" icon="icon-info">
+                  <span v-text="resMsg"></span>
+                </vs-alert>
 
                 <!-- <form ref="form"> -->
                   <div>
@@ -36,8 +40,9 @@
                           icon-no-border
                           icon="icon icon-user"
                           icon-pack="feather"
-                          label-placeholder="User ID"
+                          placeholder="사용자 ID"
                           v-model="formData.USER_ID"
+                          v-on:keyup.enter="handleLogin"
                           class="w-full"/>
 
                       <vs-input
@@ -46,8 +51,9 @@
                           icon-no-border
                           icon="icon icon-lock"
                           icon-pack="feather"
-                          label-placeholder="Password"
+                          placeholder="비밀번호"
                           v-model="formData.password"
+                          v-on:keyup.enter="handleLogin"
                           class="w-full mt-6" />
 
                       <div class="flex flex-wrap justify-between mt-5">
@@ -55,7 +61,7 @@
                           <!-- <router-link to="">Forgot Password?</router-link> -->
                       </div>
                       <!-- <vs-button  type="border">Register</vs-button> -->
-                      <vs-button @click="handleLogin" class="float-left my-3 mb-5">Login</vs-button>
+                      <vs-button @click="handleLogin" class="float-left my-3 mb-5 vs-con-loading__container" id="login-btn">{{ $t('Login') }}</vs-button>
 
                       <vs-divider></vs-divider>
                     </form>
@@ -79,6 +85,8 @@ import axios from 'axios'
 export default{
   data() {
     return {
+      resError: false,
+      resMsg: '',
       formData: {
         USER_ID: "",
         password: "",
@@ -88,27 +96,33 @@ export default{
   },
 
   methods: {
-    submit() {
-      auth.login(this.formData).then((res) => {
-        if (res.data.success) {
-          
-          this.$router.push({ path: '/' })
-        }
-      }).catch((err) => {
-        if (!err.response.data.success) {
-          alert(err.response.data.message)
-        }
-      })
-    },
-
     handleLogin () {
-      axios.get('/sanctum/csrf-cookie').then((res) => {
+      this.resError = false
+      this.$vs.loading({
+        background: 'primary',
+        color: '#fff',
+        container: "#login-btn",
+        scale: 0.45
+      })
+
+      axios.get('/sanctum/csrf-cookie').then(() => {
         axios.post('/auth', this.formData, {headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}).then((res) => {
+          this.$vs.loading.close("#login-btn > .con-vs-loading")
+
           if (res.data.success) {
+            this.resError = false
+
             localStorage.setItem('loggedIn', res.data.result)
 
             this.$router.push({path: '/'})
+          } else {
+            this.resError = true
+            this.resMsg = res.data.result
           }
+        }).catch((err) => {
+          this.$vs.loading.close("#login-btn > .con-vs-loading")
+          this.resError = true
+          this.resMsg = err.response.data.message
         })
       })
     }

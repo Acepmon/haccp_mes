@@ -1,6 +1,7 @@
 // en, kr
 export default {
   en: {
+    Login: 'Login',
     Warning: 'Warning',
     Add: 'Add',
     Save: 'Save',
@@ -24,6 +25,7 @@ export default {
     TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.'
   },
   kr: {
+    Login: '로그인',
     Warning: '경고',
     Add: '추가',
     Save: '저장',
