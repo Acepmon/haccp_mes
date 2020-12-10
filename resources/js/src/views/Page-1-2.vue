@@ -332,19 +332,28 @@ export default {
         },
 
         add () {
-            api.post(this.selected)
-                .then((res) => {
-                    if (res.data.success) {
-                        this.$vs.notify({
-                            color: 'success',
-                            position: 'top-right',
-                            title: this.$t('AddedUser'),
-                            text: this.$t('SuccessAddedUser')
-                        })
-                        this.query()
-                        this.clearSelected()
-                    }
-                })
+            this.$vs.dialog({
+                type: 'confirm',
+                color: 'primary',
+                title: this.$t('Confirmation'),
+                text: this.$t('AddUser'),
+                acceptText: this.$t('Accept'),
+                cancelText: this.$t('Cancel'),
+                accept: () => {
+                    api.post(this.selected).then((res) => {
+                        if (res.data.success) {
+                            this.$vs.notify({
+                                color: 'success',
+                                position: 'top-right',
+                                title: this.$t('AddedUser'),
+                                text: this.$t('SuccessAddedUser')
+                            })
+                            this.query()
+                            this.clearSelected()
+                        }
+                    })
+                }
+            })
         },
 
         save () {
