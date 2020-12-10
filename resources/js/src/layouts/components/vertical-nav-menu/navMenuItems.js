@@ -34,14 +34,14 @@ export default [
       },
       {
         url: "/1/2",
-        name: "생산담당자등록",
-        slug: "생산담당자등록",
+        name: "HACCP담당자 관리",
+        slug: "HACCP담당자 관리",
         showSubmenuOn: '/1',
       },
       {
         url: "/1/3",
-        name: "HACCP담당자등록",
-        slug: "HACCP담당자등록",
+        name: "생산담당자 관리",
+        slug: "생산담당자 관리",
         showSubmenuOn: '/1',
       },
       {

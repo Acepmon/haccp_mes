@@ -49,13 +49,13 @@ const router = new Router({
               },
               {
                 path: '/1/2',
-                name: '생산담당자등록',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/2', value: 'page-1-2', label: '생산담당자등록', component: 'page-1-2'}) } }
+                name: 'HACCP담당자 관리',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/2', value: 'page-1-2', label: 'HACCP담당자 관리', component: 'page-1-2'}) } }
               },
               {
                 path: '/1/3',
-                name: 'HACCP담당자등록',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/3', value: 'page-1-3', label: 'HACCP담당자등록', component: 'page-1-3'}) } }
+                name: '생산담당자 관리',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/3', value: 'page-1-3', label: '생산담당자 관리', component: 'page-1-3'}) } }
               },
               {
                 path: '/1/4/1',

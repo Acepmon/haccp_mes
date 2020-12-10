@@ -1,5 +1,6 @@
 <?php
 
+use App\Worker;
 use Illuminate\Database\Seeder;
 
 class TestWorkerSeeder extends Seeder
@@ -11,6 +12,6 @@ class TestWorkerSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(Worker::class, rand(10, 50))->create();
     }
 }

@@ -46,4 +46,6 @@ Route::group([
     // Route::apiResource('comm_cd', 'CommCdController')->except(['show', 'store', 'destroy', 'update']);
 
     Route::apiResource('comp_info', 'CompInfoController')->except(['show', 'update']);
+
+    Route::apiResource('worker', 'WorkerController');
 });
