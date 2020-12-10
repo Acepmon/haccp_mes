@@ -42,4 +42,8 @@ class CompInfo extends Model
         'updated' => CompInfoUpdated::class,
         'deleted' => CompInfoDeleted::class,
     ];
+
+    public function haccp_user() {
+        return $this->belongsTo('App\User', 'HACCP_ID', 'USER_ID');
+    }
 }

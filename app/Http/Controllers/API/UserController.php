@@ -26,7 +26,11 @@ class UserController extends Controller
         $sort = $request->input('sort', 'reg_dtm');
         $order = $request->input('order', 'asc');
 
-        $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
+        if ($limit == -1) {
+            $items = $items->with($with)->orderBy($sort, $order)->get();
+        } else {
+            $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
+        }
 
         return UserResource::collection($items);
     }

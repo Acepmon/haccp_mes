@@ -22,7 +22,7 @@ $factory->define(CompInfo::class, function (Faker $faker) {
         'ZIP_CD' => $zip->COMM2_CD,
         'ADDR1' => $faker->text(60),
         'ADDR2' => $faker->text(60),
-        'HACCP_ID' => $user->user_id,
+        'HACCP_ID' => $user->USER_ID,
         'HACCP_ITEM' => $faker->text(100),
         'REG_ID' => 'admin',
         'REG_DTM' => now()->format('Ymdhis'),

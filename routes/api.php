@@ -18,24 +18,24 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-// Route::group([
-//     'namespace' => 'API',
-//     'prefix' => 'auth'
-// ], function () {
-//     Route::post('register', 'AuthController@register');
-//     Route::post('login', 'AuthController@login');
-//     Route::get('refresh', 'AuthController@refresh');
+Route::group([
+    'namespace' => 'API',
+    'prefix' => 'auth'
+], function () {
+    Route::post('register', 'AuthController@register');
+    Route::post('login', 'AuthController@login');
+    Route::get('refresh', 'AuthController@refresh');
 
-//     Route::group(['middleware' => 'auth:api'], function () {
-//         Route::get('user', 'AuthController@user');
-//         Route::post('logout', 'AuthController@logout');
-//     });
-// });
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::get('user', 'AuthController@user');
+        Route::post('logout', 'AuthController@logout');
+    });
+});
 
 Route::group([
     'namespace' => 'API',
     'as' => 'api.',
-    'middleware' => 'auth:sanctum',
+    // 'middleware' => 'auth:sanctum',
 ], function () {
     Route::get('user/download', 'UserController@download')->name('user.download');
     Route::apiResource('user', 'UserController');
@@ -44,4 +44,6 @@ Route::group([
 
     Route::get('code', 'CommCdController@code')->name('code');
     // Route::apiResource('comm_cd', 'CommCdController')->except(['show', 'store', 'destroy', 'update']);
+
+    Route::apiResource('comp_info', 'CompInfoController')->except(['show', 'update']);
 });
