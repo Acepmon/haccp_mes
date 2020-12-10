@@ -214,7 +214,8 @@
 <script>
 import axios from 'axios'
 import comm_cd from '@/services/comm_cd'
-import api from '@/services/user'
+import user from '@/services/user'
+import api from '@/services/comp_info'
 import {mapActions} from 'vuex';
 
 export default {
@@ -275,7 +276,6 @@ export default {
 		},
 
 		save () {
-			this.clearCompInfo()
 			this.$vs.loading({
 				container: '#div-with-loading',
 				scale: 0.6
@@ -305,19 +305,41 @@ export default {
 				scale: 0.6
 			})
 
-			setTimeout( ()=> {
+			api.fetch().then((res) => {
 				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
-			}, 3000);
+
+				if (res.data.success == false) {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+        				icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				} else {
+					this.comp_info = res.data.data
+				}
+			}).catch((err) => {
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		remove () {
-			this.clearCompInfo()
 			this.$vs.loading({
 				container: '#div-with-loading',
 				scale: 0.6
 			})
 
 			setTimeout( ()=> {
+				this.clearCompInfo()
 				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
 			}, 3000);
 		},
@@ -348,6 +370,11 @@ export default {
 		
 		chooseUserDialog () {
 			this.userSelectionPrompt = true
+			user.fetch({
+				limit: -1
+			}).then((res) => {
+				this.users = res.data.data
+			})
 		},
 
 		selectUser () {
