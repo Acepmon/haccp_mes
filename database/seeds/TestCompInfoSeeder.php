@@ -1,5 +1,6 @@
 <?php
 
+use App\CompInfo;
 use Illuminate\Database\Seeder;
 
 class TestCompInfoSeeder extends Seeder
@@ -11,6 +12,6 @@ class TestCompInfoSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(CompInfo::class)->create();
     }
 }

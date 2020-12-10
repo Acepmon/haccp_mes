@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         // Test Data (will not run on production environment)
         if (env('APP_ENV') != 'production') {
             $this->call(TestUserSeeder::class);
-            // $this->call(TestLoginHistSeeder::class);
+            $this->call(TestLoginHistSeeder::class);
+            $this->call(TestCompInfoSeeder::class);
         }
     }
 }
