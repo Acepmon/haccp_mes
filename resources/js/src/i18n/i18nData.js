@@ -22,7 +22,9 @@ export default {
     EmailValid: 'Email valid',
     Accept: 'Accept',
     Cancel: 'Cancel',
-    TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.'
+    TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.',
+    SaveCompInfo: 'Save company info?',
+    DeleteCompInfo: 'Delete company info?'
   },
   kr: {
     Login: '로그인',
@@ -46,6 +48,8 @@ export default {
     EmailValid: 'Email valid',
     Accept: '동의하기',
     Cancel: '취소',
-    TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.'
+    TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.',
+    SaveCompInfo: 'Save company info?',
+    DeleteCompInfo: 'Delete company info?'
   }
 }

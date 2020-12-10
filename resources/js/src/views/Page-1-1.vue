@@ -1,101 +1,358 @@
 <template>
 	<div>
-		<h4>회사 정보</h4>
+		<vx-card id="div-with-loading" class="vs-con-loading__container">
+			<div class="flex flex-wrap justify-end mb-2">
+                <vs-button @click="saveDialog()" class="mx-1" color="dark" type="border">{{ $t('Save') }}</vs-button>
+                <vs-button @click="query()" class="mx-1" color="dark" type="border">{{ $t('Query') }}</vs-button>
+                <vs-button @click="removeDialog()" class="mx-1" color="dark" type="border">{{ $t('Delete') }}</vs-button>
+                <vs-button @click="closeTab()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
+            </div>
 
-		<vs-breadcrumb
-			:separator="$vs.rtl ? 'chevron_left' : 'chevron_right'"
-			:items="
-			[
-				{
-					title: '정보관리',
-					url: '/1'
-				},
-				{
-					title: '기업정보 수정',
-					url: '/1/1',
-					active: true
-				},
-			]"
-		></vs-breadcrumb>
+			<form action="#">
+				<!-- Row 1 -->
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span><span class="text-danger">*</span> 사업자등록번호</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.comp_id" />
+                            </div>
+                        </div>
+                    </div>
 
-		<vx-card class="mt-5">
-			<h2 class="mb-5">기본정보</h2>
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span><span class="text-danger">*</span> 회사명</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.comp_nm" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!-- /row 1 -->
 
-			<vs-table stripe :data="data">
+				<!-- Row 2 -->
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span><span class="text-danger">*</span> 대표자명</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.ceo_nm" />
+                            </div>
+                        </div>
+                    </div>
 
-				<vs-tr>
-					<vs-th class="h5 py-5 text-center">회사명</vs-th>
-					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
-				</vs-tr>
-				<vs-tr>
-					<vs-th class="h5 py-5 text-center">사업자등록번호</vs-th>
-					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
-				</vs-tr>
-				<vs-tr>
-					<vs-th class="h5 py-5 text-center">대표명</vs-th>
-					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
-				</vs-tr>
-				<vs-tr>
-					<vs-th class="h5 py-5 text-center">전화번호</vs-th>
-					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
-				</vs-tr>
-				<vs-tr>
-					<vs-th class="h5 py-5 text-center">팩스번호</vs-th>
-					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
-				</vs-tr>
-				<vs-tr>
-					<vs-th class="h5 py-5 text-center">홈페이지</vs-th>
-					<vs-td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate laboriosam id hic natus quo dolorum voluptas</vs-td>
-				</vs-tr>
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>홈페이지</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.url" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!-- /row 2 -->
 
-			</vs-table>
+				<!-- Row 3 -->
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>전화번호</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.tel_no" />
+                            </div>
+                        </div>
+                    </div>
 
-			<div class="mt-5">
-				<h5>주소</h5>
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>팩스번호</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.fax_no" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!-- /row 3 -->
 
-				<form>
-					<div class="vx-row">
-						<div class="vx-col">
-							<vs-input v-model="address.disabled1" label-placeholder="" disabled />
-						</div>
-						<div class="vx-col">
-							<!-- search button -->
-							<vs-button type="border">주소첮기</vs-button>
-						</div>
-					</div>
-					<div class="vx-row">
-						<div class="vx-col">
-							<vs-input v-model="address.disabled2" label-placeholder="" disabled />
-						</div>
-					</div>
-					<div class="vx-row">
-						<div class="vx-col">
-							<vs-input v-model="address.addressDetails" label-placeholder="상세주소" />
-						</div>
-					</div>
-				</form>
-			</div>
+				<!-- Row 4 -->
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>우편번호</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.zip_cd" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!-- /row 4 -->
+
+				<!-- Row 5 -->
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>주소</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input class="w-full" v-model="comp_info.addr1" />
+                            </div>
+                        </div>
+						<div class="vx-row mb-2">
+							<div class="vx-col sm:w-1/3 w-full flex items-center justify-end"></div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input class="w-full" v-model="comp_info.addr2" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!-- /row 5 -->
+
+				<!-- Row 6 -->
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>HACCP 팀장 정보</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-button @click="chooseUserDialog()" color="primary" type="border">담당자 변경</vs-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!-- /row 6 -->
+
+				<!-- Row 7 -->
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>이름</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.haccp_user.user_nm" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>휴대폰번호(ID)</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.haccp_user.user_id" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!-- /row 7 -->
+
+				<!-- Row 8 -->
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>이메일</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.haccp_user.email" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!-- /row 8 -->
+
+				<!-- Row 9 -->
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>HACCP 젹용 품목류</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="comp_info.haccp_item" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!-- /row 9 -->
+			</form>
 		</vx-card>
+
+		<vs-prompt
+			@cancel="selectedUser = null"
+			@accept="selectUser"
+			@close="close"
+			:active.sync="userSelectionPrompt">
+			<div class="con-exemple-prompt">
+				<span>Select User</span>
+				<vs-select class="mt-3 w-full" v-model="selectedUser">
+					<vs-select-item v-for="(user, index) in users" :key="index" :text="user.user_nm" :value="user"></vs-select-item>
+				</vs-select>
+			</div>
+		</vs-prompt>
 	</div>
 </template>
 
 <script>
+import axios from 'axios'
+import comm_cd from '@/services/comm_cd'
+import api from '@/services/user'
+import {mapActions} from 'vuex';
+
 export default {
 	data() {
 		return {
-			data: [
-				{label: '회사명', value: ''},
-				{label: '사업자등록번호', value: ''},
-				{label: '대표명', value: ''},
-				{label: '전화번호', value: ''},
-				{label: '팩스번호', value: ''},
-				{label: '홈페이지', value: ''},
-			],
-			address: {
-				disabled1: '',
-				disabled2: '',
-				addressDetails: ''
+			userSelectionPrompt: false,
+			users: [],
+			selectedUser: null,
+			comp_info: {
+				comp_id: null,
+				comp_nm: null,
+				ceo_nm: null,
+				tel_no: null,
+				fax_no: null,
+				url: null,
+				zip_cd: null,
+				addr1: null,
+				addr2: null,
+				haccp_id: null,
+				haccp_user: {
+					user_id: null,
+					user_nm: null,
+					email: null
+				},
+				haccp_item: null,
+				reg_id: null,
+				reg_dtm: null,
 			}
+		}
+	},
+
+	methods: {
+		...mapActions({
+            removeTab: 'mdn/removeTab',
+		}),
+
+		clearCompInfo () {
+			this.$set(this, 'comp_info', {
+				comp_id: null,
+				comp_nm: null,
+				ceo_nm: null,
+				tel_no: null,
+				fax_no: null,
+				url: null,
+				zip_cd: null,
+				addr1: null,
+				addr2: null,
+				haccp_id: null,
+				haccp_user: {
+					user_id: null,
+					user_nm: null,
+					email: null
+				},
+				haccp_item: null,
+				reg_id: null,
+				reg_dtm: null,
+			})
+		},
+
+		save () {
+			this.clearCompInfo()
+			this.$vs.loading({
+				container: '#div-with-loading',
+				scale: 0.6
+			})
+
+			setTimeout( ()=> {
+				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+			}, 3000);
+		},
+
+		saveDialog () {
+			this.$vs.dialog({
+                type: 'confirm',
+                color: 'success',
+                title: this.$t('Confirmation'),
+                text: this.$t('SaveCompInfo'),
+                acceptText: this.$t('Accept'),
+                cancelText: this.$t('Cancel'),
+                accept: () => this.save()
+            })
+		},
+
+		query () {
+			this.clearCompInfo()
+			this.$vs.loading({
+				container: '#div-with-loading',
+				scale: 0.6
+			})
+
+			setTimeout( ()=> {
+				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+			}, 3000);
+		},
+
+		remove () {
+			this.clearCompInfo()
+			this.$vs.loading({
+				container: '#div-with-loading',
+				scale: 0.6
+			})
+
+			setTimeout( ()=> {
+				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+			}, 3000);
+		},
+
+		removeDialog () {
+            this.$vs.dialog({
+                type: 'confirm',
+                color: 'danger',
+                title: this.$t('Confirmation'),
+                text: this.$t('DeleteCompInfo'),
+                acceptText: this.$t('Accept'),
+                cancelText: this.$t('Cancel'),
+                accept: () => this.remove()
+            })
+		},
+
+		closeTab () {
+            this.$vs.dialog({
+                type: 'confirm',
+                color: 'dark',
+                title: this.$t('Confirmation'),
+                text: this.$t('CloseDocument'),
+                acceptText: this.$t('Accept'),
+                cancelText: this.$t('Cancel'),
+                accept: () => this.removeTab('page-1-1')
+            })
+		},
+		
+		chooseUserDialog () {
+			this.userSelectionPrompt = true
+		},
+
+		selectUser () {
+			this.comp_info.haccp_user = this.selectedUser
+			this.selectedUser = null
 		}
 	}
 }
