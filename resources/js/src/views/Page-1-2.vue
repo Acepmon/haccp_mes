@@ -6,7 +6,7 @@
                 <vs-button @click="save()" class="mx-1" color="dark" type="border" :disabled="!isSelected">{{ $t('Save') }}</vs-button>
                 <vs-button @click="query()" class="mx-1" color="dark" type="border">{{ $t('Query') }}</vs-button>
                 <vs-button @click="remove()" class="mx-1" color="dark" type="border" :disabled="!isSelected">{{ $t('Delete') }}</vs-button>
-                <vs-button @click="closeTab()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
+                <vs-button @click="closeDialog()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
             </div>
 
             <form ref="form">
@@ -168,8 +168,8 @@
                     <template slot-scope="{data}">
                         <vs-tr :data="tr" :key="index" v-for="(tr, index) in data">
 
-                            <vs-td :data="(overallIndex(index))">
-                                {{ (overallIndex(index)) }}
+                            <vs-td :data="(rowIndex(index))">
+                                {{ (rowIndex(index)) }}
                             </vs-td>
 
                             <vs-td :data="data[index].user_id">
@@ -245,7 +245,7 @@ export default {
 			},
 			sorting: {
 				sort: 'reg_dtm',
-				order: 'asc'
+				order: 'desc'
 			},
         }
     },
@@ -273,7 +273,7 @@ export default {
             removeTab: 'mdn/removeTab',
         }),
 
-        overallIndex: function (index) {
+        rowIndex: function (index) {
 			return (this.pagination.page * this.pagination.limit)-this.pagination.limit + index + 1
 		},
 
@@ -383,7 +383,7 @@ export default {
             })
         },
 
-        closeTab () {
+        closeDialog () {
             this.$vs.dialog({
                 type: 'confirm',
                 color: 'dark',

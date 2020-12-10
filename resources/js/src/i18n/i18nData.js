@@ -26,7 +26,13 @@ export default {
     SaveCompInfo: 'Save company info?',
     SavedCompInfo: 'Successfully saved company info',
     DeleteCompInfo: 'Delete company info?',
-    DeletedCompInfo: 'Successfully deleted company info'
+    DeletedCompInfo: 'Successfully deleted company info',
+    AddWorker: 'Add worker data?',
+    AddedWorker: 'Successfully added worker data',
+    SaveWorker: 'Save worker data?',
+    SavedWorker: 'Successfully added worker data',
+    DeleteWorker: 'Delete worker data?',
+    DeletedWorker: 'Successfully added worker data'
   },
   kr: {
     Login: '로그인',
@@ -54,6 +60,12 @@ export default {
     SaveCompInfo: 'Save company info?',
     SavedCompInfo: 'Successfully saved company info',
     DeleteCompInfo: 'Delete company info?',
-    DeletedCompInfo: 'Successfully deleted company info'
+    DeletedCompInfo: 'Successfully deleted company info',
+    AddWorker: 'Add worker data?',
+    AddedWorker: 'Successfully added worker data',
+    SaveWorker: 'Save worker data?',
+    SavedWorker: 'Successfully added worker data',
+    DeleteWorker: 'Delete worker data?',
+    DeletedWorker: 'Successfully added worker data'
   }
 }

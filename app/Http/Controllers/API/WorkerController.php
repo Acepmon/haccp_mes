@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exports\WorkerExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\WorkerResource;
 use App\Worker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WorkerController extends Controller
 {
@@ -157,5 +159,10 @@ class WorkerController extends Controller
             'success' => true,
             'message' => __('Worker data successfully deleted')
         ]);
+    }
+
+    public function download(Request $request)
+    {
+        return Excel::download(new WorkerExport(), 'WORKER-' . now()->format('Y-m-d') . '.xlsx');
     }
 }

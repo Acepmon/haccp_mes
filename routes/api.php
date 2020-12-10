@@ -47,5 +47,6 @@ Route::group([
 
     Route::apiResource('comp_info', 'CompInfoController')->except(['show', 'update']);
 
+    Route::get('worker/download', 'WorkerController@download')->name('worker.download');
     Route::apiResource('worker', 'WorkerController');
 });

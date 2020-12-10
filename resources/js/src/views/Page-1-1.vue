@@ -5,7 +5,7 @@
                 <vs-button @click="saveDialog()" class="mx-1" color="dark" type="border" :disabled="!comp_info.comp_id">{{ $t('Save') }}</vs-button>
                 <vs-button @click="query()" class="mx-1" color="dark" type="border">{{ $t('Query') }}</vs-button>
                 <vs-button @click="removeDialog()" class="mx-1" color="dark" type="border" :disabled="!comp_info.comp_id">{{ $t('Delete') }}</vs-button>
-                <vs-button @click="closeTab()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
+                <vs-button @click="closeDialog()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
             </div>
 
 			<form action="#">
@@ -427,7 +427,7 @@ export default {
             })
 		},
 
-		closeTab () {
+		closeDialog () {
             this.$vs.dialog({
                 type: 'confirm',
                 color: 'dark',
