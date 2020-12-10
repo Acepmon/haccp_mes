@@ -2,9 +2,9 @@
 	<div>
 		<vx-card id="div-with-loading" class="vs-con-loading__container">
 			<div class="flex flex-wrap justify-end mb-2">
-                <vs-button @click="saveDialog()" class="mx-1" color="dark" type="border">{{ $t('Save') }}</vs-button>
+                <vs-button @click="saveDialog()" class="mx-1" color="dark" type="border" :disabled="!comp_info.comp_id">{{ $t('Save') }}</vs-button>
                 <vs-button @click="query()" class="mx-1" color="dark" type="border">{{ $t('Query') }}</vs-button>
-                <vs-button @click="removeDialog()" class="mx-1" color="dark" type="border">{{ $t('Delete') }}</vs-button>
+                <vs-button @click="removeDialog()" class="mx-1" color="dark" type="border" :disabled="!comp_info.comp_id">{{ $t('Delete') }}</vs-button>
                 <vs-button @click="closeTab()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
             </div>
 
@@ -247,6 +247,12 @@ export default {
 		}
 	},
 
+	created () {
+		setTimeout(() => {
+			this.query()
+		}, 300);
+	},
+
 	methods: {
 		...mapActions({
             removeTab: 'mdn/removeTab',
@@ -321,6 +327,7 @@ export default {
 					this.comp_info = res.data.data
 				}
 			}).catch((err) => {
+				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
 				this.$vs.notify({
 					title: this.$t('Error'),
 					position: 'top-right',
@@ -338,10 +345,38 @@ export default {
 				scale: 0.6
 			})
 
-			setTimeout( ()=> {
-				this.clearCompInfo()
+			api.delete(this.comp_info.comp_id).then((res) => {
 				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
-			}, 3000);
+
+				if (res.data.success) {
+					this.clearCompInfo()
+					this.$vs.notify({
+						title: this.$t('DeletedCompInfo'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+						icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		removeDialog () {
@@ -370,6 +405,7 @@ export default {
 		
 		chooseUserDialog () {
 			this.userSelectionPrompt = true
+			this.selectedUser = this.comp_info.haccp_user
 			user.fetch({
 				limit: -1
 			}).then((res) => {

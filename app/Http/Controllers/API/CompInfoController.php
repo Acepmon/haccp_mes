@@ -97,7 +97,7 @@ class CompInfoController extends Controller
      */
     public function destroy($id)
     {
-        $item = CompInfo::first();
+        $item = CompInfo::where('COMP_ID', $id)->first();
 
         if (!$item) {
             return response()->json([
