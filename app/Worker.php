@@ -37,4 +37,14 @@ class Worker extends Model
         'updated' => WorkerUpdated::class,
         'deleted' => WorkerDeleted::class,
     ];
+
+    public function role()
+    {
+        return $this->belongsTo('App\CommCd', 'ROLE_CD', 'COMM2_CD')->where('COMM1_CD', 'A00')->whereNotIn('COMM2_CD', ['$$']);
+    }
+
+    public function work()
+    {
+        return $this->belongsTo('App\CommCd', 'WORK_CD', 'COMM2_CD')->where('COMM1_CD', 'A05')->whereNotIn('COMM2_CD', ['$$']);
+    }
 }

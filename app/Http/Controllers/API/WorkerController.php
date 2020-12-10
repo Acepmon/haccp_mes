@@ -46,9 +46,9 @@ class WorkerController extends Controller
         $request->validate([
             'worker_nm' => 'required|string|max:60',
             'tel_no' => 'required|string|max:20',
-            'work_cd' => 'nullable|string|max:10',
+            'work_cd' => 'nullable|string|max:20',
             'health_chk_dt' => 'nullable|string|date_format:Y-m-d',
-            'role_cd' => 'nullable|string|max:10',
+            'role_cd' => 'nullable|string|max:20',
             'remark' => 'nullable|string|max:100',
         ]);
 
@@ -113,9 +113,9 @@ class WorkerController extends Controller
         $request->validate([
             'worker_nm' => 'required|string|max:60',
             'tel_no' => 'required|string|max:20',
-            'work_cd' => 'nullable|string|max:10',
+            'work_cd' => 'nullable|string|max:20',
             'health_chk_dt' => 'nullable|string|date_format:Y-m-d',
-            'role_cd' => 'nullable|string|max:10',
+            'role_cd' => 'nullable|string|max:20',
             'remark' => 'nullable|string|max:100',
         ]);
 

@@ -25,10 +25,10 @@ class WorkerExport implements FromCollection, WithHeadings, WithStyles, WithMapp
             $worker->WORKER_ID,
             $worker->WORKER_NM,
             $worker->TEL_NO,
-            $worker->WORK_CD,
+            ($worker->work ? $worker->work->COMM2_NM : null),
             $worker->REMARK,
             now()->parse($worker->HEALTH_CHK_DT)->format('Y-m-d'),
-            $worker->ROLE_CD,
+            ($worker->role ? $worker->role->COMM2_NM : null),
             now()->parse($worker->REG_DTM)->format('Y-m-d')
         ];
     }

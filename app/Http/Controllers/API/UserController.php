@@ -50,7 +50,7 @@ class UserController extends Controller
             'email' => 'nullable|string|email|max:50',
             'role_cd' => 'nullable|array',
             'appr_cd' => 'nullable|array',
-            'job_cd' => 'nullable|string|max:10',
+            'job_cd' => 'nullable|string|max:20',
             'user_sts_yn' => 'nullable|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
 
@@ -101,7 +101,7 @@ class UserController extends Controller
             'email' => 'nullable|string|email|max:50',
             'role_cd' => 'nullable|array',
             'appr_cd' => 'nullable|array',
-            'job_cd' => 'nullable|string|max:10',
+            'job_cd' => 'nullable|string|max:20',
             'user_sts_yn' => 'nullable|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
 

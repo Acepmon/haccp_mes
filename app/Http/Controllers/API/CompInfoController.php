@@ -44,7 +44,7 @@ class CompInfoController extends Controller
             'tel_no' => 'nullable|string|max:20',
             'fax_no' => 'nullable|string|max:20',
             'url' => 'nullable|string|max:30',
-            'zip_cd' => 'nullable|string|max:10',
+            'zip_cd' => 'nullable|string|max:20',
             'addr1' => 'nullable|string|max:60',
             'addr2' => 'nullable|string|max:60',
             'haccp_id' => 'nullable|string|max:15|exists:user,USER_ID',

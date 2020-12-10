@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\CommCd;
 use App\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -21,13 +22,16 @@ class UserExport implements FromCollection, WithHeadings, WithStyles, WithMappin
 
     public function map($user): array
     {
+        $roles = CommCd::where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$'])->whereIn('COMM2_CD', explode(',', $user->ROLE_CD))->get();
+        $approvals = CommCd::where('COMM1_CD', 'B10')->whereNotIn('COMM2_CD', ['$$'])->whereIn('COMM2_CD', explode(',', $user->APPR_CD))->get();
+
         return [
             $user->USER_ID,
             $user->USER_NM,
             $user->USER_PW,
             $user->EMAIL,
-            $user->APPR_CD,
-            $user->ROLE_CD,
+            implode(',', $approvals->pluck('COMM2_NM')->toArray()),
+            implode(',', $roles->pluck('COMM2_NM')->toArray()),
             now()->parse($user->REG_DTM)->format('Y-m-d')
         ];
     }
