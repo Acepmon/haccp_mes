@@ -4,7 +4,7 @@
             <span v-if="value">Selected File: {{value.name}}</span>
             <span v-else>Select File</span>
         </vs-button>
-        <input type="file" ref="file" @change="handleFileChange"/>
+        <input type="file" ref="file" @change="handleFileChange" accept=".docx, .doc, .xls, .xlsx, .pdf, .hwp, image/*"/>
     </label>
 </template>
 
