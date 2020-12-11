@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use App\AttFile;
+use App\Exports\HaccpMstFileExport;
 use App\HaccpMstFile;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\HaccpMstFileResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HaccpMstFileController extends Controller
 {
@@ -216,5 +218,10 @@ class HaccpMstFileController extends Controller
             'success' => true,
             'result' => __('Haccp Master File data successfully deleted'),
         ]);
+    }
+
+    public function download(Request $request)
+    {
+        return Excel::download(new HaccpMstFileExport(), 'HACCP-MST-FILE-' . now()->format('Y-m-d') . '.xlsx');
     }
 }
