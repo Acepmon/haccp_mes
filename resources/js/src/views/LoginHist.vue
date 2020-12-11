@@ -7,12 +7,12 @@
                 <div class="w-full sm:w-1/3 mb-4 px-1">
 					<p>Date</p>
 					<div class="flex flex-row">
-						<datepicker :language="ko" :format="format" placeholder="Date from" class="pr-1" v-model="filter.from"></datepicker>
-						<datepicker :language="ko" :format="format" placeholder="Date to" class="pl-1" v-model="filter.to"></datepicker>
+						<flat-pickr :config="configFromdateTimePicker" v-model="from" placeholder="From Date" @on-change="onFromChange" />
+						<flat-pickr :config="configTodateTimePicker" v-model="to" placeholder="To Date" @on-change="onToChange" />
 					</div>
                 </div>
                 <div class="w-full sm:w-1/3 mb-4 px-1">
-                    <vs-input class="w-full" label="User ID/Name" v-model="filter.keyword" />
+                    <vs-input class="w-full" label="User ID/Name" v-model="keyword" />
                 </div>
 				<div class="w-full sm:w-1/3 mb-4 px-1 text-right">
 					<p>&nbsp;</p>
@@ -67,25 +67,29 @@
 <script>
 import moment from 'moment'
 import axios from 'axios'
-import Datepicker from 'vuejs-datepicker';
-import {en, ko, mn} from 'vuejs-datepicker/dist/locale'
+import flatPickr from 'vue-flatpickr-component';
+import 'flatpickr/dist/flatpickr.css';
+import {Korean as KoreanLocale} from 'flatpickr/dist/l10n/ko.js';
 import api from '@/services/login_hist'
 
 export default {
 	components: {
-		Datepicker
+		flatPickr
 	},
     data() {
         return {
-			en: en,
-			ko: ko,
-			mn: mn,
 			format: 'yyyy-MM-dd',
-			filter: {
-				from: null,
-				to: null,
-				keyword: null
-			},
+			from: null,
+			to: null,
+			keyword: null,
+			configFromdateTimePicker: {
+				maxDate: null,
+				locale: KoreanLocale,
+            },
+            configTodateTimePicker: {
+				minDate: null,
+				locale: KoreanLocale,
+            },
 			pagination: {
 				page: 1,
 				limit: 15,
@@ -108,9 +112,9 @@ export default {
 
 		filterParam: function () {
 			return {
-				from: this.filter.from != null ? moment(this.filter.from).format('YYYY-MM-DD') : '',
-				to: this.filter.to != null ? moment(this.filter.to).format('YYYY-MM-DD') : '',
-				keyword: this.filter.keyword != null ? this.filter.keyword : '',
+				from: this.from != null ? moment(this.from).format('YYYY-MM-DD') : '',
+				to: this.to != null ? moment(this.to).format('YYYY-MM-DD') : '',
+				keyword: this.keyword != null ? this.keyword : '',
 			}
 		},
 
@@ -122,6 +126,14 @@ export default {
 		}
 	},
     methods: {
+		onFromChange(selectedDates, dateStr, instance) {
+			this.$set(this.configTodateTimePicker, 'minDate', dateStr);
+		},
+
+		onToChange(selectedDates, dateStr, instance) {
+			this.$set(this.configFromdateTimePicker, 'maxDate', dateStr);
+		},
+
 		overallIndex: function (index) {
 			return (this.pagination.page * this.pagination.limit)-this.pagination.limit + index + 1
 		},
