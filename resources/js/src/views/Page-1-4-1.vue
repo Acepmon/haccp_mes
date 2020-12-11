@@ -8,6 +8,61 @@
                 <vs-button @click="removeDialog()" class="mx-1" color="dark" type="border">{{ $t('Delete') }}</vs-button>
                 <vs-button @click="closeDialog()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
             </div>
+
+			<form action="#">
+				<!--  -->
+			</form>
+
+			<vs-divider/>
+
+            <div class="flex flex-wrap justify-end mb-2">
+                <vs-button @click="excel()" class="mx-1" color="dark" type="border" :disabled="haccp_mst_files.length <= 0">{{ $t('ToExcel') }}</vs-button>
+            </div>
+
+			<div class="overflow-y-auto" style="max-height: 300px;">
+                <vs-table stripe pagination description sst :max-items="pagination.limit" :data="haccp_mst_files" :total="pagination.total" @change-page="handleChangePage" @sort="handleSort" v-model="haccp_mst_file">
+
+                    <template slot="thead">
+                        <vs-th>No</vs-th>
+                        <vs-th sort-key="rev_no">개정번호</vs-th>
+                        <vs-th sort-key="rev_dt">등록일자</vs-th>
+                        <vs-th sort-key="rev_content">개정내용</vs-th>
+                        <vs-th sort-key="rev_reason">개정사유</vs-th>
+                        <vs-th>첨부화일</vs-th>
+                    </template>
+
+                    <template slot-scope="{data}">
+                        <vs-tr :data="tr" :key="index" v-for="(tr, index) in haccp_mst_files">
+
+                            <vs-td :data="(rowIndex(index))">
+                                {{ (rowIndex(index)) }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].rev_no">
+                                {{ data[index].rev_no }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].rev_dt">
+                                {{ data[index].rev_dt }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].rev_content">
+                                {{ data[index].rev_content }}
+                            </vs-td>
+
+                            <vs-td :data="data[index].rev_reason">
+                                {{ data[index].rev_reason }}
+                            </vs-td>
+
+                            <vs-td>
+                                <div v-for="(att, attIndex) in data[index].att" :key="attIndex" v-text="att.att_nm"></div>
+                            </vs-td>
+
+                        </vs-tr>
+                    </template>
+                </vs-table>
+            </div>
+			
 		</vx-card>
 	</div>
 </template>
@@ -15,12 +70,31 @@
 <script>
 import axios from 'axios'
 import comm_cd from '@/services/comm_cd'
-import api from '@/services/user'
+import api from '@/services/haccp_mst_file'
 import {mapActions} from 'vuex';
 
 export default {
 	data () {
 		return {
+			haccp_mst_file: {
+				rev_seq: null,
+				rev_no: null,
+				rev_dt: null,
+				att_dtm: null,
+				rev_content: null,
+				rev_reason: null,
+				reg_id: null,
+				reg_dtm: null,
+				att: {
+					att_dtm: null,
+					att_seq: null,
+					att_nm: null,
+					att_path: null,
+					file_sz: null,
+					rmk: null,
+				}
+			},
+			haccp_mst_files: [],
 			pagination: {
 				page: 1,
 				limit: 15,
@@ -66,16 +140,16 @@ export default {
 		},
 
 		clear () {
-			this.$set(this, 'worker', {
-				worker_id: null,
-				worker_nm: null,
-				tel_no: null,
-				work_cd: null,
-				health_chk_dt: null,
-				role_cd: null,
-				remark: null,
+			this.$set(this, 'haccp_mst_file', {
+				rev_seq: null,
+				rev_no: null,
+				rev_dt: null,
+				att_dtm: null,
+				rev_content: null,
+				rev_reason: null,
 				reg_id: null,
 				reg_dtm: null,
+				att: []
 			})
 		},
 
@@ -103,7 +177,27 @@ export default {
 		},
 
 		query () {
-			// 
+			this.spinner()
+
+			api.fetch({
+                ...this.paginationParam,
+			    ...this.sortParam
+            }).then((res) => {
+				this.spinner(false)
+                this.haccp_mst_files = res.data.data
+                this.pagination.total = res.data.meta.total
+				this.pagination.page = res.data.meta.current_page
+            }).catch(() => {
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		remove () {
