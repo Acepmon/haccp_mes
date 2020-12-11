@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AttFile extends Model
 {
-    protected $table = 'comp_info';
+    protected $table = 'att_file';
     protected $primaryKey = 'ATT_SEQ';
     public $incrementing = false;
     protected $keyType = 'string';
@@ -28,6 +28,7 @@ class AttFile extends Model
     ];
 
     protected $casts = [
+        'FILE_SZ' => 'float'
     ];
 
     protected $dispatchesEvents = [

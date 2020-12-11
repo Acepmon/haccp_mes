@@ -15,7 +15,6 @@ class HaccpMstFile extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'REV_SEQ',
         'REV_NO',
         'REV_DT',
         'ATT_DTM',
@@ -36,4 +35,8 @@ class HaccpMstFile extends Model
         'updated' => HaccpMstFileUpdated::class,
         'deleted' => HaccpMstFileDeleted::class,
     ];
+
+    public function att_file() {
+        return $this->hasMany('App\AttFile', 'ATT_DTM', 'ATT_DTM');
+    }
 }
