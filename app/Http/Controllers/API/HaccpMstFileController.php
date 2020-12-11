@@ -123,7 +123,7 @@ class HaccpMstFileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = HaccpMstFile::where('REV_SEQ', $id)->first();
+        $item = HaccpMstFile::where('REV_SEQ', $id)->with(['att_file'])->first();
 
         if (!$item) {
             return response()->json([
@@ -146,14 +146,12 @@ class HaccpMstFileController extends Controller
             $files = $request->file('att');
 
             if ($item->att_file->count() > 0) {
-
                 $item->att_file->each(function ($att) {
                     if (Storage::exists($att->ATT_PATH)) {
                         Storage::delete($att->ATT_PATH);
                     }
-
-                    $att->delete();
                 });
+                $item->att_file()->delete();
             }
 
             foreach ($files as $index => $file) {
@@ -192,7 +190,7 @@ class HaccpMstFileController extends Controller
      */
     public function destroy($id)
     {
-        $item = HaccpMstFile::where('REV_SEQ', $id)->first();
+        $item = HaccpMstFile::where('REV_SEQ', $id)->with(['att_file'])->first();
 
         if (!$item) {
             return response()->json([
@@ -203,14 +201,12 @@ class HaccpMstFileController extends Controller
 
         if ($item->att_file->count() > 0) {
             if ($item->att_file->count() > 0) {
-
                 $item->att_file->each(function ($att) {
                     if (Storage::exists($att->ATT_PATH)) {
                         Storage::delete($att->ATT_PATH);
                     }
-
-                    $att->delete();
                 });
+                $item->att_file()->delete();
             }
         }
 
