@@ -28,7 +28,7 @@
                                 <span><span class="text-danger">*</span> 휴대폰번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="worker.tel_no" />
+                                <vs-input v-model="worker.tel_no" type="number" class="vs-input-text-right" />
                             </div>
                         </div>
                     </div>
@@ -41,8 +41,8 @@
                                 <span>업무구분</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="worker.role_cd">
-                                    <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in roles"></vs-select-item>
+                                <vs-select v-model="worker.work_cd">
+                                    <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in works"></vs-select-item>
                                 </vs-select>
                             </div>
                         </div>
@@ -79,8 +79,8 @@
                                 <span>정/부 구분</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="worker.work_cd">
-                                    <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in works"></vs-select-item>
+                                <vs-select v-model="worker.role_cd">
+                                    <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in roles"></vs-select-item>
                                 </vs-select>
                             </div>
                         </div>

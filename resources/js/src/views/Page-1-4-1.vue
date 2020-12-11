@@ -18,7 +18,7 @@
                                 <span><span class="text-danger">*</span> 개정번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="haccp_mst_file.rev_no" />
+                                <vs-input v-model="haccp_mst_file.rev_no" type="number" class="vs-input-text-right" />
                             </div>
                         </div>
                     </div>

@@ -69,7 +69,7 @@
                                 <span>전화번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info.tel_no" />
+                                <vs-input v-model="comp_info.tel_no" type="number" class="vs-input-text-right" />
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                                 <span>팩스번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info.fax_no" />
+                                <vs-input v-model="comp_info.fax_no" type="number" class="vs-input-text-right" />
                             </div>
                         </div>
                     </div>
