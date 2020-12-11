@@ -10,7 +10,70 @@
             </div>
 
 			<form action="#">
-				<!--  -->
+
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span><span class="text-danger">*</span> 개정번호</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="haccp_mst_file.rev_no" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span><span class="text-danger">*</span> 개정일자</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+								<flat-pickr :config="configdateTimePicker" v-model="haccp_mst_file.rev_dt"></flat-pickr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>개정내용</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input class="w-full" v-model="haccp_mst_file.rev_content" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span>개정사유</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input class="w-full" v-model="haccp_mst_file.rev_reason" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
+                                <span><span class="text-danger">*</span> 첨부화일</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+								<file-select v-model="haccp_mst_file.att"></file-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 			</form>
 
 			<vs-divider/>
@@ -20,7 +83,7 @@
             </div>
 
 			<div class="overflow-y-auto" style="max-height: 300px;">
-                <vs-table stripe pagination description sst :max-items="pagination.limit" :data="haccp_mst_files" :total="pagination.total" @change-page="handleChangePage" @sort="handleSort" v-model="haccp_mst_file">
+                <vs-table stripe pagination description sst :max-items="pagination.limit" :data="haccp_mst_files" :total="pagination.total" @change-page="handleChangePage" @sort="handleSort" v-model="haccp_mst_file" @selected="handleSelected">
 
                     <template slot="thead">
                         <vs-th>No</vs-th>
@@ -54,8 +117,8 @@
                                 {{ data[index].rev_reason }}
                             </vs-td>
 
-                            <vs-td>
-                                <div v-for="(att, attIndex) in data[index].att" :key="attIndex" v-text="att.att_nm"></div>
+                            <vs-td :data="data[index].att_dtm">
+                                {{ data[index].att_dtm }}
                             </vs-td>
 
                         </vs-tr>
@@ -72,10 +135,22 @@ import axios from 'axios'
 import comm_cd from '@/services/comm_cd'
 import api from '@/services/haccp_mst_file'
 import {mapActions} from 'vuex';
+import flatPickr from 'vue-flatpickr-component';
+import 'flatpickr/dist/flatpickr.css';
+import {Korean as KoreanLocale} from 'flatpickr/dist/l10n/ko.js';
+import FileSelect from '@/layouts/components/FileSelect.vue'
 
 export default {
+	components: {
+		flatPickr,
+		FileSelect
+	},
+
 	data () {
 		return {
+			configdateTimePicker: {
+				locale: KoreanLocale,
+			},
 			haccp_mst_file: {
 				rev_seq: null,
 				rev_no: null,
@@ -85,14 +160,7 @@ export default {
 				rev_reason: null,
 				reg_id: null,
 				reg_dtm: null,
-				att: {
-					att_dtm: null,
-					att_seq: null,
-					att_nm: null,
-					att_path: null,
-					file_sz: null,
-					rmk: null,
-				}
+				att: null
 			},
 			haccp_mst_files: [],
 			pagination: {
@@ -149,7 +217,7 @@ export default {
 				rev_reason: null,
 				reg_id: null,
 				reg_dtm: null,
-				att: []
+				att: null
 			})
 		},
 
@@ -166,7 +234,18 @@ export default {
 			this.sorting.sort = sort
 			this.sorting.order = order
 			this.query()
-        },
+		},
+
+		handleSelected (tr) {
+			if (tr.att.length > 0) {
+				this.haccp_mst_file.att = new File([""], tr.att[0].att_nm)
+			}
+		},
+		
+		handleFileChange(e) {
+			// Whenever the file changes, emit the 'input' event with the file data.
+			this.$emit('input', e.target.files[0])
+		},
 
 		add () {
 			// 
@@ -201,11 +280,41 @@ export default {
 		},
 
 		remove () {
-			// 
-		},
+			this.spinner()
 
-		close () {
-			// 
+			api.delete(this.haccp_mst_file.rev_seq).then((res) => {
+				this.spinner(false)
+
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('DeletedHaccpMstFile'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+					this.clear()
+					this.query()
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+						icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		addDialog () {
@@ -213,7 +322,7 @@ export default {
                 type: 'confirm',
                 color: 'primary',
                 title: this.$t('Confirmation'),
-                text: this.$t('AddWorker'),
+                text: this.$t('AddHaccpMstFile'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.add()
@@ -225,7 +334,7 @@ export default {
                 type: 'confirm',
                 color: 'success',
                 title: this.$t('Confirmation'),
-                text: this.$t('SaveWorker'),
+                text: this.$t('SaveHaccpMstFile'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.save()
@@ -237,7 +346,7 @@ export default {
                 type: 'confirm',
                 color: 'danger',
                 title: this.$t('Confirmation'),
-                text: this.$t('DeleteWorker'),
+                text: this.$t('DeleteHaccpMstFile'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.remove()
@@ -258,7 +367,9 @@ export default {
 	},
 
 	created() {
-		// console.log('Page-1-4-1 created')
+		setTimeout(() => {
+			this.query()
+		}, 100);
 	}
 }
 </script>
