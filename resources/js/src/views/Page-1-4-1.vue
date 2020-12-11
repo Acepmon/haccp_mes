@@ -68,7 +68,12 @@
                                 <span><span class="text-danger">*</span> 첨부화일</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-								<file-select v-model="haccp_mst_file.att"></file-select>
+								<div class="flex flex-row">
+									<file-select v-model="haccp_mst_file.att"></file-select>
+									<vs-button type="border" color="dark" @click.native="haccp_mst_file.att = null" v-if="haccp_mst_file.att" class="ml-1 px-4">
+										<vs-icon icon="close" />
+									</vs-button>
+								</div>
                             </div>
                         </div>
                     </div>
@@ -118,7 +123,7 @@
                             </vs-td>
 
                             <vs-td :data="data[index].att_dtm">
-                                {{ data[index].att_dtm }}
+                                <span v-if="data[index].att_file.length > 0" v-text="data[index].att_file[0].att_nm"></span>
                             </vs-td>
 
                         </vs-tr>
@@ -160,7 +165,8 @@ export default {
 				rev_reason: null,
 				reg_id: null,
 				reg_dtm: null,
-				att: null
+				att: null,
+				att_file: []
 			},
 			haccp_mst_files: [],
 			pagination: {
@@ -217,7 +223,8 @@ export default {
 				rev_reason: null,
 				reg_id: null,
 				reg_dtm: null,
-				att: null
+				att: null,
+				att_file: []
 			})
 		},
 
@@ -237,22 +244,102 @@ export default {
 		},
 
 		handleSelected (tr) {
-			if (tr.att.length > 0) {
-				this.haccp_mst_file.att = new File([""], tr.att[0].att_nm)
+			if (tr.att_file.length > 0) {
+				// this.haccp_mst_file.att = new File([""], tr.att_file[0].att_nm)
+				this.$set(this.haccp_mst_file, 'att', new File([""], tr.att_file[0].att_nm))
+			} else {
+				this.$set(this.haccp_mst_file, 'att', null)
 			}
-		},
-		
-		handleFileChange(e) {
-			// Whenever the file changes, emit the 'input' event with the file data.
-			this.$emit('input', e.target.files[0])
 		},
 
 		add () {
-			// 
+			this.spinner()
+
+			let formData = new FormData()
+			formData.append('rev_no', this.haccp_mst_file.rev_no)
+			formData.append('rev_dt', this.haccp_mst_file.rev_dt)
+			formData.append('rev_content', this.haccp_mst_file.rev_content)
+			formData.append('rev_reason', this.haccp_mst_file.rev_reason)
+			formData.append('att[]', this.haccp_mst_file.att)
+
+			api.post(formData).then((res) => {
+				this.spinner(false)
+				
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('AddedHaccpMstFile'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+					this.query()
+					this.clear()
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+        				icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		save () {
-			// 
+			this.spinner()
+
+			let formData = new FormData()
+			formData.append('rev_no', this.haccp_mst_file.rev_no)
+			formData.append('rev_dt', this.haccp_mst_file.rev_dt)
+			formData.append('rev_content', this.haccp_mst_file.rev_content)
+			formData.append('rev_reason', this.haccp_mst_file.rev_reason)
+			formData.append('att[]', this.haccp_mst_file.att)
+
+			api.put(this.haccp_mst_file.rev_seq, formData).then((res) => {
+				this.spinner(false)
+
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('SavedHaccpMstFile'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+					this.query()
+					this.clear()
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+        				icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		query () {
@@ -315,6 +402,10 @@ export default {
 					text: err.response.data.message,
 				})
 			})
+		},
+
+		excel () {
+			window.location.href = api.downloadUrl()
 		},
 
 		addDialog () {

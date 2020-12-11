@@ -24,7 +24,7 @@ class HaccpMstFileResource extends JsonResource
             'reg_id' => $this->REG_ID,
             'reg_dtm' => now()->parse($this->REG_DTM)->format('Y-m-d'),
 
-            'att' => AttFileResource::collection($this->whenLoaded('att_file')),
+            'att_file' => AttFileResource::collection($this->whenLoaded('att_file')),
         ];
     }
 }

@@ -21,25 +21,24 @@ export default {
         return axios.get(`${config.baseUrl}/${this.api}?${this.prepParams(params)}`)
     },
 
-    post: function (args = {}) {
-
-        // Default parameters
-        let params = {
-            ...args
-        }
-
-        return axios.post(`${config.baseUrl}/${this.api}`, params)
+    post: function (formData) {
+        return axios.post(`${config.baseUrl}/${this.api}`, formData, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
     },
 
-    put: function (id, args = {}) {
+    put: function (id, formData) {
 
         // Default parameters
-        let params = {
-            _method: 'PUT',
-            ...args
-        }
+        formData.append('_method', 'PUT')
 
-        return axios.post(`${config.baseUrl}/${this.api}/${id}`, params)
+        return axios.post(`${config.baseUrl}/${this.api}/${id}`, formData, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
     },
 
     delete: function (id, args = {}) {
