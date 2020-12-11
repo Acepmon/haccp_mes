@@ -48,7 +48,7 @@ class HaccpMstFileController extends Controller
         $request->validate([
             'rev_no' => 'required|string|max:10',
             'rev_dt' => 'required|string|date_format:Y-m-d',
-            'att.*' => 'required|file',
+            'att' => 'required|file',
             'rev_content' => 'nullable|string|max:100',
             'rev_reason' => 'nullable|string|max:100',
         ]);

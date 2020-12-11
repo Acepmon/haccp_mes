@@ -39,8 +39,8 @@ class CompInfoController extends Controller
     {
         $request->validate([
             'comp_id' => 'required|string|max:20',
-            'comp_nm' => 'nullable|string|max:60',
-            'ceo_nm' => 'nullable|string|max:60',
+            'comp_nm' => 'required|string|max:60',
+            'ceo_nm' => 'required|string|max:60',
             'tel_no' => 'nullable|string|max:20',
             'fax_no' => 'nullable|string|max:20',
             'url' => 'nullable|string|max:30',

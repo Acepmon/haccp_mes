@@ -45,13 +45,13 @@ class UserController extends Controller
     {
         $request->validate([
             'user_id' => 'required|string|max:15|unique:user,USER_ID',
-            'user_pw' => 'nullable|string|max:100',
-            'user_nm' => 'nullable|string|max:20',
+            'user_pw' => 'required|string|confirmed|max:100',
+            'user_nm' => 'required|string|max:20',
             'email' => 'nullable|string|email|max:50',
-            'role_cd' => 'nullable|array',
-            'appr_cd' => 'nullable|array',
-            'job_cd' => 'nullable|string|max:20',
-            'user_sts_yn' => 'nullable|string|in:' . implode(',', User::STATUS_ARRAY),
+            'role_cd' => 'required|array',
+            'appr_cd' => 'required|array',
+            'job_cd' => 'required|string|max:20',
+            'user_sts_yn' => 'required|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
 
         $user = User::create([
@@ -96,13 +96,13 @@ class UserController extends Controller
     {
         $request->validate([
             'user_id' => 'required|string|max:15|unique:user,USER_ID,' . $id . ',USER_ID',
-            'user_pw' => 'nullable|string|max:100',
-            'user_nm' => 'nullable|string|max:20',
+            'user_pw' => 'nullable|string|confirmed|max:100',
+            'user_nm' => 'required|string|max:20',
             'email' => 'nullable|string|email|max:50',
-            'role_cd' => 'nullable|array',
-            'appr_cd' => 'nullable|array',
-            'job_cd' => 'nullable|string|max:20',
-            'user_sts_yn' => 'nullable|string|in:' . implode(',', User::STATUS_ARRAY),
+            'role_cd' => 'required|array',
+            'appr_cd' => 'required|array',
+            'job_cd' => 'required|string|max:20',
+            'user_sts_yn' => 'required|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
 
         $user = User::where('USER_ID', $id)->first();

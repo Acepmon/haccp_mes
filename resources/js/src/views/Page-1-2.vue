@@ -1,11 +1,11 @@
 <template>
 	<div>
-        <vx-card>
+        <vx-card id="div-with-loading" class="vs-con-loading__container">
             <div class="flex flex-wrap justify-end mb-2">
-                <vs-button @click="add()" class="mx-1" color="dark" type="border" :disabled="isSelected">{{ $t('Add') }}</vs-button>
-                <vs-button @click="save()" class="mx-1" color="dark" type="border" :disabled="!isSelected">{{ $t('Save') }}</vs-button>
+                <vs-button @click="add()" class="mx-1" color="dark" type="border">{{ $t('Add') }}</vs-button>
+                <vs-button @click="save()" class="mx-1" color="dark" type="border">{{ $t('Save') }}</vs-button>
                 <vs-button @click="query()" class="mx-1" color="dark" type="border">{{ $t('Query') }}</vs-button>
-                <vs-button @click="remove()" class="mx-1" color="dark" type="border" :disabled="!isSelected">{{ $t('Delete') }}</vs-button>
+                <vs-button @click="remove()" class="mx-1" color="dark" type="border">{{ $t('Delete') }}</vs-button>
                 <vs-button @click="closeDialog()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
             </div>
 
@@ -13,22 +13,22 @@
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 휴대폰번호(ID)</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 휴대폰번호(ID)</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="selected.user_id" />
+                                <vs-input v-model="selected.user_id" :danger="errors.user_id != null" :danger-text="errors.user_id" />
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 이름</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 이름</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="selected.user_nm" />
+                                <vs-input v-model="selected.user_nm" :danger="errors.user_nm != null" :danger-text="errors.user_nm" />
                             </div>
                         </div>
                     </div>
@@ -37,22 +37,22 @@
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 비밀번호</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 비밀번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="selected.user_pw" type="password" />
+                                <vs-input v-model="selected.user_pw" type="password" :danger="errors.user_pw != null" :danger-text="errors.user_pw" />
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>비밀번호확인</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">비밀번호확인</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="selected.user_pw_confirmation" type="password" />
+                                <vs-input v-model="selected.user_pw_confirmation" type="password" :danger="errors.user_pw_confirmation != null" :danger-text="errors.user_pw_confirmation" />
                             </div>
                         </div>
                     </div>
@@ -61,11 +61,65 @@
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>이메일</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">이메일</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="selected.email" type="email" :success="validEmail" :success-text="$t('EmailValid')" />
+                                <vs-input v-model="selected.email" type="email" :danger="errors.email != null" :danger-text="errors.email" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap">
+                    <div class="w-full sm:w-2/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/6 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 메뉴접근권한</span>
+                            </div>
+                            <div class="vx-col sm:w-5/6 w-full">
+                                <div class="flex flex-row flex-wrap">
+                                    <vs-button 
+                                        v-for="(role, index) in roles"
+                                        :key="index"
+                                        @click="toggleRole(role.comm2_cd)"
+                                        :color="selectedRoleHas(role.comm2_cd) ? 'primary' : 'dark'"
+                                        class="px-3 mt-1 flex-shrink-0 ml-1"
+                                        type="border">
+                                            <vs-icon v-if="selectedRoleHas(role.comm2_cd)" icon-pack="feather" icon="icon-check" />
+                                            <span v-text="role.comm2_nm"></span>
+                                        </vs-button>
+                                </div>
+                                <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.role_cd != null">
+									<span class="span-text-validation" v-text="errors.role_cd"></span>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap">
+                    <div class="w-full sm:w-12/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/6 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 담당업무</span>
+                            </div>
+                            <div class="vx-col sm:w-5/6 w-full">
+                                <div class="flex flex-row flex-wrap">
+                                    <vs-button 
+                                        v-for="(appr, index) in approvals"
+                                        :key="index"
+                                        @click="toggleApproval(appr.comm2_cd)"
+                                        :color="selectedApprovalHas(appr.comm2_cd) ? 'primary' : 'dark'"
+                                        class="px-3 mt-1 flex-shrink-0 ml-1"
+                                        type="border">
+                                            <vs-icon v-if="selectedApprovalHas(appr.comm2_cd)" icon-pack="feather" icon="icon-check" />
+                                            <span v-text="appr.comm2_nm"></span>
+                                        </vs-button>
+                                </div>
+                                <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.appr_cd != null">
+									<span class="span-text-validation" v-text="errors.appr_cd"></span>
+								</div>
                             </div>
                         </div>
                     </div>
@@ -74,57 +128,11 @@
                 <div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 메뉴접근권한</span>
-                            </div>
-                            <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                                <vs-button 
-                                    v-for="(role, index) in roles"
-                                    :key="index"
-                                    @click="toggleRole(role.comm2_cd)"
-                                    :color="selectedRoleHas(role.comm2_cd) ? 'primary' : 'dark'"
-                                    class="px-3 mt-1 flex-shrink-0"
-                                    :class="{'ml-1': index != 0}"
-                                    type="border">
-                                        <vs-icon v-if="selectedRoleHas(role.comm2_cd)" icon-pack="feather" icon="icon-check" />
-                                        <span v-text="role.comm2_nm"></span>
-                                    </vs-button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap">
-                    <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 담당업무</span>
-                            </div>
-                            <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                                <vs-button 
-                                    v-for="(appr, index) in approvals"
-                                    :key="index"
-                                    @click="toggleApproval(appr.comm2_cd)"
-                                    :color="selectedApprovalHas(appr.comm2_cd) ? 'primary' : 'dark'"
-                                    class="px-3 mt-1 flex-shrink-0"
-                                    :class="{'ml-1': index != 0}"
-                                    type="border">
-                                        <vs-icon v-if="selectedApprovalHas(appr.comm2_cd)" icon-pack="feather" icon="icon-check" />
-                                        <span v-text="appr.comm2_nm"></span>
-                                    </vs-button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap">
-                    <div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 업무권한</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 업무권한</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="selected.job_cd">
+                                <vs-select v-model="selected.job_cd" :danger="errors.job_cd != null" :danger-text="errors.job_cd">
                                     <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in jobs"></vs-select-item>
                                 </vs-select>
                             </div>
@@ -133,11 +141,11 @@
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 사용여부</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 사용여부</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="selected.user_sts_yn">
+                                <vs-select v-model="selected.user_sts_yn" :danger="errors.user_sts_yn != null" :danger-text="errors.user_sts_yn">
                                     <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item, index) in status"></vs-select-item>
                                 </vs-select>
                             </div>
@@ -235,6 +243,17 @@ export default {
                 job_cd: null,
                 user_sts_yn: null,
             },
+            errors: {
+				user_id: null,
+                user_pw: null,
+                user_pw_confirmation: null,
+                user_nm: null,
+                email: null,
+                role_cd: [],
+                appr_cd: [],
+                job_cd: null,
+                user_sts_yn: null,
+			},
             isSelected: false,
             datas: [],
 
@@ -318,7 +337,18 @@ export default {
             }
         },
 
-        clearSelected () {
+        spinner (loading = true) {
+			if (loading) {
+				this.$vs.loading({
+					container: '#div-with-loading',
+					scale: 0.6
+				})
+			} else {
+				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+			}
+		},
+
+        clear () {
             this.isSelected = false
             this.selected.user_id = null,
             this.selected.user_pw = null,
@@ -331,6 +361,24 @@ export default {
             this.selected.user_sts_yn = null
         },
 
+        clearErrors () {
+			this.$set(this, 'errors', {
+				worker_id: null,
+				worker_nm: null,
+				tel_no: null,
+				work_cd: null,
+				health_chk_dt: null,
+				role_cd: null,
+				remark: null,
+			})
+		},
+
+		displayErrors (errors) {
+			for (const [key, value] of Object.entries(errors)) {
+				this.$set(this.errors, key, Array.isArray(value) ? value[0] : value)
+			}
+		},
+
         add () {
             this.$vs.dialog({
                 type: 'confirm',
@@ -340,7 +388,11 @@ export default {
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => {
+                    this.clearErrors()
+                    this.spinner()
+
                     api.post(this.selected).then((res) => {
+                        this.spinner(false)
                         if (res.data.success) {
                             this.$vs.notify({
                                 color: 'success',
@@ -349,8 +401,19 @@ export default {
                                 text: this.$t('SuccessAddedUser')
                             })
                             this.query()
-                            this.clearSelected()
+                            this.clear()
                         }
+                    }).catch((err) => {
+                        this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+                        this.spinner(false)
+                        this.$vs.notify({
+                            title: this.$t('Error'),
+                            position: 'top-right',
+                            color: 'warning',
+                            iconPack: 'feather',
+                            icon:'icon-alert-circle',
+                            text: err.response.data.message,
+                        })
                     })
                 }
             })
@@ -365,7 +428,11 @@ export default {
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => {
+                    this.clearErrors()
+                    this.spinner()
+
                     api.put(this.selected.user_id, this.selected).then((res) => {
+                        this.spinner(false)
                         if (res.data.success) {
                             this.$vs.notify({
                                 color: 'success',
@@ -374,22 +441,47 @@ export default {
                                 text: this.$t('SuccessSavedUser')
                             })
                             this.query()
-                            this.clearSelected()
+                            this.clear()
                         }
+                    }).catch((err) => {
+                        this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+                        this.spinner(false)
+                        this.$vs.notify({
+                            title: this.$t('Error'),
+                            position: 'top-right',
+                            color: 'warning',
+                            iconPack: 'feather',
+                            icon:'icon-alert-circle',
+                            text: err.response.data.message,
+                        })
                     })
                 }
             })
         },
 
         query () {
+            this.spinner()
+
             api.fetch({
                 ...this.paginationParam,
 			    ...this.sortParam
             }).then((res) => {
+                this.spinner(false)
                 this.datas = res.data.data
                 this.pagination.total = res.data.meta.total
 				this.pagination.page = res.data.meta.current_page
-            })
+            }).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
         },
 
         closeDialog () {
@@ -414,9 +506,13 @@ export default {
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => {
+                    this.clearErrors()
+                    this.spinner()
+
                     api.delete(sUserId).then((res) => {
+                        this.spinner(false)
                         if (res.data.success) {
-                            this.clearSelected()
+                            this.clear()
                             this.query()
 
                             this.$vs.notify({
@@ -426,6 +522,17 @@ export default {
                                 text: this.$t('SuccessDeletedUser')
                             })
                         }
+                    }).catch((err) => {
+                        this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+                        this.spinner(false)
+                        this.$vs.notify({
+                            title: this.$t('Error'),
+                            position: 'top-right',
+                            color: 'warning',
+                            iconPack: 'feather',
+                            icon:'icon-alert-circle',
+                            text: err.response.data.message,
+                        })
                     })
                 }
             })

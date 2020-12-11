@@ -13,22 +13,22 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 이름</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 이름</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="worker.worker_nm" />
+                                <vs-input v-model="worker.worker_nm" :danger="errors.worker_nm != null" :danger-text="errors.worker_nm" />
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 휴대폰번호</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 휴대폰번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="worker.tel_no" type="number" class="vs-input-text-right" />
+                                <vs-input v-model="worker.tel_no" type="number" class="vs-input-text-right" :danger="errors.tel_no != null" :danger-text="errors.tel_no" />
                             </div>
                         </div>
                     </div>
@@ -37,11 +37,11 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>업무구분</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">업무구분</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="worker.work_cd">
+                                <vs-select v-model="worker.work_cd" :danger="errors.work_cd != null" :danger-text="errors.work_cd">
                                     <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in works"></vs-select-item>
                                 </vs-select>
                             </div>
@@ -50,11 +50,11 @@
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>업무내용</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">업무내용</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="worker.remark" />
+                                <vs-input v-model="worker.remark" :danger="errors.remark != null" :danger-text="errors.remark" />
                             </div>
                         </div>
                     </div>
@@ -63,23 +63,26 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>보건증갱신일자</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">보건증갱신일자</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
 								<!-- <datepicker :language="ko" format="" v-model="worker.health_chk_dt"></datepicker> -->
 								<flat-pickr :config="configdateTimePicker" v-model="worker.health_chk_dt"></flat-pickr>
+								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.health_chk_dt != null">
+									<span class="span-text-validation" v-text="errors.health_chk_dt"></span>
+								</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>정/부 구분</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">정/부 구분</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="worker.role_cd">
+                                <vs-select v-model="worker.role_cd" :danger="errors.role_cd != null" :danger-text="errors.role_cd">
                                     <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in roles"></vs-select-item>
                                 </vs-select>
                             </div>
@@ -181,6 +184,15 @@ export default {
 				reg_id: null,
 				reg_dtm: null,
 			},
+			errors: {
+				worker_id: null,
+				worker_nm: null,
+				tel_no: null,
+				work_cd: null,
+				health_chk_dt: null,
+				role_cd: null,
+				remark: null,
+			},
 			roles: [],
 			works: [],
 			workers: [],
@@ -242,11 +254,30 @@ export default {
 			})
 		},
 
+		clearErrors () {
+			this.$set(this, 'errors', {
+				worker_id: null,
+				worker_nm: null,
+				tel_no: null,
+				work_cd: null,
+				health_chk_dt: null,
+				role_cd: null,
+				remark: null,
+			})
+		},
+
+		displayErrors (errors) {
+			for (const [key, value] of Object.entries(errors)) {
+				this.$set(this.errors, key, Array.isArray(value) ? value[0] : value)
+			}
+		},
+
 		rowIndex: function (index) {
 			return (this.pagination.page * this.pagination.limit)-this.pagination.limit + index + 1
 		},
 
 		add () {
+			this.clearErrors()
 			this.spinner()
 
 			api.post(this.worker).then((res) => {
@@ -272,6 +303,7 @@ export default {
 					})
 				}
 			}).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
 				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),
@@ -285,6 +317,7 @@ export default {
 		},
 
 		save () {
+			this.clearErrors()
 			this.spinner()
 
 			api.put(this.worker.worker_id, this.worker).then((res) => {
@@ -310,6 +343,7 @@ export default {
 					})
 				}
 			}).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
 				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),
@@ -334,6 +368,7 @@ export default {
                 this.pagination.total = res.data.meta.total
 				this.pagination.page = res.data.meta.current_page
             }).catch(() => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
 				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),
@@ -358,6 +393,7 @@ export default {
         },
 
 		remove () {
+			this.clearErrors()
 			this.spinner()
 
 			api.delete(this.worker.worker_id).then((res) => {
@@ -383,6 +419,7 @@ export default {
 					})
 				}
 			}).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
 				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),

@@ -14,22 +14,25 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 개정번호</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 개정번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="haccp_mst_file.rev_no" type="number" class="vs-input-text-right" />
+                                <vs-input v-model="haccp_mst_file.rev_no" type="number" class="vs-input-text-right" :danger="errors.rev_no != null" :danger-text="errors.rev_no" />
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 개정일자</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 개정일자</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
 								<flat-pickr :config="configdateTimePicker" v-model="haccp_mst_file.rev_dt"></flat-pickr>
+								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.rev_dt != null">
+									<span class="span-text-validation" v-text="errors.rev_dt"></span>
+								</div>
                             </div>
                         </div>
                     </div>
@@ -38,11 +41,11 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>개정내용</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">개정내용</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input class="w-full" v-model="haccp_mst_file.rev_content" />
+                                <vs-input class="w-full" v-model="haccp_mst_file.rev_content" :danger="errors.rev_content != null" :danger-text="errors.rev_content" />
                             </div>
                         </div>
                     </div>
@@ -51,11 +54,11 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>개정사유</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">개정사유</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input class="w-full" v-model="haccp_mst_file.rev_reason" />
+                                <vs-input class="w-full" v-model="haccp_mst_file.rev_reason" :danger="errors.rev_reason != null" :danger-text="errors.rev_reason" />
                             </div>
                         </div>
                     </div>
@@ -64,8 +67,8 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 첨부화일</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 첨부화일</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
 								<div class="flex flex-row">
@@ -73,6 +76,9 @@
 									<vs-button type="border" color="dark" @click.native="haccp_mst_file.att = null" v-if="haccp_mst_file.att" class="ml-1 px-4">
 										<vs-icon icon="close" />
 									</vs-button>
+								</div>
+								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.att != null">
+									<span class="span-text-validation" v-text="errors.att"></span>
 								</div>
                             </div>
                         </div>
@@ -168,6 +174,14 @@ export default {
 				att: null,
 				att_file: []
 			},
+			errors: {
+				rev_no: null,
+				rev_dt: null,
+				att_dtm: null,
+				rev_content: null,
+				rev_reason: null,
+				att: null,
+			},
 			haccp_mst_files: [],
 			pagination: {
 				page: 1,
@@ -228,6 +242,23 @@ export default {
 			})
 		},
 
+		clearErrors () {
+			this.$set(this, 'errors', {
+				rev_no: null,
+				rev_dt: null,
+				att_dtm: null,
+				rev_content: null,
+				rev_reason: null,
+				att: null,
+			})
+		},
+
+		displayErrors (errors) {
+			for (const [key, value] of Object.entries(errors)) {
+				this.$set(this.errors, key, Array.isArray(value) ? value[0] : value)
+			}
+		},
+
 		rowIndex: function (index) {
 			return (this.pagination.page * this.pagination.limit)-this.pagination.limit + index + 1
 		},
@@ -244,6 +275,8 @@ export default {
 		},
 
 		handleSelected (tr) {
+			this.clearErrors()
+
 			if (tr.att_file.length > 0) {
 				// this.haccp_mst_file.att = new File([""], tr.att_file[0].att_nm)
 				this.$set(this.haccp_mst_file, 'att', new File([""], tr.att_file[0].att_nm))
@@ -253,14 +286,25 @@ export default {
 		},
 
 		add () {
+			this.clearErrors()
 			this.spinner()
 
 			let formData = new FormData()
-			formData.append('rev_no', this.haccp_mst_file.rev_no)
-			formData.append('rev_dt', this.haccp_mst_file.rev_dt)
-			formData.append('rev_content', this.haccp_mst_file.rev_content)
-			formData.append('rev_reason', this.haccp_mst_file.rev_reason)
-			formData.append('att[]', this.haccp_mst_file.att)
+			if (this.haccp_mst_file.rev_no) {
+				formData.append('rev_no', this.haccp_mst_file.rev_no)
+			}
+			if (this.haccp_mst_file.rev_dt) {
+				formData.append('rev_dt', this.haccp_mst_file.rev_dt)
+			}
+			if (this.haccp_mst_file.rev_content) {
+				formData.append('rev_content', this.haccp_mst_file.rev_content)
+			}
+			if (this.haccp_mst_file.rev_reason) {
+				formData.append('rev_reason', this.haccp_mst_file.rev_reason)
+			}
+			if (this.haccp_mst_file.att) {
+				formData.append('att', this.haccp_mst_file.att)
+			}
 
 			api.post(formData).then((res) => {
 				this.spinner(false)
@@ -285,6 +329,7 @@ export default {
 					})
 				}
 			}).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
 				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),
@@ -298,14 +343,25 @@ export default {
 		},
 
 		save () {
+			this.clearErrors()
 			this.spinner()
 
 			let formData = new FormData()
-			formData.append('rev_no', this.haccp_mst_file.rev_no)
-			formData.append('rev_dt', this.haccp_mst_file.rev_dt)
-			formData.append('rev_content', this.haccp_mst_file.rev_content)
-			formData.append('rev_reason', this.haccp_mst_file.rev_reason)
-			formData.append('att[]', this.haccp_mst_file.att)
+			if (this.haccp_mst_file.rev_no) {
+				formData.append('rev_no', this.haccp_mst_file.rev_no)
+			}
+			if (this.haccp_mst_file.rev_dt) {
+				formData.append('rev_dt', this.haccp_mst_file.rev_dt)
+			}
+			if (this.haccp_mst_file.rev_content) {
+				formData.append('rev_content', this.haccp_mst_file.rev_content)
+			}
+			if (this.haccp_mst_file.rev_reason) {
+				formData.append('rev_reason', this.haccp_mst_file.rev_reason)
+			}
+			if (this.haccp_mst_file.att) {
+				formData.append('att', this.haccp_mst_file.att)
+			}
 
 			api.put(this.haccp_mst_file.rev_seq, formData).then((res) => {
 				this.spinner(false)
@@ -330,6 +386,7 @@ export default {
 					})
 				}
 			}).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
 				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),
@@ -354,6 +411,7 @@ export default {
                 this.pagination.total = res.data.meta.total
 				this.pagination.page = res.data.meta.current_page
             }).catch(() => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
 				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),
@@ -367,6 +425,7 @@ export default {
 		},
 
 		remove () {
+			this.clearErrors()
 			this.spinner()
 
 			api.delete(this.haccp_mst_file.rev_seq).then((res) => {
@@ -392,6 +451,7 @@ export default {
 					})
 				}
 			}).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
 				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),

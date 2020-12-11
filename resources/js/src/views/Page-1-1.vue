@@ -13,22 +13,22 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 사업자등록번호</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 사업자등록번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info.comp_id" />
+                                <vs-input v-model="comp_info.comp_id" :danger="errors.comp_id != null" :danger-text="errors.comp_id" />
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 회사명</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 회사명</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info.comp_nm" />
+                                <vs-input v-model="comp_info.comp_nm" :danger="errors.comp_nm != null" :danger-text="errors.comp_nm" />
                             </div>
                         </div>
                     </div>
@@ -39,22 +39,22 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span><span class="text-danger">*</span> 대표자명</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 대표자명</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info.ceo_nm" />
+                                <vs-input v-model="comp_info.ceo_nm" :danger="errors.ceo_nm != null" :danger-text="errors.ceo_nm" />
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>홈페이지</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">홈페이지</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info.url" />
+                                <vs-input v-model="comp_info.url" :danger="errors.url != null" :danger-text="errors.url" />
                             </div>
                         </div>
                     </div>
@@ -65,22 +65,22 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>전화번호</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">전화번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info.tel_no" type="number" class="vs-input-text-right" />
+                                <vs-input v-model="comp_info.tel_no" type="number" class="vs-input-text-right" :danger="errors.tel_no != null" :danger-text="errors.tel_no" />
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>팩스번호</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">팩스번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info.fax_no" type="number" class="vs-input-text-right" />
+                                <vs-input v-model="comp_info.fax_no" type="number" class="vs-input-text-right" :danger="errors.fax_no != null" :danger-text="errors.fax_no" />
                             </div>
                         </div>
                     </div>
@@ -91,11 +91,11 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>우편번호</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">우편번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info.zip_cd" />
+                                <vs-input v-model="comp_info.zip_cd" :danger="errors.zip_cd != null" :danger-text="errors.zip_cd" />
                             </div>
                         </div>
                     </div>
@@ -106,17 +106,17 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>주소</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">주소</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input class="w-full" v-model="comp_info.addr1" />
+                                <vs-input class="w-full" v-model="comp_info.addr1" :danger="errors.addr1 != null" :danger-text="errors.addr1" />
                             </div>
                         </div>
 						<div class="vx-row mb-2">
-							<div class="vx-col sm:w-1/3 w-full flex items-center justify-end"></div>
+							<div class="vx-col sm:w-1/3 w-full flex justify-end"></div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input class="w-full" v-model="comp_info.addr2" />
+                                <vs-input class="w-full" v-model="comp_info.addr2" :danger="errors.addr2 != null" :danger-text="errors.addr2" />
                             </div>
                         </div>
                     </div>
@@ -127,11 +127,14 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>HACCP 팀장 정보</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">HACCP 팀장 정보</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
                                 <vs-button @click="chooseUserDialog()" color="primary" type="border">담당자 변경</vs-button>
+								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.haccp_id != null">
+									<span class="span-text-validation" v-text="errors.haccp_id"></span>
+								</div>
                             </div>
                         </div>
                     </div>
@@ -142,8 +145,8 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>이름</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">이름</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
                                 <vs-input v-model="comp_info.haccp_user.user_nm" />
@@ -153,8 +156,8 @@
 
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>휴대폰번호(ID)</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">휴대폰번호(ID)</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
                                 <vs-input v-model="comp_info.haccp_user.user_id" />
@@ -168,8 +171,8 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>이메일</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">이메일</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
                                 <vs-input v-model="comp_info.haccp_user.email" />
@@ -183,11 +186,11 @@
 				<div class="flex flex-wrap">
                     <div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex items-center justify-end">
-                                <span>HACCP 젹용 품목류</span>
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">HACCP 젹용 품목류</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info.haccp_item" />
+                                <vs-input v-model="comp_info.haccp_item" :danger="errors.haccp_item != null" :danger-text="errors.haccp_item" />
                             </div>
                         </div>
                     </div>
@@ -243,7 +246,18 @@ export default {
 				haccp_item: null,
 				reg_id: null,
 				reg_dtm: null,
-			}
+			},
+			errors: {
+				user_id: null,
+                user_pw: null,
+                user_pw_confirmation: null,
+                user_nm: null,
+                email: null,
+                role_cd: [],
+                appr_cd: [],
+                job_cd: null,
+                user_sts_yn: null,
+			},
 		}
 	},
 
@@ -258,7 +272,7 @@ export default {
             removeTab: 'mdn/removeTab',
 		}),
 
-		clearCompInfo () {
+		clear () {
 			this.$set(this, 'comp_info', {
 				comp_id: null,
 				comp_nm: null,
@@ -281,14 +295,45 @@ export default {
 			})
 		},
 
-		save () {
-			this.$vs.loading({
-				container: '#div-with-loading',
-				scale: 0.6
+		spinner (loading = true) {
+			if (loading) {
+				this.$vs.loading({
+					container: '#div-with-loading',
+					scale: 0.6
+				})
+			} else {
+				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+			}
+		},
+
+		clearErrors () {
+			this.$set(this, 'errors', {
+				comp_id: null,
+				comp_nm: null,
+				ceo_nm: null,
+				tel_no: null,
+				fax_no: null,
+				url: null,
+				zip_cd: null,
+				addr1: null,
+				addr2: null,
+				haccp_id: null,
+				haccp_item: null,
 			})
+		},
+
+		displayErrors (errors) {
+			for (const [key, value] of Object.entries(errors)) {
+				this.$set(this.errors, key, Array.isArray(value) ? value[0] : value)
+			}
+		},
+
+		save () {
+			this.spinner()
+			this.clearErrors()
 
 			api.post(this.comp_info).then((res) => {
-				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+				this.spinner(false)
 
 				if (res.data.success) {
 					this.$vs.notify({
@@ -308,7 +353,8 @@ export default {
 					})
 				}
 			}).catch((err) => {
-				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),
 					position: 'top-right',
@@ -333,14 +379,10 @@ export default {
 		},
 
 		query () {
-			this.clearCompInfo()
-			this.$vs.loading({
-				container: '#div-with-loading',
-				scale: 0.6
-			})
+			this.spinner()
 
 			api.fetch().then((res) => {
-				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+				this.spinner(false)
 
 				if (res.data.success == false) {
 					this.$vs.notify({
@@ -363,7 +405,8 @@ export default {
 					}
 				}
 			}).catch((err) => {
-				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),
 					position: 'top-right',
@@ -376,16 +419,13 @@ export default {
 		},
 
 		remove () {
-			this.$vs.loading({
-				container: '#div-with-loading',
-				scale: 0.6
-			})
+			this.spinner()
 
 			api.delete(this.comp_info.comp_id).then((res) => {
-				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+				this.spinner(false)
 
 				if (res.data.success) {
-					this.clearCompInfo()
+					this.clear()
 					this.$vs.notify({
 						title: this.$t('DeletedCompInfo'),
 						position: 'top-right',
@@ -403,7 +443,8 @@ export default {
 					})
 				}
 			}).catch((err) => {
-				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
 				this.$vs.notify({
 					title: this.$t('Error'),
 					position: 'top-right',
