@@ -44,21 +44,21 @@ class WorkerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'worker_nm' => 'required|string|max:60',
-            'tel_no' => 'required|string|max:20',
-            'work_cd' => 'nullable|string|max:20',
-            'health_chk_dt' => 'nullable|string|date_format:Y-m-d',
-            'role_cd' => 'nullable|string|max:20',
-            'remark' => 'nullable|string|max:100',
+            'worker:worker_nm' => 'required|string|max:60',
+            'worker:tel_no' => 'required|string|max:20',
+            'worker:work_cd' => 'nullable|string|max:20',
+            'worker:health_chk_dt' => 'nullable|string|date_format:Y-m-d',
+            'worker:role_cd' => 'nullable|string|max:20',
+            'worker:remark' => 'nullable|string|max:100',
         ]);
 
         $item = Worker::create([
-            'WORKER_NM' => $request->input('worker_nm'),
-            'TEL_NO' => $request->input('tel_no'),
-            'WORK_CD' => $request->input('work_cd'),
-            'HEALTH_CHK_DT' => now()->parse($request->input('health_chk_dt'))->format('Ymd'),
-            'ROLE_CD' => $request->input('role_cd'),
-            'REMARK' => $request->input('remark'),
+            'WORKER_NM' => $request->input('worker:worker_nm'),
+            'TEL_NO' => $request->input('worker:tel_no'),
+            'WORK_CD' => $request->input('worker:work_cd'),
+            'HEALTH_CHK_DT' => now()->parse($request->input('worker:health_chk_dt'))->format('Ymd'),
+            'ROLE_CD' => $request->input('worker:role_cd'),
+            'REMARK' => $request->input('worker:remark'),
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
             'REG_DTM' => now()->format('Ymdhis'),
         ]);
@@ -111,21 +111,21 @@ class WorkerController extends Controller
         }
 
         $request->validate([
-            'worker_nm' => 'required|string|max:60',
-            'tel_no' => 'required|string|max:20',
-            'work_cd' => 'nullable|string|max:20',
-            'health_chk_dt' => 'nullable|string|date_format:Y-m-d',
-            'role_cd' => 'nullable|string|max:20',
-            'remark' => 'nullable|string|max:100',
+            'worker_nm' => 'worker:required|string|max:60',
+            'tel_no' => 'worker:required|string|max:20',
+            'work_cd' => 'worker:nullable|string|max:20',
+            'health_chk_dt' => 'worker:nullable|string|date_format:Y-m-d',
+            'role_cd' => 'worker:nullable|string|max:20',
+            'remark' => 'worker:nullable|string|max:100',
         ]);
 
         $item->update([
-            'WORKER_NM' => $request->input('worker_nm'),
-            'TEL_NO' => $request->input('tel_no'),
-            'WORK_CD' => $request->input('work_cd'),
-            'HEALTH_CHK_DT' => now()->parse($request->input('health_chk_dt'))->format('Ymd'),
-            'ROLE_CD' => $request->input('role_cd'),
-            'REMARK' => $request->input('remark'),
+            'WORKER_NM' => $request->input('worker:worker_nm'),
+            'TEL_NO' => $request->input('worker:tel_no'),
+            'WORK_CD' => $request->input('worker:work_cd'),
+            'HEALTH_CHK_DT' => now()->parse($request->input('worker:health_chk_dt'))->format('Ymd'),
+            'ROLE_CD' => $request->input('worker:role_cd'),
+            'REMARK' => $request->input('worker:remark'),
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
             'REG_DTM' => now()->format('Ymdhis'),
         ]);

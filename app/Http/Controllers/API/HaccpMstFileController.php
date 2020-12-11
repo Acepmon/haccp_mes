@@ -46,11 +46,11 @@ class HaccpMstFileController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'rev_no' => 'required|string|max:10',
-            'rev_dt' => 'required|string|date_format:Y-m-d',
-            'att' => 'required|file',
-            'rev_content' => 'nullable|string|max:100',
-            'rev_reason' => 'nullable|string|max:100',
+            'haccp_mst_file:rev_no' => 'required|string|max:10',
+            'haccp_mst_file:rev_dt' => 'required|string|date_format:Y-m-d',
+            'haccp_mst_file:att' => 'required|file',
+            'haccp_mst_file:rev_content' => 'nullable|string|max:100',
+            'haccp_mst_file:rev_reason' => 'nullable|string|max:100',
         ]);
 
         $dtm = now()->format('Ymdhis');
@@ -78,11 +78,11 @@ class HaccpMstFileController extends Controller
         }
 
         $item = HaccpMstFile::create([
-            'REV_NO' => $request->input('rev_no'),
-            'REV_DT' => now()->parse($request->input('rev_dt'))->format('Ymd'),
+            'REV_NO' => $request->input('haccp_mst_file:rev_no'),
+            'REV_DT' => now()->parse($request->input('haccp_mst_file:rev_dt'))->format('Ymd'),
             'ATT_DTM' => $request->hasFile('att') ? $dtm : null,
-            'REV_CONTENT' => $request->input('rev_content'),
-            'REV_REASON' => $request->input('rev_reason'),
+            'REV_CONTENT' => $request->input('haccp_mst_file:rev_content'),
+            'REV_REASON' => $request->input('haccp_mst_file:rev_reason'),
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
             'REG_DTM' => now()->format('Ymdhis'),
         ]);
@@ -135,11 +135,11 @@ class HaccpMstFileController extends Controller
         }
 
         $request->validate([
-            'rev_no' => 'required|string|max:10',
-            'rev_dt' => 'required|string|date_format:Y-m-d',
-            'att.*' => 'nullable|file',
-            'rev_content' => 'nullable|string|max:100',
-            'rev_reason' => 'nullable|string|max:100',
+            'haccp_mst_file:rev_no' => 'required|string|max:10',
+            'haccp_mst_file:rev_dt' => 'required|string|date_format:Y-m-d',
+            'haccp_mst_file:att' => 'nullable|file',
+            'haccp_mst_file:rev_content' => 'nullable|string|max:100',
+            'haccp_mst_file:rev_reason' => 'nullable|string|max:100',
         ]);
 
         $dtm = now()->format('Ymdhis');
@@ -171,11 +171,11 @@ class HaccpMstFileController extends Controller
         }
 
         $item->update([
-            'REV_NO' => $request->input('rev_no'),
-            'REV_DT' => now()->parse($request->input('rev_dt'))->format('Ymd'),
+            'REV_NO' => $request->input('haccp_mst_file:rev_no'),
+            'REV_DT' => now()->parse($request->input('haccp_mst_file:rev_dt'))->format('Ymd'),
             'ATT_DTM' => $request->hasFile('att') ? $dtm : $item->ATT_DTM,
-            'REV_CONTENT' => $request->input('rev_content'),
-            'REV_REASON' => $request->input('rev_reason')
+            'REV_CONTENT' => $request->input('haccp_mst_file:rev_content'),
+            'REV_REASON' => $request->input('haccp_mst_file:rev_reason')
         ]);
 
         return response()->json([

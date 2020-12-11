@@ -17,7 +17,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 이름</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="worker.worker_nm" :danger="errors.worker_nm != null" :danger-text="errors.worker_nm" />
+                                <vs-input v-model="worker['worker:worker_nm']" :danger="errors['worker:worker_nm'] != null" :danger-text="errors['worker:worker_nm']" />
                             </div>
                         </div>
                     </div>
@@ -28,7 +28,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 휴대폰번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="worker.tel_no" type="number" class="vs-input-text-right" :danger="errors.tel_no != null" :danger-text="errors.tel_no" />
+                                <vs-input v-model="worker['worker:tel_no']" type="number" class="vs-input-text-right" :danger="errors['worker:tel_no'] != null" :danger-text="errors['worker:tel_no']" />
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                                 <span class="pt-2">업무구분</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="worker.work_cd" :danger="errors.work_cd != null" :danger-text="errors.work_cd">
+                                <vs-select v-model="worker['worker:work_cd']" :danger="errors['worker:work_cd'] != null" :danger-text="errors['worker:work_cd']">
                                     <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in works"></vs-select-item>
                                 </vs-select>
                             </div>
@@ -54,7 +54,7 @@
                                 <span class="pt-2">업무내용</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="worker.remark" :danger="errors.remark != null" :danger-text="errors.remark" />
+                                <vs-input v-model="worker['worker:remark']" :danger="errors['worker:remark'] != null" :danger-text="errors['worker:remark']" />
                             </div>
                         </div>
                     </div>
@@ -67,10 +67,9 @@
                                 <span class="pt-2">보건증갱신일자</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-								<!-- <datepicker :language="ko" format="" v-model="worker.health_chk_dt"></datepicker> -->
-								<flat-pickr :config="configdateTimePicker" v-model="worker.health_chk_dt"></flat-pickr>
-								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.health_chk_dt != null">
-									<span class="span-text-validation" v-text="errors.health_chk_dt"></span>
+								<flat-pickr :config="configdateTimePicker" v-model="worker['worker:health_chk_dt']"></flat-pickr>
+								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['worker:health_chk_dt'] != null">
+									<span class="span-text-validation" v-text="errors['worker:health_chk_dt']"></span>
 								</div>
                             </div>
                         </div>
@@ -82,7 +81,7 @@
                                 <span class="pt-2">정/부 구분</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="worker.role_cd" :danger="errors.role_cd != null" :danger-text="errors.role_cd">
+                                <vs-select v-model="worker['worker:role_cd']" :danger="errors['worker:role_cd'] != null" :danger-text="errors['worker:role_cd']">
                                     <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in roles"></vs-select-item>
                                 </vs-select>
                             </div>
@@ -174,24 +173,24 @@ export default {
 				locale: KoreanLocale,
 			},
 			worker: {
-				worker_id: null,
-				worker_nm: null,
-				tel_no: null,
-				work_cd: null,
-				health_chk_dt: null,
-				role_cd: null,
-				remark: null,
-				reg_id: null,
-				reg_dtm: null,
+				'worker:worker_id': null,
+				'worker:worker_nm': null,
+				'worker:tel_no': null,
+				'worker:work_cd': null,
+				'worker:health_chk_dt': null,
+				'worker:role_cd': null,
+				'worker:remark': null,
+				'worker:reg_id': null,
+				'worker:reg_dtm': null,
 			},
 			errors: {
-				worker_id: null,
-				worker_nm: null,
-				tel_no: null,
-				work_cd: null,
-				health_chk_dt: null,
-				role_cd: null,
-				remark: null,
+				'worker:worker_id': null,
+				'worker:worker_nm': null,
+				'worker:tel_no': null,
+				'worker:work_cd': null,
+				'worker:health_chk_dt': null,
+				'worker:role_cd': null,
+				'worker:remark': null,
 			},
 			roles: [],
 			works: [],
@@ -320,7 +319,7 @@ export default {
 			this.clearErrors()
 			this.spinner()
 
-			api.put(this.worker.worker_id, this.worker).then((res) => {
+			api.put(this.worker['worker:worker_id'], this.worker).then((res) => {
 				this.spinner(false)
 
 				if (res.data.success) {
@@ -396,7 +395,7 @@ export default {
 			this.clearErrors()
 			this.spinner()
 
-			api.delete(this.worker.worker_id).then((res) => {
+			api.delete(this.worker['worker:worker_id']).then((res) => {
 				this.spinner(false)
 
 				if (res.data.success) {

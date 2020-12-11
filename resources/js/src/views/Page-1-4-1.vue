@@ -18,7 +18,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 개정번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="haccp_mst_file.rev_no" type="number" class="vs-input-text-right" :danger="errors.rev_no != null" :danger-text="errors.rev_no" />
+                                <vs-input v-model="haccp_mst_file['haccp_mst_file:rev_no']" type="number" class="vs-input-text-right" :danger="errors['haccp_mst_file:rev_no'] != null" :danger-text="errors['haccp_mst_file:rev_no']" />
                             </div>
                         </div>
                     </div>
@@ -29,9 +29,9 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 개정일자</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-								<flat-pickr :config="configdateTimePicker" v-model="haccp_mst_file.rev_dt"></flat-pickr>
-								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.rev_dt != null">
-									<span class="span-text-validation" v-text="errors.rev_dt"></span>
+								<flat-pickr :config="configdateTimePicker" v-model="haccp_mst_file['haccp_mst_file:rev_dt']"></flat-pickr>
+								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['haccp_mst_file:rev_dt'] != null">
+									<span class="span-text-validation" v-text="errors['haccp_mst_file:rev_dt']"></span>
 								</div>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                                 <span class="pt-2">개정내용</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input class="w-full" v-model="haccp_mst_file.rev_content" :danger="errors.rev_content != null" :danger-text="errors.rev_content" />
+                                <vs-input class="w-full" v-model="haccp_mst_file['haccp_mst_file:rev_content']" :danger="errors['haccp_mst_file:rev_content'] != null" :danger-text="errors['haccp_mst_file:rev_content']" />
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                                 <span class="pt-2">개정사유</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input class="w-full" v-model="haccp_mst_file.rev_reason" :danger="errors.rev_reason != null" :danger-text="errors.rev_reason" />
+                                <vs-input class="w-full" v-model="haccp_mst_file['haccp_mst_file:rev_reason']" :danger="errors['haccp_mst_file:rev_reason'] != null" :danger-text="errors['haccp_mst_file:rev_reason']" />
                             </div>
                         </div>
                     </div>
@@ -72,13 +72,13 @@
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
 								<div class="flex flex-row">
-									<file-select v-model="haccp_mst_file.att"></file-select>
-									<vs-button type="border" color="dark" @click.native="haccp_mst_file.att = null" v-if="haccp_mst_file.att" class="ml-1 px-4">
+									<file-select v-model="haccp_mst_file['haccp_mst_file:att']"></file-select>
+									<vs-button type="border" color="dark" @click.native="haccp_mst_file['haccp_mst_file:att'] = null" v-if="haccp_mst_file['haccp_mst_file:att']" class="ml-1 px-4">
 										<vs-icon icon="close" />
 									</vs-button>
 								</div>
-								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.att != null">
-									<span class="span-text-validation" v-text="errors.att"></span>
+								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['haccp_mst_file:att'] != null">
+									<span class="span-text-validation" v-text="errors['haccp_mst_file:att']"></span>
 								</div>
                             </div>
                         </div>
@@ -163,24 +163,24 @@ export default {
 				locale: KoreanLocale,
 			},
 			haccp_mst_file: {
-				rev_seq: null,
-				rev_no: null,
-				rev_dt: null,
-				att_dtm: null,
-				rev_content: null,
-				rev_reason: null,
-				reg_id: null,
-				reg_dtm: null,
-				att: null,
-				att_file: []
+				'haccp_mst_file:rev_seq': null,
+				'haccp_mst_file:rev_no': null,
+				'haccp_mst_file:rev_dt': null,
+				'haccp_mst_file:att_dtm': null,
+				'haccp_mst_file:rev_content': null,
+				'haccp_mst_file:rev_reason': null,
+				'haccp_mst_file:reg_id': null,
+				'haccp_mst_file:reg_dtm': null,
+				'haccp_mst_file:att': null,
+				'haccp_mst_file:att_file': []
 			},
 			errors: {
-				rev_no: null,
-				rev_dt: null,
-				att_dtm: null,
-				rev_content: null,
-				rev_reason: null,
-				att: null,
+				'haccp_mst_file:rev_no': null,
+				'haccp_mst_file:rev_dt': null,
+				'haccp_mst_file:att_dtm': null,
+				'haccp_mst_file:rev_content': null,
+				'haccp_mst_file:rev_reason': null,
+				'haccp_mst_file:att': null,
 			},
 			haccp_mst_files: [],
 			pagination: {
@@ -229,27 +229,27 @@ export default {
 
 		clear () {
 			this.$set(this, 'haccp_mst_file', {
-				rev_seq: null,
-				rev_no: null,
-				rev_dt: null,
-				att_dtm: null,
-				rev_content: null,
-				rev_reason: null,
-				reg_id: null,
-				reg_dtm: null,
-				att: null,
-				att_file: []
+				'haccp_mst_file:rev_seq': null,
+				'haccp_mst_file:rev_no': null,
+				'haccp_mst_file:rev_dt': null,
+				'haccp_mst_file:att_dtm': null,
+				'haccp_mst_file:rev_content': null,
+				'haccp_mst_file:rev_reason': null,
+				'haccp_mst_file:reg_id': null,
+				'haccp_mst_file:reg_dtm': null,
+				'haccp_mst_file:att': null,
+				'haccp_mst_file:att_file': []
 			})
 		},
 
 		clearErrors () {
 			this.$set(this, 'errors', {
-				rev_no: null,
-				rev_dt: null,
-				att_dtm: null,
-				rev_content: null,
-				rev_reason: null,
-				att: null,
+				'haccp_mst_file:rev_no': null,
+				'haccp_mst_file:rev_dt': null,
+				'haccp_mst_file:att_dtm': null,
+				'haccp_mst_file:rev_content': null,
+				'haccp_mst_file:rev_reason': null,
+				'haccp_mst_file:att': null,
 			})
 		},
 
@@ -278,7 +278,7 @@ export default {
 			this.clearErrors()
 
 			if (tr.att_file.length > 0) {
-				// this.haccp_mst_file.att = new File([""], tr.att_file[0].att_nm)
+				// this.haccp_mst_file['haccp_mst_file:att'] = new File([""], tr.att_file[0].att_nm)
 				this.$set(this.haccp_mst_file, 'att', new File([""], tr.att_file[0].att_nm))
 			} else {
 				this.$set(this.haccp_mst_file, 'att', null)
@@ -290,20 +290,20 @@ export default {
 			this.spinner()
 
 			let formData = new FormData()
-			if (this.haccp_mst_file.rev_no) {
-				formData.append('rev_no', this.haccp_mst_file.rev_no)
+			if (this.haccp_mst_file['haccp_mst_file:rev_no']) {
+				formData.append('rev_no', this.haccp_mst_file['haccp_mst_file:rev_no'])
 			}
-			if (this.haccp_mst_file.rev_dt) {
-				formData.append('rev_dt', this.haccp_mst_file.rev_dt)
+			if (this.haccp_mst_file['haccp_mst_file:rev_dt']) {
+				formData.append('rev_dt', this.haccp_mst_file['haccp_mst_file:rev_dt'])
 			}
-			if (this.haccp_mst_file.rev_content) {
-				formData.append('rev_content', this.haccp_mst_file.rev_content)
+			if (this.haccp_mst_file['haccp_mst_file:rev_content']) {
+				formData.append('rev_content', this.haccp_mst_file['haccp_mst_file:rev_content'])
 			}
-			if (this.haccp_mst_file.rev_reason) {
-				formData.append('rev_reason', this.haccp_mst_file.rev_reason)
+			if (this.haccp_mst_file['haccp_mst_file:rev_reason']) {
+				formData.append('rev_reason', this.haccp_mst_file['haccp_mst_file:rev_reason'])
 			}
-			if (this.haccp_mst_file.att) {
-				formData.append('att', this.haccp_mst_file.att)
+			if (this.haccp_mst_file['haccp_mst_file:att']) {
+				formData.append('att', this.haccp_mst_file['haccp_mst_file:att'])
 			}
 
 			api.post(formData).then((res) => {
@@ -347,23 +347,23 @@ export default {
 			this.spinner()
 
 			let formData = new FormData()
-			if (this.haccp_mst_file.rev_no) {
-				formData.append('rev_no', this.haccp_mst_file.rev_no)
+			if (this.haccp_mst_file['haccp_mst_file:rev_no']) {
+				formData.append('rev_no', this.haccp_mst_file['haccp_mst_file:rev_no'])
 			}
-			if (this.haccp_mst_file.rev_dt) {
-				formData.append('rev_dt', this.haccp_mst_file.rev_dt)
+			if (this.haccp_mst_file['haccp_mst_file:rev_dt']) {
+				formData.append('rev_dt', this.haccp_mst_file['haccp_mst_file:rev_dt'])
 			}
-			if (this.haccp_mst_file.rev_content) {
-				formData.append('rev_content', this.haccp_mst_file.rev_content)
+			if (this.haccp_mst_file['haccp_mst_file:rev_content']) {
+				formData.append('rev_content', this.haccp_mst_file['haccp_mst_file:rev_content'])
 			}
-			if (this.haccp_mst_file.rev_reason) {
-				formData.append('rev_reason', this.haccp_mst_file.rev_reason)
+			if (this.haccp_mst_file['haccp_mst_file:rev_reason']) {
+				formData.append('rev_reason', this.haccp_mst_file['haccp_mst_file:rev_reason'])
 			}
-			if (this.haccp_mst_file.att) {
-				formData.append('att', this.haccp_mst_file.att)
+			if (this.haccp_mst_file['haccp_mst_file:att']) {
+				formData.append('att', this.haccp_mst_file['haccp_mst_file:att'])
 			}
 
-			api.put(this.haccp_mst_file.rev_seq, formData).then((res) => {
+			api.put(this.haccp_mst_file['haccp_mst_file:rev_seq'], formData).then((res) => {
 				this.spinner(false)
 
 				if (res.data.success) {
@@ -428,7 +428,7 @@ export default {
 			this.clearErrors()
 			this.spinner()
 
-			api.delete(this.haccp_mst_file.rev_seq).then((res) => {
+			api.delete(this.haccp_mst_file['haccp_mst_file:rev_seq']).then((res) => {
 				this.spinner(false)
 
 				if (res.data.success) {

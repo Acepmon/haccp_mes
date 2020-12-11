@@ -44,25 +44,25 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|string|max:15|unique:user,USER_ID',
-            'user_pw' => 'required|string|confirmed|max:100',
-            'user_nm' => 'required|string|max:20',
-            'email' => 'nullable|string|email|max:50',
-            'role_cd' => 'required|array',
-            'appr_cd' => 'required|array',
-            'job_cd' => 'required|string|max:20',
-            'user_sts_yn' => 'required|string|in:' . implode(',', User::STATUS_ARRAY),
+            'user:user_id' => 'required|string|max:15|unique:user,USER_ID',
+            'user:user_pw' => 'required|string|confirmed|max:100',
+            'user:user_nm' => 'required|string|max:20',
+            'user:email' => 'nullable|string|email|max:50',
+            'user:role_cd' => 'required|array',
+            'user:appr_cd' => 'required|array',
+            'user:job_cd' => 'required|string|max:20',
+            'user:user_sts_yn' => 'required|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
 
         $user = User::create([
-            'USER_ID' => $request->input('user_id'),
-            'USER_PW' => Hash::make($request->input('user_pw')),
-            'USER_NM' => $request->input('user_nm'),
-            'EMAIL' => $request->input('email'),
-            'ROLE_CD' => implode(',', $request->input('role_cd')),
-            'APPR_CD' => implode(',', $request->input('appr_cd')),
-            'JOB_CD' => $request->input('job_cd'),
-            'USER_STS_YN' => $request->input('user_sts_yn'),
+            'USER_ID' => $request->input('user:user_id'),
+            'USER_PW' => Hash::make($request->input('user:user_pw')),
+            'USER_NM' => $request->input('user:user_nm'),
+            'EMAIL' => $request->input('user:email'),
+            'ROLE_CD' => implode(',', $request->input('user:role_cd')),
+            'APPR_CD' => implode(',', $request->input('user:appr_cd')),
+            'JOB_CD' => $request->input('user:job_cd'),
+            'USER_STS_YN' => $request->input('user:user_sts_yn'),
             'REG_DTM' => now()->format('YmdHis')
         ]);
 
@@ -95,26 +95,26 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'user_id' => 'required|string|max:15|unique:user,USER_ID,' . $id . ',USER_ID',
-            'user_pw' => 'nullable|string|confirmed|max:100',
-            'user_nm' => 'required|string|max:20',
-            'email' => 'nullable|string|email|max:50',
-            'role_cd' => 'required|array',
-            'appr_cd' => 'required|array',
-            'job_cd' => 'required|string|max:20',
-            'user_sts_yn' => 'required|string|in:' . implode(',', User::STATUS_ARRAY),
+            'user:user_id' => 'required|string|max:15|unique:user,USER_ID,' . $id . ',USER_ID',
+            'user:user_pw' => 'nullable|string|confirmed|max:100',
+            'user:user_nm' => 'required|string|max:20',
+            'user:email' => 'nullable|string|email|max:50',
+            'user:role_cd' => 'required|array',
+            'user:appr_cd' => 'required|array',
+            'user:job_cd' => 'required|string|max:20',
+            'user:user_sts_yn' => 'required|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
 
         $user = User::where('USER_ID', $id)->first();
         $user->update([
-            'USER_ID' => $request->input('user_id'),
-            'USER_PW' => Hash::make($request->input('user_pw')),
-            'USER_NM' => $request->input('user_nm'),
-            'EMAIL' => $request->input('email'),
-            'ROLE_CD' => implode(',', $request->input('role_cd')),
-            'APPR_CD' => implode(',', $request->input('appr_cd')),
-            'JOB_CD' => $request->input('job_cd'),
-            'USER_STS_YN' => $request->input('user_sts_yn'),
+            'USER_ID' => $request->input('user:user_id'),
+            'USER_PW' => Hash::make($request->input('user:user_pw')),
+            'USER_NM' => $request->input('user:user_nm'),
+            'EMAIL' => $request->input('user:email'),
+            'ROLE_CD' => implode(',', $request->input('user:role_cd')),
+            'APPR_CD' => implode(',', $request->input('user:appr_cd')),
+            'JOB_CD' => $request->input('user:job_cd'),
+            'USER_STS_YN' => $request->input('user:user_sts_yn'),
         ]);
 
         return response()->json([
@@ -142,6 +142,6 @@ class UserController extends Controller
 
     public function download(Request $request)
     {
-        return Excel::download(new UserExport(), 'USER-' . now()->format('Y-m-d') . '.xlsx');
+        return Excel::download(new UserExport(), 'USER:' . now()->format('Y-m-d') . '.xlsx');
     }
 }

@@ -17,7 +17,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 휴대폰번호(ID)</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="selected.user_id" :danger="errors.user_id != null" :danger-text="errors.user_id" />
+                                <vs-input v-model="selected['user:user_id']" :danger="errors['user:user_id'] != null" :danger-text="errors['user:user_id']" />
                             </div>
                         </div>
                     </div>
@@ -28,7 +28,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 이름</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="selected.user_nm" :danger="errors.user_nm != null" :danger-text="errors.user_nm" />
+                                <vs-input v-model="selected['user:user_nm']" :danger="errors['user:user_nm'] != null" :danger-text="errors['user:user_nm']" />
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 비밀번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="selected.user_pw" type="password" :danger="errors.user_pw != null" :danger-text="errors.user_pw" />
+                                <vs-input v-model="selected['user:user_pw']" type="password" :danger="errors['user:user_pw'] != null" :danger-text="errors['user:user_pw']" />
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                                 <span class="pt-2">비밀번호확인</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="selected.user_pw_confirmation" type="password" :danger="errors.user_pw_confirmation != null" :danger-text="errors.user_pw_confirmation" />
+                                <vs-input v-model="selected['user:user_pw_confirmation']" type="password" :danger="errors['user:user_pw_confirmation'] != null" :danger-text="errors['user:user_pw_confirmation']" />
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                                 <span class="pt-2">이메일</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="selected.email" type="email" :danger="errors.email != null" :danger-text="errors.email" />
+                                <vs-input v-model="selected['user:email']" type="email" :danger="errors['user:email'] != null" :danger-text="errors['user:email']" />
                             </div>
                         </div>
                     </div>
@@ -90,8 +90,8 @@
                                             <span v-text="role.comm2_nm"></span>
                                         </vs-button>
                                 </div>
-                                <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.role_cd != null">
-									<span class="span-text-validation" v-text="errors.role_cd"></span>
+                                <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['user:role_cd'] != null">
+									<span class="span-text-validation" v-text="errors['user:role_cd']"></span>
 								</div>
                             </div>
                         </div>
@@ -117,8 +117,8 @@
                                             <span v-text="appr.comm2_nm"></span>
                                         </vs-button>
                                 </div>
-                                <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors.appr_cd != null">
-									<span class="span-text-validation" v-text="errors.appr_cd"></span>
+                                <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['user:appr_cd'] != null">
+									<span class="span-text-validation" v-text="errors['user:appr_cd']"></span>
 								</div>
                             </div>
                         </div>
@@ -132,7 +132,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 업무권한</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="selected.job_cd" :danger="errors.job_cd != null" :danger-text="errors.job_cd">
+                                <vs-select v-model="selected['user:job_cd']" :danger="errors['user:job_cd'] != null" :danger-text="errors['user:job_cd']">
                                     <vs-select-item :key="index" :value="item.comm2_cd" :text="item.comm2_nm" v-for="(item, index) in jobs"></vs-select-item>
                                 </vs-select>
                             </div>
@@ -145,7 +145,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 사용여부</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="selected.user_sts_yn" :danger="errors.user_sts_yn != null" :danger-text="errors.user_sts_yn">
+                                <vs-select v-model="selected['user:user_sts_yn']" :danger="errors['user:user_sts_yn'] != null" :danger-text="errors['user:user_sts_yn']">
                                     <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item, index) in status"></vs-select-item>
                                 </vs-select>
                             </div>
@@ -233,26 +233,26 @@ export default {
                 { 'text': 'N', 'value': 'N' }
             ],
             selected: {
-                user_id: null,
-                user_pw: null,
-                user_pw_confirmation: null,
-                user_nm: null,
-                email: null,
-                role_cd: [],
-                appr_cd: [],
-                job_cd: null,
-                user_sts_yn: null,
+                'user:user_id': null,
+                'user:user_pw': null,
+                'user:user_pw_confirmation': null,
+                'user:user_nm': null,
+                'user:email': null,
+                'user:role_cd': [],
+                'user:appr_cd': [],
+                'user:job_cd': null,
+                'user:user_sts_yn': null,
             },
             errors: {
-				user_id: null,
-                user_pw: null,
-                user_pw_confirmation: null,
-                user_nm: null,
-                email: null,
-                role_cd: [],
-                appr_cd: [],
-                job_cd: null,
-                user_sts_yn: null,
+				'user:user_id': null,
+                'user:user_pw': null,
+                'user:user_pw_confirmation': null,
+                'user:user_nm': null,
+                'user:email': null,
+                'user:role_cd': null,
+                'user:appr_cd': null,
+                'user:job_cd': null,
+                'user:user_sts_yn': null,
 			},
             isSelected: false,
             datas: [],
@@ -270,7 +270,7 @@ export default {
     },
     computed: {
         validEmail() {
-            return this.selected.email != null ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.selected.email) : false
+            return this.selected['user:user']-email != null ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.selected['user:user']-email) : false
         },
 
         paginationParam: function () {
@@ -312,28 +312,28 @@ export default {
         },
 
         selectedRoleHas(comm2_cd) {
-            return this.selected.role_cd.includes(comm2_cd)
+            return this.selected['user:role_cd'].includes(comm2_cd)
         },
 
         toggleRole(comm2_cd) {
             if (!this.selectedRoleHas(comm2_cd)) {
-                this.selected.role_cd.push(comm2_cd)
+                this.selected['user:role_cd'].push(comm2_cd)
             } else {
-                let index = this.selected.role_cd.indexOf(comm2_cd)
-                this.selected.role_cd.splice(index, 1)
+                let index = this.selected['user:role_cd'].indexOf(comm2_cd)
+                this.selected['user:role_cd'].splice(index, 1)
             }
         },
 
         selectedApprovalHas(comm2_cd) {
-            return this.selected.appr_cd.includes(comm2_cd)
+            return this.selected['user:appr_cd'].includes(comm2_cd)
         },
 
         toggleApproval(comm2_cd) {
             if (!this.selectedApprovalHas(comm2_cd)) {
-                this.selected.appr_cd.push(comm2_cd)
+                this.selected['user:appr_cd'].push(comm2_cd)
             } else {
-                let index = this.selected.appr_cd.indexOf(comm2_cd)
-                this.selected.appr_cd.splice(index, 1)
+                let index = this.selected['user:appr_cd'].indexOf(comm2_cd)
+                this.selected['user:appr_cd'].splice(index, 1)
             }
         },
 
@@ -349,27 +349,31 @@ export default {
 		},
 
         clear () {
-            this.isSelected = false
-            this.selected.user_id = null,
-            this.selected.user_pw = null,
-            this.selected.user_pw_confirmation = null,
-            this.selected.user_nm = null,
-            this.selected.email = null,
-            this.selected.role_cd = [],
-            this.selected.appr_cd = [],
-            this.selected.job_cd = null,
-            this.selected.user_sts_yn = null
+            this.$set(this, 'isSelected', false)
+            this.$set(this, 'selected', {
+                'user:user_id': null,
+                'user:user_pw': null,
+                'user:user_pw_confirmation': null,
+                'user:user_nm': null,
+                'user:email': null,
+                'user:role_cd': [],
+                'user:appr_cd': [],
+                'user:job_cd': null,
+                'user:user_sts_yn': null
+            })
         },
 
         clearErrors () {
 			this.$set(this, 'errors', {
-				worker_id: null,
-				worker_nm: null,
-				tel_no: null,
-				work_cd: null,
-				health_chk_dt: null,
-				role_cd: null,
-				remark: null,
+				'user:user_id': null,
+                'user:user_pw': null,
+                'user:user_pw_confirmation': null,
+                'user:user_nm': null,
+                'user:email': null,
+                'user:role_cd': null,
+                'user:appr_cd': null,
+                'user:job_cd': null,
+                'user:user_sts_yn': null,
 			})
 		},
 
@@ -431,7 +435,7 @@ export default {
                     this.clearErrors()
                     this.spinner()
 
-                    api.put(this.selected.user_id, this.selected).then((res) => {
+                    api.put(this.selected['user:user']-user_id, this.selected).then((res) => {
                         this.spinner(false)
                         if (res.data.success) {
                             this.$vs.notify({
@@ -497,7 +501,7 @@ export default {
         },
 
         remove () {
-            var sUserId = this.selected.user_id
+            var sUserId = this.selected['user:user']-user_id
             this.$vs.dialog({
                 type: 'confirm',
                 color: 'danger',
