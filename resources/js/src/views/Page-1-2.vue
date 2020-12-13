@@ -180,32 +180,32 @@
                                 {{ (rowIndex(index)) }}
                             </vs-td>
 
-                            <vs-td :data="data[index].user_id">
-                                {{ data[index].user_id }}
+                            <vs-td :data="data[index]['user:user_id']">
+                                {{ data[index]['user:user_id'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].user_nm">
-                                {{ data[index].user_nm }}
+                            <vs-td :data="data[index]['user:user_nm']">
+                                {{ data[index]['user:user_nm'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].user_pw">
-                                {{ data[index].user_pw }}
+                            <vs-td :data="data[index]['user:user_pw']">
+                                {{ data[index]['user:user_pw'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].email">
-                                {{ data[index].email }}
+                            <vs-td :data="data[index]['user:email']">
+                                {{ data[index]['user:email'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].appr_nm">
-                                {{ data[index].appr_nm }}
+                            <vs-td :data="data[index]['user:appr_nm']">
+                                {{ data[index]['user:appr_nm'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].role_nm">
-                                {{ data[index].role_nm }}
+                            <vs-td :data="data[index]['user:role_nm']">
+                                {{ data[index]['user:role_nm'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].reg_dtm">
-                                {{ data[index].reg_dtm }}
+                            <vs-td :data="data[index]['user:reg_dtm']">
+                                {{ data[index]['user:reg_dtm'] }}
                             </vs-td>
 
                         </vs-tr>
@@ -270,7 +270,7 @@ export default {
     },
     computed: {
         validEmail() {
-            return this.selected['user:user']-email != null ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.selected['user:user']-email) : false
+            return this.selected['user:email'] != null ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.selected['user:email']) : false
         },
 
         paginationParam: function () {
@@ -435,7 +435,7 @@ export default {
                     this.clearErrors()
                     this.spinner()
 
-                    api.put(this.selected['user:user']-user_id, this.selected).then((res) => {
+                    api.put(this.selected['user:user_id'], this.selected).then((res) => {
                         this.spinner(false)
                         if (res.data.success) {
                             this.$vs.notify({
@@ -501,7 +501,7 @@ export default {
         },
 
         remove () {
-            var sUserId = this.selected['user:user']-user_id
+            var sUserId = this.selected['user:user_id']
             this.$vs.dialog({
                 type: 'confirm',
                 color: 'danger',

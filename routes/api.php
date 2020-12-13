@@ -51,5 +51,6 @@ Route::group([
     Route::apiResource('worker', 'WorkerController');
 
     Route::get('haccp_mst_file/download', 'HaccpMstFileController@download')->name('haccp_mst_file.download');
+    Route::get('haccp_mst_file/{REV_SEQ}/att_file/{ATT_SEQ}/download', 'HaccpMstFileController@downloadAttFile')->name('haccp_mst_file.att_file.download');
     Route::apiResource('haccp_mst_file', 'HaccpMstFileController');
 });

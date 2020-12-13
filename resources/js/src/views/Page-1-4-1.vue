@@ -112,24 +112,27 @@
                                 {{ (rowIndex(index)) }}
                             </vs-td>
 
-                            <vs-td :data="data[index].rev_no">
-                                {{ data[index].rev_no }}
+                            <vs-td :data="data[index]['haccp_mst_file:rev_no']">
+                                {{ data[index]['haccp_mst_file:rev_no'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].rev_dt">
-                                {{ data[index].rev_dt }}
+                            <vs-td :data="data[index]['haccp_mst_file:rev_dt']">
+                                {{ data[index]['haccp_mst_file:rev_dt'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].rev_content">
-                                {{ data[index].rev_content }}
+                            <vs-td :data="data[index]['haccp_mst_file:rev_content']">
+                                {{ data[index]['haccp_mst_file:rev_content'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].rev_reason">
-                                {{ data[index].rev_reason }}
+                            <vs-td :data="data[index]['haccp_mst_file:rev_reason']">
+                                {{ data[index]['haccp_mst_file:rev_reason'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].att_dtm">
-                                <span v-if="data[index].att_file.length > 0" v-text="data[index].att_file[0].att_nm"></span>
+                            <vs-td :data="data[index]['haccp_mst_file:att_dtm']">
+								<div class="flex flex-row">
+									<span v-if="data[index]['haccp_mst_file:att_file'].length > 0" v-text="data[index]['haccp_mst_file:att_file'][0].att_nm" class="pt-1"></span>
+									<vs-button color="primary" class="ml-2" :href="'/api/haccp_mst_file/' + data[index]['haccp_mst_file:rev_seq'] + '/att_file/' + data[index]['haccp_mst_file:att_file'][0].att_seq + '/download'" type="flat" size="small" icon-pack="feather" icon="icon-download"></vs-button>
+								</div>
                             </vs-td>
 
                         </vs-tr>
@@ -275,13 +278,14 @@ export default {
 		},
 
 		handleSelected (tr) {
+			console.log('selected: ', tr)
 			this.clearErrors()
 
-			if (tr.att_file.length > 0) {
-				// this.haccp_mst_file['haccp_mst_file:att'] = new File([""], tr.att_file[0].att_nm)
-				this.$set(this.haccp_mst_file, 'att', new File([""], tr.att_file[0].att_nm))
+			if (tr['haccp_mst_file:att_file'].length > 0) {
+				// this.haccp_mst_file['haccp_mst_file:att'] = new File([""], tr['haccp_mst_file:att_file'][0].att_nm)
+				this.$set(this.haccp_mst_file, 'haccp_mst_file:att', new File([""], tr['haccp_mst_file:att_file'][0].att_nm))
 			} else {
-				this.$set(this.haccp_mst_file, 'att', null)
+				this.$set(this.haccp_mst_file, 'haccp_mst_file:att', null)
 			}
 		},
 
@@ -291,19 +295,19 @@ export default {
 
 			let formData = new FormData()
 			if (this.haccp_mst_file['haccp_mst_file:rev_no']) {
-				formData.append('rev_no', this.haccp_mst_file['haccp_mst_file:rev_no'])
+				formData.append('haccp_mst_file:rev_no', this.haccp_mst_file['haccp_mst_file:rev_no'])
 			}
 			if (this.haccp_mst_file['haccp_mst_file:rev_dt']) {
-				formData.append('rev_dt', this.haccp_mst_file['haccp_mst_file:rev_dt'])
+				formData.append('haccp_mst_file:rev_dt', this.haccp_mst_file['haccp_mst_file:rev_dt'])
 			}
 			if (this.haccp_mst_file['haccp_mst_file:rev_content']) {
-				formData.append('rev_content', this.haccp_mst_file['haccp_mst_file:rev_content'])
+				formData.append('haccp_mst_file:rev_content', this.haccp_mst_file['haccp_mst_file:rev_content'])
 			}
 			if (this.haccp_mst_file['haccp_mst_file:rev_reason']) {
-				formData.append('rev_reason', this.haccp_mst_file['haccp_mst_file:rev_reason'])
+				formData.append('haccp_mst_file:rev_reason', this.haccp_mst_file['haccp_mst_file:rev_reason'])
 			}
 			if (this.haccp_mst_file['haccp_mst_file:att']) {
-				formData.append('att', this.haccp_mst_file['haccp_mst_file:att'])
+				formData.append('haccp_mst_file:att', this.haccp_mst_file['haccp_mst_file:att'])
 			}
 
 			api.post(formData).then((res) => {
@@ -348,19 +352,19 @@ export default {
 
 			let formData = new FormData()
 			if (this.haccp_mst_file['haccp_mst_file:rev_no']) {
-				formData.append('rev_no', this.haccp_mst_file['haccp_mst_file:rev_no'])
+				formData.append('haccp_mst_file:rev_no', this.haccp_mst_file['haccp_mst_file:rev_no'])
 			}
 			if (this.haccp_mst_file['haccp_mst_file:rev_dt']) {
-				formData.append('rev_dt', this.haccp_mst_file['haccp_mst_file:rev_dt'])
+				formData.append('haccp_mst_file:rev_dt', this.haccp_mst_file['haccp_mst_file:rev_dt'])
 			}
 			if (this.haccp_mst_file['haccp_mst_file:rev_content']) {
-				formData.append('rev_content', this.haccp_mst_file['haccp_mst_file:rev_content'])
+				formData.append('haccp_mst_file:rev_content', this.haccp_mst_file['haccp_mst_file:rev_content'])
 			}
 			if (this.haccp_mst_file['haccp_mst_file:rev_reason']) {
-				formData.append('rev_reason', this.haccp_mst_file['haccp_mst_file:rev_reason'])
+				formData.append('haccp_mst_file:rev_reason', this.haccp_mst_file['haccp_mst_file:rev_reason'])
 			}
 			if (this.haccp_mst_file['haccp_mst_file:att']) {
-				formData.append('att', this.haccp_mst_file['haccp_mst_file:att'])
+				formData.append('haccp_mst_file:att', this.haccp_mst_file['haccp_mst_file:att'])
 			}
 
 			api.put(this.haccp_mst_file['haccp_mst_file:rev_seq'], formData).then((res) => {

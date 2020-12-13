@@ -117,32 +117,32 @@
                                 {{ (rowIndex(index)) }}
                             </vs-td>
 
-                            <vs-td :data="data[index].worker_nm">
-                                {{ data[index].worker_nm }}
+                            <vs-td :data="data[index]['worker:worker_nm']">
+                                {{ data[index]['worker:worker_nm'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].tel_no">
-                                {{ data[index].tel_no }}
+                            <vs-td :data="data[index]['worker:tel_no']">
+                                {{ data[index]['worker:tel_no'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].work_cd">
-                                {{ data[index].work_cd }}
+                            <vs-td :data="data[index]['worker:work_cd']">
+                                {{ data[index]['worker:work_cd'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].remark">
-                                {{ data[index].remark }}
+                            <vs-td :data="data[index]['worker:remark']">
+                                {{ data[index]['worker:remark'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].health_chk_dt">
-                                {{ data[index].health_chk_dt }}
+                            <vs-td :data="data[index]['worker:health_chk_dt']">
+                                {{ data[index]['worker:health_chk_dt'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].role_cd">
-                                {{ data[index].role_cd }}
+                            <vs-td :data="data[index]['worker:role_cd']">
+                                {{ data[index]['worker:role_cd'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index].reg_dtm">
-                                {{ data[index].reg_dtm }}
+                            <vs-td :data="data[index]['worker:reg_dtm']">
+                                {{ data[index]['worker:reg_dtm'] }}
                             </vs-td>
 
                         </vs-tr>

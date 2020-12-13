@@ -149,7 +149,7 @@
                                 <span class="pt-2">이름</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info['comp_info:haccp_user'].user_nm" />
+                                <vs-input v-model="comp_info['comp_info:haccp_user']['user:user_nm']" />
                             </div>
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                                 <span class="pt-2">휴대폰번호(ID)</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info['comp_info:haccp_user'].user_id" />
+                                <vs-input v-model="comp_info['comp_info:haccp_user']['user:user_id']" />
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                                 <span class="pt-2">이메일</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info['comp_info:haccp_user'].email" />
+                                <vs-input v-model="comp_info['comp_info:haccp_user']['user:email']" />
                             </div>
                         </div>
                     </div>
@@ -207,7 +207,7 @@
 			<div class="con-exemple-prompt">
 				<span>Select User</span>
 				<vs-select class="mt-3 w-full" v-model="selectedUser">
-					<vs-select-item v-for="(user, index) in users" :key="index" :text="user.user_nm" :value="user"></vs-select-item>
+					<vs-select-item v-for="(user, index) in users" :key="index" :text="user['user:user_nm']" :value="user"></vs-select-item>
 				</vs-select>
 			</div>
 		</vs-prompt>
@@ -239,9 +239,9 @@ export default {
 				'comp_info:addr2': null,
 				'comp_info:haccp_id': null,
 				'comp_info:haccp_user': {
-					user_id: null,
-					user_nm: null,
-					email: null
+					'user:user_id': null,
+					'user:user_nm': null,
+					'user:email': null
 				},
 				'comp_info:haccp_item': null,
 				'comp_info:reg_id': null,
@@ -287,9 +287,9 @@ export default {
 				'comp_info:addr2': null,
 				'comp_info:haccp_id': null,
 				'comp_info:haccp_user': {
-					user_id: null,
-					user_nm: null,
-					email: null
+					'user:user_id': null,
+					'user:user_nm': null,
+					'user:email': null
 				},
 				'comp_info:haccp_item': null,
 				'comp_info:reg_id': null,
@@ -398,11 +398,11 @@ export default {
 				} else {
 					this.comp_info = res.data.data
 
-					if (res.data.data.haccp_user == null) {
+					if (res.data.data['comp_info:haccp_user'] == null) {
 						this.comp_info['comp_info:haccp_user'] = {
-							user_id: null,
-							user_nm: null,
-							email: null,
+							'user:user_id': null,
+							'user:user_nm': null,
+							'user:email': null
 						}
 					}
 				}
@@ -493,6 +493,7 @@ export default {
 		},
 
 		selectUser () {
+			this.comp_info['comp_info:haccp_id'] = this.selectedUser['user:user_id']
 			this.comp_info['comp_info:haccp_user'] = this.selectedUser
 			this.selectedUser = null
 		}

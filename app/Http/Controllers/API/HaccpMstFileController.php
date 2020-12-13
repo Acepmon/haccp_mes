@@ -55,21 +55,21 @@ class HaccpMstFileController extends Controller
 
         $dtm = now()->format('Ymdhis');
 
-        if ($request->hasFile('att')) {
-            $files = $request->file('att');
+        if ($request->hasFile('haccp_mst_file:att')) {
+            $file = $request->file('haccp_mst_file:att');
 
-            foreach ($files as $index => $file) {
+            // foreach ($files as $index => $file) {
                 $path = $file->store('files');
 
                 AttFile::create([
                     'ATT_DTM' => $dtm,
-                    'ATT_SEQ' => ($index + 1),
+                    'ATT_SEQ' => 1,
                     'ATT_NM' => $file->getClientOriginalName(),
                     'ATT_PATH' => $path,
                     'FILE_SZ' => Storage::size($path),
                     'RMK' => null,
                 ]);
-            }
+            // }
         } else {
             return response()->json([
                 'success' => false,
@@ -80,7 +80,7 @@ class HaccpMstFileController extends Controller
         $item = HaccpMstFile::create([
             'REV_NO' => $request->input('haccp_mst_file:rev_no'),
             'REV_DT' => now()->parse($request->input('haccp_mst_file:rev_dt'))->format('Ymd'),
-            'ATT_DTM' => $request->hasFile('att') ? $dtm : null,
+            'ATT_DTM' => $request->hasFile('haccp_mst_file:att') ? $dtm : null,
             'REV_CONTENT' => $request->input('haccp_mst_file:rev_content'),
             'REV_REASON' => $request->input('haccp_mst_file:rev_reason'),
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
@@ -144,8 +144,8 @@ class HaccpMstFileController extends Controller
 
         $dtm = now()->format('Ymdhis');
 
-        if ($request->hasFile('att')) {
-            $files = $request->file('att');
+        if ($request->hasFile('haccp_mst_file:att')) {
+            $file = $request->file('haccp_mst_file:att');
 
             if ($item->att_file->count() > 0) {
                 $item->att_file->each(function ($att) {
@@ -156,24 +156,24 @@ class HaccpMstFileController extends Controller
                 $item->att_file()->delete();
             }
 
-            foreach ($files as $index => $file) {
+            // foreach ($files as $index => $file) {
                 $path = $file->store('files');
 
                 AttFile::create([
                     'ATT_DTM' => $dtm,
-                    'ATT_SEQ' => ($index + 1),
+                    'ATT_SEQ' => 1,
                     'ATT_NM' => $file->getClientOriginalName(),
                     'ATT_PATH' => $path,
                     'FILE_SZ' => Storage::size($path),
                     'RMK' => null,
                 ]);
-            }
+            // }
         }
 
         $item->update([
             'REV_NO' => $request->input('haccp_mst_file:rev_no'),
             'REV_DT' => now()->parse($request->input('haccp_mst_file:rev_dt'))->format('Ymd'),
-            'ATT_DTM' => $request->hasFile('att') ? $dtm : $item->ATT_DTM,
+            'ATT_DTM' => $request->hasFile('haccp_mst_file:att') ? $dtm : $item->ATT_DTM,
             'REV_CONTENT' => $request->input('haccp_mst_file:rev_content'),
             'REV_REASON' => $request->input('haccp_mst_file:rev_reason')
         ]);
@@ -223,5 +223,21 @@ class HaccpMstFileController extends Controller
     public function download(Request $request)
     {
         return Excel::download(new HaccpMstFileExport(), 'HACCP-MST-FILE-' . now()->format('Y-m-d') . '.xlsx');
+    }
+
+    public function downloadAttFile(Request $request, $revSeq, $attSeq)
+    {
+        $item = HaccpMstFile::where('REV_SEQ', $revSeq)->with(['att_file'])->first();
+
+        if (!$item) {
+            return response()->json([
+                'success' => false,
+                'message' => __('HACCP Master File data not found')
+            ]);
+        }
+
+        $att = AttFile::where('ATT_DTM', $item->ATT_DTM)->where('ATT_SEQ', $attSeq)->first();
+
+        return response()->download(storage_path('app/' . $att->ATT_PATH), $att->ATT_NM);
     }
 }
