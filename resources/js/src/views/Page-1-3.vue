@@ -28,7 +28,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 휴대폰번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="worker['worker:tel_no']" type="number" class="vs-input-text-right" :danger="errors['worker:tel_no'] != null" :danger-text="errors['worker:tel_no']" />
+                                <vs-input v-model="worker['worker:tel_no']" :danger="errors['worker:tel_no'] != null" :danger-text="errors['worker:tel_no']" />
                             </div>
                         </div>
                     </div>
