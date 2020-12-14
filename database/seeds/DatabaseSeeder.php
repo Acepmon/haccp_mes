@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             $this->call(TestCompInfoSeeder::class);
             $this->call(TestWorkerSeeder::class);
             $this->call(TestHaccpMstFileSeeder::class);
+            $this->call(TestDocMgmtSeeder::class);
         }
     }
 }
