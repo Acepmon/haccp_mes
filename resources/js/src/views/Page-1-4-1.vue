@@ -69,16 +69,19 @@
                 </div>
 
 				<div class="flex flex-wrap">
-                    <div class="w-full sm:w-1/2 px-1">
+                    <div class="w-full sm:w-2/2 px-1">
                         <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                            <div class="vx-col sm:w-1/6 w-full flex justify-end">
                                 <span class="pt-2"><span class="text-danger">*</span> 첨부화일</span>
                             </div>
-                            <div class="vx-col sm:w-2/3 w-full">
+                            <div class="vx-col sm:w-5/6 w-full">
 								<div class="flex flex-row">
 									<file-select v-model="haccp_mst_file['haccp_mst_file:att']"></file-select>
 									<vs-button type="border" color="dark" @click.native="haccp_mst_file['haccp_mst_file:att'] = null" v-if="haccp_mst_file['haccp_mst_file:att']" class="ml-1 px-4">
 										<vs-icon icon="close" />
+									</vs-button>
+									<vs-button class="ml-1" v-if="haccp_mst_file['haccp_mst_file:att_file'].length > 0 && haccp_mst_file['haccp_mst_file:att']" color="primary" :href="'/api/haccp_mst_file/' + haccp_mst_file['haccp_mst_file:rev_seq'] + '/att_file/' + haccp_mst_file['haccp_mst_file:att_file'][0].att_seq + '/download'">
+										{{$t('Download')}}
 									</vs-button>
 								</div>
 								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['haccp_mst_file:att'] != null">
