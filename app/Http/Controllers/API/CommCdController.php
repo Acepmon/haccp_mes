@@ -16,9 +16,17 @@ class CommCdController extends Controller
         $cd2 = $request->input('cd2');
 
         if ($request->has('cd2')) {
-            $items = DB::select('select haccp_mes.get_codename(?, ?) as comm2_nm', [$cd1, $cd2]);
+            if ($this->getCodeListExists()) {
+                $items = DB::select('select haccp_mes.get_codename(?, ?) as comm2_nm', [$cd1, $cd2]);
+            } else {
+                $items = CommCd::select('comm2_cd', 'comm2_nm')->where('comm1_cd', $cd1)->where('comm2_cd', $cd2)->get();
+            }
         } else {
-            $items = DB::select('call haccp_mes.get_codelist(?)', [$cd1]);
+            if ($this->getCodeListExists()) {
+                $items = DB::select('call haccp_mes.get_codelist(?)', [$cd1]);
+            } else {
+                $items = CommCd::select('comm2_cd', 'comm2_nm')->where('comm1_cd', $cd1)->get();
+            }
         }
 
         return response()->json($items);
@@ -42,6 +50,14 @@ class CommCdController extends Controller
         }
 
         return CommCdResource::collection($items);
+    }
+
+    private function getCodeListExists() {
+        return DB::table('information_schema.ROUTINES')->where('ROUTINE_SCHEMA', config('database.connections.mysql.database'))->where('ROUTINE_NAME', 'get_codelist')->exists();
+    }
+
+    private function getCodeNameExists() {
+        return DB::table('information_schema.ROUTINES')->where('ROUTINE_SCHEMA', config('database.connections.mysql.database'))->where('ROUTINE_NAME', 'get_codename')->exists();
     }
 
     /**

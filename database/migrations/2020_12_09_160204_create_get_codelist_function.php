@@ -26,6 +26,6 @@ class CreateGetCodelistFunction extends Migration
      */
     public function down()
     {
-        DB::unprepared('DROP PROCEDURE IF EXISTS haccp_mes.get_codelist;');
+        // DB::unprepared('DROP PROCEDURE IF EXISTS haccp_mes.get_codelist;');
     }
 }

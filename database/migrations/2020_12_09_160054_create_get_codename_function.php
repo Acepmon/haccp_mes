@@ -26,6 +26,6 @@ class CreateGetCodenameFunction extends Migration
      */
     public function down()
     {
-        DB::unprepared('DROP function IF EXISTS haccp_mes.get_codename;');
+        // DB::unprepared('DROP function IF EXISTS haccp_mes.get_codename;');
     }
 }
