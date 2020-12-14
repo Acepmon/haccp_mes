@@ -388,7 +388,7 @@ export default {
                 type: 'confirm',
                 color: 'primary',
                 title: this.$t('Confirmation'),
-                text: this.$t('AddUser'),
+                text: this.$t('AddData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => {
@@ -401,8 +401,8 @@ export default {
                             this.$vs.notify({
                                 color: 'success',
                                 position: 'top-right',
-                                title: this.$t('AddedUser'),
-                                text: this.$t('SuccessAddedUser')
+                                title: this.$t('SuccessAddData'),
+                                text: res.data.message
                             })
                             this.query()
                             this.clear()
@@ -428,7 +428,7 @@ export default {
                 type: 'confirm',
                 color: 'success',
                 title: this.$t('Confirmation'),
-                text: this.$t('SaveUser'),
+                text: this.$t('SaveData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => {
@@ -441,8 +441,8 @@ export default {
                             this.$vs.notify({
                                 color: 'success',
                                 position: 'top-right',
-                                title: this.$t('SavedUser'),
-                                text: this.$t('SuccessSavedUser')
+                                title: this.$t('SuccessSaveData'),
+                                text: res.data.message
                             })
                             this.query()
                             this.clear()
@@ -506,7 +506,7 @@ export default {
                 type: 'confirm',
                 color: 'danger',
                 title: this.$t('Confirmation'),
-                text: this.$t('DeleteUser'),
+                text: this.$t('DeleteData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => {
@@ -522,8 +522,8 @@ export default {
                             this.$vs.notify({
                                 color: 'success',
                                 position: 'top-right',
-                                title: this.$t('DeletedUser'),
-                                text: this.$t('SuccessDeletedUser')
+                                title: this.$t('SuccessDeleteData'),
+                                text: res.data.message
                             })
                         }
                     }).catch((err) => {

@@ -315,7 +315,7 @@ export default {
 				
 				if (res.data.success) {
 					this.$vs.notify({
-						title: this.$t('AddedHaccpMstFile'),
+						title: this.$t('SuccessAddData'),
 						position: 'top-right',
 						color: 'success',
 						text: res.data.message,
@@ -372,7 +372,7 @@ export default {
 
 				if (res.data.success) {
 					this.$vs.notify({
-						title: this.$t('SavedHaccpMstFile'),
+						title: this.$t('SuccessSaveData'),
 						position: 'top-right',
 						color: 'success',
 						text: res.data.message,
@@ -437,7 +437,7 @@ export default {
 
 				if (res.data.success) {
 					this.$vs.notify({
-						title: this.$t('DeletedHaccpMstFile'),
+						title: this.$t('SuccessDeleteData'),
 						position: 'top-right',
 						color: 'success',
 						text: res.data.message,
@@ -477,7 +477,7 @@ export default {
                 type: 'confirm',
                 color: 'primary',
                 title: this.$t('Confirmation'),
-                text: this.$t('AddHaccpMstFile'),
+                text: this.$t('AddData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.add()
@@ -489,7 +489,7 @@ export default {
                 type: 'confirm',
                 color: 'success',
                 title: this.$t('Confirmation'),
-                text: this.$t('SaveHaccpMstFile'),
+                text: this.$t('SaveData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.save()
@@ -501,7 +501,7 @@ export default {
                 type: 'confirm',
                 color: 'danger',
                 title: this.$t('Confirmation'),
-                text: this.$t('DeleteHaccpMstFile'),
+                text: this.$t('DeleteData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.remove()

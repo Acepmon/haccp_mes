@@ -264,6 +264,8 @@ export default {
 	},
 
 	created () {
+		console.log(this.$vs.loading.close)
+
 		setTimeout(() => {
 			this.query()
 		}, 300);
@@ -298,7 +300,7 @@ export default {
 		},
 
 		spinner (loading = true) {
-			if (loading) {
+			if (loading && this.$vs.loading != undefined) {
 				this.$vs.loading({
 					container: '#div-with-loading',
 					scale: 0.6
@@ -339,7 +341,7 @@ export default {
 
 				if (res.data.success) {
 					this.$vs.notify({
-						title: this.$t('SavedCompInfo'),
+						title: this.$t('SuccessSaveData'),
 						position: 'top-right',
 						color: 'success',
 						text: res.data.message,
@@ -373,7 +375,7 @@ export default {
                 type: 'confirm',
                 color: 'success',
                 title: this.$t('Confirmation'),
-                text: this.$t('SaveCompInfo'),
+                text: this.$t('SaveData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.save()
@@ -429,7 +431,7 @@ export default {
 				if (res.data.success) {
 					this.clear()
 					this.$vs.notify({
-						title: this.$t('DeletedCompInfo'),
+						title: this.$t('SuccessDeleteData'),
 						position: 'top-right',
 						color: 'success',
 						text: res.data.message,
@@ -463,7 +465,7 @@ export default {
                 type: 'confirm',
                 color: 'danger',
                 title: this.$t('Confirmation'),
-                text: this.$t('DeleteCompInfo'),
+                text: this.$t('DeleteData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.remove()

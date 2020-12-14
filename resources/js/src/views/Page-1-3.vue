@@ -284,7 +284,7 @@ export default {
 				
 				if (res.data.success) {
 					this.$vs.notify({
-						title: this.$t('AddedWorker'),
+						title: this.$t('SuccessAddData'),
 						position: 'top-right',
 						color: 'success',
 						text: res.data.message,
@@ -324,7 +324,7 @@ export default {
 
 				if (res.data.success) {
 					this.$vs.notify({
-						title: this.$t('SavedWorker'),
+						title: this.$t('SuccessSaveData'),
 						position: 'top-right',
 						color: 'success',
 						text: res.data.message,
@@ -400,7 +400,7 @@ export default {
 
 				if (res.data.success) {
 					this.$vs.notify({
-						title: this.$t('DeletedWorker'),
+						title: this.$t('SuccessDeleteData'),
 						position: 'top-right',
 						color: 'success',
 						text: res.data.message,
@@ -452,7 +452,7 @@ export default {
                 type: 'confirm',
                 color: 'primary',
                 title: this.$t('Confirmation'),
-                text: this.$t('AddWorker'),
+                text: this.$t('AddData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.add()
@@ -464,7 +464,7 @@ export default {
                 type: 'confirm',
                 color: 'success',
                 title: this.$t('Confirmation'),
-                text: this.$t('SaveWorker'),
+                text: this.$t('SaveData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.save()
@@ -476,7 +476,7 @@ export default {
                 type: 'confirm',
                 color: 'danger',
                 title: this.$t('Confirmation'),
-                text: this.$t('DeleteWorker'),
+                text: this.$t('DeleteData'),
                 acceptText: this.$t('Accept'),
                 cancelText: this.$t('Cancel'),
                 accept: () => this.remove()

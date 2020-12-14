@@ -11,28 +11,24 @@ export default {
     ToExcel: 'To Excel',
     Confirmation: 'Confirmation',
     CloseDocument: 'Close document?',
-    DeleteUser: 'Delete user records?',
-    DeletedUser: 'Deleted user',
-    SuccessDeletedUser: 'Successfully deleted user record',
-    SaveUser: 'Save user record',
-    SavedUser: 'Saved User',
-    SuccessSavedUser: 'Successfully updated user record',
-    AddedUser: 'New User',
-    SuccessAddedUser: 'Successfully added new user record',
+
+    DeleteData: 'Are you sure to delete data?',
+    SuccessDeleteData: 'Successfully deleted data',
+    FailDeleteData: 'Failed to delete data',
+
+    AddData: 'Are you sure to add data?',
+    SuccessAddData: 'Successfully added data',
+    FailAddData: 'Failed to add data',
+
+    SaveData: 'Are you sure to save data?',
+    SuccessSaveData: 'Successfully saved data',
+    FailSaveData: 'Failed to save data',
+
     EmailValid: 'Email valid',
     Accept: 'Accept',
     Cancel: 'Cancel',
+
     TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.',
-    SaveCompInfo: 'Save company info?',
-    SavedCompInfo: 'Successfully saved company info',
-    DeleteCompInfo: 'Delete company info?',
-    DeletedCompInfo: 'Successfully deleted company info',
-    AddWorker: 'Add worker data?',
-    AddedWorker: 'Successfully added worker data',
-    SaveWorker: 'Save worker data?',
-    SavedWorker: 'Successfully added worker data',
-    DeleteWorker: 'Delete worker data?',
-    DeletedWorker: 'Successfully added worker data'
   },
   kr: {
     Login: '로그인',
@@ -45,27 +41,23 @@ export default {
     ToExcel: 'To Excel',
     Confirmation: '확인',
     CloseDocument: 'Close document?',
-    DeleteUser: 'Delete user records?',
-    DeletedUser: 'Deleted user',
-    SuccessDeletedUser: 'Successfully deleted user record',
-    SaveUser: 'Save user record',
-    SavedUser: 'Saved User',
-    SuccessSavedUser: 'Successfully updated user record',
-    AddedUser: 'New User',
-    SuccessAddedUser: 'Successfully added new user record',
+
+    DeleteData: 'Are you sure to delete data?',
+    SuccessDeleteData: 'Successfully deleted data',
+    FailDeleteData: 'Failed to delete data',
+
+    AddData: 'Are you sure to add data?',
+    SuccessAddData: 'Successfully added data',
+    FailAddData: 'Failed to add data',
+
+    SaveData: 'Are you sure to save data?',
+    SuccessSaveData: 'Successfully saved data',
+    FailSaveData: 'Failed to save data',
+
     EmailValid: 'Email valid',
-    Accept: '동의하기',
-    Cancel: '취소',
+    Accept: '네',
+    Cancel: '아니오',
+
     TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.',
-    SaveCompInfo: 'Save company info?',
-    SavedCompInfo: 'Successfully saved company info',
-    DeleteCompInfo: 'Delete company info?',
-    DeletedCompInfo: 'Successfully deleted company info',
-    AddWorker: 'Add worker data?',
-    AddedWorker: 'Successfully added worker data',
-    SaveWorker: 'Save worker data?',
-    SavedWorker: 'Successfully added worker data',
-    DeleteWorker: 'Delete worker data?',
-    DeletedWorker: 'Successfully added worker data'
   }
 }
