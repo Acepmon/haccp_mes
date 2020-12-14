@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     name: 'AutoLogout',
 
@@ -73,11 +75,18 @@ export default {
         resetTimer () {
             clearTimeout(this.warningTimer)
             clearInterval(this.refreshIntervalId)
+            if (this.dialogActive) {
+                this.sessionRefresh()
+            }
 
             this.dialogActive = false
             this.countdownTimer = 10
 
             this.setTimers()
+        },
+
+        sessionRefresh () {
+            axios.get('/sanctum/csrf-cookie').then(() => {});
         }
     }
 }
