@@ -1,13 +1,17 @@
 <template>
 	<div>
 		<vx-card id="div-with-loading" class="vs-con-loading__container">
-			<div class="flex flex-wrap justify-end mb-2">
-				<vs-button @click="addDialog()" class="mx-1" color="dark" type="border">{{ $t('Add') }}</vs-button>
-                <vs-button @click="saveDialog()" class="mx-1" color="dark" type="border">{{ $t('Save') }}</vs-button>
-                <vs-button @click="query()" class="mx-1" color="dark" type="border">{{ $t('Query') }}</vs-button>
-                <vs-button @click="removeDialog()" class="mx-1" color="dark" type="border">{{ $t('Delete') }}</vs-button>
-                <vs-button @click="closeDialog()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
-            </div>
+			<div class="flex flex-wrap mb-2">
+				<div class="w-full sm:w-1/2 px-1 flex justify-end">
+				</div>
+				<div class="w-full sm:w-1/2 px-1 flex justify-end">
+					<vs-button @click="query()" class="mx-1 mr-16" color="dark" type="border">{{ $t('Query') }}</vs-button>
+					<vs-button @click="addDialog()" class="mx-1" color="dark" type="border">{{ $t('Add') }}</vs-button>
+					<vs-button @click="saveDialog()" class="mx-1" color="dark" type="border">{{ $t('Save') }}</vs-button>
+					<vs-button @click="removeDialog()" class="mx-1" color="dark" type="border">{{ $t('Delete') }}</vs-button>
+					<vs-button @click="closeDialog()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
+				</div>
+			</div>
 
 			<form action="#">
 
