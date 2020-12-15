@@ -272,7 +272,7 @@ export default {
 
 		setTimeout(() => {
 			this.query()
-		}, 300);
+		}, 200);
 	},
 
 	methods: {

@@ -497,7 +497,9 @@ export default {
             this.works = res.data
 		})
 
-		this.query()
+		setTimeout(() => {
+			this.query()
+		}, 200);
 	}
 }
 </script>

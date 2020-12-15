@@ -285,7 +285,6 @@ export default {
 		},
 
 		handleSelected (tr) {
-			console.log('selected: ', tr)
 			this.clearErrors()
 
 			if (tr['haccp_mst_file:att_file'].length > 0) {
@@ -531,7 +530,7 @@ export default {
 	created() {
 		setTimeout(() => {
 			this.query()
-		}, 100);
+		}, 200);
 	}
 }
 </script>

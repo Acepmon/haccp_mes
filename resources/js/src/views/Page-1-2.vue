@@ -563,7 +563,9 @@ export default {
             this.jobs = res.data
         })
 
-        this.query()
+        setTimeout(() => {
+			this.query()
+		}, 200);
     }
 }
 </script>

@@ -36,4 +36,8 @@ class DocMgmt extends Model
         'updated' => DocMgmtUpdated::class,
         'deleted' => DocMgmtDeleted::class,
     ];
+
+    public function att_file() {
+        return $this->hasMany('App\AttFile', 'ATT_DTM', 'ATT_DTM');
+    }
 }
