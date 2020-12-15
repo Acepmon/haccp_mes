@@ -170,7 +170,7 @@
                         <vs-th>No</vs-th>
                         <vs-th sort-key="user_id">사용자 ID</vs-th>
                         <vs-th sort-key="user_nm">이름</vs-th>
-                        <vs-th sort-key="user_pw">비밀번호</vs-th>
+                        <!-- <vs-th sort-key="user_pw">비밀번호</vs-th> -->
                         <vs-th sort-key="email">이메일</vs-th>
                         <vs-th sort-key="appr_cd">담당업무</vs-th>
                         <vs-th sort-key="role_cd">메뉴접근권한</vs-th>
@@ -192,9 +192,9 @@
                                 {{ data[index]['user:user_nm'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index]['user:user_pw']">
+                            <!-- <vs-td :data="data[index]['user:user_pw']">
                                 {{ data[index]['user:user_pw'] }}
-                            </vs-td>
+                            </vs-td> -->
 
                             <vs-td :data="data[index]['user:email']">
                                 {{ data[index]['user:email'] }}
