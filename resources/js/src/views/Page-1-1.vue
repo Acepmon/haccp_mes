@@ -84,7 +84,7 @@
                                 <span class="pt-2">팩스번호</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="comp_info['comp_info:fax_no']" type="number" class="vs-input-text-right" :danger="errors['comp_info:fax_no'] != null" :danger-text="errors['comp_info:fax_no']" />
+                                <vs-input v-model="comp_info['comp_info:fax_no']" :danger="errors['comp_info:fax_no'] != null" :danger-text="errors['comp_info:fax_no']" />
                             </div>
                         </div>
                     </div>
