@@ -129,8 +129,8 @@
                                 {{ data[index]['worker:tel_no'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index]['worker:work_cd']">
-                                {{ data[index]['worker:work_cd'] }}
+                            <vs-td :data="data[index]['worker:work_nm']">
+                                {{ data[index]['worker:work_nm'] }}
                             </vs-td>
 
                             <vs-td :data="data[index]['worker:remark']">
@@ -141,8 +141,8 @@
                                 {{ data[index]['worker:health_chk_dt'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index]['worker:role_cd']">
-                                {{ data[index]['worker:role_cd'] }}
+                            <vs-td :data="data[index]['worker:role_nm']">
+                                {{ data[index]['worker:role_nm'] }}
                             </vs-td>
 
                             <vs-td :data="data[index]['worker:reg_dtm']">

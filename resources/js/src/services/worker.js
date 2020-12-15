@@ -13,6 +13,7 @@ export default {
             limit: 15,
             sort: 'reg_dtm',
             order: 'asc',
+            with: 'work,role',
             ...args
         }
 
