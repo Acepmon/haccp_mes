@@ -9,7 +9,7 @@
 								<span class="pt-2">문서이름</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input />
+                                <vs-input v-model="searchNm"/>
                             </div>
                         </div>
                     </div>
@@ -185,19 +185,24 @@
                                 {{ data[index]['edoc_file:type_nm'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index]['edoc_file:doc_desc']">
-                                {{ data[index]['edoc_file:doc_desc'] }}
+                            <vs-td :data="data[index]['edoc_file:doc_content']">
+                                {{ data[index]['edoc_file:doc_content'] }}
                             </vs-td>
 
-							<vs-td :data="data[index]['edoc_file:att_dtm']">
-								<div class="flex flex-row">
-									<span v-if="data[index]['edoc_file:att_file'].length > 0" v-text="data[index]['edoc_file:att_file'][0].att_nm" class="pt-1"></span>
-									<vs-button color="primary" class="ml-2" :href="'/api/edoc_file/' + data[index]['edoc_file:rev_seq'] + '/att_file/' + data[index]['edoc_file:att_file'][0].att_seq + '/download'" type="flat" size="small" icon-pack="feather" icon="icon-download"></vs-button>
-								</div>
+							<vs-td :data="data[index]['edoc_file:period_nm']">
+                                {{ data[index]['edoc_file:period_nm'] }}
                             </vs-td>
 
-                            <vs-td :data="data[index]['edoc_file:reg_dtm']">
-                                {{ data[index]['edoc_file:reg_dtm'] }}
+							<vs-td :data="data[index]['edoc_file:use_yn']">
+                                {{ data[index]['edoc_file:use_yn'] }}
+                            </vs-td>
+
+							<vs-td :data="data[index]['edoc_file:work_id']">
+                                {{ data[index]['edoc_file:work_id'] }}
+                            </vs-td>
+
+                            <vs-td :data="data[index]['edoc_file:app_id']">
+                                {{ data[index]['edoc_file:app_id'] }}
                             </vs-td>
 
                         </vs-tr>
@@ -257,6 +262,7 @@ export default {
 			items: [],
 			searchNm: null,
 			searchType: null,
+			searchUseYn: null,
 			types: [],
 			periods: [],
 			pagination: {
@@ -376,9 +382,24 @@ export default {
 		query () {
 			this.spinner()
 
+			let search_params = {};
+
+			if (this.searchNm != null) {
+				search_params['doc_nm'] = this.searchNm
+			}
+
+			if (this.searchType != null) {
+				search_params['type_cd'] = this.searchType
+			}
+
+			if (this.searchUseYn != null) {
+				search_params['use_yn'] = this.searchUseYn
+			}
+
 			api.fetch({
                 ...this.paginationParam,
 				...this.sortParam,
+				...search_params
             }).then((res) => {
 				this.spinner(false)
                 this.items = res.data.data

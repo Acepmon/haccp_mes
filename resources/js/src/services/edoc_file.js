@@ -13,7 +13,7 @@ export default {
             limit: 15,
             sort: 'reg_dtm',
             order: 'asc',
-            with: 'att_file',
+            with: 'type,period',
             ...args
         }
 

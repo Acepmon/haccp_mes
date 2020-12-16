@@ -25,6 +25,21 @@ class EdocFileController extends Controller
         $sort = $request->input('sort', 'doc_id');
         $order = $request->input('order', 'asc');
 
+        if ($request->has('doc_nm')) {
+            $docNm = $request->input('doc_nm');
+            $items = $items->where('doc_nm', 'LIKE', '%'.$docNm.'%');
+        }
+
+        if ($request->has('type_cd')) {
+            $typeCd = $request->input('type_cd');
+            $items = $items->where('type_cd', $typeCd);
+        }
+
+        if ($request->has('use_yn')) {
+            $useYn = $request->input('use_yn');
+            $items = $items->where('use_yn', $useYn);
+        }
+
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();
         } else {

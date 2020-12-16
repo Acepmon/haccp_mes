@@ -39,8 +39,8 @@ class DocMgmtController extends Controller
         }
 
         if ($request->has('type_cd')) {
-            $type_cd = $request->input('type_cd');
-            $items = $items->where('type_cd', $type_cd);
+            $typeCd = $request->input('type_cd');
+            $items = $items->where('type_cd', $typeCd);
         }
 
         if ($limit == -1) {
