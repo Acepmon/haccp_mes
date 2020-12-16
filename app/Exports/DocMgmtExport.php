@@ -30,6 +30,7 @@ class DocMgmtExport implements FromCollection, WithHeadings, WithStyles, WithMap
         return [
             $docMgmt->DOC_ID,
             $docMgmt->DOC_NM,
+            $docMgmt->type->COMM2_NM,
             $docMgmt->DOC_DESC,
             $att_nm,
             now()->parse($docMgmt->REG_DTM)->format('Y-m-d')

@@ -25,6 +25,8 @@ class DocMgmtResource extends JsonResource
             'doc_mgmt:att_dtm' => $this->ATT_DTM,
             'doc_mgmt:reg_id' => $this->REG_ID,
             'doc_mgmt:reg_dtm' => now()->parse($this->REG_DTM)->format('Y-m-d'),
+
+            'doc_mgmt:att_file' => AttFileResource::collection($this->whenLoaded('att_file')),
         ];
     }
 }
