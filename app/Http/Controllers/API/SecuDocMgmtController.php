@@ -5,8 +5,11 @@ namespace App\Http\Controllers\API;
 use App\AttFile;
 use App\Exports\SecuDocMgmtExport;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SecuDocMgmtResource;
 use App\SecuDocMgmt;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SecuDocMgmtController extends Controller
@@ -16,9 +19,22 @@ class SecuDocMgmtController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $items = SecuDocMgmt::query();
+
+        $with = array_filter(explode(',', $request->input('with')));
+        $limit = $request->input('limit', 15);
+        $sort = $request->input('sort', 'reg_dtm');
+        $order = $request->input('order', 'desc');
+
+        if ($limit == -1) {
+            $items = $items->with($with)->orderBy($sort, $order)->get();
+        } else {
+            $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
+        }
+
+        return SecuDocMgmtResource::collection($items);
     }
 
     /**
@@ -29,7 +45,52 @@ class SecuDocMgmtController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'secu_doc_mgmt:doc_nm' => 'required|string|max:100',
+            'secu_doc_mgmt:doc_dt' => 'required|string|date_format:Y-m-d',
+            'secu_doc_mgmt:from_dt' => 'required|string|date_format:Y-m-d',
+            'secu_doc_mgmt:to_dt' => 'required|string|date_format:Y-m-d',
+            'secu_doc_mgmt:att' => 'required|file',
+        ]);
+
+        $dtm = now()->format('Ymdhis');
+
+        if ($request->hasFile('secu_doc_mgmt:att')) {
+            $file = $request->file('secu_doc_mgmt:att');
+
+            // foreach ($files as $index => $file) {
+                $path = $file->store('files');
+
+                AttFile::create([
+                    'ATT_DTM' => $dtm,
+                    'ATT_SEQ' => 1,
+                    'ATT_NM' => $file->getClientOriginalName(),
+                    'ATT_PATH' => $path,
+                    'FILE_SZ' => Storage::size($path),
+                    'RMK' => null,
+                ]);
+            // }
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => __('Attachment upload failed'),
+            ], 422);
+        }
+
+        $item = SecuDocMgmt::create([
+            'DOC_NM' => $request->input('secu_doc_mgmt:doc_nm'),
+            'DOC_DT' => now()->parse($request->input('secu_doc_mgmt:doc_dt'))->format('Ymd'),
+            'FROM_DT' => now()->parse($request->input('secu_doc_mgmt:from_dt'))->format('Ymd'),
+            'TO_DT' => now()->parse($request->input('secu_doc_mgmt:to_dt'))->format('Ymd'),
+            'ATT_DTM' => $request->hasFile('secu_doc_mgmt:att') ? $dtm : null,
+            'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+            'REG_DTM' => now()->format('Ymdhis'),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'result' => new SecuDocMgmtResource(SecuDocMgmt::where('DOC_ID', $item->DOC_ID)->with(['att_file'])->first()),
+        ]);
     }
 
     /**
@@ -40,7 +101,19 @@ class SecuDocMgmtController extends Controller
      */
     public function show($id)
     {
-        //
+        $item = SecuDocMgmt::where('DOC_ID', $id)->first();
+
+        if (!$item) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Security Document Management data not found')
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'result' => new SecuDocMgmtResource($item),
+        ]);
     }
 
     /**
@@ -52,7 +125,63 @@ class SecuDocMgmtController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $item = SecuDocMgmt::where('DOC_ID', $id)->with(['att_file'])->first();
+
+        if (!$item) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Security Document Management data not found')
+            ]);
+        }
+
+        $request->validate([
+            'secu_doc_mgmt:doc_nm' => 'required|string|max:100',
+            'secu_doc_mgmt:doc_dt' => 'required|string|date_format:Y-m-d',
+            'secu_doc_mgmt:from_dt' => 'required|string|date_format:Y-m-d',
+            'secu_doc_mgmt:to_dt' => 'required|string|date_format:Y-m-d',
+            'secu_doc_mgmt:att' => 'nullable|file',
+        ]);
+
+        $dtm = now()->format('Ymdhis');
+
+        if ($request->hasFile('secu_doc_mgmt:att')) {
+            $file = $request->file('secu_doc_mgmt:att');
+
+            if ($item->att_file->count() > 0) {
+                $item->att_file->each(function ($att) {
+                    if (Storage::exists($att->ATT_PATH)) {
+                        Storage::delete($att->ATT_PATH);
+                    }
+                });
+                $item->att_file()->delete();
+            }
+
+            // foreach ($files as $index => $file) {
+                $path = $file->store('files');
+
+                AttFile::create([
+                    'ATT_DTM' => $dtm,
+                    'ATT_SEQ' => 1,
+                    'ATT_NM' => $file->getClientOriginalName(),
+                    'ATT_PATH' => $path,
+                    'FILE_SZ' => Storage::size($path),
+                    'RMK' => null,
+                ]);
+            // }
+        }
+
+        $item->update([
+            'DOC_NM' => $request->input('secu_doc_mgmt:doc_nm'),
+            'DOC_DT' => now()->parse($request->input('secu_doc_mgmt:doc_dt'))->format('Ymd'),
+            'FROM_DT' => now()->parse($request->input('secu_doc_mgmt:from_dt'))->format('Ymd'),
+            'TO_DT' => now()->parse($request->input('secu_doc_mgmt:to_dt'))->format('Ymd'),
+            'ATT_DTM' => $request->hasFile('secu_doc_mgmt:att') ? $dtm : $item->ATT_DTM,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'result' => new SecuDocMgmtResource(SecuDocMgmt::where('DOC_ID', $id)->with(['att_file'])->first()),
+        ]);
     }
 
     /**
@@ -63,7 +192,32 @@ class SecuDocMgmtController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $item = SecuDocMgmt::where('DOC_ID', $id)->with(['att_file'])->first();
+
+        if (!$item) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Security Document Management data not found')
+            ]);
+        }
+
+        if ($item->att_file->count() > 0) {
+            if ($item->att_file->count() > 0) {
+                $item->att_file->each(function ($att) {
+                    if (Storage::exists($att->ATT_PATH)) {
+                        Storage::delete($att->ATT_PATH);
+                    }
+                });
+                $item->att_file()->delete();
+            }
+        }
+
+        $item->delete();
+
+        return response()->json([
+            'success' => true,
+            'result' => __('Security Document Management data successfully deleted'),
+        ]);
     }
 
     public function download(Request $request)
@@ -71,9 +225,9 @@ class SecuDocMgmtController extends Controller
         return Excel::download(new SecuDocMgmtExport(), 'SECU-DOC-MGMT-' . now()->format('Y-m-d') . '.xlsx');
     }
 
-    public function downloadAttFile(Request $request, $revSeq, $attSeq)
+    public function downloadAttFile(Request $request, $docId, $attSeq)
     {
-        $item = SecuDocMgmt::where('REV_SEQ', $revSeq)->with(['att_file'])->first();
+        $item = SecuDocMgmt::where('DOC_ID', $docId)->with(['att_file'])->first();
 
         if (!$item) {
             return response()->json([
