@@ -28,6 +28,16 @@ class SecuDocMgmtController extends Controller
         $sort = $request->input('sort', 'reg_dtm');
         $order = $request->input('order', 'desc');
 
+        if ($request->has('from_dt')) {
+            $fromDt = $request->input('from_dt');
+            $items = $items->where('from_dt', now()->parse($fromDt)->format('Ymd'));
+        }
+
+        if ($request->has('to_dt')) {
+            $toDt = $request->input('to_dt');
+            $items = $items->where('to_dt', now()->parse($toDt)->format('Ymd'));
+        }
+
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();
         } else {

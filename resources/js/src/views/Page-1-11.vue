@@ -2,27 +2,25 @@
 	<div>
 		<vx-card id="div-with-loading" class="vs-con-loading__container">
 			<div class="flex flex-wrap mb-2">
-				<div class="w-full sm:w-1/2 px-1 flex justify-end">
+				<div class="w-full sm:w-1/2 px-1 flex justify-start">
 					<div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex justify-end">
 								<span class="pt-2">기간</span>
                             </div>
-                            <div class="vx-col sm:w-2/3 w-full">
-                                <flat-pickr class="text-center" :config="configdateTimePicker" v-model="searchFrom"></flat-pickr>
-                            </div>
-                        </div>
-                    </div>
-					<div class="w-full sm:w-1/2 px-1">
-                        <div class="vx-row mb-2">
-                            <div class="vx-col sm:w-2/3 w-full">
-                            	<flat-pickr class="text-center" :config="configdateTimePicker" v-model="searchTo"></flat-pickr>
+                            <div class="vx-col sm:w-2/3 w-full flex">
+                                <flat-pickr style="width: 100px;" class="text-center flex-shrink-0" :config="configdateTimePicker" v-model="searchFrom"></flat-pickr>
+
+								<span class="mx-5 flex justify-center content-center flex-shrink-0">~</span>
+
+                            	<flat-pickr style="width: 100px;" class="text-center flex-shrink-0" :config="configdateTimePicker" v-model="searchTo"></flat-pickr>
+
+								<vs-button @click="query()" class="ml-5 flex-shrink-0" color="dark" type="border">{{ $t('Query') }}</vs-button>
                             </div>
                         </div>
                     </div>
 				</div>
 				<div class="w-full sm:w-1/2 px-1 flex justify-end" style="position: relative;">
-					<vs-button @click="query()" class="mx-1 py-4 justify-self-start" color="dark" type="border" style="position: absolute; left: 0;">{{ $t('Query') }}</vs-button>
 					<vs-button @click="addDialog()" class="mx-1" color="dark" type="border">{{ $t('Add') }}</vs-button>
 					<vs-button @click="saveDialog()" class="mx-1" color="dark" type="border">{{ $t('Save') }}</vs-button>
 					<vs-button @click="removeDialog()" class="mx-1" color="dark" type="border">{{ $t('Delete') }}</vs-button>
@@ -92,9 +90,9 @@
                             <div class="vx-col sm:w-2/3 w-full">
                                 <div class="flex flex-row">
 									<file-select v-model="item['secu_doc_mgmt:att']"></file-select>
-									<vs-button type="border" color="dark" @click.native="item['secu_doc_mgmt:att'] = null" v-if="item['secu_doc_mgmt:att']" class="ml-1 px-4">
+									<!-- <vs-button type="border" color="dark" @click.native="item['secu_doc_mgmt:att'] = null" v-if="item['secu_doc_mgmt:att']" class="ml-1 px-4">
 										<vs-icon icon="close" />
-									</vs-button>
+									</vs-button> -->
 									<vs-button class="ml-1" v-if="item['secu_doc_mgmt:att_file'].length > 0 && item['secu_doc_mgmt:att']" color="primary" :href="'/api/doc_mgmt/' + item['secu_doc_mgmt:rev_seq'] + '/att_file/' + item['secu_doc_mgmt:att_file'][0].att_seq + '/download'">
 										{{$t('Download')}}
 									</vs-button>
@@ -167,7 +165,7 @@
 <script>
 import axios from 'axios'
 import comm_cd from '@/services/comm_cd'
-import api from '@/services/doc_mgmt'
+import api from '@/services/secu_doc_mgmt'
 import {mapActions} from 'vuex';
 import flatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
@@ -308,10 +306,10 @@ export default {
 			this.clearErrors()
 
 			if (tr['secu_doc_mgmt:att_file'].length > 0) {
-				// this.doc_mgmt['secu_doc_mgmt:att'] = new File([""], tr['secu_doc_mgmt:att_file'][0].att_nm)
-				this.$set(this.doc_mgmt, 'secu_doc_mgmt:att', new File([""], tr['secu_doc_mgmt:att_file'][0].att_nm))
+				// this.item['secu_doc_mgmt:att'] = new File([""], tr['secu_doc_mgmt:att_file'][0].att_nm)
+				this.$set(this.item, 'secu_doc_mgmt:att', new File([""], tr['secu_doc_mgmt:att_file'][0].att_nm))
 			} else {
-				this.$set(this.doc_mgmt, 'secu_doc_mgmt:att', null)
+				this.$set(this.item, 'secu_doc_mgmt:att', null)
 			}
 		},
 		
@@ -332,7 +330,37 @@ export default {
 		query () {
 			this.spinner()
 
-			// 
+			let search_params = {};
+
+			if (this.searchFrom != null) {
+				search_params['from_dt'] = this.searchFrom
+			}
+
+			if (this.searchTo != null) {
+				search_params['to_dt'] = this.searchTo
+			}
+
+			api.fetch({
+                ...this.paginationParam,
+				...this.sortParam,
+				...search_params
+            }).then((res) => {
+				this.spinner(false)
+                this.items = res.data.data
+                this.pagination.total = res.data.meta.total
+				this.pagination.page = res.data.meta.current_page
+            }).catch(() => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		remove () {
