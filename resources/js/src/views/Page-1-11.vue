@@ -374,7 +374,57 @@ export default {
 			this.clearErrors()
 			this.spinner()
 
-			// 
+			let formData = new FormData()
+			if (this.item['secu_doc_mgmt:doc_nm']) {
+				formData.append('secu_doc_mgmt:doc_nm', this.item['secu_doc_mgmt:doc_nm'])
+			}
+			if (this.item['secu_doc_mgmt:doc_dt']) {
+				formData.append('secu_doc_mgmt:doc_dt', this.item['secu_doc_mgmt:doc_dt'])
+			}
+			if (this.item['secu_doc_mgmt:from_dt']) {
+				formData.append('secu_doc_mgmt:from_dt', this.item['secu_doc_mgmt:from_dt'])
+			}
+			if (this.item['secu_doc_mgmt:to_dt']) {
+				formData.append('secu_doc_mgmt:to_dt', this.item['secu_doc_mgmt:to_dt'])
+			}
+			if (this.item['secu_doc_mgmt:att']) {
+				formData.append('secu_doc_mgmt:att', this.item['secu_doc_mgmt:att'])
+			}
+
+			api.put(this.item['secu_doc_mgmt:doc_id'], formData).then((res) => {
+				this.spinner(false)
+
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('SuccessSaveData'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+					this.query()
+					this.clear()
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+        				icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		query () {
