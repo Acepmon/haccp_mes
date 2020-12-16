@@ -41,4 +41,14 @@ class EdocFile extends Model
         'updated' => EdocFileUpdated::class,
         'deleted' => EdocFileDeleted::class,
     ];
+
+    public function type()
+    {
+        return $this->belongsTo('App\CommCd', 'TYPE_CD', 'COMM2_CD')->where('COMM1_CD', 'A40')->whereNotIn('COMM2_CD', ['$$']);
+    }
+
+    public function period()
+    {
+        return $this->belongsTo('App\CommCd', 'PERIOD_CD', 'COMM2_CD')->where('COMM1_CD', 'A50')->whereNotIn('COMM2_CD', ['$$']);
+    }
 }

@@ -54,5 +54,14 @@ Route::group([
     Route::get('haccp_mst_file/{REV_SEQ}/att_file/{ATT_SEQ}/download', 'HaccpMstFileController@downloadAttFile')->name('haccp_mst_file.att_file.download');
     Route::apiResource('haccp_mst_file', 'HaccpMstFileController');
 
+    Route::get('doc_mgmt/download', 'DocMgmtController@download')->name('doc_mgmt.download');
+    Route::get('doc_mgmt/{REV_SEQ}/att_file/{ATT_SEQ}/download', 'DocMgmtController@downloadAttFile')->name('doc_mgmt.att_file.download');
     Route::apiResource('doc_mgmt', 'DocMgmtController');
+
+    Route::get('edoc_file/download', 'EdocFileController@download')->name('edoc_file.download');
+    Route::apiResource('edoc_file', 'EdocFileController');
+
+    Route::get('secu_doc_mgmt/download', 'SecuDocMgmtController@download')->name('secu_doc_mgmt.download');
+    Route::get('secu_doc_mgmt/{REV_SEQ}/att_file/{ATT_SEQ}/download', 'SecuDocMgmtController@downloadAttFile')->name('secu_doc_mgmt.att_file.download');
+    Route::apiResource('secu_doc_mgmt', 'SecuDocMgmtController');
 });

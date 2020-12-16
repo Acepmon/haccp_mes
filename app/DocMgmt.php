@@ -40,4 +40,9 @@ class DocMgmt extends Model
     public function att_file() {
         return $this->hasMany('App\AttFile', 'ATT_DTM', 'ATT_DTM');
     }
+
+    public function type()
+    {
+        return $this->belongsTo('App\CommCd', 'TYPE_CD', 'COMM2_CD')->where('COMM1_CD', 'A35')->whereNotIn('COMM2_CD', ['$$']);
+    }
 }

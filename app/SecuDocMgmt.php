@@ -38,4 +38,8 @@ class SecuDocMgmt extends Model
         'updated' => SecuDocMgmtUpdated::class,
         'deleted' => SecuDocMgmtDeleted::class,
     ];
+
+    public function att_file() {
+        return $this->hasMany('App\AttFile', 'ATT_DTM', 'ATT_DTM');
+    }
 }

@@ -4,11 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\AttFile;
 use App\DocMgmt;
+use App\Exports\DocMgmtExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DocMgmtResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DocMgmtController extends Controller
 {
@@ -216,5 +218,26 @@ class DocMgmtController extends Controller
             'success' => true,
             'result' => __('Haccp Master File data successfully deleted'),
         ]);
+    }
+
+    public function download(Request $request)
+    {
+        return Excel::download(new DocMgmtExport(), 'DOC-MGMT-' . now()->format('Y-m-d') . '.xlsx');
+    }
+
+    public function downloadAttFile(Request $request, $revSeq, $attSeq)
+    {
+        $item = DocMgmt::where('REV_SEQ', $revSeq)->with(['att_file'])->first();
+
+        if (!$item) {
+            return response()->json([
+                'success' => false,
+                'message' => __('HACCP Master File data not found')
+            ]);
+        }
+
+        $att = AttFile::where('ATT_DTM', $item->ATT_DTM)->where('ATT_SEQ', $attSeq)->first();
+
+        return response()->download(storage_path('app/' . $att->ATT_PATH), $att->ATT_NM);
     }
 }
