@@ -26,7 +26,7 @@ class DocMgmtController extends Controller
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
         $sort = $request->input('sort', 'reg_dtm');
-        $order = $request->input('order', 'asc');
+        $order = $request->input('order', 'desc');
 
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();
@@ -46,11 +46,10 @@ class DocMgmtController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'doc_mgmt:rev_no' => 'required|string|max:10',
-            'doc_mgmt:rev_dt' => 'required|string|date_format:Y-m-d',
+            'doc_mgmt:type_cd' => 'required|string|max:20',
+            'doc_mgmt:doc_nm' => 'required|string|max:100',
+            'doc_mgmt:doc_desc' => 'nullable|string|max:150',
             'doc_mgmt:att' => 'required|file',
-            'doc_mgmt:rev_content' => 'nullable|string|max:100',
-            'doc_mgmt:rev_reason' => 'nullable|string|max:100',
         ]);
 
         $dtm = now()->format('Ymdhis');
@@ -78,18 +77,17 @@ class DocMgmtController extends Controller
         }
 
         $item = DocMgmt::create([
-            'REV_NO' => $request->input('doc_mgmt:rev_no'),
-            'REV_DT' => now()->parse($request->input('doc_mgmt:rev_dt'))->format('Ymd'),
+            'TYPE_CD' => $request->input('doc_mgmt:type_cd'),
+            'DOC_NM' => $request->input('doc_mgmt:doc_nm'),
+            'DOC_DESC' => $request->input('doc_mgmt:doc_desc'),
             'ATT_DTM' => $request->hasFile('doc_mgmt:att') ? $dtm : null,
-            'REV_CONTENT' => $request->input('doc_mgmt:rev_content'),
-            'REV_REASON' => $request->input('doc_mgmt:rev_reason'),
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
             'REG_DTM' => now()->format('Ymdhis'),
         ]);
 
         return response()->json([
             'success' => true,
-            'result' => new DocMgmtResource(DocMgmt::where('REV_SEQ', $item->REV_SEQ)->with(['att_file'])->first()),
+            'result' => new DocMgmtResource(DocMgmt::where('DOC_ID', $item->DOC_ID)->with(['att_file'])->first()),
         ]);
     }
 
@@ -101,12 +99,12 @@ class DocMgmtController extends Controller
      */
     public function show($id)
     {
-        $item = DocMgmt::where('REV_SEQ', $id)->first();
+        $item = DocMgmt::where('DOC_ID', $id)->first();
 
         if (!$item) {
             return response()->json([
                 'success' => false,
-                'message' => __('HACCP Master File data not found')
+                'message' => __('Document Management data not found')
             ]);
         }
 
@@ -125,21 +123,20 @@ class DocMgmtController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = DocMgmt::where('REV_SEQ', $id)->with(['att_file'])->first();
+        $item = DocMgmt::where('DOC_ID', $id)->with(['att_file'])->first();
 
         if (!$item) {
             return response()->json([
                 'success' => false,
-                'message' => __('HACCP Master File data not found')
+                'message' => __('Document Management data not found')
             ]);
         }
 
         $request->validate([
-            'doc_mgmt:rev_no' => 'required|string|max:10',
-            'doc_mgmt:rev_dt' => 'required|string|date_format:Y-m-d',
+            'doc_mgmt:type_cd' => 'required|string|max:20',
+            'doc_mgmt:doc_nm' => 'required|string|max:100',
+            'doc_mgmt:doc_desc' => 'nullable|string|max:150',
             'doc_mgmt:att' => 'nullable|file',
-            'doc_mgmt:rev_content' => 'nullable|string|max:100',
-            'doc_mgmt:rev_reason' => 'nullable|string|max:100',
         ]);
 
         $dtm = now()->format('Ymdhis');
@@ -171,16 +168,15 @@ class DocMgmtController extends Controller
         }
 
         $item->update([
-            'REV_NO' => $request->input('doc_mgmt:rev_no'),
-            'REV_DT' => now()->parse($request->input('doc_mgmt:rev_dt'))->format('Ymd'),
+            'TYPE_CD' => $request->input('doc_mgmt:type_cd'),
+            'DOC_NM' => $request->input('doc_mgmt:doc_nm'),
+            'DOC_DESC' => $request->input('doc_mgmt:doc_desc'),
             'ATT_DTM' => $request->hasFile('doc_mgmt:att') ? $dtm : $item->ATT_DTM,
-            'REV_CONTENT' => $request->input('doc_mgmt:rev_content'),
-            'REV_REASON' => $request->input('doc_mgmt:rev_reason')
         ]);
 
         return response()->json([
             'success' => true,
-            'result' => new DocMgmtResource(DocMgmt::where('REV_SEQ', $id)->with(['att_file'])->first()),
+            'result' => new DocMgmtResource(DocMgmt::where('DOC_ID', $id)->with(['att_file'])->first()),
         ]);
     }
 
@@ -192,12 +188,12 @@ class DocMgmtController extends Controller
      */
     public function destroy($id)
     {
-        $item = DocMgmt::where('REV_SEQ', $id)->with(['att_file'])->first();
+        $item = DocMgmt::where('DOC_ID', $id)->with(['att_file'])->first();
 
         if (!$item) {
             return response()->json([
                 'success' => false,
-                'message' => __('HACCP Master File data not found')
+                'message' => __('Document Management data not found')
             ]);
         }
 
@@ -216,7 +212,7 @@ class DocMgmtController extends Controller
 
         return response()->json([
             'success' => true,
-            'result' => __('Haccp Master File data successfully deleted'),
+            'result' => __('Document Management data successfully deleted'),
         ]);
     }
 
@@ -225,14 +221,14 @@ class DocMgmtController extends Controller
         return Excel::download(new DocMgmtExport(), 'DOC-MGMT-' . now()->format('Y-m-d') . '.xlsx');
     }
 
-    public function downloadAttFile(Request $request, $revSeq, $attSeq)
+    public function downloadAttFile(Request $request, $docId, $attSeq)
     {
-        $item = DocMgmt::where('REV_SEQ', $revSeq)->with(['att_file'])->first();
+        $item = DocMgmt::where('DOC_ID', $docId)->with(['att_file'])->first();
 
         if (!$item) {
             return response()->json([
                 'success' => false,
-                'message' => __('HACCP Master File data not found')
+                'message' => __('Document Management data not found')
             ]);
         }
 
