@@ -186,6 +186,12 @@ return [
         'doc_mgmt:type_cd' => '문서종류',
         'doc_mgmt:doc_desc' => '설명(제품명)',
         'doc_mgmt:att' => '첨부화일',
+
+        'secu_doc_mgmt:doc_nm' => '문서이름',
+        'secu_doc_mgmt:doc_dt' => '보고서작성일',
+        'secu_doc_mgmt:from_dt' => '기간',
+        'secu_doc_mgmt:to_dt' => '기간',
+        'secu_doc_mgmt:att' => '첨부화일',
     ],
 
 ];
