@@ -181,6 +181,11 @@ return [
         'haccp_mst_file:att' => '첨부화일',
         'haccp_mst_file:rev_content' => '개정내용',
         'haccp_mst_file:rev_reason' => '개정사유',
+
+        'doc_mgmt:doc_nm' => '문서이름',
+        'doc_mgmt:type_cd' => '문서종류',
+        'doc_mgmt:doc_desc' => '설명(제품명)',
+        'doc_mgmt:att' => '첨부화일',
     ],
 
 ];

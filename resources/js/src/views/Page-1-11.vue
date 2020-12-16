@@ -93,7 +93,7 @@
 									<!-- <vs-button type="border" color="dark" @click.native="item['secu_doc_mgmt:att'] = null" v-if="item['secu_doc_mgmt:att']" class="ml-1 px-4">
 										<vs-icon icon="close" />
 									</vs-button> -->
-									<vs-button class="ml-1" v-if="item['secu_doc_mgmt:att_file'].length > 0 && item['secu_doc_mgmt:att']" color="primary" :href="'/api/doc_mgmt/' + item['secu_doc_mgmt:rev_seq'] + '/att_file/' + item['secu_doc_mgmt:att_file'][0].att_seq + '/download'">
+									<vs-button class="ml-1" v-if="item['secu_doc_mgmt:att_file'].length > 0 && item['secu_doc_mgmt:att']" color="primary" :href="'/api/doc_mgmt/' + item['secu_doc_mgmt:doc_id'] + '/att_file/' + item['secu_doc_mgmt:att_file'][0].att_seq + '/download'">
 										{{$t('Download')}}
 									</vs-button>
 								</div>
@@ -150,7 +150,7 @@
 							<vs-td :data="data[index]['secu_doc_mgmt:att_dtm']">
 								<div class="flex flex-row">
 									<span v-if="data[index]['secu_doc_mgmt:att_file'].length > 0" v-text="data[index]['secu_doc_mgmt:att_file'][0].att_nm" class="pt-1"></span>
-									<vs-button color="primary" class="ml-2" :href="'/api/doc_mgmt/' + data[index]['secu_doc_mgmt:rev_seq'] + '/att_file/' + data[index]['secu_doc_mgmt:att_file'][0].att_seq + '/download'" type="flat" size="small" icon-pack="feather" icon="icon-download"></vs-button>
+									<vs-button color="primary" class="ml-2" :href="'/api/doc_mgmt/' + data[index]['secu_doc_mgmt:doc_id'] + '/att_file/' + data[index]['secu_doc_mgmt:att_file'][0].att_seq + '/download'" type="flat" size="small" icon-pack="feather" icon="icon-download"></vs-button>
 								</div>
                             </vs-td>
 

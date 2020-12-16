@@ -92,7 +92,7 @@
 									<!-- <vs-button type="border" color="dark" @click.native="item['doc_mgmt:att'] = null" v-if="item['doc_mgmt:att']" class="ml-1 px-4">
 										<vs-icon icon="close" />
 									</vs-button> -->
-									<vs-button class="ml-1" v-if="item['doc_mgmt:att_file'].length > 0 && item['doc_mgmt:att']" color="primary" :href="'/api/doc_mgmt/' + item['doc_mgmt:rev_seq'] + '/att_file/' + item['doc_mgmt:att_file'][0].att_seq + '/download'">
+									<vs-button class="ml-1" v-if="item['doc_mgmt:att_file'].length > 0 && item['doc_mgmt:att']" color="primary" :href="'/api/doc_mgmt/' + item['doc_mgmt:doc_id'] + '/att_file/' + item['doc_mgmt:att_file'][0].att_seq + '/download'">
 										{{$t('Download')}}
 									</vs-button>
 								</div>
@@ -145,7 +145,7 @@
 							<vs-td :data="data[index]['doc_mgmt:att_dtm']">
 								<div class="flex flex-row">
 									<span v-if="data[index]['doc_mgmt:att_file'].length > 0" v-text="data[index]['doc_mgmt:att_file'][0].att_nm" class="pt-1"></span>
-									<vs-button color="primary" class="ml-2" :href="'/api/doc_mgmt/' + data[index]['doc_mgmt:rev_seq'] + '/att_file/' + data[index]['doc_mgmt:att_file'][0].att_seq + '/download'" type="flat" size="small" icon-pack="feather" icon="icon-download"></vs-button>
+									<vs-button color="primary" class="ml-2" :href="'/api/doc_mgmt/' + data[index]['doc_mgmt:doc_id'] + '/att_file/' + data[index]['doc_mgmt:att_file'][0].att_seq + '/download'" type="flat" size="small" icon-pack="feather" icon="icon-download"></vs-button>
 								</div>
                             </vs-td>
 
@@ -308,7 +308,54 @@ export default {
 			this.clearErrors()
 			this.spinner()
 
-			// 
+			let formData = new FormData()
+			if (this.item['doc_mgmt:doc_nm']) {
+				formData.append('doc_mgmt:doc_nm', this.item['doc_mgmt:doc_nm'])
+			}
+			if (this.item['doc_mgmt:type_cd']) {
+				formData.append('doc_mgmt:type_cd', this.item['doc_mgmt:type_cd'])
+			}
+			if (this.item['doc_mgmt:doc_desc']) {
+				formData.append('doc_mgmt:doc_desc', this.item['doc_mgmt:doc_desc'])
+			}
+			if (this.item['doc_mgmt:att']) {
+				formData.append('doc_mgmt:att', this.item['doc_mgmt:att'])
+			}
+
+			api.post(formData).then((res) => {
+				this.spinner(false)
+				
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('SuccessAddData'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+					this.query()
+					this.clear()
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+        				icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		save () {
@@ -358,7 +405,40 @@ export default {
 			this.clearErrors()
 			this.spinner()
 
-			// 
+			api.delete(this.item['doc_mgmt:doc_id']).then((res) => {
+				this.spinner(false)
+
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('SuccessDeleteData'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+					this.clear()
+					this.query()
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+						icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		excel () {
