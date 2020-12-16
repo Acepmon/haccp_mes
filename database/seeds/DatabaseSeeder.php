@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +12,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        if(!Storage::has('files')) {
+            Storage::makeDirectory('files');
+        }
+
         // Mandatory Seeds
         $this->call(CommCdSeeder::class);
         $this->call(UserSeeder::class);
