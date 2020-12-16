@@ -116,11 +116,11 @@
 
                     <template slot="thead">
                         <vs-th>No</vs-th>
-                        <vs-th sort-key="rev_no">문서이름</vs-th>
-                        <vs-th sort-key="rev_dt">문서종류</vs-th>
-                        <vs-th sort-key="rev_content">설명(제품명)</vs-th>
-                        <vs-th sort-key="rev_reason">첨부문서</vs-th>
-                        <vs-th>등록일자</vs-th>
+                        <vs-th sort-key="doc_nm">문서이름</vs-th>
+                        <vs-th sort-key="type_nm">문서종류</vs-th>
+                        <vs-th sort-key="doc_desc">설명(제품명)</vs-th>
+                        <vs-th>첨부문서</vs-th>
+                        <vs-th sort-key="reg_dtm">등록일자</vs-th>
                     </template>
 
                     <template slot-scope="{data}">

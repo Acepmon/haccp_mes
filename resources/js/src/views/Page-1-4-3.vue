@@ -1,11 +1,421 @@
 <template>
-	<h4>Page-1-4-3</h4>
+	<div>
+		<vx-card id="div-with-loading" class="vs-con-loading__container">
+			<div class="flex flex-wrap mb-2">
+				<div class="w-full sm:w-2/3 flex">
+					<div class="w-full sm:w-1/3">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+								<span class="pt-2">문서이름</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input />
+                            </div>
+                        </div>
+                    </div>
+					<div class="w-full sm:w-1/3">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">업무종류</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-select v-model="searchType">
+									<vs-select-item v-for="(type, index) in types" :key="index" :value="type.comm2_cd" :text="type.comm2_nm"></vs-select-item>
+								</vs-select>
+                            </div>
+                        </div>
+                    </div>
+					<div class="w-full sm:w-1/3">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">사용구분</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-select v-model="searchUseYn">
+									<vs-select-item value="Y" text="Y"></vs-select-item>
+									<vs-select-item value="N" text="N"></vs-select-item>
+								</vs-select>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+				<div class="w-full sm:w-1/3 px-1 flex justify-end" style="position: relative;">
+					<vs-button @click="query()" class="mx-1 py-4 justify-self-start" color="dark" type="border" style="position: absolute; left: 0;">{{ $t('Query') }}</vs-button>
+					<vs-button @click="saveDialog()" class="mx-1" color="dark" type="border">{{ $t('Save') }}</vs-button>
+					<vs-button @click="closeDialog()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
+				</div>
+			</div>
+
+			<vs-divider/>
+
+			<form action="#">
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 문서이름</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="item['edoc_file:doc_nm']" :danger="errors['edoc_file:doc_nm'] != null" :danger-text="errors['edoc_file:doc_nm']" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 문서종류</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+								<vs-select v-model="item['edoc_file:type_cd']" :danger="errors['edoc_file:type_cd'] != null" :danger-text="errors['edoc_file:type_cd']">
+									<vs-select-item v-for="(type, index) in types" :key="index" :value="type.comm2_cd" :text="type.comm2_nm"></vs-select-item>
+								</vs-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2">설명(제품명)</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input class="w-full" v-model="item['edoc_file:doc_desc']" :danger="errors['edoc_file:doc_desc'] != null" :danger-text="errors['edoc_file:doc_desc']" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<!--  -->
+
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 업무처리주기</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-select v-model="item['edoc_file:period_cd']" :danger="errors['edoc_file:period_cd'] != null" :danger-text="errors['edoc_file:period_cd']">
+									<vs-select-item v-for="(period, index) in periods" :key="index" :value="period.comm2_cd" :text="period.comm2_nm"></vs-select-item>
+								</vs-select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-1/2 px-1">
+                    </div>
+                </div>
+
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 사용구분</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+								<vs-select v-model="item['edoc_file:use_yn']" :danger="errors['edoc_file:use_yn'] != null" :danger-text="errors['edoc_file:use_yn']">
+									<vs-select-item value="Y" text="Y"></vs-select-item>
+									<vs-select-item value="N" text="N"></vs-select-item>
+								</vs-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<div class="flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 작업자</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+                                <vs-input v-model="item['edoc_file:work_id']" :danger="errors['edoc_file:work_id'] != null" :danger-text="errors['edoc_file:work_id']" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-1/2 px-1">
+                        <div class="vx-row mb-2">
+                            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+                                <span class="pt-2"><span class="text-danger">*</span> 승인자</span>
+                            </div>
+                            <div class="vx-col sm:w-2/3 w-full">
+								<vs-input v-model="item['edoc_file:app_id']" :danger="errors['edoc_file:app_id'] != null" :danger-text="errors['edoc_file:app_id']" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+			</form>
+
+			<vs-divider/>
+
+			<div class="flex flex-wrap justify-end mb-2">
+                <vs-button @click="excel()" class="mx-1" color="dark" type="border" :disabled="items.length <= 0">{{ $t('ToExcel') }}</vs-button>
+            </div>
+
+			<div class="overflow-y-auto" style="max-height: 300px;">
+                <vs-table stripe pagination description sst :max-items="pagination.limit" :data="items" :total="pagination.total" @change-page="handleChangePage" @sort="handleSort" v-model="item" @selected="handleSelected">
+
+                    <template slot="thead">
+                        <vs-th>No</vs-th>
+                        <vs-th sort-key="doc_nm">문서이름</vs-th>
+                        <vs-th sort-key="type_nm">업무종류</vs-th>
+                        <vs-th sort-key="doc_content">문서내용</vs-th>
+                        <vs-th sort-key="period_nm">업무처리주기</vs-th>
+                        <vs-th sort-key="use_yn">사용구분</vs-th>
+                        <vs-th sort-key="work_id">작업자</vs-th>
+                        <vs-th sort-key="app_id">승인자</vs-th>
+                    </template>
+
+                    <template slot-scope="{data}">
+                        <vs-tr :data="tr" :key="index" v-for="(tr, index) in items">
+
+                            <vs-td :data="(rowIndex(index))">
+                                {{ (rowIndex(index)) }}
+                            </vs-td>
+
+                            <vs-td :data="data[index]['edoc_file:doc_nm']">
+                                {{ data[index]['edoc_file:doc_nm'] }}
+                            </vs-td>
+
+                            <vs-td :data="data[index]['edoc_file:type_nm']">
+                                {{ data[index]['edoc_file:type_nm'] }}
+                            </vs-td>
+
+                            <vs-td :data="data[index]['edoc_file:doc_desc']">
+                                {{ data[index]['edoc_file:doc_desc'] }}
+                            </vs-td>
+
+							<vs-td :data="data[index]['edoc_file:att_dtm']">
+								<div class="flex flex-row">
+									<span v-if="data[index]['edoc_file:att_file'].length > 0" v-text="data[index]['edoc_file:att_file'][0].att_nm" class="pt-1"></span>
+									<vs-button color="primary" class="ml-2" :href="'/api/edoc_file/' + data[index]['edoc_file:rev_seq'] + '/att_file/' + data[index]['edoc_file:att_file'][0].att_seq + '/download'" type="flat" size="small" icon-pack="feather" icon="icon-download"></vs-button>
+								</div>
+                            </vs-td>
+
+                            <vs-td :data="data[index]['edoc_file:reg_dtm']">
+                                {{ data[index]['edoc_file:reg_dtm'] }}
+                            </vs-td>
+
+                        </vs-tr>
+                    </template>
+                </vs-table>
+            </div>
+		</vx-card>
+	</div>
 </template>
 
 <script>
+import axios from 'axios'
+import comm_cd from '@/services/comm_cd'
+import api from '@/services/edoc_file'
+import {mapActions} from 'vuex';
+import FileSelect from '@/layouts/components/FileSelect.vue'
+
 export default {
-	created() {
-		console.log('Page-1-4-3 created')
+	components: {
+		FileSelect
+	},
+
+	data () {
+		return {
+			item: {
+				'edoc_file:doc_id': null,
+				'edoc_file:type_cd': null,
+				'edoc_file:type_nm': null,
+				'edoc_file:doc_nm': null,
+				'edoc_file:doc_desc': null,
+				'edoc_file:doc_content': null,
+				'edoc_file:doc_appdata': null,
+				'edoc_file:period_cd': null,
+				'edoc_file:period_nm': null,
+				'edoc_file:period_data': null,
+				'edoc_file:use_yn': null,
+				'edoc_file:work_id': null,
+				'edoc_file:app_id': null,
+				'edoc_file:upd_dtm': null,
+			},
+			errors: {
+				'edoc_file:doc_id': null,
+				'edoc_file:type_cd': null,
+				'edoc_file:type_nm': null,
+				'edoc_file:doc_nm': null,
+				'edoc_file:doc_desc': null,
+				'edoc_file:doc_content': null,
+				'edoc_file:doc_appdata': null,
+				'edoc_file:period_cd': null,
+				'edoc_file:period_nm': null,
+				'edoc_file:period_data': null,
+				'edoc_file:use_yn': null,
+				'edoc_file:work_id': null,
+				'edoc_file:app_id': null,
+				'edoc_file:upd_dtm': null,
+			},
+			items: [],
+			searchNm: null,
+			searchType: null,
+			types: [],
+			periods: [],
+			pagination: {
+				page: 1,
+				limit: 15,
+				total: 0,
+			},
+			sorting: {
+				sort: 'upd_dtm',
+				order: 'desc'
+			},
+		}
+	},
+
+	computed: {
+		paginationParam: function () {
+			return {
+				page: this.pagination.page,
+				limit: this.pagination.limit
+			}
+        },
+
+		sortParam: function () {
+			return {
+				sort: this.sorting.sort != null ? this.sorting.sort : 'upd_dtm',
+				order: this.sorting.order != null ? this.sorting.order : 'desc',
+			}
+		}
+	},
+
+	methods: {
+		...mapActions({
+            removeTab: 'mdn/removeTab',
+		}),
+
+		spinner (loading = true) {
+			if (loading) {
+				this.$vs.loading({
+					container: '#div-with-loading',
+					scale: 0.6
+				})
+			} else {
+				this.$vs.loading.close('#div-with-loading > .con-vs-loading')
+			}
+		},
+
+		clear () {
+			this.$set(this, 'item', {
+				'edoc_file:doc_id': null,
+				'edoc_file:type_cd': null,
+				'edoc_file:type_nm': null,
+				'edoc_file:doc_nm': null,
+				'edoc_file:doc_desc': null,
+				'edoc_file:doc_content': null,
+				'edoc_file:doc_appdata': null,
+				'edoc_file:period_cd': null,
+				'edoc_file:period_nm': null,
+				'edoc_file:period_data': null,
+				'edoc_file:use_yn': null,
+				'edoc_file:work_id': null,
+				'edoc_file:app_id': null,
+				'edoc_file:upd_dtm': null,
+			})
+		},
+
+		clearErrors () {
+			this.$set(this, 'errors', {
+				'edoc_file:doc_id': null,
+				'edoc_file:type_cd': null,
+				'edoc_file:type_nm': null,
+				'edoc_file:doc_nm': null,
+				'edoc_file:doc_desc': null,
+				'edoc_file:doc_content': null,
+				'edoc_file:doc_appdata': null,
+				'edoc_file:period_cd': null,
+				'edoc_file:period_nm': null,
+				'edoc_file:period_data': null,
+				'edoc_file:use_yn': null,
+				'edoc_file:work_id': null,
+				'edoc_file:app_id': null,
+				'edoc_file:upd_dtm': null,
+			})
+		},
+
+		displayErrors (errors) {
+			for (const [key, value] of Object.entries(errors)) {
+				this.$set(this.errors, key, Array.isArray(value) ? value[0] : value)
+			}
+		},
+
+		rowIndex: function (index) {
+			return (this.pagination.page * this.pagination.limit)-this.pagination.limit + index + 1
+		},
+
+		handleChangePage(page) {
+			this.pagination.page = page
+			this.query()
+		},
+
+        handleSort(sort, order) {
+			this.sorting.sort = sort
+			this.sorting.order = order
+			this.query()
+		},
+
+		handleSelected (tr) {
+			this.clearErrors()
+		},
+
+		save () {
+			this.clearErrors()
+			this.spinner()
+
+			// 
+		},
+
+		query () {
+			this.spinner()
+
+			// 
+		},
+
+		excel () {
+			window.location.href = api.downloadUrl()
+		},
+
+		closeDialog () {
+			this.$vs.dialog({
+                type: 'confirm',
+                color: 'dark',
+                title: this.$t('Confirmation'),
+                text: this.$t('CloseDocument'),
+                acceptText: this.$t('Accept'),
+                cancelText: this.$t('Cancel'),
+                accept: () => this.removeTab('page-1-4-3')
+            })
+		},
+
+		saveDialog () {
+			this.$vs.dialog({
+                type: 'confirm',
+                color: 'success',
+                title: this.$t('Confirmation'),
+                text: this.$t('SaveData'),
+                acceptText: this.$t('Accept'),
+                cancelText: this.$t('Cancel'),
+                accept: () => this.save()
+            })
+		},
+	},
+
+	created () {
+		comm_cd.fetch({cd1: 'A35'}).then((res) => {
+            this.types = res.data
+		})
+		
+		comm_cd.fetch({cd1: 'A50'}).then((res) => {
+            this.periods = res.data
+        })
 	}
 }
 </script>
