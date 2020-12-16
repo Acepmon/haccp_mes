@@ -11,6 +11,7 @@ export default {
     ToExcel: 'To Excel',
     Confirmation: 'Confirmation',
     CloseDocument: 'Close document?',
+    Download: 'Download',
 
     DeleteData: 'Are you sure to delete data?',
     SuccessDeleteData: 'Successfully deleted data',
@@ -41,6 +42,7 @@ export default {
     ToExcel: 'To Excel',
     Confirmation: '확인',
     CloseDocument: 'Close document?',
+    Download: 'Download',
 
     DeleteData: 'Are you sure to delete data?',
     SuccessDeleteData: 'Successfully deleted data',

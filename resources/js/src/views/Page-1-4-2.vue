@@ -12,7 +12,7 @@
 								</vs-select>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input />
+                                <vs-input v-model="searchKeyword"/>
                             </div>
                         </div>
                     </div>
@@ -89,9 +89,9 @@
                             <div class="vx-col sm:w-2/3 w-full">
                                 <div class="flex flex-row">
 									<file-select v-model="item['doc_mgmt:att']"></file-select>
-									<vs-button type="border" color="dark" @click.native="item['doc_mgmt:att'] = null" v-if="item['doc_mgmt:att']" class="ml-1 px-4">
+									<!-- <vs-button type="border" color="dark" @click.native="item['doc_mgmt:att'] = null" v-if="item['doc_mgmt:att']" class="ml-1 px-4">
 										<vs-icon icon="close" />
-									</vs-button>
+									</vs-button> -->
 									<vs-button class="ml-1" v-if="item['doc_mgmt:att_file'].length > 0 && item['doc_mgmt:att']" color="primary" :href="'/api/doc_mgmt/' + item['doc_mgmt:rev_seq'] + '/att_file/' + item['doc_mgmt:att_file'][0].att_seq + '/download'">
 										{{$t('Download')}}
 									</vs-button>
@@ -198,6 +198,7 @@ export default {
 			},
 			items: [],
 			searchBy: null,
+			searchKeyword: null,
 			searchType: null,
 			types: [],
 			pagination: {
@@ -297,9 +298,9 @@ export default {
 
 			if (tr['doc_mgmt:att_file'].length > 0) {
 				// this.doc_mgmt['doc_mgmt:att'] = new File([""], tr['doc_mgmt:att_file'][0].att_nm)
-				this.$set(this.doc_mgmt, 'doc_mgmt:att', new File([""], tr['doc_mgmt:att_file'][0].att_nm))
+				this.$set(this.item, 'doc_mgmt:att', new File([""], tr['doc_mgmt:att_file'][0].att_nm))
 			} else {
-				this.$set(this.doc_mgmt, 'doc_mgmt:att', null)
+				this.$set(this.item, 'doc_mgmt:att', null)
 			}
 		},
 		
@@ -320,7 +321,37 @@ export default {
 		query () {
 			this.spinner()
 
-			// 
+			let search_params = {};
+
+			if (this.searchKeyword != null) {
+				search_params[this.searchBy] = this.searchKeyword
+			}
+
+			if (this.searchType != null) {
+				search_params['type_cd'] = this.searchType
+			}
+
+			api.fetch({
+                ...this.paginationParam,
+				...this.sortParam,
+				...search_params
+            }).then((res) => {
+				this.spinner(false)
+                this.items = res.data.data
+                this.pagination.total = res.data.meta.total
+				this.pagination.page = res.data.meta.current_page
+            }).catch(() => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		remove () {

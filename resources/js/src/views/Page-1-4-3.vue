@@ -376,7 +376,26 @@ export default {
 		query () {
 			this.spinner()
 
-			// 
+			api.fetch({
+                ...this.paginationParam,
+				...this.sortParam,
+            }).then((res) => {
+				this.spinner(false)
+                this.items = res.data.data
+                this.pagination.total = res.data.meta.total
+				this.pagination.page = res.data.meta.current_page
+            }).catch(() => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		excel () {

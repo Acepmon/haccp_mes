@@ -28,6 +28,21 @@ class DocMgmtController extends Controller
         $sort = $request->input('sort', 'reg_dtm');
         $order = $request->input('order', 'desc');
 
+        if ($request->has('doc_nm')) {
+            $docNm = $request->input('doc_nm');
+            $items = $items->where('doc_nm', 'LIKE', '%'.$docNm.'%');
+        }
+
+        if ($request->has('doc_desc')) {
+            $docDesc = $request->input('doc_desc');
+            $items = $items->where('doc_desc', 'LIKE', '%'.$docDesc.'%');
+        }
+
+        if ($request->has('type_cd')) {
+            $type_cd = $request->input('type_cd');
+            $items = $items->where('type_cd', $type_cd);
+        }
+
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();
         } else {
