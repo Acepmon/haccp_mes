@@ -18,7 +18,6 @@ class SecuDocMgmt extends Model
     protected $fillable = [
         'DOC_ID',
         'DOC_NM',
-        'DOC_DESC',
         'DOC_DT',
         'ATT_DTM',
         'FROM_DT',

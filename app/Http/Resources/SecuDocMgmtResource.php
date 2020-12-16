@@ -24,6 +24,7 @@ class SecuDocMgmtResource extends JsonResource
             'secu_doc_mgmt:to_dt' => now()->parse($this->TO_DT)->format('Y-m-d'),
             'secu_doc_mgmt:reg_id' => $this->REG_ID,
             'secu_doc_mgmt:reg_dtm' => now()->parse($this->REG_DTM)->format('Y-m-d'),
+            'secu_doc_mgmt:att_file' => AttFileResource::collection($this->whenLoaded('att_file')),
         ];
     }
 }
