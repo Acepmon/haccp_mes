@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
+use App\EdocFile;
 use App\Exports\EdocFileExport;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EdocFileResource;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -14,9 +16,22 @@ class EdocFileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $items = EdocFile::query();
+
+        $with = array_filter(explode(',', $request->input('with')));
+        $limit = $request->input('limit', 15);
+        $sort = $request->input('sort', 'doc_id');
+        $order = $request->input('order', 'asc');
+
+        if ($limit == -1) {
+            $items = $items->with($with)->orderBy($sort, $order)->get();
+        } else {
+            $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
+        }
+
+        return EdocFileResource::collection($items);
     }
 
     /**
@@ -50,7 +65,42 @@ class EdocFileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $item = EdocFile::where('DOC_ID', $id)->first();
+
+        if (!$item) {
+            return response()->json([
+                'success' => false,
+                'message' => __('eDoc file not found')
+            ]);
+        }
+
+        $request->validate([
+            'edoc_file:type_cd' => 'required|string|max:20',
+            'edoc_file:doc_nm' => 'required|string|max:100',
+            'edoc_file:doc_desc' => 'nullable|string|max:150',
+            'edoc_file:period_cd' => 'required|string|max:20',
+            'edoc_file:period_data' => 'nullable|string|max:40',
+            'edoc_file:use_yn' => 'required|string|in:' . implode(',', EdocFile::USE_ARRAY),
+            'edoc_file:work_id' => 'required|string|max:20',
+            'edoc_file:app_id' => 'required|string|max:20',
+        ]);
+
+        $item->update([
+            'TYPE_CD' => $request->input('edoc_file:type_cd'),
+            'DOC_NM' => $request->input('edoc_file:doc_nm'),
+            'DOC_DESC' => $request->input('edoc_file:doc_desc'),
+            'PERIOD_CD' => $request->input('edoc_file:period_cd'),
+            'PERIOD_DATA' => $request->input('edoc_file:period_data'),
+            'USE_YN' => $request->input('edoc_file:use_yn'),
+            'WORK_ID' => $request->input('edoc_file:work_id'),
+            'APP_ID' => $request->input('edoc_file:app_id'),
+            'UPD_DTM' => now()->format('Ymdhis'),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'result' => new EdocFileResource(EdocFile::where('DOC_ID', $id)->first()),
+        ]);
     }
 
     /**

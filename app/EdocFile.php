@@ -42,6 +42,13 @@ class EdocFile extends Model
         'deleted' => EdocFileDeleted::class,
     ];
 
+    public const USE_YES = 'Y';
+    public const USE_NO = 'N';
+    public const USE_ARRAY = [
+        self::USE_YES,
+        self::USE_NO
+    ];
+
     public function type()
     {
         return $this->belongsTo('App\CommCd', 'TYPE_CD', 'COMM2_CD')->where('COMM1_CD', 'A40')->whereNotIn('COMM2_CD', ['$$']);
