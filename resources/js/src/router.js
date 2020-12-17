@@ -153,6 +153,11 @@ const router = new Router({
                 name: '자료관리',
                 component: () => import('./views/Empty.vue')
               },
+              {
+                path: '/7/1',
+                name: '정보보호관리',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/7/1', value: 'page-7-1', label: '정보보호관리', component: 'page-7-1'}) } }
+              },
 
               {
                 path: '/user-entry',

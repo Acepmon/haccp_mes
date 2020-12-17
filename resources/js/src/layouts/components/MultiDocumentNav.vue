@@ -89,6 +89,7 @@ export default {
         'tab-page-1-9': () => lazyLoadView(import(/* webpackChunkName: "page-1-9" */ '@/views/Page-1-9.vue')),
         'tab-page-1-10': () => lazyLoadView(import(/* webpackChunkName: "page-1-10" */ '@/views/Page-1-10.vue')),
         'tab-page-1-11': () => lazyLoadView(import(/* webpackChunkName: "page-1-11" */ '@/views/Page-1-11.vue')),
+        'tab-page-7-1': () => lazyLoadView(import(/* webpackChunkName: "page-7-1" */ '@/views/Page-7-1.vue')),
     },
 
     computed: {

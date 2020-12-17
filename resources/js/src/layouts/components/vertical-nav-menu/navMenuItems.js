@@ -336,8 +336,26 @@ export default [
     submenu: [
       {
         url: "/7/1",
-        name: "판매정보",
-        slug: "판매정보",
+        name: "공통코드 관리",
+        slug: "공통코드 관리",
+        showSubmenuOn: '/7',
+      },
+      {
+        url: "/7/2",
+        name: "프로그램권한 권리",
+        slug: "프로그램권한 권리",
+        showSubmenuOn: '/7',
+      },
+      {
+        url: "/7/3",
+        name: "A Management",
+        slug: "A Management",
+        showSubmenuOn: '/7',
+      },
+      {
+        url: "/7/4",
+        name: "B Management",
+        slug: "B Management",
         showSubmenuOn: '/7',
       }
     ]
