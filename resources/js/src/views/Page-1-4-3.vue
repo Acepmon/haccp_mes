@@ -41,7 +41,7 @@
 				</div>
 				<div class="w-full sm:w-1/3 px-1 flex justify-end" style="position: relative;">
 					<vs-button @click="query()" class="mx-1 py-4 justify-self-start" color="dark" type="border" style="position: absolute; left: 0;">{{ $t('Query') }}</vs-button>
-					<vs-button @click="saveDialog()" class="mx-1" color="dark" type="border">{{ $t('Save') }}</vs-button>
+					<vs-button @click="saveDialog()" class="mx-1" color="dark" type="border" :disabled="!item['edoc_file:doc_id']">{{ $t('Save') }}</vs-button>
 					<vs-button @click="closeDialog()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
 				</div>
 			</div>
@@ -96,10 +96,23 @@
                             <div class="vx-col sm:w-1/3 w-full flex justify-end">
                                 <span class="pt-2"><span class="text-danger">*</span> 업무처리주기</span>
                             </div>
-                            <div class="vx-col sm:w-2/3 w-full">
+                            <div class="vx-col sm:w-2/3 w-full flex">
                                 <vs-select v-model="item['edoc_file:period_cd']" :danger="errors['edoc_file:period_cd'] != null" :danger-text="errors['edoc_file:period_cd']">
 									<vs-select-item v-for="(period, index) in periods" :key="index" :value="period.comm2_cd" :text="period.comm2_nm"></vs-select-item>
 								</vs-select>
+								
+								<div class="flex flex-row" v-if="item['edoc_file:period_cd'] == 'ED'">
+									<vs-button 
+                                        v-for="(item, index) in periodEdDays"
+                                        :key="index"
+                                        @click="toggleEd(item.value)"
+                                        :color="selectedEdHas(item.value) ? 'primary' : 'dark'"
+                                        class="px-3 flex-shrink-0 ml-1"
+                                        type="border">
+                                            <vs-icon v-if="selectedEdHas(item.value)" icon-pack="feather" icon="icon-check" />
+                                            <span v-text="item.text"></span>
+                                        </vs-button>
+								</div>
                             </div>
                         </div>
                     </div>
@@ -131,7 +144,10 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 작업자</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="item['edoc_file:work_id']" :danger="errors['edoc_file:work_id'] != null" :danger-text="errors['edoc_file:work_id']" />
+                                <!-- <vs-input v-model="item['edoc_file:work_id']" :danger="errors['edoc_file:work_id'] != null" :danger-text="errors['edoc_file:work_id']" /> -->
+								<vs-select v-model="item['edoc_file:work_id']" :danger="errors['edoc_file:work_id'] != null" :danger-text="errors['edoc_file:work_id']">
+									<vs-select-item v-for="(user, index) in work_users" :key="index" :value="user['user:user_id']" :text="user['user:user_id']"></vs-select-item>
+								</vs-select>
                             </div>
                         </div>
                     </div>
@@ -142,7 +158,10 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 승인자</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-								<vs-input v-model="item['edoc_file:app_id']" :danger="errors['edoc_file:app_id'] != null" :danger-text="errors['edoc_file:app_id']" />
+								<!-- <vs-input v-model="item['edoc_file:app_id']" :danger="errors['edoc_file:app_id'] != null" :danger-text="errors['edoc_file:app_id']" /> -->
+								<vs-select v-model="item['edoc_file:app_id']" :danger="errors['edoc_file:app_id'] != null" :danger-text="errors['edoc_file:app_id']">
+									<vs-select-item v-for="(user, index) in app_users" :key="index" :value="user['user:user_id']" :text="user['user:user_id']"></vs-select-item>
+								</vs-select>
                             </div>
                         </div>
                     </div>
@@ -216,6 +235,7 @@
 <script>
 import axios from 'axios'
 import comm_cd from '@/services/comm_cd'
+import user from '@/services/user'
 import api from '@/services/edoc_file'
 import {mapActions} from 'vuex';
 import FileSelect from '@/layouts/components/FileSelect.vue'
@@ -237,7 +257,7 @@ export default {
 				'edoc_file:doc_appdata': null,
 				'edoc_file:period_cd': null,
 				'edoc_file:period_nm': null,
-				'edoc_file:period_data': null,
+				'edoc_file:period_data': [],
 				'edoc_file:use_yn': null,
 				'edoc_file:work_id': null,
 				'edoc_file:app_id': null,
@@ -260,11 +280,22 @@ export default {
 				'edoc_file:upd_dtm': null,
 			},
 			items: [],
+			work_users: [],
+			app_users: [],
 			searchNm: null,
 			searchType: null,
 			searchUseYn: null,
 			types: [],
 			periods: [],
+			periodEdDays: [
+				{text: '월', value: 0},
+				{text: '화', value: 1},
+				{text: '수', value: 2},
+				{text: '목', value: 3},
+				{text: '금', value: 4},
+				{text: '토', value: 5},
+				{text: '일', value: 6},
+			],
 			pagination: {
 				page: 1,
 				limit: 15,
@@ -320,7 +351,7 @@ export default {
 				'edoc_file:doc_appdata': null,
 				'edoc_file:period_cd': null,
 				'edoc_file:period_nm': null,
-				'edoc_file:period_data': null,
+				'edoc_file:period_data': [],
 				'edoc_file:use_yn': null,
 				'edoc_file:work_id': null,
 				'edoc_file:app_id': null,
@@ -376,7 +407,40 @@ export default {
 			this.clearErrors()
 			this.spinner()
 
-			// 
+			api.put(this.item['edoc_file:doc_id'], this.item).then((res) => {
+				this.spinner(false)
+
+				if (res.data.success) {
+					this.$vs.notify({
+						title: this.$t('SuccessSaveData'),
+						position: 'top-right',
+						color: 'success',
+						text: res.data.message,
+					})
+					this.query()
+					this.clear()
+				} else {
+					this.$vs.notify({
+						title: this.$t('Error'),
+						position: 'top-right',
+						color: 'warning',
+						iconPack: 'feather',
+        				icon:'icon-alert-circle',
+						text: res.data.message,
+					})
+				}
+			}).catch((err) => {
+				this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
+				this.spinner(false)
+				this.$vs.notify({
+					title: this.$t('Error'),
+					position: 'top-right',
+					color: 'warning',
+					iconPack: 'feather',
+					icon:'icon-alert-circle',
+					text: err.response.data.message,
+				})
+			})
 		},
 
 		query () {
@@ -446,15 +510,38 @@ export default {
                 accept: () => this.save()
             })
 		},
+
+		selectedEdHas(ed) {
+			let parsed = '' + ed
+            return this.item['edoc_file:period_data'].includes('' + parsed)
+        },
+
+		toggleEd(ed) {
+			let parsed = '' + ed
+            if (!this.selectedEdHas(parsed)) {
+                this.item['edoc_file:period_data'].push(parsed)
+            } else {
+                let index = this.item['edoc_file:period_data'].indexOf(parsed)
+                this.item['edoc_file:period_data'].splice(index, 1)
+            }
+        },
 	},
 
 	created () {
-		comm_cd.fetch({cd1: 'A35'}).then((res) => {
+		comm_cd.fetch({cd1: 'A40'}).then((res) => {
             this.types = res.data
 		})
 		
 		comm_cd.fetch({cd1: 'A50'}).then((res) => {
             this.periods = res.data
+		})
+		
+		user.fetch({appr_cd: '10', limit: -1}).then((res) => {
+            this.work_users = res.data.data
+		})
+
+		user.fetch({appr_cd: '20', limit: -1}).then((res) => {
+            this.app_users = res.data.data
         })
 	}
 }

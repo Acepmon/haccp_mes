@@ -19,13 +19,13 @@ class CommCdController extends Controller
             if ($this->getCodeListExists()) {
                 $items = DB::select('select haccp_mes.get_codename(?, ?) as comm2_nm', [$cd1, $cd2]);
             } else {
-                $items = CommCd::select('comm2_cd', 'comm2_nm')->where('comm1_cd', $cd1)->where('comm2_cd', $cd2)->get();
+                $items = CommCd::select('comm2_cd', 'comm2_nm')->where('comm1_cd', $cd1)->whereNotIn('comm2_cd', ['$$'])->where('comm2_cd', $cd2)->get();
             }
         } else {
             if ($this->getCodeListExists()) {
                 $items = DB::select('call haccp_mes.get_codelist(?)', [$cd1]);
             } else {
-                $items = CommCd::select('comm2_cd', 'comm2_nm')->where('comm1_cd', $cd1)->get();
+                $items = CommCd::select('comm2_cd', 'comm2_nm')->where('comm1_cd', $cd1)->whereNotIn('comm2_cd', ['$$'])->get();
             }
         }
 

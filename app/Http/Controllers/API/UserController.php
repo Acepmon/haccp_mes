@@ -26,6 +26,10 @@ class UserController extends Controller
         $sort = $request->input('sort', 'reg_dtm');
         $order = $request->input('order', 'asc');
 
+        if ($request->has('appr_cd')) {
+            $items = $items->where('APPR_CD', $request->input('appr_cd'));
+        }
+
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();
         } else {
