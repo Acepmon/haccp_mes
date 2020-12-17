@@ -71,7 +71,7 @@
                                 <span class="pt-2">보건증갱신일자</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-								<flat-pickr style="width: 100px;" class="text-center" :config="configdateTimePicker" v-model="worker['worker:health_chk_dt']"></flat-pickr>
+								<flat-pickr style="width: 120px;" class="text-center" :config="configdateTimePicker" v-model="worker['worker:health_chk_dt']"></flat-pickr>
 								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['worker:health_chk_dt'] != null">
 									<span class="span-text-validation" v-text="errors['worker:health_chk_dt']"></span>
 								</div>

@@ -9,7 +9,7 @@
 								<span class="pt-2">문서이름</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-input v-model="searchNm"/>
+                                <vs-input v-model="searchNm" style="width: 150px;" />
                             </div>
                         </div>
                     </div>
@@ -19,7 +19,7 @@
                                 <span class="pt-2">업무종류</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-                                <vs-select v-model="searchType">
+                                <vs-select v-model="searchType" style="width: 150px;">
 									<vs-select-item v-for="(type, index) in types" :key="index" :value="type.comm2_cd" :text="type.comm2_nm"></vs-select-item>
 								</vs-select>
                             </div>
@@ -30,17 +30,17 @@
                             <div class="vx-col sm:w-1/3 w-full flex justify-end">
                                 <span class="pt-2">사용구분</span>
                             </div>
-                            <div class="vx-col sm:w-2/3 w-full">
+                            <div class="vx-col sm:w-2/3 w-full flex flex-row">
                                 <vs-select v-model="searchUseYn">
 									<vs-select-item value="Y" text="Y"></vs-select-item>
 									<vs-select-item value="N" text="N"></vs-select-item>
 								</vs-select>
+								<vs-button @click="query()" class="mx-1 flex-shrink-0" color="dark" type="border">{{ $t('Query') }}</vs-button>
                             </div>
                         </div>
                     </div>
 				</div>
 				<div class="w-full sm:w-1/3 px-1 flex justify-end" style="position: relative;">
-					<vs-button @click="query()" class="mx-1 py-4 justify-self-start" color="dark" type="border" style="position: absolute; left: 0;">{{ $t('Query') }}</vs-button>
 					<vs-button @click="saveDialog()" class="mx-1" color="dark" type="border" :disabled="!item['edoc_file:doc_id']">{{ $t('Save') }}</vs-button>
 					<vs-button @click="closeDialog()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
 				</div>

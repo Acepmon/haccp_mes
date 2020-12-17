@@ -2,7 +2,7 @@
 	<div>
 		<vx-card id="div-with-loading" class="vs-con-loading__container">
 			<div class="flex flex-wrap mb-2">
-				<div class="w-full sm:w-1/2 px-1 flex justify-end">
+				<div class="w-full sm:w-2/3 px-1 flex justify-end">
 					<div class="w-full sm:w-1/2 px-1">
                         <div class="vx-row mb-2">
                             <div class="vx-col sm:w-1/3 w-full flex justify-end">
@@ -21,20 +21,20 @@
                             <div class="vx-col sm:w-1/3 w-full flex justify-end">
                                 <span class="pt-2">문서종류</span>
                             </div>
-                            <div class="vx-col sm:w-2/3 w-full">
+                            <div class="vx-col sm:w-2/3 w-full flex flex-row">
                                 <vs-select v-model="searchType">
 									<vs-select-item v-for="(type, index) in types" :key="index" :value="type.comm2_cd" :text="type.comm2_nm"></vs-select-item>
 								</vs-select>
+								<vs-button @click="query()" class="mx-1 px-4 flex-shrink-0" color="dark" type="border">{{ $t('Query') }}</vs-button>
                             </div>
                         </div>
                     </div>
 				</div>
-				<div class="w-full sm:w-1/2 px-1 flex justify-end" style="position: relative;">
-					<vs-button @click="query()" class="mx-1 py-4 justify-self-start" color="dark" type="border" style="position: absolute; left: 0;">{{ $t('Query') }}</vs-button>
-					<vs-button @click="addDialog()" class="mx-1" color="dark" type="border">{{ $t('Add') }}</vs-button>
-					<vs-button @click="saveDialog()" class="mx-1" color="dark" type="border">{{ $t('Save') }}</vs-button>
-					<vs-button @click="removeDialog()" class="mx-1" color="dark" type="border">{{ $t('Delete') }}</vs-button>
-					<vs-button @click="closeDialog()" class="mx-1" color="dark" type="border">{{ $t('Close') }}</vs-button>
+				<div class="w-full sm:w-1/3 px-1 flex justify-end" style="position: relative;">
+					<vs-button @click="addDialog()" class="mx-1 px-4 flex-shrink-0" color="dark" type="border">{{ $t('Add') }}</vs-button>
+					<vs-button @click="saveDialog()" class="mx-1 px-4 flex-shrink-0" color="dark" type="border">{{ $t('Save') }}</vs-button>
+					<vs-button @click="removeDialog()" class="mx-1 px-4 flex-shrink-0" color="dark" type="border">{{ $t('Delete') }}</vs-button>
+					<vs-button @click="closeDialog()" class="mx-1 px-4 flex-shrink-0" color="dark" type="border">{{ $t('Close') }}</vs-button>
 				</div>
 			</div>
 

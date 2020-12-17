@@ -33,7 +33,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 개정일자</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-								<flat-pickr style="width: 100px;" class="text-center" :config="configdateTimePicker" v-model="haccp_mst_file['haccp_mst_file:rev_dt']"></flat-pickr>
+								<flat-pickr style="width: 120px;" class="text-center" :config="configdateTimePicker" v-model="haccp_mst_file['haccp_mst_file:rev_dt']"></flat-pickr>
 								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['haccp_mst_file:rev_dt'] != null">
 									<span class="span-text-validation" v-text="errors['haccp_mst_file:rev_dt']"></span>
 								</div>

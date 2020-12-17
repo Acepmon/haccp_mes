@@ -9,11 +9,11 @@
 								<span class="pt-2">기간</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full flex">
-                                <flat-pickr style="width: 100px;" class="text-center flex-shrink-0" :config="configdateTimePicker" v-model="searchFrom"></flat-pickr>
+                                <flat-pickr style="width: 120px;" class="text-center flex-shrink-0" :config="configdateTimePicker" v-model="searchFrom"></flat-pickr>
 
 								<span class="mx-5 flex justify-center content-center flex-shrink-0">~</span>
 
-                            	<flat-pickr style="width: 100px;" class="text-center flex-shrink-0" :config="configdateTimePicker" v-model="searchTo"></flat-pickr>
+                            	<flat-pickr style="width: 120px;" class="text-center flex-shrink-0" :config="configdateTimePicker" v-model="searchTo"></flat-pickr>
 
 								<vs-button @click="query()" class="ml-5 flex-shrink-0" color="dark" type="border">{{ $t('Query') }}</vs-button>
                             </div>
@@ -49,7 +49,7 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 문서종류</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full">
-								<flat-pickr style="width: 100px;" class="text-center" :config="configdateTimePicker" v-model="item['secu_doc_mgmt:doc_dt']"></flat-pickr>
+								<flat-pickr style="width: 120px;" class="text-center" :config="configdateTimePicker" v-model="item['secu_doc_mgmt:doc_dt']"></flat-pickr>
 								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['secu_doc_mgmt:doc_dt'] != null">
 									<span class="span-text-validation" v-text="errors['secu_doc_mgmt:doc_dt']"></span>
 								</div>
@@ -65,14 +65,14 @@
                                 <span class="pt-2"><span class="text-danger">*</span> 기간</span>
                             </div>
                             <div class="vx-col sm:w-2/3 w-full flex">
-								<flat-pickr style="width: 100px;" class="text-center" :config="configdateTimePicker" v-model="item['secu_doc_mgmt:from_dt']"></flat-pickr>
+								<flat-pickr style="width: 120px;" class="text-center" :config="configdateTimePicker" v-model="item['secu_doc_mgmt:from_dt']"></flat-pickr>
 								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['secu_doc_mgmt:from_dt'] != null">
 									<span class="span-text-validation" v-text="errors['secu_doc_mgmt:from_dt']"></span>
 								</div>
 
 								<span class="mx-5 flex justify-center content-center">~</span>
 
-								<flat-pickr style="width: 100px;" class="text-center" :config="configdateTimePicker" v-model="item['secu_doc_mgmt:to_dt']"></flat-pickr>
+								<flat-pickr style="width: 120px;" class="text-center" :config="configdateTimePicker" v-model="item['secu_doc_mgmt:to_dt']"></flat-pickr>
 								<div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['secu_doc_mgmt:to_dt'] != null">
 									<span class="span-text-validation" v-text="errors['secu_doc_mgmt:to_dt']"></span>
 								</div>
