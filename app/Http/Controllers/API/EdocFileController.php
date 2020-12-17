@@ -131,6 +131,10 @@ class EdocFileController extends Controller
 
     public function download(Request $request)
     {
-        return Excel::download(new EdocFileExport(), 'EDOC-FILE-' . now()->format('Y-m-d') . '.xlsx');
+        $docNm = $request->input('doc_nm');
+        $typeCd = $request->input('type_cd');
+        $useYn = $request->input('use_yn');
+
+        return Excel::download(new EdocFileExport($docNm, $typeCd, $useYn), 'EDOC-FILE-' . now()->format('Y-m-d') . '.xlsx');
     }
 }

@@ -484,7 +484,21 @@ export default {
 		},
 
 		excel () {
-			window.location.href = api.downloadUrl()
+			let search_params = {};
+
+			if (this.searchNm != null) {
+				search_params['doc_nm'] = this.searchNm
+			}
+
+			if (this.searchType != null) {
+				search_params['type_cd'] = this.searchType
+			}
+
+			if (this.searchUseYn != null) {
+				search_params['use_yn'] = this.searchUseYn
+			}
+
+			window.location.href = api.downloadUrl(search_params)
 		},
 
 		closeDialog () {

@@ -187,6 +187,15 @@ return [
         'doc_mgmt:doc_desc' => '설명(제품명)',
         'doc_mgmt:att' => '첨부화일',
 
+        'edoc_file:type_cd' => '업무종류',
+        'edoc_file:doc_nm' => '문서이름',
+        'edoc_file:doc_desc' => '문서내용',
+        'edoc_file:period_cd' => '업무처리주기',
+        'edoc_file:period_data' => 'Period Data',
+        'edoc_file:use_yn' => '사용구분',
+        'edoc_file:work_id' => '작업자',
+        'edoc_file:app_id' => '승인자',
+
         'secu_doc_mgmt:doc_nm' => '문서이름',
         'secu_doc_mgmt:doc_dt' => '보고서작성일',
         'secu_doc_mgmt:from_dt' => '기간',

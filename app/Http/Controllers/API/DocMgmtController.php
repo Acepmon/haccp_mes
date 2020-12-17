@@ -233,7 +233,11 @@ class DocMgmtController extends Controller
 
     public function download(Request $request)
     {
-        return Excel::download(new DocMgmtExport(), 'DOC-MGMT-' . now()->format('Y-m-d') . '.xlsx');
+        $docNm = $request->input('doc_nm');
+        $docDesc = $request->input('doc_desc');
+        $typeCd = $request->input('type_cd');
+
+        return Excel::download(new DocMgmtExport($docNm, $docDesc, $typeCd), 'DOC-MGMT-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     public function downloadAttFile(Request $request, $docId, $attSeq)

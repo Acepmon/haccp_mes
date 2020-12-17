@@ -489,7 +489,17 @@ export default {
 		},
 
 		excel () {
-			window.location.href = api.downloadUrl()
+			let search_params = {};
+
+			if (this.searchKeyword != null) {
+				search_params[this.searchBy] = this.searchKeyword
+			}
+
+			if (this.searchType != null) {
+				search_params['type_cd'] = this.searchType
+			}
+
+			window.location.href = api.downloadUrl(search_params)
 		},
 
 		closeDialog () {

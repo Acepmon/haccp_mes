@@ -504,7 +504,17 @@ export default {
 		},
 
 		excel () {
-			window.location.href = api.downloadUrl()
+			let search_params = {};
+
+			if (this.searchFrom != null) {
+				search_params['from_dt'] = this.searchFrom
+			}
+
+			if (this.searchTo != null) {
+				search_params['to_dt'] = this.searchTo
+			}
+
+			window.location.href = api.downloadUrl(search_params)
 		},
 
 		closeDialog () {

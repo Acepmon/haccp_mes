@@ -11,12 +11,37 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class EdocFileExport implements FromCollection, WithHeadings, WithStyles, WithMapping
 {
+    public $docNm, $typeCd, $useYn;
+
+    public function __construct($docNm, $typeCd, $useYn)
+    {
+        $this->docNm = $docNm;
+        $this->typeCd = $typeCd;
+        $this->useYn = $useYn;
+    }
+
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return EdocFile::orderBy('DOC_ID', 'asc')->get();
+        $items = EdocFile::query();
+
+        if (!empty($this->docNm)) {
+            $items = $items->where('doc_nm', 'LIKE', '%'.$this->docNm.'%');
+        }
+
+        if (!empty($this->typeCd)) {
+            $items = $items->where('type_cd', $this->typeCd);
+        }
+
+        if (!empty($this->useYn)) {
+            $items = $items->where('use_yn', $this->useYn);
+        }
+
+        $items = $items->orderBy('DOC_ID', 'asc');
+
+        return $items->get();
     }
 
     public function map($edocFile): array
@@ -24,9 +49,9 @@ class EdocFileExport implements FromCollection, WithHeadings, WithStyles, WithMa
         return [
             $edocFile->DOC_ID,
             $edocFile->DOC_NM,
-            $edocFile->type->COMM2_NM,
+            ($edocFile->type ? $edocFile->type->COMM2_NM : null),
             $edocFile->DOC_CONTENT,
-            $edocFile->period->COMM2_NM,
+            ($edocFile->period ? $edocFile->period->COMM2_NM : null),
             $edocFile->USE_YN,
             $edocFile->WORK_ID,
             $edocFile->APP_ID,

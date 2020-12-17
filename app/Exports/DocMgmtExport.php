@@ -11,12 +11,37 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class DocMgmtExport implements FromCollection, WithHeadings, WithStyles, WithMapping
 {
+    public $docNm, $docDesc, $typeCd;
+
+    public function __construct($docNm, $docDesc, $typeCd)
+    {
+        $this->docNm = $docNm;
+        $this->docDesc = $docDesc;
+        $this->typeCd = $typeCd;
+    }
+
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return DocMgmt::orderBy('REG_DTM', 'desc')->get();
+        $items = DocMgmt::query();
+
+        if (!empty($this->docNm)) {
+            $items = $items->where('doc_nm', 'LIKE', '%'.$this->docNm.'%');
+        }
+
+        if (!empty($this->docDesc)) {
+            $items = $items->where('doc_desc', 'LIKE', '%'.$this->docDesc.'%');
+        }
+
+        if (!empty($this->typeCd)) {
+            $items = $items->where('type_cd', $this->typeCd);
+        }
+
+        $items = $items->orderBy('REG_DTM', 'desc');
+
+        return $items->get();
     }
 
     public function map($docMgmt): array

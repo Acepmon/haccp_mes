@@ -232,7 +232,10 @@ class SecuDocMgmtController extends Controller
 
     public function download(Request $request)
     {
-        return Excel::download(new SecuDocMgmtExport(), 'SECU-DOC-MGMT-' . now()->format('Y-m-d') . '.xlsx');
+        $fromDt = $request->input('from_dt');
+        $toDt = $request->input('to_dt');
+
+        return Excel::download(new SecuDocMgmtExport($fromDt, $toDt), 'SECU-DOC-MGMT-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     public function downloadAttFile(Request $request, $docId, $attSeq)

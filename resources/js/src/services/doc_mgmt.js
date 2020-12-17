@@ -65,8 +65,8 @@ export default {
         return axios.get(`${config.baseUrl}/${this.api}/download`, params)
     },
 
-    downloadUrl: function () {
-        return `${config.baseUrl}/${this.api}/download`
+    downloadUrl: function (params) {
+        return `${config.baseUrl}/${this.api}/download?${this.prepParams(params)}`
     },
 
     // Create url query parameters for API request

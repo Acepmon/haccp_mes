@@ -11,12 +11,32 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class SecuDocMgmtExport implements FromCollection, WithHeadings, WithStyles, WithMapping
 {
+    public $fromDt, $toDt;
+
+    public function __construct($fromDt, $toDt)
+    {
+        $this->fromDt = $fromDt;
+        $this->toDt = $toDt;
+    }
+
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return SecuDocMgmt::orderBy('REG_DTM', 'desc')->get();
+        $items = SecuDocMgmt::query();
+
+        if (!empty($this->fromDt)) {
+            $items = $items->where('from_dt', now()->parse($this->fromDt)->format('Ymd'));
+        }
+
+        if (!empty($this->toDt)) {
+            $items = $items->where('to_dt', now()->parse($this->toDt)->format('Ymd'));
+        }
+
+        $items = $items->orderBy('REG_DTM', 'desc');
+
+        return $items->get();
     }
 
     public function map($secuDocMgmt): array
