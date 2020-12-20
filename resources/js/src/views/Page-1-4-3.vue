@@ -418,7 +418,7 @@ export default {
 						text: res.data.message,
 					})
 					this.query()
-					this.clear()
+					// this.clear()
 				} else {
 					this.$vs.notify({
 						title: this.$t('Error'),

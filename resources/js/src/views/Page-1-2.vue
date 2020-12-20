@@ -409,7 +409,7 @@ export default {
                                 text: res.data.message
                             })
                             this.query()
-                            this.clear()
+                            // this.clear()
                         }
                     }).catch((err) => {
                         this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
@@ -449,7 +449,7 @@ export default {
                                 text: res.data.message
                             })
                             this.query()
-                            this.clear()
+                            // this.clear()
                         }
                     }).catch((err) => {
                         this.displayErrors(err.response.data.hasOwnProperty('errors') ? err.response.data.errors : null)
