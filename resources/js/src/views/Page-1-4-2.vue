@@ -23,6 +23,7 @@
                             </div>
                             <div class="vx-col sm:w-2/3 w-full flex flex-row">
                                 <vs-select v-model="searchType">
+									<vs-select-item value="" text=" "></vs-select-item>
 									<vs-select-item v-for="(type, index) in types" :key="index" :value="type.comm2_cd" :text="type.comm2_nm"></vs-select-item>
 								</vs-select>
 								<vs-button @click="query()" class="mx-1 px-4 flex-shrink-0" color="dark" type="border">{{ $t('Query') }}</vs-button>
