@@ -43,7 +43,8 @@ Route::group([
     Route::apiResource('login_hist', 'LoginHistController');
 
     Route::get('code', 'CommCdController@code')->name('code');
-    // Route::apiResource('comm_cd', 'CommCdController')->except(['show', 'store', 'destroy', 'update']);
+    Route::post('comm_cd/{comm1cd}/sync', 'CommCdController@sync');
+    Route::apiResource('comm_cd', 'CommCdController')->except(['show', 'store', 'destroy', 'update']);
 
     Route::apiResource('comp_info', 'CompInfoController')->except(['show', 'update']);
 

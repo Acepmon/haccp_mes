@@ -40,13 +40,20 @@ class CommCdController extends Controller
     public function index(Request $request)
     {
         $limit = $request->input('limit', 15);
-        $paginate = $request->input('paginate', true);
         $items = CommCd::query();
 
-        if ($paginate) {
-            $items = $items->paginate($limit);
-        } else {
+        if ($request->has('comm1_cd')) {
+            $items = $items->where('COMM1_CD', $request->input('comm1_cd'))->whereNotIn('COMM2_CD', ['$$']);
+        }
+
+        if ($request->has('comm2_nm')) {
+            $items = $items->where('COMM2_NM', 'LIKE', '%'.$request->input('comm2_nm').'%')->whereIn('COMM2_CD', ['$$']);
+        }
+
+        if ($limit == -1) {
             $items = $items->get();
+        } else {
+            $items = $items->paginate($limit);
         }
 
         return CommCdResource::collection($items);
@@ -58,6 +65,15 @@ class CommCdController extends Controller
 
     private function getCodeNameExists() {
         return DB::table('information_schema.ROUTINES')->where('ROUTINE_SCHEMA', config('database.connections.mysql.database'))->where('ROUTINE_NAME', 'get_codename')->exists();
+    }
+
+    public function sync(Request $request, $comm1cd)
+    {
+        $items = CommCd::query();
+
+        $items = $items->where('COMM1_CD', $comm1cd)->whereNotIn('COMM2_CD', ['$$']);
+
+        return CommCdResource::collection($items->get());
     }
 
     /**
