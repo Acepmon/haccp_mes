@@ -155,8 +155,8 @@ const router = new Router({
               },
               {
                 path: '/7/1',
-                name: '정보보호관리',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/7/1', value: 'page-7-1', label: '정보보호관리', component: 'page-7-1'}) } }
+                name: '공통코드 관리',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/7/1', value: 'page-7-1', label: '공통코드 관리', component: 'page-7-1'}) } }
               },
               {
                 path: '/profile',

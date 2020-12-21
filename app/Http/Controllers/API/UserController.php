@@ -146,6 +146,44 @@ class UserController extends Controller
 
     public function download(Request $request)
     {
-        return Excel::download(new UserExport(), 'USER:' . now()->format('Y-m-d') . '.xlsx');
+        $filename = 'USER:' . now()->format('Y-m-d') . '.xlsx';
+        return Excel::download(new UserExport(), $filename);
+    }
+
+    public function password(Request $request, $userId)
+    {
+        $item = User::where('USER_ID', $userId)->first();
+
+        if (!$item) {
+            return response()->json([
+                'success' => false,
+                'message' => __('User data not found')
+            ]);
+        }
+
+        $request->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|confirmed',
+        ]);
+
+        $oldpw = $request->input('old_password');
+        $newpw = $request->input('new_password');
+
+        if (Hash::check($oldpw, $item->USER_PW)) {
+            $item->USER_PW = Hash::make($newpw);
+            $item->save();
+        } else {
+            return response()->json([
+                'errors' => [
+                    'old_password' => ['Old password was incorrect.']
+                ],
+                'message' => __('The given data was invalid.')
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'result' => new UserResource($item),
+        ]);
     }
 }

@@ -4,6 +4,13 @@
       <div class="w-full sm:w-1/2 px-1 flex justify-end"></div>
       <div class="w-full sm:w-1/2 px-1 flex justify-end">
         <vs-button
+          @click="query()"
+          class="mx-1"
+          color="dark"
+          type="border"
+          >{{ $t("Query") }}</vs-button
+        >
+        <vs-button
           @click="saveDialog()"
           class="mx-1"
           color="dark"
@@ -20,26 +27,64 @@
       </div>
     </div>
 
-    <!-- Img Row -->
-    <div class="flex flex-wrap items-center mb-base">
-      <vs-avatar :src="activeUserInfo.photoURL" size="70px" class="mr-4 mb-4" />
-      <div>
-        <vs-button class="mr-4 sm:mb-0 mb-2">Upload photo</vs-button>
-        <vs-button type="border" color="danger">Remove</vs-button>
-        <p class="text-sm mt-2">Allowed JPG, GIF or PNG. Max size of 800kB</p>
+    <form action="#">
+      <!-- Row 1 -->
+      <div class="flex flex-wrap">
+        <div class="w-full sm:w-1/2 px-1">
+          <div class="vx-row mb-2">
+            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+              <span class="pt-2"
+                ><span class="text-danger">*</span> 휴대폰번호(ID)</span
+              >
+            </div>
+            <div class="vx-col sm:w-2/3 w-full">
+              <vs-input
+                v-model="item['user:user_id']"
+                :danger="errors['user:user_id'] != null"
+                :danger-text="errors['user:user_id']"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full sm:w-1/2 px-1">
+          <div class="vx-row mb-2">
+            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+              <span class="pt-2"><span class="text-danger">*</span> 이름</span>
+            </div>
+            <div class="vx-col sm:w-2/3 w-full">
+              <vs-input
+                v-model="item['user:user_nm']"
+                :danger="errors['user:user_nm'] != null"
+                :danger-text="errors['user:user_nm']"
+              />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+      <!-- /row 1 -->
 
-    <!-- Info -->
-    <vs-input class="w-full mb-base" label-placeholder="Username" v-model="username"></vs-input>
-    <vs-input class="w-full mb-base" label-placeholder="Name" v-model="name"></vs-input>
-    <vs-input class="w-full" label-placeholder="Email" v-model="email"></vs-input>
+      <!-- Row 2 -->
+      <div class="flex flex-wrap">
+        <div class="w-full sm:w-1/2 px-1">
+          <div class="vx-row mb-2">
+            <div class="vx-col sm:w-1/3 w-full flex justify-end">
+              <span class="pt-2">이메일</span>
+            </div>
+            <div class="vx-col sm:w-2/3 w-full">
+              <vs-input
+                v-model="item['user:email']"
+                :danger="errors['user:email'] != null"
+                :danger-text="errors['user:email']"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /row 2 -->
+    </form>
 
-    <vs-alert icon-pack="feather" icon="icon-info" class="h-full my-4" color="warning">
-      <span>Your account is not verified. <a href="#" class="hover:underline">Resend Confirmation</a></span>
-    </vs-alert>
-
-    <vs-input class="w-full my-base" label-placeholder="Company" v-model="company"></vs-input>
   </vx-card>
 </template>
 
@@ -49,18 +94,26 @@ import api from "@/services/user";
 import { mapActions } from "vuex";
 
 export default {
-  data () {
+  data() {
     return {
-      username: 'johny_01',
-      name: this.$store.state.AppActiveUser.displayName,
-      email: 'john@admin.com',
-      company: 'SnowMash Technologies Pvt Ltd'
-    }
+      item: {
+        "user:user_id": null,
+        "user:user_nm": null,
+        "user:email": null,
+      },
+      errors: {
+        "user:user_id": null,
+        "user:user_nm": null,
+        "user:email": null,
+      },
+    };
   },
   computed: {
-    activeUserInfo () {
-      return this.$store.state.AppActiveUser
-    }
+    activeUserInfo() {
+      let loggedIn = localStorage.getItem('loggedIn')
+      let json = JSON.parse(loggedIn)
+      return json;
+    },
   },
   methods: {
     ...mapActions({
@@ -79,28 +132,18 @@ export default {
     },
 
     clear() {
-      this.$set(this, "worker", {
-        worker_id: null,
-        worker_nm: null,
-        tel_no: null,
-        work_cd: null,
-        health_chk_dt: null,
-        role_cd: null,
-        remark: null,
-        reg_id: null,
-        reg_dtm: null,
+      this.$set(this, "item", {
+        "user:user_id": null,
+        "user:user_nm": null,
+        "user:email": null,
       });
     },
 
     clearErrors() {
       this.$set(this, "errors", {
-        worker_id: null,
-        worker_nm: null,
-        tel_no: null,
-        work_cd: null,
-        health_chk_dt: null,
-        role_cd: null,
-        remark: null,
+        "user:user_id": null,
+        "user:user_nm": null,
+        "user:email": null,
       });
     },
 
@@ -108,6 +151,22 @@ export default {
       for (const [key, value] of Object.entries(errors)) {
         this.$set(this.errors, key, Array.isArray(value) ? value[0] : value);
       }
+    },
+
+    query () {
+      let loggedIn = localStorage.getItem('loggedIn')
+      let json = JSON.parse(loggedIn)
+      axios.get('/sanctum/csrf-cookie').then(() => {
+        axios.get('/api/auth/user').then((res) => {
+          this.$set(this.item, 'user:user_id', res.data.data.USER_ID)
+          this.$set(this.item, 'user:user_nm', res.data.data.USER_NM)
+          this.$set(this.item, 'user:email', res.data.data.EMAIL)
+        })
+      })
+    },
+
+    save () {
+      // 
     },
 
     closeDialog() {
@@ -132,7 +191,11 @@ export default {
         cancelText: this.$t("Cancel"),
         accept: () => this.save(),
       });
-    },
+    }
+  },
+
+  created () {
+    this.query()
   }
-}
+};
 </script>

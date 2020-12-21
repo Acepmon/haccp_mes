@@ -38,6 +38,7 @@ Route::group([
     // 'middleware' => 'auth:sanctum',
 ], function () {
     Route::get('user/download', 'UserController@download')->name('user.download');
+    Route::put('user/{userId}/password', 'UserController@password')->name('user.password');
     Route::apiResource('user', 'UserController');
 
     Route::apiResource('login_hist', 'LoginHistController');

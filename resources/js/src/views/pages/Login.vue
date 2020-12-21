@@ -112,7 +112,7 @@ export default{
           if (res.data.success) {
             this.resError = false
 
-            localStorage.setItem('loggedIn', res.data.result)
+            localStorage.setItem('loggedIn', JSON.stringify(res.data.result))
 
             this.$router.push({path: '/'})
           } else {

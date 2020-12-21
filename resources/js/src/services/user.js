@@ -70,6 +70,17 @@ export default {
         return `${config.baseUrl}/${this.api}/download`
     },
 
+    password: function (id, args = {}) {
+
+        // Default parameters
+        let params = {
+            _method: 'PUT',
+            ...args
+        }
+
+        return axios.post(`${config.baseUrl}/${this.api}/${id}/password`, params)
+    },
+
     // Create url query parameters for API request
     prepParams(data) {
         const ret = [];
