@@ -37,6 +37,10 @@
 
         <notification-drop-down /> -->
 
+        <vs-navbar-item>
+          <router-link to="/profile">Hi Administrator</router-link>
+        </vs-navbar-item>
+
         <profile-drop-down />
 
         <vs-navbar-item index="0" class="ml-5 text-danger cursor-pointer">
@@ -94,7 +98,7 @@ export default {
     },
 
     menuItemsUpdated () {
-      const clone = navMenuItems.slice()
+      const clone = navMenuItems.slice().filter(item => !item.hideMenu)
 
       for (const [index, item] of navMenuItems.entries()) {
         if (item.header && item.items.length && (index || 1)) {

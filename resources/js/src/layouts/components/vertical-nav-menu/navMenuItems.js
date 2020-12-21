@@ -359,5 +359,26 @@ export default [
         showSubmenuOn: '/7',
       }
     ]
+  },
+  {
+    url: "/profile",
+    name: "Profile",
+    slug: "Profile",
+    showSubmenuOn: '/profile',
+    hideMenu: true,
+    submenu: [
+      {
+        url: "/profile/general",
+        name: "Profile General",
+        slug: "Profile General",
+        showSubmenuOn: '/profile',
+      },
+      {
+        url: "/profile/password",
+        name: "Change Password",
+        slug: "Change Password",
+        showSubmenuOn: '/profile',
+      }
+    ]
   }
 ]

@@ -158,7 +158,21 @@ const router = new Router({
                 name: '정보보호관리',
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/7/1', value: 'page-7-1', label: '정보보호관리', component: 'page-7-1'}) } }
               },
-
+              {
+                path: '/profile',
+                name: 'Profile',
+                redirect: '/profile/general'
+              },
+              {
+                path: '/profile/general',
+                name: 'Profile General',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/general', value: 'profile-general', label: 'Profile General', component: 'profile-general'}) } }
+              },
+              {
+                path: '/profile/password',
+                name: 'Change Password',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/password', value: 'profile-password', label: 'Change Password', component: 'profile-password'}) } }
+              },
               {
                 path: '/user-entry',
                 name: 'User Entry',

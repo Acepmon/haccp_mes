@@ -1,9 +1,9 @@
 <template>
   <div class="the-navbar__user-meta flex items-center" v-if="activeUserInfo.displayName">
 
-    <div class="text-right leading-tight hidden sm:block">
+    <!-- <div class="text-right leading-tight hidden sm:block">
       <p class="font-semibold">Hi {{ activeUserInfo.displayName }}</p>
-    </div>
+    </div> -->
 
     <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
 
