@@ -417,6 +417,14 @@ export default {
         sort: "upd_dtm",
         order: "desc",
       },
+      required: {
+        'edoc_file:type_cd': '업무종류',
+        'edoc_file:doc_nm': '문서이름',
+        'edoc_file:period_cd': '업무처리주기',
+        'edoc_file:use_yn': '사용구분',
+        'edoc_file:work_id': '작업자',
+        'edoc_file:app_id': '승인자',
+      }
     };
   },
 
@@ -440,6 +448,26 @@ export default {
     ...mapActions({
       removeTab: "mdn/removeTab",
     }),
+
+    validateRequired() {
+      let passed = true
+      for (const [key, value] of Object.entries(this.required)) {
+        if (Array.isArray(this.item[key])) {
+          if (this.item[key] === undefined || this.item[key].length == 0) {
+            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            passed = false
+          }
+        } else {
+          if (this.item[key]) {
+          } else {
+            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            passed = false
+          }
+        }
+      }
+
+      return passed
+    },
 
     spinner(loading = true) {
       if (loading) {
@@ -645,15 +673,17 @@ export default {
     },
 
     saveDialog() {
-      this.$vs.dialog({
-        type: "confirm",
-        color: "success",
-        title: this.$t("Confirmation"),
-        text: this.$t("SaveData"),
-        acceptText: this.$t("Accept"),
-        cancelText: this.$t("Cancel"),
-        accept: () => this.save(),
-      });
+      if (this.validateRequired()) {
+        this.$vs.dialog({
+          type: "confirm",
+          color: "success",
+          title: this.$t("Confirmation"),
+          text: this.$t("SaveData"),
+          acceptText: this.$t("Accept"),
+          cancelText: this.$t("Cancel"),
+          accept: () => this.save(),
+        });
+      }
     },
 
     selectedEdHas(ed) {

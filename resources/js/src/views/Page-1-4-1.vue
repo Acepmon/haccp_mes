@@ -330,6 +330,11 @@ export default {
         sort: "reg_dtm",
         order: "desc",
       },
+      required: {
+        'haccp_mst_file:rev_no': '개정번호',
+        'haccp_mst_file:rev_dt': '개정일자',
+        'haccp_mst_file:att': '첨부화일',
+      }
     };
   },
 
@@ -353,6 +358,26 @@ export default {
     ...mapActions({
       removeTab: "mdn/removeTab",
     }),
+
+    validateRequired() {
+      let passed = true
+      for (const [key, value] of Object.entries(this.required)) {
+        if (Array.isArray(this.haccp_mst_file[key])) {
+          if (this.haccp_mst_file[key] === undefined || this.haccp_mst_file[key].length == 0) {
+            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            passed = false
+          }
+        } else {
+          if (this.haccp_mst_file[key]) {
+          } else {
+            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            passed = false
+          }
+        }
+      }
+
+      return passed
+    },
 
     spinner(loading = true) {
       if (loading) {
@@ -674,27 +699,31 @@ export default {
     },
 
     addDialog() {
-      this.$vs.dialog({
-        type: "confirm",
-        color: "primary",
-        title: this.$t("Confirmation"),
-        text: this.$t("AddData"),
-        acceptText: this.$t("Accept"),
-        cancelText: this.$t("Cancel"),
-        accept: () => this.add(),
-      });
+      if (this.validateRequired()) {
+        this.$vs.dialog({
+          type: "confirm",
+          color: "primary",
+          title: this.$t("Confirmation"),
+          text: this.$t("AddData"),
+          acceptText: this.$t("Accept"),
+          cancelText: this.$t("Cancel"),
+          accept: () => this.add(),
+        });
+      }
     },
 
     saveDialog() {
-      this.$vs.dialog({
-        type: "confirm",
-        color: "success",
-        title: this.$t("Confirmation"),
-        text: this.$t("SaveData"),
-        acceptText: this.$t("Accept"),
-        cancelText: this.$t("Cancel"),
-        accept: () => this.save(),
-      });
+      if (this.validateRequired()) {
+        this.$vs.dialog({
+          type: "confirm",
+          color: "success",
+          title: this.$t("Confirmation"),
+          text: this.$t("SaveData"),
+          acceptText: this.$t("Accept"),
+          cancelText: this.$t("Cancel"),
+          accept: () => this.save(),
+        });
+      }
     },
 
     removeDialog() {

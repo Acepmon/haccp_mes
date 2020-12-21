@@ -390,6 +390,15 @@ export default {
         sort: "reg_dtm",
         order: "desc",
       },
+      required: {
+        'user:user_id': '휴대폰번호(ID)',
+        'user:user_pw': '비밀번호',
+        'user:user_nm': '이름',
+        'user:role_cd': '메뉴접근권한',
+        'user:appr_cd': '담당업무',
+        'user:job_cd': '업무권한',
+        'user:user_sts_yn': '사용여부',
+      }
     };
   },
   computed: {
@@ -420,6 +429,26 @@ export default {
       removeTab: "mdn/removeTab",
     }),
 
+    validateRequired() {
+      let passed = true
+      for (const [key, value] of Object.entries(this.required)) {
+        if (Array.isArray(this.selected[key])) {
+          if (this.selected[key] === undefined || this.selected[key].length == 0) {
+            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            passed = false
+          }
+        } else {
+          if (this.selected[key]) {
+          } else {
+            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            passed = false
+          }
+        }
+      }
+
+      return passed
+    },
+
     rowIndex: function (index) {
       return (
         this.pagination.page * this.pagination.limit -
@@ -431,6 +460,7 @@ export default {
 
     handleSelected: function (tr) {
       this.isSelected = true;
+      this.clearErrors()
     },
 
     handleChangePage(page) {
@@ -517,97 +547,101 @@ export default {
     },
 
     add() {
-      this.$vs.dialog({
-        type: "confirm",
-        color: "primary",
-        title: this.$t("Confirmation"),
-        text: this.$t("AddData"),
-        acceptText: this.$t("Accept"),
-        cancelText: this.$t("Cancel"),
-        accept: () => {
-          this.clearErrors();
-          this.spinner();
-
-          api
-            .post(this.selected)
-            .then((res) => {
-              this.spinner(false);
-              if (res.data.success) {
+      if (this.validateRequired()) {
+        this.$vs.dialog({
+          type: "confirm",
+          color: "primary",
+          title: this.$t("Confirmation"),
+          text: this.$t("AddData"),
+          acceptText: this.$t("Accept"),
+          cancelText: this.$t("Cancel"),
+          accept: () => {
+            this.clearErrors();
+            this.spinner();
+  
+            api
+              .post(this.selected)
+              .then((res) => {
+                this.spinner(false);
+                if (res.data.success) {
+                  this.$vs.notify({
+                    color: "success",
+                    position: "top-right",
+                    title: this.$t("SuccessAddData"),
+                    text: res.data.message,
+                  });
+                  this.query();
+                  // this.clear()
+                }
+              })
+              .catch((err) => {
+                this.displayErrors(
+                  err.response.data.hasOwnProperty("errors")
+                    ? err.response.data.errors
+                    : null
+                );
+                this.spinner(false);
                 this.$vs.notify({
-                  color: "success",
+                  title: this.$t("Error"),
                   position: "top-right",
-                  title: this.$t("SuccessAddData"),
-                  text: res.data.message,
+                  color: "warning",
+                  iconPack: "feather",
+                  icon: "icon-alert-circle",
+                  text: err.response.data.message,
                 });
-                this.query();
-                // this.clear()
-              }
-            })
-            .catch((err) => {
-              this.displayErrors(
-                err.response.data.hasOwnProperty("errors")
-                  ? err.response.data.errors
-                  : null
-              );
-              this.spinner(false);
-              this.$vs.notify({
-                title: this.$t("Error"),
-                position: "top-right",
-                color: "warning",
-                iconPack: "feather",
-                icon: "icon-alert-circle",
-                text: err.response.data.message,
               });
-            });
-        },
-      });
+          },
+        });
+      }
     },
 
     save() {
-      this.$vs.dialog({
-        type: "confirm",
-        color: "success",
-        title: this.$t("Confirmation"),
-        text: this.$t("SaveData"),
-        acceptText: this.$t("Accept"),
-        cancelText: this.$t("Cancel"),
-        accept: () => {
-          this.clearErrors();
-          this.spinner();
-
-          api
-            .put(this.selected["user:user_id"], this.selected)
-            .then((res) => {
-              this.spinner(false);
-              if (res.data.success) {
+      if (this.validateRequired()) {
+        this.$vs.dialog({
+          type: "confirm",
+          color: "success",
+          title: this.$t("Confirmation"),
+          text: this.$t("SaveData"),
+          acceptText: this.$t("Accept"),
+          cancelText: this.$t("Cancel"),
+          accept: () => {
+            this.clearErrors();
+            this.spinner();
+  
+            api
+              .put(this.selected["user:user_id"], this.selected)
+              .then((res) => {
+                this.spinner(false);
+                if (res.data.success) {
+                  this.$vs.notify({
+                    color: "success",
+                    position: "top-right",
+                    title: this.$t("SuccessSaveData"),
+                    text: res.data.message,
+                  });
+                  this.query();
+                  // this.clear()
+                }
+              })
+              .catch((err) => {
+                this.displayErrors(
+                  err.response.data.hasOwnProperty("errors")
+                    ? err.response.data.errors
+                    : null
+                );
+                this.spinner(false);
                 this.$vs.notify({
-                  color: "success",
+                  title: this.$t("Error"),
                   position: "top-right",
-                  title: this.$t("SuccessSaveData"),
-                  text: res.data.message,
+                  color: "warning",
+                  iconPack: "feather",
+                  icon: "icon-alert-circle",
+                  text: err.response.data.message,
                 });
-                this.query();
-                // this.clear()
-              }
-            })
-            .catch((err) => {
-              this.displayErrors(
-                err.response.data.hasOwnProperty("errors")
-                  ? err.response.data.errors
-                  : null
-              );
-              this.spinner(false);
-              this.$vs.notify({
-                title: this.$t("Error"),
-                position: "top-right",
-                color: "warning",
-                iconPack: "feather",
-                icon: "icon-alert-circle",
-                text: err.response.data.message,
               });
-            });
-        },
-      });
+          },
+        });
+      }
     },
 
     query() {

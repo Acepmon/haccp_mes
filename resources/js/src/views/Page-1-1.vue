@@ -16,7 +16,7 @@
             class="mx-1"
             color="dark"
             type="border"
-            :disabled="!comp_info['comp_info:comp_id']"
+            :disabled="!item['comp_info:comp_id']"
             >{{ $t("Save") }}</vs-button
           >
           <vs-button
@@ -24,7 +24,7 @@
             class="mx-1"
             color="dark"
             type="border"
-            :disabled="!comp_info['comp_info:comp_id']"
+            :disabled="!item['comp_info:comp_id']"
             >{{ $t("Delete") }}</vs-button
           >
           <vs-button
@@ -50,7 +50,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   maxlength="20"
-                  v-model="comp_info['comp_info:comp_id']"
+                  v-model="item['comp_info:comp_id']"
                   :danger="errors['comp_info:comp_id'] != null"
                   :danger-text="errors['comp_info:comp_id']"
                 />
@@ -68,7 +68,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   maxlength="60"
-                  v-model="comp_info['comp_info:comp_nm']"
+                  v-model="item['comp_info:comp_nm']"
                   :danger="errors['comp_info:comp_nm'] != null"
                   :danger-text="errors['comp_info:comp_nm']"
                 />
@@ -90,7 +90,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   maxlength="60"
-                  v-model="comp_info['comp_info:ceo_nm']"
+                  v-model="item['comp_info:ceo_nm']"
                   :danger="errors['comp_info:ceo_nm'] != null"
                   :danger-text="errors['comp_info:ceo_nm']"
                 />
@@ -106,7 +106,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   maxlength="30"
-                  v-model="comp_info['comp_info:url']"
+                  v-model="item['comp_info:url']"
                   :danger="errors['comp_info:url'] != null"
                   :danger-text="errors['comp_info:url']"
                 />
@@ -126,7 +126,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   maxlength="20"
-                  v-model="comp_info['comp_info:tel_no']"
+                  v-model="item['comp_info:tel_no']"
                   :danger="errors['comp_info:tel_no'] != null"
                   :danger-text="errors['comp_info:tel_no']"
                 />
@@ -142,7 +142,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   maxlength="20"
-                  v-model="comp_info['comp_info:fax_no']"
+                  v-model="item['comp_info:fax_no']"
                   :danger="errors['comp_info:fax_no'] != null"
                   :danger-text="errors['comp_info:fax_no']"
                 />
@@ -162,7 +162,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   maxlength="20"
-                  v-model="comp_info['comp_info:zip_cd']"
+                  v-model="item['comp_info:zip_cd']"
                   :danger="errors['comp_info:zip_cd'] != null"
                   :danger-text="errors['comp_info:zip_cd']"
                 />
@@ -183,7 +183,7 @@
                 <vs-input
                   class="w-full"
                   maxlength="60"
-                  v-model="comp_info['comp_info:addr1']"
+                  v-model="item['comp_info:addr1']"
                   :danger="errors['comp_info:addr1'] != null"
                   :danger-text="errors['comp_info:addr1']"
                 />
@@ -195,7 +195,7 @@
                 <vs-input
                   class="w-full"
                   maxlength="60"
-                  v-model="comp_info['comp_info:addr2']"
+                  v-model="item['comp_info:addr2']"
                   :danger="errors['comp_info:addr2'] != null"
                   :danger-text="errors['comp_info:addr2']"
                 />
@@ -243,7 +243,7 @@
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
-                  v-model="comp_info['comp_info:haccp_user']['user:user_nm']"
+                  v-model="item['comp_info:haccp_user']['user:user_nm']"
                 />
               </div>
             </div>
@@ -256,7 +256,7 @@
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
-                  v-model="comp_info['comp_info:haccp_user']['user:user_id']"
+                  v-model="item['comp_info:haccp_user']['user:user_id']"
                 />
               </div>
             </div>
@@ -273,7 +273,7 @@
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
-                  v-model="comp_info['comp_info:haccp_user']['user:email']"
+                  v-model="item['comp_info:haccp_user']['user:email']"
                 />
               </div>
             </div>
@@ -291,7 +291,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   maxlength="100"
-                  v-model="comp_info['comp_info:haccp_item']"
+                  v-model="item['comp_info:haccp_item']"
                   :danger="errors['comp_info:haccp_item'] != null"
                   :danger-text="errors['comp_info:haccp_item']"
                 />
@@ -337,7 +337,7 @@ export default {
       userSelectionPrompt: false,
       users: [],
       selectedUser: null,
-      comp_info: {
+      item: {
         "comp_info:comp_id": null,
         "comp_info:comp_nm": null,
         "comp_info:ceo_nm": null,
@@ -370,6 +370,11 @@ export default {
         "comp_info:haccp_id": null,
         "comp_info:haccp_item": null,
       },
+      required: {
+        'comp_info:comp_id': '사업자등록번호',
+        'comp_info:comp_nm': '회사명',
+        'comp_info:ceo_nm': '대표자명',
+      }
     };
   },
 
@@ -385,6 +390,26 @@ export default {
     ...mapActions({
       removeTab: "mdn/removeTab",
     }),
+
+    validateRequired() {
+      let passed = true
+      for (const [key, value] of Object.entries(this.required)) {
+        if (isArray(this.item[key])) {
+          if (this.item[key] === undefined || this.item[key].length == 0) {
+            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            passed = false
+          }
+        } else {
+          if (this.item[key]) {
+          } else {
+            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            passed = false
+          }
+        }
+      }
+
+      return passed
+    },
 
     clear() {
       this.$set(this, "comp_info", {
@@ -447,7 +472,7 @@ export default {
       this.clearErrors();
 
       api
-        .post(this.comp_info)
+        .post(this.item)
         .then((res) => {
           this.spinner(false);
 
@@ -488,15 +513,17 @@ export default {
     },
 
     saveDialog() {
-      this.$vs.dialog({
-        type: "confirm",
-        color: "success",
-        title: this.$t("Confirmation"),
-        text: this.$t("SaveData"),
-        acceptText: this.$t("Accept"),
-        cancelText: this.$t("Cancel"),
-        accept: () => this.save(),
-      });
+      if (this.validateRequired()) {
+        this.$vs.dialog({
+          type: "confirm",
+          color: "success",
+          title: this.$t("Confirmation"),
+          text: this.$t("SaveData"),
+          acceptText: this.$t("Accept"),
+          cancelText: this.$t("Cancel"),
+          accept: () => this.save(),
+        });
+      }
     },
 
     query() {
@@ -517,10 +544,10 @@ export default {
               text: res.data.message,
             });
           } else {
-            this.comp_info = res.data.data;
+            this.item = res.data.data;
 
             if (res.data.data["comp_info:haccp_user"] == null) {
-              this.comp_info["comp_info:haccp_user"] = {
+              this.item["comp_info:haccp_user"] = {
                 "user:user_id": null,
                 "user:user_nm": null,
                 "user:email": null,
@@ -550,7 +577,7 @@ export default {
       this.spinner();
 
       api
-        .delete(this.comp_info["comp_info:comp_id"])
+        .delete(this.item["comp_info:comp_id"])
         .then((res) => {
           this.spinner(false);
 
@@ -617,7 +644,7 @@ export default {
 
     chooseUserDialog() {
       this.userSelectionPrompt = true;
-      this.selectedUser = this.comp_info["comp_info:haccp_user"];
+      this.selectedUser = this.item["comp_info:haccp_user"];
       user
         .fetch({
           limit: -1,
@@ -628,8 +655,8 @@ export default {
     },
 
     selectUser() {
-      this.comp_info["comp_info:haccp_id"] = this.selectedUser["user:user_id"];
-      this.comp_info["comp_info:haccp_user"] = this.selectedUser;
+      this.item["comp_info:haccp_id"] = this.selectedUser["user:user_id"];
+      this.item["comp_info:haccp_user"] = this.selectedUser;
       this.selectedUser = null;
     },
   },
