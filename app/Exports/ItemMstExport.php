@@ -11,13 +11,13 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class ItemMstExport implements FromCollection, WithHeadings, WithStyles, WithMapping
 {
-    public $docNm, $typeCd, $useYn;
+    public $itemNm, $itemId, $itemCd;
 
-    public function __construct($docNm, $typeCd, $useYn)
+    public function __construct($itemNm, $itemId, $itemCd)
     {
-        $this->docNm = $docNm;
-        $this->typeCd = $typeCd;
-        $this->useYn = $useYn;
+        $this->itemNm = $itemNm;
+        $this->itemId = $itemId;
+        $this->itemCd = $itemCd;
     }
 
     /**
@@ -27,57 +27,64 @@ class ItemMstExport implements FromCollection, WithHeadings, WithStyles, WithMap
     {
         $items = ItemMst::query();
 
-        if (!empty($this->docNm)) {
-            $items = $items->where('doc_nm', 'LIKE', '%'.$this->docNm.'%');
+        if (!empty($this->itemNm)) {
+            $items = $items->where('ITEM_NM', 'LIKE', '%'.$this->itemNm.'%');
         }
 
-        if (!empty($this->typeCd)) {
-            $items = $items->where('type_cd', $this->typeCd);
+        if (!empty($this->itemId)) {
+            $items = $items->where('ITEM_ID', 'LIKE', '%'.$this->itemId.'%');
         }
 
-        if (!empty($this->useYn)) {
-            $items = $items->where('use_yn', $this->useYn);
+        if (!empty($this->itemCd)) {
+            $items = $items->where('ITEM_CD', $this->itemCd);
         }
 
-        $items = $items->orderBy('DOC_ID', 'asc');
+        $items = $items->orderBy('ITEM_ID', 'asc');
 
         return $items->get();
     }
 
-    public function map($edocFile): array
+    public function map($itemMst): array
     {
         return [
-            $edocFile->DOC_ID,
-            $edocFile->DOC_NM,
-            ($edocFile->type ? $edocFile->type->COMM2_NM : null),
-            $edocFile->DOC_CONTENT,
-            ($edocFile->period ? $edocFile->period->COMM2_NM : null),
-            $edocFile->USE_YN,
-            $edocFile->WORK_ID,
-            $edocFile->APP_ID,
+            $itemMst->ITEM_ID,
+            $itemMst->ITEM_NM,
+            $itemMst->SPEC,
+            $itemMst->UNIT,
+            $itemMst->QTY1,
+            $itemMst->QTY2,
+            $itemMst->CONN_NO,
+            $itemMst->CONN_QTY,
+            $itemMst->IN_AMT,
+            $itemMst->OUT_AMT,
+            $itemMst->ITEM_CD,
+            $itemMst->GRP1_CD,
+            $itemMst->GRP2_CD,
+            $itemMst->GRP3_CD,
+            $itemMst->USE_YN,
+            $itemMst->PROCESS_CD,
         ];
     }
 
     public function headings(): array
     {
         return [
-            'No',
             '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
-            '품목ID',
+            '품목명',
+            '규격명',
+            '단위',
+            '당수량(분자)',
+            '봉수량',
+            '대표품목 환산수량',
+            '연결품목 환산수량',
+            '입고가',
+            '출고가',
+            '품목',
+            '그룹1',
+            '그룹2',
+            '그룹3',
+            '사용',
+            '생산공정',
         ];
     }
 

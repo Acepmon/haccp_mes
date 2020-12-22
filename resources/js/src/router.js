@@ -89,13 +89,13 @@ const router = new Router({
               },
               {
                 path: '/1/6',
-                name: '생산제품등록',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/6', value: 'page-1-6', label: '생산제품등록', component: 'page-1-6'}) } }
+                name: '원/부자재 관리',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/6', value: 'page-1-6', label: '원/부자재 관리', component: 'page-1-6'}) } }
               },
               {
                 path: '/1/7',
-                name: '원료배합비율',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/7', value: 'page-1-7', label: '원료배합비율', component: 'page-1-7'}) } }
+                name: 'BOM 관리',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/7', value: 'page-1-7', label: 'BOM 관리', component: 'page-1-7'}) } }
               },
               {
                 path: '/1/8/1',

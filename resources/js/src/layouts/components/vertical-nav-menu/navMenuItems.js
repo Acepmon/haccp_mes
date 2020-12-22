@@ -98,14 +98,14 @@ export default [
       },
       {
         url: "/1/6",
-        name: "생산제품등록",
-        slug: "생산제품등록",
+        name: "원/부자재 관리",
+        slug: "원/부자재 관리",
         showSubmenuOn: '/1',
       },
       {
         url: "/1/7",
-        name: "원료배합비율",
-        slug: "원료배합비율",
+        name: "BOM 관리",
+        slug: "BOM 관리",
         showSubmenuOn: '/1',
       },
       {
