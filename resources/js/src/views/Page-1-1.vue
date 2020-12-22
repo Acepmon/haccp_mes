@@ -244,6 +244,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   v-model="item['comp_info:haccp_user']['user:user_nm']"
+                  readonly
                 />
               </div>
             </div>
@@ -257,6 +258,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   v-model="item['comp_info:haccp_user']['user:user_id']"
+                  readonly
                 />
               </div>
             </div>
@@ -274,6 +276,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input
                   v-model="item['comp_info:haccp_user']['user:email']"
+                  readonly
                 />
               </div>
             </div>
