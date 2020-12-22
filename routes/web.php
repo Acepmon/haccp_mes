@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/login', 'LoginController@login')->name('login');
+Route::get('/reset-password', 'LoginController@resetPassword')->name('reset-password');
 Route::post('/auth', 'LoginController@authenticate')->name('auth');
 Route::post('/logout', 'LoginController@logout')->name('logout');
 

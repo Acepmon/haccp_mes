@@ -14,6 +14,10 @@ Here is your information
 | 사용여부       | {{ $user->USER_STS_YN }}    |
 @endcomponent
 
+@component('mail::button', ['url' => $url])
+Change Password
+@endcomponent
+
 Thanks,<br>
 {{ config('app.name') }}
 @endcomponent

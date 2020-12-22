@@ -30,6 +30,6 @@ class SendNewUserInfoToAdmin
     public function handle(Registered $event)
     {
         Mail::to(env('ADMIN_EMAIL'))
-            ->send(new NewUserInfo($event->user, 'New user just registered'));
+            ->queue(new NewUserInfo($event->user, 'New user just registered'));
     }
 }

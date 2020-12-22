@@ -12,6 +12,10 @@ class LoginController extends Controller
         return view('application');
     }
 
+    public function resetPassword () {
+        return view('application');
+    }
+
     public function authenticate(Request $request)
     {
         $request->validate([

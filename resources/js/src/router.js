@@ -201,6 +201,11 @@ const router = new Router({
                 component: () => import('@/views/pages/Login.vue')
               },
               {
+                path: '/reset-password',
+                name: 'reset-password',
+                component: () => import('@/views/pages/ResetPassword.vue')
+              },
+              {
                 path: '/error-404',
                 name: 'error-404',
                 component: () => import('@/views/pages/Error404.vue')

@@ -22,6 +22,7 @@ Route::group([
     'namespace' => 'API',
     'prefix' => 'auth'
 ], function () {
+    Route::post('reset-password', 'AuthController@resetPassword');
     Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login');
     Route::get('refresh', 'AuthController@refresh');

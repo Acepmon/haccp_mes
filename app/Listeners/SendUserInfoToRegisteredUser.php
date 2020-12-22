@@ -29,6 +29,6 @@ class SendUserInfoToRegisteredUser
     public function handle(Registered $event)
     {
         Mail::to($event->user->EMAIL)
-            ->send(new NewUserInfo($event->user));
+            ->queue(new NewUserInfo($event->user));
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -87,5 +88,37 @@ class AuthController extends Controller
     private function guard()
     {
         return Auth::guard();
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string',
+            'email' => 'required|string|email|exists:user,EMAIL',
+            'password' => 'required|string|confirmed'
+        ]);
+
+        $token = $request->input('token');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $tokenData = DB::table('password_resets')->where('token', $token)->first();
+
+        if (!$tokenData) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Invalid token')
+            ], 422);
+        }
+
+        $user = User::where('email', $email)->first();
+        $user->USER_PW = Hash::make($password);
+        $user->save();
+
+        DB::table('password_resets')->where('email', $email)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Password has been reset',
+        ]);
     }
 }
