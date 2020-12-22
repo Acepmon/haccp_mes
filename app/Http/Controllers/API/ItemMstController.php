@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ItemMstResource;
+use App\ItemMst;
 use Illuminate\Http\Request;
 
 class ItemMstController extends Controller
@@ -12,9 +14,37 @@ class ItemMstController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $items = ItemMst::query();
+
+        $with = array_filter(explode(',', $request->input('with')));
+        $limit = $request->input('limit', 15);
+        $sort = $request->input('sort', 'REG_DTM');
+        $order = $request->input('order', 'ASC');
+
+        if ($request->has('item_nm')) {
+            $itemNm = $request->input('item_nm');
+            $items = $items->where('ITEM_NM', 'LIKE', '%'.$itemNm.'%');
+        }
+
+        if ($request->has('item_id')) {
+            $itemDesc = $request->input('item_id');
+            $items = $items->where('ITEM_ID', 'LIKE', '%'.$itemDesc.'%');
+        }
+
+        if ($request->has('item_cd')) {
+            $typeCd = $request->input('item_cd');
+            $items = $items->where('ITEM_CD', $typeCd);
+        }
+
+        if ($limit == -1) {
+            $items = $items->with($with)->orderBy($sort, $order)->get();
+        } else {
+            $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
+        }
+
+        return ItemMstResource::collection($items);
     }
 
     /**
