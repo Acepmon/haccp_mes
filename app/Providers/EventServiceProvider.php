@@ -8,7 +8,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Login;
 use App\Listeners\LogSuccessfulLogin;
-use App\Listeners\SendNewUserNotificationToAdmin;
+use App\Listeners\SendNewUserInfoToAdmin;
 use App\Listeners\SendUserInfoToRegisteredUser;
 
 class EventServiceProvider extends ServiceProvider
@@ -20,7 +20,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         Registered::class => [
-            SendNewUserNotificationToAdmin::class,
+            // SendNewUserInfoToAdmin::class,
             SendUserInfoToRegisteredUser::class,
             SendEmailVerificationNotification::class,
         ],
