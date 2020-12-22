@@ -6,6 +6,7 @@ use App\Exports\UserExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -69,6 +70,9 @@ class UserController extends Controller
             'USER_STS_YN' => $request->input('user:user_sts_yn'),
             'REG_DTM' => now()->format('YmdHis')
         ]);
+
+        $user->USER_PW = $request->input('user:user_pw');
+        event(new Registered($user));
 
         return response()->json([
             'success' => true,
