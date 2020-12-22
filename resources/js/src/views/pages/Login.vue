@@ -17,11 +17,15 @@
           <div class="vx-row no-gutter justify-center items-center">
 
             <div class="vx-col hidden lg:block lg:w-1/2">
+              <div class="flex py-8">
+                <img src="@assets/images/pages/logo1.png" alt="logo1" class="mx-auto">
+                <img src="@assets/images/pages/logo2.png" alt="logo2" class="mx-auto">
+              </div>
               <img src="@assets/images/pages/login.png" alt="login" class="mx-auto">
             </div>
 
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
-              <div class="p-8 login-tabs-container">
+              <div class="p-20 login-tabs-container">
 
                 <div class="vx-card__title mb-4">
                   <h4 class="mb-4">{{ $t('Login') }}</h4>
