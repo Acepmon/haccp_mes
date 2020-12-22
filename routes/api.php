@@ -67,4 +67,12 @@ Route::group([
     Route::get('secu_doc_mgmt/download', 'SecuDocMgmtController@download')->name('secu_doc_mgmt.download');
     Route::get('secu_doc_mgmt/{REV_SEQ}/att_file/{ATT_SEQ}/download', 'SecuDocMgmtController@downloadAttFile')->name('secu_doc_mgmt.att_file.download');
     Route::apiResource('secu_doc_mgmt', 'SecuDocMgmtController');
+
+    Route::get('item_mst/export', 'ItemMstController@export')->name('item_mst.export');
+    Route::post('item_mst/import', 'ItemMstController@import')->name('item_mst.import');
+    Route::apiResource('item_mst', 'ItemMstController');
+
+    Route::get('bom_config/export', 'BomConfigController@export')->name('bom_config.export');
+    Route::post('bom_config/import', 'BomConfigController@import')->name('bom_config.import');
+    Route::apiResource('bom_config', 'BomConfigController');
 });
