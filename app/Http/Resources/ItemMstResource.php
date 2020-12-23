@@ -26,25 +26,25 @@ class ItemMstResource extends JsonResource
             'item_mst:in_atm' => number_format($this->IN_AMT),
             'item_mst:out_amt' => number_format($this->OUT_AMT),
             'item_mst:item_cd' => $this->ITEM_CD,
-            'item_mst:item_nm' => $this->whenLoaded('item', function () {
+            'item_mst:item_cd_nm' => $this->whenLoaded('item', function () {
                 return $this->item->COMM2_NM;
             }),
             'item_mst:grp1_cd' => $this->GRP1_CD,
-            'item_mst:grp1_cd' => $this->whenLoaded('grp1', function () {
-                return $this->item->COMM2_NM;
+            'item_mst:grp1_nm' => $this->whenLoaded('grp1', function () {
+                return $this->grp1->COMM2_NM;
             }),
             'item_mst:grp2_cd' => $this->GRP2_CD,
-            'item_mst:grp2_cd' => $this->whenLoaded('grp2', function () {
-                return $this->item->COMM2_NM;
+            'item_mst:grp2_nm' => $this->whenLoaded('grp2', function () {
+                return $this->grp2->COMM2_NM;
             }),
             'item_mst:grp3_cd' => $this->GRP3_CD,
-            'item_mst:grp3_cd' => $this->whenLoaded('grp3', function () {
-                return $this->item->COMM2_NM;
+            'item_mst:grp3_nm' => $this->whenLoaded('grp3', function () {
+                return $this->grp3->COMM2_NM;
             }),
             'item_mst:use_yn' => $this->USE_YN == 'Y' ? 'YES' : 'NO',
             'item_mst:process_cd' => $this->PROCESS_CD,
-            'item_mst:process_cd' => $this->whenLoaded('process', function () {
-                return $this->item->COMM2_NM;
+            'item_mst:process_nm' => $this->whenLoaded('process', function () {
+                return $this->process->COMM2_NM;
             }),
             'item_mst:unit1_nm' => $this->UNIT1_NM,
             'item_mst:unit1_qty' => $this->UNIT1_QTY,

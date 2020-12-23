@@ -37,6 +37,8 @@
         </div>
       </div>
 
+      <vs-divider />
+
       <form action="#">
         <!-- Row 1 -->
         <div class="flex flex-wrap">

@@ -353,8 +353,8 @@ export default {
       approvals: [],
       jobs: [],
       status: [
-        { text: "Y", value: "Y" },
-        { text: "N", value: "N" },
+        { text: "YES", value: "Y" },
+        { text: "NO", value: "N" },
       ],
       selected: {
         "user:user_id": null,

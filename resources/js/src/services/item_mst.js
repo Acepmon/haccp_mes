@@ -52,8 +52,8 @@ export default {
         return axios.post(`${config.baseUrl}/${this.api}/${id}`, params)
     },
 
-    export: function () {
-        return `${config.baseUrl}/${this.api}/export`
+    export: function (params) {
+        return `${config.baseUrl}/${this.api}/export?${this.prepParams(params)}`
     },
 
     import: function (formData) {

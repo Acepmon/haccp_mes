@@ -56,25 +56,48 @@ class ItemMstImport implements ToCollection
                         'CONN_QTY' => doubleval($row[7]),
                         'IN_AMT' => doubleval($row[8]),
                         'OUT_AMT' => doubleval($row[9]),
-                        'ITEM_CD' => $this->parseCommNm('B10', $row[10]),
-                        'GRP1_CD' => $this->parseCommNm('B11', $row[11]),
-                        'GRP2_CD' => $this->parseCommNm('B12', $row[12]),
-                        'GRP3_CD' => $this->parseCommNm('B13', $row[13]),
+                        'ITEM_CD' => $this->getCodeByName('B10', $row[10]),
+                        'GRP1_CD' => $this->getCodeByName('B11', $row[11]),
+                        'GRP2_CD' => $this->getCodeByName('B12', $row[12]),
+                        'GRP3_CD' => $this->getCodeByName('B13', $row[13]),
                         'USE_YN' => $this->parseUseYn($row[14]),
-                        'PROCESS_CD' => $this->parseCommNm('B14', $row[15]),
+                        'PROCESS_CD' => $this->getCodeByName('B14', $row[15]),
                     ]);
                 }
             }
         });
     }
 
-    private function parseCommNm($cd1, $cd2_nm)
+    private function parseCommNm($cd1, $cdnm)
     {
-        $cd = CommCd::where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_NM', $cd2_nm)->first();
+        $cd = CommCd::where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_NM', $cdnm)->first();
         if ($cd) {
+            dd($cd);
             return $cd->COMM2_CD;
         }
         return null;
+    }
+
+    private function getCodeByName($cd1, $cdnm)
+    {
+        if ($this->getCodeByNameExists()) {
+            $item = DB::select('select get_codebyname(?, ?) as COMM2_CD', [$cd1, $cdnm]);
+
+            if (is_array($item)) {
+                $item = $item[0]->COMM2_CD;
+            }
+
+            $item = $item == 'Code Err' ? '' : $item;
+        } else {
+            $item = CommCd::where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_NM', $cdnm)->first();
+            $item = $item ? $item->COMM2_CD : '';
+        }
+
+        return $item;
+    }
+
+    private function getCodeByNameExists() {
+        return DB::table('information_schema.ROUTINES')->where('ROUTINE_SCHEMA', config('database.connections.mysql.database'))->where('ROUTINE_NAME', 'get_codebyname')->exists();
     }
 
     private function parseUseYn($useYn)

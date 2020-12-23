@@ -109,6 +109,7 @@
 
           <template slot-scope="{ data }">
             <vs-tr :data="tr" :key="index" v-for="(tr, index) in items">
+
               <vs-td :data="rowIndex(index)">
                 {{ rowIndex(index) }}
               </vs-td>
@@ -154,7 +155,7 @@
               </vs-td>
 
               <vs-td :data="data[index]['item_mst:item_cd']">
-                {{ data[index]["item_mst:item_nm"] }}
+                {{ data[index]["item_mst:item_cd_nm"] }}
               </vs-td>
 
               <vs-td :data="data[index]['item_mst:grp1_cd']">
@@ -418,7 +419,7 @@ export default {
       }
 
       if (this.searchType != null) {
-        search_params["type_cd"] = this.searchType;
+        search_params["item_cd"] = this.searchType;
       }
 
       window.location.href = api.export(search_params);

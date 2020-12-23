@@ -43,7 +43,7 @@ class ItemMstExport implements FromCollection, WithHeadings, WithStyles, WithMap
 
         $items = $items->orderBy('ITEM_ID', 'asc');
 
-        return $items->get();
+        return $items->with(['item', 'grp1', 'grp2', 'grp3', 'process'])->get();
     }
 
     public function map($itemMst): array
@@ -59,12 +59,12 @@ class ItemMstExport implements FromCollection, WithHeadings, WithStyles, WithMap
             $itemMst->CONN_QTY,
             $itemMst->IN_AMT,
             $itemMst->OUT_AMT,
-            $this->getCdNm('B10', $itemMst->ITEM_CD),
-            $this->getCdNm('B11', $itemMst->GRP1_CD),
-            $this->getCdNm('B12', $itemMst->GRP2_CD),
-            $this->getCdNm('B13', $itemMst->GRP3_CD),
+            $itemMst->item ? $itemMst->item->COMM2_NM : '',
+            $itemMst->grp1 ? $itemMst->grp1->COMM2_NM : '',
+            $itemMst->grp2 ? $itemMst->grp2->COMM2_NM : '',
+            $itemMst->grp3 ? $itemMst->grp3->COMM2_NM : '',
             $this->parseUseYn($itemMst->USE_YN),
-            $this->getCdNm('B14', $itemMst->PROCESS_CD),
+            $itemMst->process ? $itemMst->process->COMM2_NM : '',
         ];
     }
 
@@ -112,10 +112,16 @@ class ItemMstExport implements FromCollection, WithHeadings, WithStyles, WithMap
     private function getCdNm($cd1, $cd2)
     {
         if ($this->getCodeNameExists()) {
-            $items = DB::select('select get_codename(?, ?) as comm2_nm', [$cd1, $cd2]);
+            $items = collect(DB::select('select get_codename(?, ?) as COMM2_NM', [$cd1, $cd2]));
         } else {
-            $items = CommCd::select('COMM2_CD', 'comm2_nm')->where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $cd2)->get();
+            $items = CommCd::select('COMM2_CD', 'COMM2_NM')->where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $cd2)->get();
         }
+
+        if ($items->count() > 0) {
+            return implode(',', $items->pluck('COMM2_NM')->toArray());
+        }
+
+        return '';
     }
 
     private function getCodeNameExists() {
