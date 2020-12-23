@@ -131,6 +131,20 @@ const mdn = {
             }
         },
 
+        removeTabs({commit, getters}, tabs) {
+            tabs.forEach(tab => {
+                commit('REMOVE_TAB', {index: getters.getTabIndex(tab.value)})
+            });
+
+            if (getters.getLastTab) {
+                router.push({
+                    path: getters.getLastTab.path
+                }).catch(() => {})
+            } else {
+                router.push({ path: '/1' }).catch(() => {})
+            }
+        },
+
         gotoTab({commit, getters}, tab) {
             if (getters.tabExists({value: tab.value})) {
                 commit('SET_ACTIVE_TAB', {value: tab.value})

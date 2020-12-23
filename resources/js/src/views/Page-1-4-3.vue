@@ -37,8 +37,8 @@
               </div>
               <div class="vx-col sm:w-2/3 w-full flex flex-row">
                 <vs-select v-model="searchUseYn">
-                  <vs-select-item value="Y" text="Y"></vs-select-item>
-                  <vs-select-item value="N" text="N"></vs-select-item>
+                  <vs-select-item value="Y" text="YES"></vs-select-item>
+                  <vs-select-item value="N" text="NO"></vs-select-item>
                 </vs-select>
                 <vs-button
                   @click="query()"
@@ -204,8 +204,8 @@
                   :danger="errors['edoc_file:use_yn'] != null"
                   :danger-text="errors['edoc_file:use_yn']"
                 >
-                  <vs-select-item value="Y" text="Y"></vs-select-item>
-                  <vs-select-item value="N" text="N"></vs-select-item>
+                  <vs-select-item value="Y" text="YES"></vs-select-item>
+                  <vs-select-item value="N" text="NO"></vs-select-item>
                 </vs-select>
               </div>
             </div>
