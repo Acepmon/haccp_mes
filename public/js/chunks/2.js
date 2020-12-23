@@ -628,10 +628,10 @@ function lazyLoadView(AsyncView) {
       return lazyLoadView(__webpack_require__.e(/*! import() | page-1-5-3 */ "page-1-5-3").then(__webpack_require__.bind(null, /*! @/views/Page-1-5-3.vue */ "./resources/js/src/views/Page-1-5-3.vue")));
     },
     "tab-page-1-6": function tabPage16() {
-      return lazyLoadView(Promise.all(/*! import() | page-1-6 */[__webpack_require__.e("vendors~page-1-6"), __webpack_require__.e("page-1-6")]).then(__webpack_require__.bind(null, /*! @/views/Page-1-6.vue */ "./resources/js/src/views/Page-1-6.vue")));
+      return lazyLoadView(Promise.all(/*! import() | page-1-6 */[__webpack_require__.e("vendors~page-1-6~page-1-7"), __webpack_require__.e("page-1-6~page-1-7"), __webpack_require__.e("page-1-6")]).then(__webpack_require__.bind(null, /*! @/views/Page-1-6.vue */ "./resources/js/src/views/Page-1-6.vue")));
     },
     "tab-page-1-7": function tabPage17() {
-      return lazyLoadView(__webpack_require__.e(/*! import() | page-1-7 */ "page-1-7").then(__webpack_require__.bind(null, /*! @/views/Page-1-7.vue */ "./resources/js/src/views/Page-1-7.vue")));
+      return lazyLoadView(Promise.all(/*! import() | page-1-7 */[__webpack_require__.e("vendors~page-1-6~page-1-7"), __webpack_require__.e("page-1-6~page-1-7"), __webpack_require__.e("page-1-7")]).then(__webpack_require__.bind(null, /*! @/views/Page-1-7.vue */ "./resources/js/src/views/Page-1-7.vue")));
     },
     "tab-page-1-8-1": function tabPage181() {
       return lazyLoadView(__webpack_require__.e(/*! import() | page-1-8-1 */ "page-1-8-1").then(__webpack_require__.bind(null, /*! @/views/Page-1-8-1.vue */ "./resources/js/src/views/Page-1-8-1.vue")));
