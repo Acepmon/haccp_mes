@@ -11,6 +11,9 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 
 class ItemMstImport implements ToCollection
 {
+    public $updateCount = 0;
+    public $insertCount = 0;
+
     public function collection(Collection $rows)
     {
         DB::transaction(function () use ($rows) {
@@ -43,6 +46,7 @@ class ItemMstImport implements ToCollection
                         'USE_YN' => $this->parseUseYn($row[14]),
                         'PROCESS_CD' => $this->parseCommNm('B14', $row[15]),
                     ]);
+                    $this->updateCount++;
                 } else {
                     // Insert
                     DB::table('item_mst')->insert([
@@ -63,16 +67,18 @@ class ItemMstImport implements ToCollection
                         'USE_YN' => $this->parseUseYn($row[14]),
                         'PROCESS_CD' => $this->getCodeByName('B14', $row[15]),
                     ]);
+                    $this->insertCount++;
                 }
             }
         });
+
+        session(['update_count' => $this->updateCount, 'insert_count' => $this->insertCount]);
     }
 
     private function parseCommNm($cd1, $cdnm)
     {
         $cd = CommCd::where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_NM', $cdnm)->first();
         if ($cd) {
-            dd($cd);
             return $cd->COMM2_CD;
         }
         return null;

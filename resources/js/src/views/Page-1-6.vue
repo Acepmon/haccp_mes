@@ -366,7 +366,6 @@ export default {
     },
 
     importExcel () {
-      this.$set(this, 'importDialog', false)
       this.spinner()
 
       let formData = new FormData();
@@ -385,6 +384,7 @@ export default {
               position: "top-right",
               color: "success",
               text: res.data.message,
+              time: 5000,
             });
             this.query();
           } else {

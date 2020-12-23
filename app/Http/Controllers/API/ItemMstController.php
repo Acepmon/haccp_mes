@@ -111,10 +111,17 @@ class ItemMstController extends Controller
         ]);
 
         $result = Excel::import(new ItemMstImport(), $request->file('file'));
+        $upCnt = session()->get('update_count');
+        $inCnt = session()->get('insert_count');
 
         return response()->json([
             'success' => true,
-            'message' => __('Successfully imported excel data'),
+            'result' => [
+                'import' => $result,
+                'update_count' => $upCnt,
+                'insert_count' => $inCnt,
+            ],
+            'message' => 'Updated ' . $upCnt . ' records and inserted ' . $inCnt . ' records',
         ]);
     }
 }
