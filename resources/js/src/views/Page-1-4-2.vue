@@ -257,7 +257,7 @@
                     v-text="data[index]['doc_mgmt:att_file'][0].att_nm"
                     class="pt-1"
                   ></span>
-                  <vs-button
+                  <!-- <vs-button
                     color="primary"
                     class="ml-2"
                     :href="
@@ -271,7 +271,7 @@
                     size="small"
                     icon-pack="feather"
                     icon="icon-download"
-                  ></vs-button>
+                  ></vs-button> -->
                 </div>
               </vs-td>
 

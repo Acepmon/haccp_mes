@@ -100,7 +100,7 @@
             <div class="vx-row mb-2">
               <div class="vx-col sm:w-1/3 w-full flex justify-end">
                 <span class="pt-2"
-                  ><span class="text-danger">*</span> 문서종류</span
+                  ><span class="text-danger">*</span> 보고서작성일</span
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full">
@@ -285,7 +285,7 @@
                     v-text="data[index]['secu_doc_mgmt:att_file'][0].att_nm"
                     class="pt-1"
                   ></span>
-                  <vs-button
+                  <!-- <vs-button
                     color="primary"
                     class="ml-2"
                     :href="
@@ -299,7 +299,7 @@
                     size="small"
                     icon-pack="feather"
                     icon="icon-download"
-                  ></vs-button>
+                  ></vs-button> -->
                 </div>
               </vs-td>
             </vs-tr>
@@ -319,6 +319,7 @@ import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js";
 import FileSelect from "@/layouts/components/FileSelect.vue";
+import moment from 'moment';
 
 export default {
   components: {
@@ -334,10 +335,10 @@ export default {
       item: {
         "secu_doc_mgmt:doc_id": null,
         "secu_doc_mgmt:doc_nm": null,
-        "secu_doc_mgmt:doc_dt": null,
+        "secu_doc_mgmt:doc_dt": moment().format('YYYY-MM-DD'),
         "secu_doc_mgmt:att_dtm": null,
-        "secu_doc_mgmt:from_dt": null,
-        "secu_doc_mgmt:to_dt": null,
+        "secu_doc_mgmt:from_dt": moment().subtract(1,'months').startOf('month').format('YYYY-MM-DD'),
+        "secu_doc_mgmt:to_dt": moment().subtract(1,'months').endOf('month').format('YYYY-MM-DD'),
         "secu_doc_mgmt:reg_id": null,
         "secu_doc_mgmt:reg_dtm": null,
         "secu_doc_mgmt:att": null,
