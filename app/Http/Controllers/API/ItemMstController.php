@@ -23,7 +23,7 @@ class ItemMstController extends Controller
 
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
-        $sort = $request->input('sort', 'REG_DTM');
+        $sort = $request->input('sort', 'ITEM_ID');
         $order = $request->input('order', 'ASC');
 
         if ($request->has('item_nm')) {
@@ -32,13 +32,13 @@ class ItemMstController extends Controller
         }
 
         if ($request->has('item_id')) {
-            $itemDesc = $request->input('item_id');
-            $items = $items->where('ITEM_ID', 'LIKE', '%'.$itemDesc.'%');
+            $itemId = $request->input('item_id');
+            $items = $items->where('ITEM_ID', 'LIKE', '%'.$itemId.'%');
         }
 
-        if ($request->has('item_cd')) {
-            $typeCd = $request->input('item_cd');
-            $items = $items->where('ITEM_CD', $typeCd);
+        if ($request->has('item_cd') && !empty($request->input('item_cd'))) {
+            $itemCd = $request->input('item_cd');
+            $items = $items->where('ITEM_CD', $itemCd);
         }
 
         if ($limit == -1) {

@@ -11,7 +11,7 @@
       <span>Drop Excel File or </span>
       <span class="font-medium text-primary" @click.stop="$refs.fileInput.click()">Browse</span>
     </div> -->
-    <vs-button type="border" @click.stop="$refs.fileInput.click()">{{ $t("UploadExcel") }}</vs-button>
+    <vs-button type="border" color="dark" class="py-3" @click.stop="$refs.fileInput.click()">{{ $t("UploadExcel") }}</vs-button>
   </div>
 </template>
 

@@ -26,11 +26,26 @@ class ItemMstResource extends JsonResource
             'item_mst:in_atm' => $this->IN_AMT,
             'item_mst:out_amt' => $this->OUT_AMT,
             'item_mst:item_cd' => $this->ITEM_CD,
+            'item_mst:item_nm' => $this->whenLoaded('item', function () {
+                return $this->item->COMM2_NM;
+            }),
             'item_mst:grp1_cd' => $this->GRP1_CD,
+            'item_mst:grp1_cd' => $this->whenLoaded('grp1', function () {
+                return $this->item->COMM2_NM;
+            }),
             'item_mst:grp2_cd' => $this->GRP2_CD,
+            'item_mst:grp2_cd' => $this->whenLoaded('grp2', function () {
+                return $this->item->COMM2_NM;
+            }),
             'item_mst:grp3_cd' => $this->GRP3_CD,
-            'item_mst:use_yn' => $this->USE_YN,
+            'item_mst:grp3_cd' => $this->whenLoaded('grp3', function () {
+                return $this->item->COMM2_NM;
+            }),
+            'item_mst:use_yn' => $this->USE_YN == 'Y' ? 'YES' : 'NO',
             'item_mst:process_cd' => $this->PROCESS_CD,
+            'item_mst:process_cd' => $this->whenLoaded('process', function () {
+                return $this->item->COMM2_NM;
+            }),
             'item_mst:unit1_nm' => $this->UNIT1_NM,
             'item_mst:unit1_qty' => $this->UNIT1_QTY,
             'item_mst:unit2_nm' => $this->UNIT2_NM,

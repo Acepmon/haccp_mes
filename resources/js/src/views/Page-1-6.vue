@@ -50,13 +50,15 @@
         </div>
         <div class="w-full sm:w-1/3 px-1 flex justify-end">
           <import-excel :onSuccess="loadDataInTable" v-model="importFile"></import-excel>
-          <vs-button
-            @click="closeDialog()"
-            class="mx-1"
-            color="dark"
-            type="border"
-            >{{ $t("Close") }}</vs-button
-          >
+          <div>
+            <vs-button
+              @click="closeDialog()"
+              class="mx-1 flex-shrink-0 py-3"
+              color="dark"
+              type="border"
+              >{{ $t("Close") }}</vs-button
+            >
+          </div>
         </div>
       </div>
 
@@ -73,7 +75,7 @@
         >
       </div>
 
-      <div class="overflow-y-auto" style="max-height: 300px">
+      <div class="overflow-y-auto" style="max-height: 500px">
         <vs-table
           stripe
           pagination
@@ -152,19 +154,19 @@
               </vs-td>
 
               <vs-td :data="data[index]['item_mst:item_cd']">
-                {{ data[index]["item_mst:item_cd"] }}
+                {{ data[index]["item_mst:item_nm"] }}
               </vs-td>
 
               <vs-td :data="data[index]['item_mst:grp1_cd']">
-                {{ data[index]["item_mst:grp1_cd"] }}
+                {{ data[index]["item_mst:grp1_nm"] }}
               </vs-td>
 
               <vs-td :data="data[index]['item_mst:grp2_cd']">
-                {{ data[index]["item_mst:grp2_cd"] }}
+                {{ data[index]["item_mst:grp2_nm"] }}
               </vs-td>
 
               <vs-td :data="data[index]['item_mst:grp3_cd']">
-                {{ data[index]["item_mst:grp3_cd"] }}
+                {{ data[index]["item_mst:grp3_nm"] }}
               </vs-td>
 
               <vs-td :data="data[index]['item_mst:use_yn']">
@@ -172,7 +174,7 @@
               </vs-td>
 
               <vs-td :data="data[index]['item_mst:process_cd']">
-                {{ data[index]["item_mst:process_cd"] }}
+                {{ data[index]["item_mst:process_nm"] }}
               </vs-td>
 
             </vs-tr>
@@ -241,7 +243,7 @@ export default {
       types: [],
       searchBy: 'item_nm',
       searchKeyword: null,
-      searchType: null,
+      searchType: '',
       importFile: null,
       importDialog: false,
       pagination: {
@@ -329,7 +331,7 @@ export default {
       }
 
       if (this.searchType != null) {
-        search_params["type_cd"] = this.searchType;
+        search_params["item_cd"] = this.searchType;
       }
 
       api

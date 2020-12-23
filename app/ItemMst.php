@@ -53,4 +53,29 @@ class ItemMst extends Model
         'updated' => ItemMstUpdated::class,
         'deleted' => ItemMstDeleted::class,
     ];
+
+    public function item()
+    {
+        return $this->belongsTo('App\CommCd', 'ITEM_CD', 'COMM2_CD')->where('COMM1_CD', 'B10')->whereNotIn('COMM2_CD', ['$$']);
+    }
+
+    public function grp1()
+    {
+        return $this->belongsTo('App\CommCd', 'GRP1_CD', 'COMM2_CD')->where('COMM1_CD', 'B11')->whereNotIn('COMM2_CD', ['$$']);
+    }
+
+    public function grp2()
+    {
+        return $this->belongsTo('App\CommCd', 'GRP2_CD', 'COMM2_CD')->where('COMM1_CD', 'B12')->whereNotIn('COMM2_CD', ['$$']);
+    }
+
+    public function grp3()
+    {
+        return $this->belongsTo('App\CommCd', 'GRP3_CD', 'COMM2_CD')->where('COMM1_CD', 'B13')->whereNotIn('COMM2_CD', ['$$']);
+    }
+
+    public function process()
+    {
+        return $this->belongsTo('App\CommCd', 'PROCESS_CD', 'COMM2_CD')->where('COMM1_CD', 'B14')->whereNotIn('COMM2_CD', ['$$']);
+    }
 }

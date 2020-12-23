@@ -13,7 +13,7 @@ export default {
             limit: 15,
             sort: 'reg_dtm',
             order: 'asc',
-            with: '',
+            with: 'item,grp1,grp2,grp3,process',
             ...args
         }
 

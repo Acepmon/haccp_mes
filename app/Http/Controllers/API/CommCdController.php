@@ -19,13 +19,13 @@ class CommCdController extends Controller
             if ($this->getCodeNameExists()) {
                 $items = DB::select('select get_codename(?, ?) as comm2_nm', [$cd1, $cd2]);
             } else {
-                $items = CommCd::select('COMM2_CD', 'comm2_nm')->where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $cd2)->get();
+                $items = CommCd::select('comm2_cd', 'comm2_nm')->where('comm1_cd', $cd1)->whereNotIn('comm2_cd', ['$$'])->where('comm2_cd', $cd2)->get();
             }
         } else {
             if ($this->getCodeListExists()) {
                 $items = DB::select('call get_codelist(?)', [$cd1]);
             } else {
-                $items = CommCd::select('COMM2_CD', 'comm2_nm')->where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->get();
+                $items = CommCd::select('comm2_cd', 'comm2_nm')->where('comm1_cd', $cd1)->whereNotIn('comm2_cd', ['$$'])->get();
             }
         }
 
