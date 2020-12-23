@@ -413,7 +413,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { _babel_runtime_cor
         "user:role_cd": [],
         "user:appr_cd": [],
         "user:job_cd": null,
-        "user:user_sts_yn": null
+        "user:user_sts_yn": 'Y'
       },
       errors: {
         "user:user_id": null,
@@ -469,6 +469,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { _babel_runtime_cor
     removeTab: "mdn/removeTab"
   }), {
     validateRequired: function validateRequired() {
+      var except = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       var passed = true;
 
       var _arr = _babel_runtime_core_js_object_entries__WEBPACK_IMPORTED_MODULE_5___default()(this.required);
@@ -477,6 +478,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { _babel_runtime_cor
         var _arr$_i = _slicedToArray(_arr[_i], 2),
             key = _arr$_i[0],
             value = _arr$_i[1];
+
+        if (except.includes(key)) {
+          continue;
+        }
 
         if (Array.isArray(this.selected[key])) {
           if (this.selected[key] === undefined || this.selected[key].length == 0) {
@@ -554,7 +559,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { _babel_runtime_cor
         "user:role_cd": [],
         "user:appr_cd": [],
         "user:job_cd": null,
-        "user:user_sts_yn": null
+        "user:user_sts_yn": 'Y'
       });
     },
     clearErrors: function clearErrors() {
@@ -632,7 +637,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { _babel_runtime_cor
     save: function save() {
       var _this2 = this;
 
-      if (this.validateRequired()) {
+      if (this.validateRequired(['user:user_pw'])) {
         this.$vs.dialog({
           type: "confirm",
           color: "success",

@@ -365,7 +365,7 @@ export default {
         "user:role_cd": [],
         "user:appr_cd": [],
         "user:job_cd": null,
-        "user:user_sts_yn": null,
+        "user:user_sts_yn": 'Y',
       },
       errors: {
         "user:user_id": null,
@@ -429,9 +429,13 @@ export default {
       removeTab: "mdn/removeTab",
     }),
 
-    validateRequired() {
+    validateRequired(except = []) {
       let passed = true
       for (const [key, value] of Object.entries(this.required)) {
+        if (except.includes(key)){
+          continue;
+        }
+
         if (Array.isArray(this.selected[key])) {
           if (this.selected[key] === undefined || this.selected[key].length == 0) {
             this.$set(this.errors, key, 'The ' + value + ' field is required.')
@@ -522,7 +526,7 @@ export default {
         "user:role_cd": [],
         "user:appr_cd": [],
         "user:job_cd": null,
-        "user:user_sts_yn": null,
+        "user:user_sts_yn": 'Y',
       });
     },
 
@@ -596,7 +600,7 @@ export default {
     },
 
     save() {
-      if (this.validateRequired()) {
+      if (this.validateRequired(['user:user_pw'])) {
         this.$vs.dialog({
           type: "confirm",
           color: "success",

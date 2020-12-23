@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\UserPasswordUpdated;
 use App\Exports\UserExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
@@ -71,8 +72,8 @@ class UserController extends Controller
             'REG_DTM' => now()->format('YmdHis')
         ]);
 
-        $user->USER_PW = $request->input('user:user_pw');
         event(new Registered($user));
+        event(new UserPasswordUpdated($user, $request->input('user:user_pw'), 'Thank you for registering'));
 
         return response()->json([
             'success' => true,
@@ -116,7 +117,6 @@ class UserController extends Controller
         $user = User::where('USER_ID', $id)->first();
         $user->update([
             'USER_ID' => $request->input('user:user_id'),
-            'USER_PW' => Hash::make($request->input('user:user_pw')),
             'USER_NM' => $request->input('user:user_nm'),
             'EMAIL' => $request->input('user:email'),
             'ROLE_CD' => implode(',', $request->input('user:role_cd')),
@@ -124,6 +124,14 @@ class UserController extends Controller
             'JOB_CD' => $request->input('user:job_cd'),
             'USER_STS_YN' => $request->input('user:user_sts_yn'),
         ]);
+
+        if ($request->has('user:user_pw') && !empty($request->input('user:user_pw'))) {
+            $user->update([
+                'USER_PW' => Hash::make($request->input('user:user_pw')),
+            ]);
+
+            event(new UserPasswordUpdated($user, $request->input('user:user_pw')));
+        }
 
         return response()->json([
             'success' => true,
@@ -176,6 +184,8 @@ class UserController extends Controller
         if (Hash::check($oldpw, $item->USER_PW)) {
             $item->USER_PW = Hash::make($newpw);
             $item->save();
+
+            event(new UserPasswordUpdated($item, $request->input('new_password')));
         } else {
             return response()->json([
                 'errors' => [

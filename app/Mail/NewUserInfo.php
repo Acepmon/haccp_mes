@@ -16,6 +16,7 @@ class NewUserInfo extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+    public $password;
     public $introMessage;
 
     /**
@@ -23,9 +24,10 @@ class NewUserInfo extends Mailable
      *
      * @return void
      */
-    public function __construct($user, $introMessage = 'Thank you for registering')
+    public function __construct($user, $password, $introMessage = 'Your password has been updated!')
     {
         $this->user = $user;
+        $this->password = $password;
         $this->introMessage = $introMessage;
     }
 
@@ -42,6 +44,7 @@ class NewUserInfo extends Mailable
 
         return $this->markdown('emails.new_user_info', [
             'user' => $this->user,
+            'password' => $this->password,
             'introMessage' => $this->introMessage,
             'roles' => CommCd::where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$'])->whereIn('COMM2_CD', explode(',', $this->user->ROLE_CD))->get(),
             'approvals' => CommCd::where('COMM1_CD', 'B10')->whereNotIn('COMM2_CD', ['$$'])->whereIn('COMM2_CD', explode(',', $this->user->APPR_CD))->get(),

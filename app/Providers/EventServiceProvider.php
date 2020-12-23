@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\UserPasswordUpdated;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Login;
 use App\Listeners\LogSuccessfulLogin;
 use App\Listeners\SendNewUserInfoToAdmin;
-use App\Listeners\SendUserInfoToRegisteredUser;
+use App\Listeners\SendUserInfoToOwner;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -20,9 +21,11 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         Registered::class => [
-            // SendNewUserInfoToAdmin::class,
-            SendUserInfoToRegisteredUser::class,
             SendEmailVerificationNotification::class,
+        ],
+        UserPasswordUpdated::class => [
+            SendNewUserInfoToAdmin::class,
+            SendUserInfoToOwner::class,
         ],
         Login::class => [
             LogSuccessfulLogin::class,

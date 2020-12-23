@@ -2,13 +2,13 @@
 
 namespace App\Listeners;
 
+use App\Events\UserPasswordUpdated;
 use App\Mail\NewUserInfo;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
-class SendUserInfoToRegisteredUser
+class SendUserInfoToOwner
 {
     /**
      * Create the event listener.
@@ -23,12 +23,12 @@ class SendUserInfoToRegisteredUser
     /**
      * Handle the event.
      *
-     * @param  Registered  $event
+     * @param  UserPasswordUpdated  $event
      * @return void
      */
-    public function handle(Registered $event)
+    public function handle(UserPasswordUpdated $event)
     {
         Mail::to($event->user->EMAIL)
-            ->queue(new NewUserInfo($event->user));
+            ->queue(new NewUserInfo($event->user, $event->password, $event->introMessage));
     }
 }

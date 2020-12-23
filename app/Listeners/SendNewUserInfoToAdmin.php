@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\UserPasswordUpdated;
 use App\Mail\NewUserInfo;
 use App\User;
 use Illuminate\Auth\Events\Registered;
@@ -24,12 +25,14 @@ class SendNewUserInfoToAdmin
     /**
      * Handle the event.
      *
-     * @param  Registered  $event
+     * @param  UserPasswordUpdated  $event
      * @return void
      */
-    public function handle(Registered $event)
+    public function handle(UserPasswordUpdated $event)
     {
-        Mail::to(env('ADMIN_EMAIL'))
-            ->queue(new NewUserInfo($event->user, 'New user just registered'));
+        if (false) {
+            Mail::to(env('ADMIN_EMAIL'))
+                ->queue(new NewUserInfo($event->user, $event->password, 'New user just registered'));
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\UserPasswordUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\User;
@@ -113,6 +114,8 @@ class AuthController extends Controller
         $user = User::where('email', $email)->first();
         $user->USER_PW = Hash::make($password);
         $user->save();
+
+        event(new UserPasswordUpdated($user, $password));
 
         DB::table('password_resets')->where('email', $email)->delete();
 
