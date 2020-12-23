@@ -1,7 +1,7 @@
 {
-    "/js/app.js": "/js/app.js?id=c43398528df4e28bf0eb",
-    "/css/app.css": "/css/app.css?id=662b94ff2ce25e65945e",
-    "/css/main.css": "/css/main.css?id=050aea8312d19ab18327",
+    "/js/app.js": "/js/app.js?id=2b2a7d13a824ca95f6aa",
+    "/css/app.css": "/css/app.css?id=a3919e1b248446244cf2",
+    "/css/main.css": "/css/main.css?id=cbc2c4e109c90c318e21",
     "/js/chunks/empty.js": "/js/chunks/empty.js?id=1e1e6ee889e8a4fad892",
     "/js/chunks/example.js": "/js/chunks/example.js?id=9ded6404f5464c66dee3",
     "/js/chunks/home.js": "/js/chunks/home.js?id=bf5377a370220d054577",
@@ -16,7 +16,7 @@
     "/js/chunks/page-1-5-1.js": "/js/chunks/page-1-5-1.js?id=2cf37762ab7f0172219b",
     "/js/chunks/page-1-5-2.js": "/js/chunks/page-1-5-2.js?id=aedf40b06819843fae5e",
     "/js/chunks/page-1-5-3.js": "/js/chunks/page-1-5-3.js?id=ec8bd454fc891f1f363e",
-    "/js/chunks/page-1-6.js": "/js/chunks/page-1-6.js?id=6902dc93adac413aa916",
+    "/js/chunks/page-1-6.js": "/js/chunks/page-1-6.js?id=4acbc60ad9a9b6b1c3d4",
     "/js/chunks/page-1-7.js": "/js/chunks/page-1-7.js?id=eb8709fafc5cfc69d3f2",
     "/js/chunks/page-1-8-1.js": "/js/chunks/page-1-8-1.js?id=d9f7967118a1dffcc520",
     "/js/chunks/page-1-8-2.js": "/js/chunks/page-1-8-2.js?id=edd7bf9c09bfa445c278",
@@ -28,5 +28,6 @@
     "/css/vuesax.css": "/css/vuesax.css?id=8b2f64cc5679147ac37e",
     "/css/iconfont.css": "/css/iconfont.css?id=667273af1a014bd141bd",
     "/css/material-icons/material-icons.css": "/css/material-icons/material-icons.css?id=6b78e76e7f2f5210131a",
-    "/css/prism-tomorrow.css": "/css/prism-tomorrow.css?id=f46d7519e3b65a691281"
+    "/css/prism-tomorrow.css": "/css/prism-tomorrow.css?id=f46d7519e3b65a691281",
+    "/js/chunks/vendors~page-1-6.js": "/js/chunks/vendors~page-1-6.js?id=53d4e9c8c519dbeb4bba"
 }

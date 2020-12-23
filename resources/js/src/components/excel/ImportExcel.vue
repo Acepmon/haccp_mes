@@ -1,7 +1,7 @@
 <template>
   <div class="excel-import">
     <input type="file" ref="fileInput" class="hidden" accept=".xlsx, .xls" @change="handleClick">
-    <div
+    <!-- <div
       @click="$refs.fileInput.click()"
       @drop="handleDrop"
       @dragover="handleDragover"
@@ -10,8 +10,8 @@
       <feather-icon icon="UploadCloudIcon" svgClasses="h-16 w-16 stroke-current text-grey" class="block" />
       <span>Drop Excel File or </span>
       <span class="font-medium text-primary" @click.stop="$refs.fileInput.click()">Browse</span>
-      <!-- <vs-button type="border" @click.stop="$refs.fileInput.click()">Browse</vs-button> -->
-    </div>
+    </div> -->
+    <vs-button type="border" @click.stop="$refs.fileInput.click()">{{ $t("UploadExcel") }}</vs-button>
   </div>
 </template>
 
@@ -108,6 +108,7 @@ export default {
     handleClick (e) {
       const files = e.target.files
       const rawFile = files[0]
+      this.$emit('input', rawFile)
       if (!rawFile) return
       this.uploadFile(rawFile)
     },

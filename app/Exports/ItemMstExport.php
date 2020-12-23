@@ -2,7 +2,9 @@
 
 namespace App\Exports;
 
+use App\CommCd;
 use App\ItemMst;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -57,12 +59,12 @@ class ItemMstExport implements FromCollection, WithHeadings, WithStyles, WithMap
             $itemMst->CONN_QTY,
             $itemMst->IN_AMT,
             $itemMst->OUT_AMT,
-            $itemMst->ITEM_CD,
-            $itemMst->GRP1_CD,
-            $itemMst->GRP2_CD,
-            $itemMst->GRP3_CD,
-            $itemMst->USE_YN,
-            $itemMst->PROCESS_CD,
+            $this->getCdNm('B10', $itemMst->ITEM_CD),
+            $this->getCdNm('B11', $itemMst->GRP1_CD),
+            $this->getCdNm('B12', $itemMst->GRP2_CD),
+            $this->getCdNm('B13', $itemMst->GRP3_CD),
+            $this->parseUseYn($itemMst->USE_YN),
+            $this->getCdNm('B14', $itemMst->PROCESS_CD),
         ];
     }
 
@@ -94,5 +96,29 @@ class ItemMstExport implements FromCollection, WithHeadings, WithStyles, WithMap
             // Style the first row as bold text.
             1 => ['font' => ['bold' => true]],
         ];
+    }
+
+    private function parseUseYn($useYn)
+    {
+        if ($useYn == 'Y') {
+            return 'YES';
+        } else if ($useYn == 'N') {
+            return 'NO';
+        }
+
+        return '';
+    }
+
+    private function getCdNm($cd1, $cd2)
+    {
+        if ($this->getCodeNameExists()) {
+            $items = DB::select('select get_codename(?, ?) as comm2_nm', [$cd1, $cd2]);
+        } else {
+            $items = CommCd::select('COMM2_CD', 'comm2_nm')->where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $cd2)->get();
+        }
+    }
+
+    private function getCodeNameExists() {
+        return DB::table('information_schema.ROUTINES')->where('ROUTINE_SCHEMA', config('database.connections.mysql.database'))->where('ROUTINE_NAME', 'get_codename')->exists();
     }
 }

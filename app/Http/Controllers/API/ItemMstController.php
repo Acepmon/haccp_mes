@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exports\ItemMstExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ItemMstResource;
+use App\Imports\ItemMstImport;
 use App\ItemMst;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ItemMstController extends Controller
 {
@@ -94,11 +97,24 @@ class ItemMstController extends Controller
 
     public function export(Request $request)
     {
-        // 
+        $itemNm = $request->input('item_nm');
+        $itemId = $request->input('item_id');
+        $itemCd = $request->input('item_cd');
+
+        return Excel::download(new ItemMstExport($itemNm, $itemId, $itemCd), 'ITEM-MST-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     public function import(Request $request)
     {
-        // 
+        $request->validate([
+            'file' => 'required|file'
+        ]);
+
+        $result = Excel::import(new ItemMstImport(), $request->file('file'));
+
+        return response()->json([
+            'success' => true,
+            'message' => __('Successfully imported excel data'),
+        ]);
     }
 }

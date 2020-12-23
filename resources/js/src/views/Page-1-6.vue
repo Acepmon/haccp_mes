@@ -49,13 +49,7 @@
           </div>
         </div>
         <div class="w-full sm:w-1/3 px-1 flex justify-end">
-          <vs-button
-            @click="importExcel()"
-            class="mx-1"
-            color="dark"
-            type="border"
-            >{{ $t("UploadExcel") }}</vs-button
-          >
+          <import-excel :onSuccess="loadDataInTable" v-model="importFile"></import-excel>
           <vs-button
             @click="closeDialog()"
             class="mx-1"
@@ -186,6 +180,46 @@
         </vs-table>
       </div>
     </vx-card>
+
+    <vs-popup fullscreen :title="$t('UploadExcel')" :active.sync="importDialog" button-close-hidden>
+      <div class="flex flex-wrap mb-2">
+        <div class="w-full sm:w-1/2 px-1 flex justify-end"></div>
+        <div class="w-full sm:w-1/2 px-1 flex justify-end">
+          <vs-button
+            @click="importExcel()"
+            class="mx-1"
+            color="dark"
+            type="border"
+            >{{ $t("Save") }}</vs-button
+          >
+          <vs-button
+            @click="importDialog = false"
+            class="mx-1"
+            color="dark"
+            type="border"
+            >{{ $t("Close") }}</vs-button
+          >
+        </div>
+      </div>
+
+      <vs-table stripe pagination :max-items="30" search :data="tableData">
+        <template slot="header">
+          <h4>{{ sheetName }}</h4>
+        </template>
+
+        <template slot="thead">
+          <vs-th :sort-key="heading" v-for="heading in header" :key="heading">{{ heading }}</vs-th>
+        </template>
+
+        <template slot-scope="{data}">
+          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+            <vs-td :data="col" v-for="(col, indexcol) in data[indextr]" :key="indexcol + col">
+              {{ col }}
+            </vs-td>
+          </vs-tr>
+        </template>
+      </vs-table>
+    </vs-popup>
   </div>
 </template>
 
@@ -194,8 +228,13 @@ import axios from "axios";
 import comm_cd from "@/services/comm_cd";
 import api from "@/services/item_mst";
 import { mapActions } from "vuex";
+import ImportExcel from '@/components/excel/ImportExcel.vue'
 
 export default {
+  components: {
+    ImportExcel
+  },
+
   data () {
     return {
       items: [],
@@ -203,6 +242,8 @@ export default {
       searchBy: 'item_nm',
       searchKeyword: null,
       searchType: null,
+      importFile: null,
+      importDialog: false,
       pagination: {
         page: 1,
         limit: 15,
@@ -212,6 +253,10 @@ export default {
         sort: "reg_dtm",
         order: "desc",
       },
+
+      tableData: [],
+      header: [],
+      sheetName: ''
     }
   },
 
@@ -256,6 +301,13 @@ export default {
       this.sorting.sort = sort;
       this.sorting.order = order;
       this.query();
+    },
+
+    loadDataInTable ({ results, header, meta }) {
+      this.header = header
+      this.tableData = results
+      this.sheetName = meta.sheetName
+      this.$set(this, 'importDialog', true)
     },
 
     rowIndex: function (index) {
@@ -310,7 +362,53 @@ export default {
         });
     },
 
-    exportExcel() {
+    importExcel () {
+      this.$set(this, 'importDialog', false)
+      this.spinner()
+
+      let formData = new FormData();
+      if (this.importFile) {
+        formData.append("file", this.importFile);
+      }
+
+      api
+        .import(formData)
+        .then((res) => {
+          this.spinner(false)
+
+          if (res.data.success) {
+            this.$vs.notify({
+              title: this.$t("SuccessSaveData"),
+              position: "top-right",
+              color: "success",
+              text: res.data.message,
+            });
+            this.query();
+          } else {
+            this.$vs.notify({
+              title: this.$t("Error"),
+              position: "top-right",
+              color: "warning",
+              iconPack: "feather",
+              icon: "icon-alert-circle",
+              text: res.data.message,
+            });
+          }
+        })
+        .catch((err) => {
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        })
+    },
+
+    exportExcel () {
       let search_params = {};
 
       if (this.searchKeyword != null) {
@@ -341,7 +439,12 @@ export default {
     comm_cd.fetch({ cd1: "B10" }).then((res) => {
       this.types = res.data;
     });
-    console.log("Page-1-6 created");
   },
 };
 </script>
+
+<style scoped>
+.vs-popup--background {
+  pointer-events: none;
+}
+</style>
