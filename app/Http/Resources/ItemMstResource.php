@@ -19,12 +19,12 @@ class ItemMstResource extends JsonResource
             'item_mst:item_nm' => $this->ITEM_NM,
             'item_mst:spec' => $this->SPEC,
             'item_mst:unit' => $this->UNIT,
-            'item_mst:qty1' => $this->QTY1,
-            'item_mst:qty2' => $this->QTY2,
-            'item_mst:conn_no' => $this->CONN_NO,
-            'item_mst:conn_qty' => $this->CONN_QTY,
-            'item_mst:in_atm' => $this->IN_AMT,
-            'item_mst:out_amt' => $this->OUT_AMT,
+            'item_mst:qty1' => number_format($this->QTY1),
+            'item_mst:qty2' => number_format($this->QTY2),
+            'item_mst:conn_no' => number_format($this->CONN_NO),
+            'item_mst:conn_qty' => number_format($this->CONN_QTY),
+            'item_mst:in_atm' => number_format($this->IN_AMT),
+            'item_mst:out_amt' => number_format($this->OUT_AMT),
             'item_mst:item_cd' => $this->ITEM_CD,
             'item_mst:item_nm' => $this->whenLoaded('item', function () {
                 return $this->item->COMM2_NM;

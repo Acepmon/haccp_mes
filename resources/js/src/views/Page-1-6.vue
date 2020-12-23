@@ -129,27 +129,27 @@
                 {{ data[index]["item_mst:unit"] }}
               </vs-td>
 
-              <vs-td :data="data[index]['item_mst:qty1']">
+              <vs-td :data="data[index]['item_mst:qty1']" class="text-right">
                 {{ data[index]["item_mst:qty1"] }}
               </vs-td>
 
-              <vs-td :data="data[index]['item_mst:qty2']">
+              <vs-td :data="data[index]['item_mst:qty2']" class="text-right">
                 {{ data[index]["item_mst:qty2"] }}
               </vs-td>
 
-              <vs-td :data="data[index]['item_mst:conn_no']">
+              <vs-td :data="data[index]['item_mst:conn_no']" class="text-right">
                 {{ data[index]["item_mst:conn_no"] }}
               </vs-td>
 
-              <vs-td :data="data[index]['item_mst:conn_qty']">
+              <vs-td :data="data[index]['item_mst:conn_qty']" class="text-right">
                 {{ data[index]["item_mst:conn_qty"] }}
               </vs-td>
 
-              <vs-td :data="data[index]['item_mst:in_amt']">
+              <vs-td :data="data[index]['item_mst:in_amt']" class="text-right">
                 {{ data[index]["item_mst:in_amt"] }}
               </vs-td>
 
-              <vs-td :data="data[index]['item_mst:out_amt']">
+              <vs-td :data="data[index]['item_mst:out_amt']" class="text-right">
                 {{ data[index]["item_mst:out_amt"] }}
               </vs-td>
 
