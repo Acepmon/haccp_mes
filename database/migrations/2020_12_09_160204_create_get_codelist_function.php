@@ -14,9 +14,7 @@ class CreateGetCodelistFunction extends Migration
      */
     public function up()
     {
-        $path = database_path("migrations/get_codelist.sql");
-        $sql = file_get_contents($path);
-        DB::unprepared($sql);
+        DB::unprepared($this->get_codelist());
     }
 
     /**
@@ -26,6 +24,11 @@ class CreateGetCodelistFunction extends Migration
      */
     public function down()
     {
-        // DB::unprepared('DROP PROCEDURE IF EXISTS haccp_mes.get_codelist;');
+        DB::unprepared('DROP PROCEDURE IF EXISTS get_codelist;');
+    }
+
+    private function get_codelist()
+    {
+        return "DROP PROCEDURE IF EXISTS get_codelist; CREATE PROCEDURE get_codelist(IN cd1 VARCHAR(20)) BEGIN SELECT comm2_cd, comm2_nm FROM  comm_cd WHERE comm1_cd = cd1 AND comm2_cd NOT IN ('$$');  END";
     }
 }

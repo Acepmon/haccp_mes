@@ -14,9 +14,7 @@ class CreateGetCodenameFunction extends Migration
      */
     public function up()
     {
-        $path = database_path("migrations/get_codename.sql");
-        $sql = file_get_contents($path);
-        DB::unprepared($sql);
+        DB::unprepared($this->get_codename());
     }
 
     /**
@@ -26,6 +24,11 @@ class CreateGetCodenameFunction extends Migration
      */
     public function down()
     {
-        // DB::unprepared('DROP function IF EXISTS haccp_mes.get_codename;');
+        DB::unprepared('DROP function IF EXISTS get_codename;');
+    }
+
+    private function get_codename()
+    {
+        return "DROP function IF EXISTS get_codename; CREATE function get_codename(cd1 VARCHAR(20), cd2 VARCHAR(20)) returns VARCHAR(100) BEGIN  DECLARE getname VARCHAR(100); SET getname = 'Code Err'; SELECT comm2_nm into getname FROM   comm_cd  WHERE  comm1_cd = cd1  AND    comm2_cd = cd2; RETURN getname; END";
     }
 }

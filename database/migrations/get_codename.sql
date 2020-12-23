@@ -1,9 +1,9 @@
 SET GLOBAL log_bin_trust_function_creators = 1;
 
-DROP function IF EXISTS haccp_mes.get_codename;
+DROP function IF EXISTS get_codename;
 DELIMITER $$
 CREATE function 
-  haccp_mes.get_codename(cd1 VARCHAR(20), 
+  get_codename(cd1 VARCHAR(20), 
                cd2 VARCHAR(20)) returns VARCHAR(100) 
 BEGIN 
   DECLARE getname VARCHAR(100);
