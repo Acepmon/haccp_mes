@@ -189,7 +189,7 @@
         <div class="w-full sm:w-1/2 px-1 flex justify-end"></div>
         <div class="w-full sm:w-1/2 px-1 flex justify-end">
           <vs-button
-            @click="importExcel()"
+            @click="importExcelDialog()"
             class="mx-1"
             color="dark"
             type="border"
@@ -363,6 +363,18 @@ export default {
             text: err.response.data.message,
           });
         });
+    },
+
+    importExcelDialog () {
+      this.$vs.dialog({
+        type: "confirm",
+        color: "dark",
+        title: this.$t("Confirmation"),
+        text: this.$t("ImportExcel"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => this.importExcel(),
+      });
     },
 
     importExcel () {

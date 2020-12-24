@@ -12,6 +12,7 @@ export default {
     UploadExcel: 'Upload Excel',
     Confirmation: 'Confirmation',
     CloseDocument: 'Close document?',
+    ImportExcel: 'Import Excel?',
     Download: 'Download',
 
     DeleteData: 'Are you sure to delete data?',
@@ -44,6 +45,7 @@ export default {
     UploadExcel: 'Upload Excel',
     Confirmation: '확인',
     CloseDocument: 'Close document?',
+    ImportExcel: 'Import Excel?',
     Download: 'Download',
 
     DeleteData: 'Are you sure to delete data?',
