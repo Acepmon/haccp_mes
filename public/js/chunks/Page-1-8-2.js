@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[22],{"4io6":function(e,n,t){"use strict";t.r(n);var c={created:function(){console.log("Page-1-8-2 created")}},o=t("KHd+"),a=Object(o.a)(c,(function(){var e=this.$createElement;return(this._self._c||e)("h4",[this._v("Page-1-8-2")])}),[],!1,null,null,null);n.default=a.exports}}]);
