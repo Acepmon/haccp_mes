@@ -4,9 +4,9 @@ DROP PROCEDURE IF EXISTS get_codelist;
 DELIMITER $$ 
 CREATE PROCEDURE get_codelist(IN cd1 VARCHAR(20)) 
 BEGIN 
-    SELECT comm2_cd, comm2_nm 
+    SELECT COMM2_CD, COMM2_NM 
     FROM  COMM_CD 
-    WHERE comm1_cd = cd1 
-    AND    comm2_cd NOT IN ('$$');  
+    WHERE COMM1_CD = cd1 
+    AND    COMM2_CD NOT IN ('$$');  
 END $$
 DELIMITER ;

@@ -8,10 +8,10 @@ CREATE function
 BEGIN 
   DECLARE getname VARCHAR(100);
   SET getname = 'Code Err';
-  SELECT comm2_nm into getname
+  SELECT COMM2_NM into getname
   FROM   COMM_CD 
-  WHERE  comm1_cd = cd1 
-  AND    comm2_cd = cd2;
+  WHERE  COMM1_CD = cd1 
+  AND    COMM2_CD = cd2;
   RETURN getname;
 END $$
 DELIMITER ;
