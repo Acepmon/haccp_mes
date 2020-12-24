@@ -1,0 +1,140 @@
+    1  ls
+    2  dir
+    3  cls
+    4  clear
+    5  la -la
+    6  ls -al
+    7  git clone https://github.com/Acepmon/haccp_mes.git
+    8  ls
+    9  pwd
+   10  ls -al
+   11  cd haccp_mes
+   12  pwd
+   13  composer install
+   14  composer update
+   15  composer install
+   16  npm install
+   17  cp .env.example .env
+   18  php artisan key:generate
+   19  ls -al
+   20  vi vi .env
+   21  ls
+   22  pwd
+   23  vi .env_*
+   24  ls
+   25  ls
+   26  ls -al
+   27  vi .env
+   28  ls
+   29  php artisan migrate:status
+   30  composer install
+   31  composer update
+   32  npm install
+   33  cp .env.example .env
+   34  php artisan key:generate
+   35  vi .env
+   36  php artisan migrate:status
+   37  php artisan migrate –seed
+   38  npm run dev
+   39  npm run watch
+   40  npm run watch
+   41  php artisan serve
+   42  git clone https://github.com/Acepmon/haccp_mes.git
+   43  ls -al
+   44  pwd
+   45  cd haccp_mes
+   46  ls -al
+   47  pwd
+   48  vi server.php
+   49  composer install
+   50  version
+   51  php --ini
+   52  npm install
+   53  composer install
+   54  composer update
+   55  vi C:\xampp\php\php.ini
+   56  pwd
+   57  php artisan key:generate
+   58  vi .env
+   59  composer update --lock
+   60  composer install
+   61  composer install
+   62  php --ini
+   63  composer update 
+   64  composer install
+   65  cd haccp_mes
+   66  composer install
+   67  composer
+   68  pwd
+   69  cd haccp_mes
+   70  pwd
+   71  php artison serve
+   72  php artisan serve
+   73  git clone https://github.com/Acepmon/haccp_mes.git
+   74  git clone https://github.com/Acepmon/haccp_mes.git
+   75  cd haccp_mes
+   76  pwd
+   77  composer install
+   78  npm install
+   79  cp .env.example .env
+   80  php artisan key:generate
+   81  vi .env
+   82  php artisan migrate:status
+   83  php artisan migrate:status
+   84  php artisan migrate –seed
+   85  php artisan migrate
+   86  php artisan migrate –seed
+   87  php artisan migrate --seed
+   88  npm run dev
+   89  npm run watch
+   90  php artisan serve
+   91  pwd
+   92  ls -al
+   93  vi .env
+   94  ls -al
+   95  vi pack*
+   96  vi pack*
+   97  pwd
+   98  cd haccp_mes
+   99  ls -al
+  100  php artisan serve
+  101  git reset --hard
+  102  git pull origin master
+  103  php artisan serve
+  104  php artisan serve
+  105  git reset --hard
+  106  git pull origin master
+  107  php artisan migrate:refresh --seed
+  108  composer dump-autoload
+  109  php artisan migrate:refresh --seed
+  110  mkdir storage/app/files
+  111  php artisan migrate:refresh --seed
+  112  php artisan serve
+  113  npm run dev
+  114  php artisan serve
+  115  git reset --hard
+  116  git pull origin master
+  117  npm run dev
+  118  php artisan serve
+  119  php artisan serve
+  120  hostory
+  121  history
+  122  history
+  123  php artisan serve
+  124  pwd
+  125  cd haccp_mes
+  126  php artisan serve
+  127  php artisan optimize
+  128  php artisan migrate:status
+  129* nano .
+  130  php artisan migrate:refresh --seed
+  131  php artisan serve
+  132  nano storage/logs/laravel.log 
+  133  code .
+  134  php artisan serve
+  135  nano .env
+  136  php artisan serve
+  137  npm run dev
+  138  php artisan serve
+  139  history
+  140  history > history.log
