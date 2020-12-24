@@ -9,7 +9,7 @@ BEGIN
   DECLARE getcode VARCHAR(20);
   SET getcode = 'Code Err';
   SELECT comm2_cd into getcode
-  FROM   comm_cd 
+  FROM   COMM_CD 
   WHERE  comm1_cd = cd1 
   AND    comm2_nm = cdnm;
   RETURN getcode;

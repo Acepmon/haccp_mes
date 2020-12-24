@@ -29,6 +29,6 @@ class CreateGetCodenameFunction extends Migration
 
     private function get_codename()
     {
-        return "DROP function IF EXISTS get_codename; CREATE function get_codename(cd1 VARCHAR(20), cd2 VARCHAR(20)) returns VARCHAR(100) BEGIN  DECLARE getname VARCHAR(100); SET getname = 'Code Err'; SELECT comm2_nm into getname FROM   comm_cd  WHERE  comm1_cd = cd1  AND    comm2_cd = cd2; RETURN getname; END";
+        return "DROP function IF EXISTS get_codename; CREATE function get_codename(cd1 VARCHAR(20), cd2 VARCHAR(20)) returns VARCHAR(100) BEGIN  DECLARE getname VARCHAR(100); SET getname = 'Code Err'; SELECT comm2_nm into getname FROM   COMM_CD  WHERE  comm1_cd = cd1  AND    comm2_cd = cd2; RETURN getname; END";
     }
 }

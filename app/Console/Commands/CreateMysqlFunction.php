@@ -56,16 +56,16 @@ class CreateMysqlFunction extends Command
 
     private function get_codelist()
     {
-        return "DROP PROCEDURE IF EXISTS get_codelist; CREATE PROCEDURE get_codelist(IN cd1 VARCHAR(20)) BEGIN SELECT comm2_cd, comm2_nm FROM  comm_cd WHERE comm1_cd = cd1 AND comm2_cd NOT IN ('$$');  END";
+        return "DROP PROCEDURE IF EXISTS get_codelist; CREATE PROCEDURE get_codelist(IN cd1 VARCHAR(20)) BEGIN SELECT comm2_cd, comm2_nm FROM  COMM_CD WHERE comm1_cd = cd1 AND comm2_cd NOT IN ('$$');  END";
     }
 
     private function get_codename()
     {
-        return "DROP function IF EXISTS get_codename; CREATE function get_codename(cd1 VARCHAR(20), cd2 VARCHAR(20)) returns VARCHAR(100) BEGIN  DECLARE getname VARCHAR(100); SET getname = 'Code Err'; SELECT comm2_nm into getname FROM   comm_cd  WHERE  comm1_cd = cd1  AND    comm2_cd = cd2; RETURN getname; END";
+        return "DROP function IF EXISTS get_codename; CREATE function get_codename(cd1 VARCHAR(20), cd2 VARCHAR(20)) returns VARCHAR(100) BEGIN  DECLARE getname VARCHAR(100); SET getname = 'Code Err'; SELECT comm2_nm into getname FROM   COMM_CD  WHERE  comm1_cd = cd1  AND    comm2_cd = cd2; RETURN getname; END";
     }
 
     private function get_codebyname()
     {
-        return "DROP function IF EXISTS get_codebyname; CREATE function get_codebyname(cd1 VARCHAR(20), cdnm VARCHAR(100)) returns VARCHAR(20) BEGIN DECLARE getcode VARCHAR(20); SET getcode = 'Code Err'; SELECT comm2_cd into getcode FROM   comm_cd WHERE  comm1_cd = cd1 AND    comm2_nm = cdnm; RETURN getcode; END";
+        return "DROP function IF EXISTS get_codebyname; CREATE function get_codebyname(cd1 VARCHAR(20), cdnm VARCHAR(100)) returns VARCHAR(20) BEGIN DECLARE getcode VARCHAR(20); SET getcode = 'Code Err'; SELECT comm2_cd into getcode FROM   COMM_CD WHERE  comm1_cd = cd1 AND    comm2_nm = cdnm; RETURN getcode; END";
     }
 }
