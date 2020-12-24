@@ -55,8 +55,6 @@
                 <vs-input
                   maxlength="10"
                   v-model="haccp_mst_file['haccp_mst_file:rev_no']"
-                  type="number"
-                  class="vs-input-text-right"
                   :danger="errors['haccp_mst_file:rev_no'] != null"
                   :danger-text="errors['haccp_mst_file:rev_no']"
                 />
@@ -254,7 +252,7 @@
                     v-text="data[index]['haccp_mst_file:att_file'][0].att_nm"
                     class="pt-1"
                   ></span>
-                  <vs-button
+                  <!-- <vs-button
                     color="primary"
                     class="ml-2"
                     :href="
@@ -268,7 +266,7 @@
                     size="small"
                     icon-pack="feather"
                     icon="icon-download"
-                  ></vs-button>
+                  ></vs-button> -->
                 </div>
               </vs-td>
             </vs-tr>
