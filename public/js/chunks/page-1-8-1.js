@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[21],{"/lBp":function(e,n,t){"use strict";t.r(n);var c={created:function(){console.log("Page-1-8-1 created")}},l=t("KHd+"),a=Object(l.a)(c,(function(){var e=this.$createElement;return(this._self._c||e)("h4",[this._v("Page-1-8-1")])}),[],!1,null,null,null);n.default=a.exports}}]);
