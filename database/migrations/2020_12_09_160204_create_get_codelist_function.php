@@ -29,6 +29,6 @@ class CreateGetCodelistFunction extends Migration
 
     private function get_codelist()
     {
-        return "DROP PROCEDURE IF EXISTS get_codelist; CREATE PROCEDURE get_codelist(IN cd1 VARCHAR(20)) BEGIN SELECT comm2_cd, comm2_nm FROM  comm_cd WHERE comm1_cd = cd1 AND comm2_cd NOT IN ('$$');  END";
+        return "DROP PROCEDURE IF EXISTS get_codelist; CREATE PROCEDURE get_codelist(IN cd1 VARCHAR(20)) BEGIN SELECT COMM2_CD, COMM2_NM FROM  COMM_CD WHERE COMM1_CD = cd1 AND COMM2_CD NOT IN ('$$');  END";
     }
 }

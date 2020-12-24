@@ -17,19 +17,20 @@ class CommCdController extends Controller
 
         if ($request->has('cd2')) {
             if ($this->getCodeNameExists()) {
-                $items = DB::select('select get_codename(?, ?) as comm2_nm', [$cd1, $cd2]);
+                $items = DB::select('select get_codename(?, ?) as COMM2_NM', [$cd1, $cd2]);
+                dd($items);
             } else {
-                $items = CommCd::select('comm2_cd', 'comm2_nm')->where('comm1_cd', $cd1)->whereNotIn('comm2_cd', ['$$'])->where('comm2_cd', $cd2)->get();
+                $items = CommCd::select('COMM2_CD', 'COMM2_NM')->where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $cd2)->get();
             }
         } else {
             if ($this->getCodeListExists()) {
                 $items = DB::select('call get_codelist(?)', [$cd1]);
             } else {
-                $items = CommCd::select('comm2_cd', 'comm2_nm')->where('comm1_cd', $cd1)->whereNotIn('comm2_cd', ['$$'])->get();
+                $items = CommCd::select('COMM2_CD', 'COMM2_NM')->where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->get();
             }
         }
 
-        return response()->json($items);
+        return response()->json($this->map($items));
     }
 
     /**
@@ -108,5 +109,25 @@ class CommCdController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function map($items = [])
+    {
+        return array_map(function ($item) {
+            $cd = (array) $item;
+            $rt = [];
+
+            if (array_key_exists('COMM1_CD', $cd)) {
+                $rt['comm1_cd'] = $cd['COMM1_CD'];
+            }
+            if (array_key_exists('COMM2_CD', $cd)) {
+                $rt['comm2_cd'] = $cd['COMM2_CD'];
+            }
+            if (array_key_exists('COMM2_NM', $cd)) {
+                $rt['comm2_nm'] = $cd['COMM2_NM'];
+            }
+
+            return $rt;
+        }, $items);
     }
 }
