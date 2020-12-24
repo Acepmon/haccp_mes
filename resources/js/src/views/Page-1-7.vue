@@ -221,7 +221,8 @@
         </template>
 
         <template slot-scope="{data}">
-          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+          <!-- eslint-disable-next-line -->
+          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" v-if="indextr != 0">
             <vs-td :data="col" v-for="(col, indexcol) in data[indextr]" :key="indexcol + col">
               {{ col }}
             </vs-td>
