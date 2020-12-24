@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CommCd extends Model
 {
-    protected $table = 'comm_cd';
+    protected $table = 'COMM_CD';
     protected $primaryKey = null;
     public $incrementing = false;
     protected $keyType = 'string';

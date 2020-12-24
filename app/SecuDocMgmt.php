@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SecuDocMgmt extends Model
 {
-    protected $table = 'secu_doc_mgmt';
+    protected $table = 'SECU_DOC_MGMT';
     protected $primaryKey = 'DOC_ID';
     public $incrementing = true;
     // protected $keyType = 'string';

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class HaccpMstFile extends Model
 {
-    protected $table = 'haccp_mst_file';
+    protected $table = 'HACCP_MST_FILE';
     protected $primaryKey = 'REV_SEQ';
     public $incrementing = true;
     public $timestamps = false;

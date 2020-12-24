@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CompInfo extends Model
 {
-    protected $table = 'comp_info';
+    protected $table = 'COMP_INFO';
     protected $primaryKey = 'COMP_ID';
     public $incrementing = false;
     protected $keyType = 'string';

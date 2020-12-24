@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ItemMst extends Model
 {
-    protected $table = 'item_mst';
+    protected $table = 'ITEM_MST';
     protected $primaryKey = 'ITEM_ID';
     public $incrementing = false;
     protected $keyType = 'string';

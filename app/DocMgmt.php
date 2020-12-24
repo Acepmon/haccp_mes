@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DocMgmt extends Model
 {
-    protected $table = 'doc_mgmt';
+    protected $table = 'DOC_MGMT';
     protected $primaryKey = 'DOC_ID';
     public $incrementing = true;
     // protected $keyType = 'string';

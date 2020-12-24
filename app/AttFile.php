@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AttFile extends Model
 {
-    protected $table = 'att_file';
+    protected $table = 'ATT_FILE';
     protected $primaryKey = 'ATT_SEQ';
     public $incrementing = false;
     protected $keyType = 'string';

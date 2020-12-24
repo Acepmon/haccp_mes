@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EdocFile extends Model
 {
-    protected $table = 'edoc_file';
+    protected $table = 'EDOC_FILE';
     protected $primaryKey = 'DOC_ID';
     public $incrementing = true;
     // protected $keyType = 'string';

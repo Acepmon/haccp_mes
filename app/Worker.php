@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Worker extends Model
 {
-    protected $table = 'worker';
+    protected $table = 'WORKER';
     protected $primaryKey = 'WORKER_ID';
     public $incrementing = true;
     public $timestamps = false;

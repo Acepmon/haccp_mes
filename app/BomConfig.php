@@ -12,7 +12,7 @@ class BomConfig extends Model
 {
     use HasCompositePrimaryKey;
 
-    protected $table = 'bom_config';
+    protected $table = 'BOM_CONIFG';
     protected $primaryKey = ['ITEM1_ID', 'ITEM2_ID'];
     public $incrementing = false;
     protected $keyType = 'string';
