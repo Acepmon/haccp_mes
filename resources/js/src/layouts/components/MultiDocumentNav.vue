@@ -15,7 +15,10 @@
         :style="activeTab == tab.value ? 'border-color: inherit' : ''"
         @click="routeTo({ path: tab.path })"
         class="py-1 pr-2 pl-5 flex-shrink-0"
-        @contextmenu.prevent="$refs.menu.open($event);contextTab=tab.value"
+        @contextmenu.prevent="
+          $refs.menu.open($event);
+          contextTab = tab.value;
+        "
       >
         <div class="flex flex-row">
           <span
@@ -37,11 +40,7 @@
 
       <vue-context ref="menu">
         <li>
-          <a
-            href="#"
-            @click="contextClose()"
-            class="flex items-center text-sm"
-          >
+          <a href="#" @click="contextClose()" class="flex items-center text-sm">
             <span class="ml-2">Close</span>
           </a>
         </li>
@@ -117,9 +116,13 @@ export default {
   components: {
     VueContext,
     "tab-home": () =>
-      lazyLoadView(import(/* webpackChunkName: "home" */ "@/views/Home.vue")),
+      lazyLoadView(
+        import(/* webpackChunkName: "home" */ "@/views/Home.vue")
+      ),
     "tab-empty": () =>
-      lazyLoadView(import(/* webpackChunkName: "empty" */ "@/views/Empty.vue")),
+      lazyLoadView(
+        import(/* webpackChunkName: "empty" */ "@/views/Empty.vue")
+      ),
     "tab-example": () =>
       lazyLoadView(
         import(/* webpackChunkName: "example" */ "@/views/Example.vue")
@@ -194,22 +197,18 @@ export default {
       ),
     "tab-profile-general": () =>
       lazyLoadView(
-        import(
-          /* webpackChunkName: "profile-general" */ "@/views/ProfileGeneral.vue"
-        )
+        import(/* webpackChunkName: "profile-general" */ "@/views/ProfileGeneral.vue")
       ),
     "tab-profile-password": () =>
       lazyLoadView(
-        import(
-          /* webpackChunkName: "profile-password" */ "@/views/ProfilePassword.vue"
-        )
+        import(/* webpackChunkName: "profile-password" */ "@/views/ProfilePassword.vue")
       ),
   },
 
-  data () {
+  data() {
     return {
       contextTab: null,
-    }
+    };
   },
 
   computed: {
@@ -241,43 +240,43 @@ export default {
       });
     },
 
-    contextClose(){
-      this.removeTab(this.contextTab)
+    contextClose() {
+      this.removeTab(this.contextTab);
     },
 
-    contextCloseOther(){
-      let tabsToRemove = []
-      let tabsClone = [...this.tabs]
+    contextCloseOther() {
+      let tabsToRemove = [];
+      let tabsClone = [...this.tabs];
 
-      tabsClone.forEach(tab => {
+      tabsClone.forEach((tab) => {
         if (tab.value != this.contextTab) {
-          tabsToRemove.push(tab)
+          tabsToRemove.push(tab);
         }
       });
 
-      this.removeTabs(tabsToRemove)
+      this.removeTabs(tabsToRemove);
     },
 
-    contextCloseRight(){
-      let tabsToRemove = []
-      let tabsClone = [...this.tabs]
-      let found = false
+    contextCloseRight() {
+      let tabsToRemove = [];
+      let tabsClone = [...this.tabs];
+      let found = false;
 
-      tabsClone.forEach(tab => {
+      tabsClone.forEach((tab) => {
         if (found) {
-          tabsToRemove.push(tab)
+          tabsToRemove.push(tab);
         }
         if (tab.value == this.contextTab) {
-          found = true
+          found = true;
         }
       });
 
-      this.removeTabs(tabsToRemove)
+      this.removeTabs(tabsToRemove);
     },
 
-    contextCloseAll(){
-      let tabsClone = [...this.tabs]
-      this.removeTabs(tabsClone)
+    contextCloseAll() {
+      let tabsClone = [...this.tabs];
+      this.removeTabs(tabsClone);
     },
   },
 };

@@ -40,7 +40,7 @@ const router = new Router({
               {
                 path: '/1',
                 name: '정보관리',
-                component: () => import('./views/Empty.vue')
+                component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
               },
               {
                 path: '/1/1',
@@ -126,32 +126,32 @@ const router = new Router({
               {
                 path: '/2',
                 name: '구매관리',
-                component: () => import('./views/Empty.vue')
+                component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
               },
               {
                 path: '/3',
                 name: '주문처리',
-                component: () => import('./views/Empty.vue')
+                component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
               },
               {
                 path: '/4',
                 name: '생산관리',
-                component: () => import('./views/Empty.vue')
+                component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
               },
               {
                 path: '/5',
                 name: '출하관리',
-                component: () => import('./views/Empty.vue')
+                component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
               },
               {
                 path: '/6',
                 name: 'HACCP모니터링',
-                component: () => import('./views/Empty.vue')
+                component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
               },
               {
                 path: '/7',
                 name: '자료관리',
-                component: () => import('./views/Empty.vue')
+                component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
               },
               {
                 path: '/7/1',
@@ -176,12 +176,12 @@ const router = new Router({
               {
                 path: '/user-entry',
                 name: 'User Entry',
-                component: () => import('./views/UserEntry.vue')
+                component: () => import(/* webpackChunkName: "user-entry" */ './views/UserEntry.vue')
               },
               {
                 path: '/login-history',
                 name: 'Login History',
-                component: () => import('./views/LoginHist.vue')
+                component: () => import(/* webpackChunkName: "login-hist" */ './views/LoginHist.vue')
               },
             ],
         },
