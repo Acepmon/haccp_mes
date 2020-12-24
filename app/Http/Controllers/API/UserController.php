@@ -50,7 +50,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user:user_id' => 'required|string|max:15|unique:user,USER_ID',
+            'user:user_id' => 'required|string|max:15|unique:USER,USER_ID',
             'user:user_pw' => 'required|string|confirmed|max:100',
             'user:user_nm' => 'required|string|max:20',
             'user:email' => 'nullable|string|email|max:50',
@@ -104,7 +104,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'user:user_id' => 'required|string|max:15|unique:user,USER_ID,' . $id . ',USER_ID',
+            'user:user_id' => 'required|string|max:15|unique:USER,USER_ID,' . $id . ',USER_ID',
             'user:user_pw' => 'nullable|string|confirmed|max:100',
             'user:user_nm' => 'required|string|max:20',
             'user:email' => 'nullable|string|email|max:50',
