@@ -26,6 +26,6 @@ class CreateMyhhTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('myhh');
+        Schema::dropIfExists('MYHH');
     }
 }

@@ -51,6 +51,7 @@ class DropTable extends Command
         Schema::dropIfExists('password_resets');
         Schema::dropIfExists('ITEM_MST');
         Schema::dropIfExists('BOM_CONFIG');
+        Schema::dropIfExists('MYHH');
         Schema::dropIfExists('personal_access_tokens');
         Schema::dropIfExists('failed_jobs');
         Schema::dropIfExists('migrations');
