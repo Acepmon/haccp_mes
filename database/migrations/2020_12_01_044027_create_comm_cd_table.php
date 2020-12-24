@@ -26,6 +26,6 @@ class CreateCommCdTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comm_cd');
+        Schema::dropIfExists('COMM_CD');
     }
 }

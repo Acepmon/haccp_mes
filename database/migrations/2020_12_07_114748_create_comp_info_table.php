@@ -26,6 +26,6 @@ class CreateCompInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comp_info');
+        Schema::dropIfExists('COMP_INFO');
     }
 }

@@ -26,6 +26,6 @@ class CreateHaccpMstFileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('haccp_mst_file');
+        Schema::dropIfExists('HACCP_MST_FILE');
     }
 }

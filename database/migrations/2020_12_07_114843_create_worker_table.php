@@ -26,6 +26,6 @@ class CreateWorkerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('worker');
+        Schema::dropIfExists('WORKER');
     }
 }

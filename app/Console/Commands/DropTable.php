@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Schema;
 
 class DropTable extends Command
 {
@@ -11,14 +12,14 @@ class DropTable extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'drop:table';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Drops table';
 
     /**
      * Create a new command instance.
@@ -37,6 +38,20 @@ class DropTable extends Command
      */
     public function handle()
     {
-        return 0;
+        Schema::dropIfExists('USER');
+        Schema::dropIfExists('COMM_CD');
+        Schema::dropIfExists('LOGIN_HIST');
+        Schema::dropIfExists('COMP_INFO');
+        Schema::dropIfExists('WORKER');
+        Schema::dropIfExists('HACCP_MST_FILE');
+        Schema::dropIfExists('ATT_FILE');
+        Schema::dropIfExists('DOC_MGMT');
+        Schema::dropIfExists('EDOC_FILE');
+        Schema::dropIfExists('SECU_DOC_MGMT');
+        Schema::dropIfExists('password_resets');
+        Schema::dropIfExists('ITEM_MST');
+        Schema::dropIfExists('BOM_CONFIG');
+        Schema::dropIfExists('personal_access_tokens');
+        Schema::dropIfExists('migrations');
     }
 }

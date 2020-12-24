@@ -26,6 +26,6 @@ class CreateItemMstTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('item_mst');
+        Schema::dropIfExists('ITEM_MST');
     }
 }

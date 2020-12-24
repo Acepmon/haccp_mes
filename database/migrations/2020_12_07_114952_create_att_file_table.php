@@ -26,6 +26,6 @@ class CreateAttFileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('att_file');
+        Schema::dropIfExists('ATT_FILE');
     }
 }

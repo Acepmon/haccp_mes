@@ -26,6 +26,6 @@ class CreateEdocFileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('edoc_file');
+        Schema::dropIfExists('EDOC_FILE');
     }
 }

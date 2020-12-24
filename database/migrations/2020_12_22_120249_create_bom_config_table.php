@@ -26,6 +26,6 @@ class CreateBomConfigTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bom_config');
+        Schema::dropIfExists('BOM_CONFIG');
     }
 }

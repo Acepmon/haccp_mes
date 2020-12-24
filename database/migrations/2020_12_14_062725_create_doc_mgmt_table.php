@@ -26,6 +26,6 @@ class CreateDocMgmtTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('doc_mgmt');
+        Schema::dropIfExists('DOC_MGMT');
     }
 }

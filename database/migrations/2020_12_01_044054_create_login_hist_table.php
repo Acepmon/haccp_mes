@@ -26,6 +26,6 @@ class CreateLoginHistTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('login_hist');
+        Schema::dropIfExists('LOGIN_HIST');
     }
 }

@@ -26,6 +26,6 @@ class CreateSecuDocMgmtTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('secu_doc_mgmt');
+        Schema::dropIfExists('SECU_DOC_MGMT');
     }
 }
