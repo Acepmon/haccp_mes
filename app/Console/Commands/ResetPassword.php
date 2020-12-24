@@ -42,8 +42,8 @@ class ResetPassword extends Command
         $userId = $this->argument('userId');
         $password = $this->argument('password');
 
-        if (DB::table('user')->where('USER_ID', $userId)->exists()) {
-            DB::table('user')->where('USER_ID', $userId)->update([
+        if (DB::table('USER')->where('USER_ID', $userId)->exists()) {
+            DB::table('USER')->where('USER_ID', $userId)->update([
                 'USER_PW' => Hash::make($password)
             ]);
 
