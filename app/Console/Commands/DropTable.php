@@ -52,6 +52,7 @@ class DropTable extends Command
         Schema::dropIfExists('ITEM_MST');
         Schema::dropIfExists('BOM_CONFIG');
         Schema::dropIfExists('personal_access_tokens');
+        Schema::dropIfExists('failed_jobs');
         Schema::dropIfExists('migrations');
     }
 }
