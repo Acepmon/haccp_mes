@@ -375,7 +375,52 @@ export default {
         });
     },
 
-    remove() {},
+    remove() {
+      this.clearErrors();
+      this.spinner();
+
+      api
+        .delete(this.item2['comm_cd:comm1_cd'])
+        .then((res) => {
+          this.spinner(false);
+
+          if (res.data.success) {
+            this.$vs.notify({
+              title: this.$t("SuccessDeleteData"),
+              position: "top-right",
+              color: "success",
+              text: res.data.message,
+            });
+            this.clear();
+            this.query();
+          } else {
+            this.$vs.notify({
+              title: this.$t("Error"),
+              position: "top-right",
+              color: "warning",
+              iconPack: "feather",
+              icon: "icon-alert-circle",
+              text: res.data.message,
+            });
+          }
+        })
+        .catch((err) => {
+          this.displayErrors(
+            err.response.data.hasOwnProperty("errors")
+              ? err.response.data.errors
+              : null
+          );
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
 
     closeDialog() {
       this.$vs.dialog({

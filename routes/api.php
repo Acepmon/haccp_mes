@@ -46,7 +46,7 @@ Route::group([
 
     Route::get('code', 'CommCdController@code')->name('code');
     Route::post('comm_cd/{comm1cd}/sync', 'CommCdController@sync');
-    Route::apiResource('comm_cd', 'CommCdController')->except(['show', 'store', 'destroy', 'update']);
+    Route::apiResource('comm_cd', 'CommCdController')->except(['show', 'store', 'update']);
 
     Route::apiResource('comp_info', 'CompInfoController')->except(['show', 'update']);
 

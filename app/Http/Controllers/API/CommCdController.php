@@ -127,7 +127,12 @@ class CommCdController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('COMM_CD')->where('COMM1_CD', $id)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => __('Company info successfully deleted')
+        ]);
     }
 
     private function map($items = [])

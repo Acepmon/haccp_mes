@@ -36,6 +36,17 @@ export default {
         return axios.post(`${config.baseUrl}/comm_cd/${comm1_cd}/sync`, params)
     },
 
+    delete: function (id, args = {}) {
+
+        // Default parameters
+        let params = {
+            _method: 'DELETE',
+            ...args
+        }
+
+        return axios.post(`${config.baseUrl}/comm_cd/${id}`, params)
+    },
+
     // Create url query parameters for API request
     prepParams(data) {
         const ret = [];
