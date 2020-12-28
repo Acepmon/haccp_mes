@@ -45,10 +45,10 @@ class CommCdController extends Controller
 
         if ($request->has('comm1_cd')) {
             $items = $items->where('COMM1_CD', $request->input('comm1_cd'))->whereNotIn('COMM2_CD', ['$$']);
-        }
-
-        if ($request->has('comm2_nm')) {
+        } else if ($request->has('comm2_nm')) {
             $items = $items->where('COMM2_NM', 'LIKE', '%'.$request->input('comm2_nm').'%')->whereIn('COMM2_CD', ['$$']);
+        } else {
+            $items = $items->whereIn('COMM2_CD', ['$$']);
         }
 
         if ($limit == -1) {
@@ -72,9 +72,28 @@ class CommCdController extends Controller
     {
         $items = CommCd::query();
 
-        $items = $items->where('COMM1_CD', $comm1cd)->whereNotIn('COMM2_CD', ['$$']);
+        $request->validate([
+            'rowData' => 'required|array'
+        ]);
 
-        return CommCdResource::collection($items->get());
+        $datas = collect($request->input('rowData'))->map(function ($item) {
+            return [
+                'COMM1_CD' => $item['comm_cd:comm1_cd'],
+                'COMM2_CD' => $item['comm_cd:comm2_cd'],
+                'COMM2_NM' => $item['comm_cd:comm2_nm'],
+            ];
+        })->each(function ($item) use ($comm1cd) {
+            DB::table('COMM_CD')
+                ->where('COMM1_CD', $comm1cd)
+                ->whereNotIn('COMM2_CD', ['$$'])
+                ->where('COMM2_CD', $item['COMM2_CD'])
+                ->update($item);
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => __('Successfully synced'),
+        ]);
     }
 
     /**

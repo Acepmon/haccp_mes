@@ -6,7 +6,7 @@
           <div class="w-full sm:w-2/3">
             <div class="vx-row mb-2">
               <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">문서이름</span>
+                <span class="pt-2">공통코드명</span>
               </div>
               <div class="vx-col sm:w-1/3 w-full">
                 <vs-input v-model="searchNm" style="width: 150px" />
@@ -69,61 +69,16 @@
         />
       </div>
 
-      <div class="overflow-y-auto" style="max-height: 300px">
-        <vs-table stripe :data="items1" edit>
-          <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="comm1_cd">코드</vs-th>
-            <vs-th sort-key="comm2_nm">코드명</vs-th>
-            <vs-th></vs-th>
-          </template>
-
-          <template slot-scope="{ data }">
-            <vs-tr :data="tr" :key="index" v-for="(tr, index) in items1">
-              <vs-td :data="index + 1">
-                {{ index + 1 }}
-              </vs-td>
-
-              <vs-td :data="data[index]['comm_cd:comm2_cd']">
-                {{ data[index]["comm_cd:comm2_cd"] }}
-
-                <template slot="edit">
-                  <vs-input
-                    maxlength="20"
-                    v-model="tr['comm_cd:comm2_cd']"
-                    class="inputx"
-                    placeholder="코드"
-                  />
-                </template>
-              </vs-td>
-
-              <vs-td :data="data[index]['comm_cd:comm2_nm']">
-                {{ data[index]["comm_cd:comm2_nm"] }}
-
-                <template slot="edit">
-                  <vs-input
-                    maxlength="100"
-                    v-model="tr['comm_cd:comm2_nm']"
-                    class="inputx"
-                    placeholder="코드명"
-                  />
-                </template>
-              </vs-td>
-
-              <vs-td>
-                <vs-button
-                  @click="removeRow(index)"
-                  type="flat"
-                  color="danger"
-                  size="small"
-                  icon="clear"
-                  style="float: right"
-                ></vs-button>
-              </vs-td>
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
+      <ag-grid-vue
+        ref="agGridTable"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 300px;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :onGridReady="fillAllCellsWithWidthMeasurement"
+        :rowData="itemsComp">
+      </ag-grid-vue>
 
       <vs-divider />
 
@@ -186,8 +141,14 @@
 import axios from "axios";
 import api from "@/services/comm_cd";
 import { mapActions } from "vuex";
+import { AgGridVue } from 'ag-grid-vue'
+
+import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
+  components: {
+    AgGridVue
+  },
   data() {
     return {
       searchNm: null,
@@ -209,7 +170,49 @@ export default {
 
       items1: [],
       items2: [],
+
+      gridOptions: {},
+      defaultColDef: {
+        sortable: true,
+        editable: true,
+        resizable: true,
+        suppressMenu: false
+      },
+
+      columnDefs: [
+        {
+          headerName: 'No',
+          field: 'no',
+          filter: false,
+          editable: false,
+          minWidth: 100,
+        },
+        {
+          headerName: '코드',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+          minWidth: 200,
+          width: 500,
+        },
+        {
+          headerName: '코드명',
+          field: 'comm_cd:comm2_nm',
+          width: 200,
+          width: 500,
+        }
+      ],
     };
+  },
+
+  computed: {
+    itemsComp: function () {
+      return this.items1.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    }
   },
 
   methods: {
@@ -328,7 +331,9 @@ export default {
       this.spinner();
 
       api
-        .sync(this.item2["comm_cd:comm1_cd"], this.items1)
+        .sync(this.item2["comm_cd:comm1_cd"], {
+          'rowData': this.gridOptions.rowData
+        })
         .then((res) => {
           this.spinner(false);
 
@@ -433,6 +438,16 @@ export default {
     removeRow(index) {
       this.items1.splice(index, 1);
     },
+
+    fillAllCellsWithWidthMeasurement () {
+      Array.prototype.slice
+        .call(document.querySelectorAll('.ag-cell'))
+        .forEach(function (cell) {
+          var width = cell.offsetWidth;
+          var isFullWidthRow = cell.parentElement.childNodes.length === 1;
+          cell.textContent = (isFullWidthRow ? 'Total width: ' : '') + width + 'px';
+        });
+    }
   },
 
   created() {
