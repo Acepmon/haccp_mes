@@ -13,7 +13,7 @@ export default {
             limit: 15,
             sort: 'reg_dtm',
             order: 'asc',
-            with: '',
+            with: 'item1,item2',
             ...args
         }
 
@@ -52,8 +52,18 @@ export default {
         return axios.post(`${config.baseUrl}/${this.api}/${id}`, params)
     },
 
-    export: function () {
-        return `${config.baseUrl}/${this.api}/export`
+    sync: function (args = {}) {
+        // Default parameters
+        let params = {
+            ...args
+        }
+
+        // Return axios promise
+        return axios.post(`${config.baseUrl}/${this.api}/sync`, params)
+    },
+
+    export: function (params) {
+        return `${config.baseUrl}/${this.api}/export?${this.prepParams(params)}`
     },
 
     import: function (formData) {

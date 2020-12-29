@@ -12,8 +12,8 @@ class BomConfig extends Model
 {
     use HasCompositePrimaryKey;
 
-    protected $table = 'BOM_CONIFG';
-    protected $primaryKey = ['ITEM1_ID', 'ITEM2_ID'];
+    protected $table = 'BOM_CONFIG';
+    protected $primaryKey = ['ITEM1_ID', 'BOM_VER', 'ITEM2_ID'];
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
@@ -39,4 +39,14 @@ class BomConfig extends Model
         'updated' => BomConfigUpdated::class,
         'deleted' => BomConfigDeleted::class,
     ];
+
+    public function item1()
+    {
+        return $this->belongsTo('App\ItemMst', 'ITEM1_ID', 'ITEM_ID');
+    }
+
+    public function item2()
+    {
+        return $this->belongsTo('App\ItemMst', 'ITEM2_ID', 'ITEM_ID');
+    }
 }

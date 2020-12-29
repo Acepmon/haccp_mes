@@ -49,6 +49,16 @@
           </div>
         </div>
         <div class="w-full sm:w-1/3 px-1 flex justify-end">
+          <div>
+            <vs-button
+              :disabled="items.length <= 0"
+              @click="saveDialog()"
+              class="mx-1 flex-shrink-0"
+              color="dark"
+              type="border"
+              >{{ $t("Save") }}</vs-button
+            >
+          </div>
           <import-excel :onSuccess="loadDataInTable" v-model="importFile"></import-excel>
           <div>
             <vs-button
@@ -71,8 +81,7 @@
         style="max-height: 300px;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
-        :onGridReady="fillAllCellsWithWidthMeasurement"
-        :rowData="itemsComp">
+        :rowData="items2Comp">
       </ag-grid-vue>
 
       <vs-divider />
@@ -264,6 +273,7 @@ export default {
       item: {
       },
       items: [],
+      items2: [],
       types: [],
       searchBy: 'item_nm',
       searchKeyword: null,
@@ -298,87 +308,70 @@ export default {
           field: 'no',
           filter: false,
           editable: false,
-          minWidth: 100,
+          width: 100,
         },
         {
-          headerName: '코드',
-          field: 'comm_cd:comm2_cd',
+          headerName: '생산품목코드',
+          field: 'bom_config:item1_id',
           editable: false,
+          width: 150,
         },
         {
-          headerName: '품목명',
-          field: 'comm_cd:comm2_cd',
+          headerName: '생산품목명',
+          field: 'bom_config:item1_nm',
           editable: false,
+          width: 200,
         },
         {
-          headerName: '규격명',
-          field: 'comm_cd:comm2_cd',
+          headerName: '생산공정명',
+          field: 'bom_config:process_nm',
           editable: false,
+          width: 150,
         },
         {
-          headerName: '단위',
-          field: 'comm_cd:comm2_cd',
+          headerName: 'BOM버전',
+          field: 'bom_config:bom_ver',
           editable: false,
+          width: 200,
         },
         {
-          headerName: '당수량(분자)',
-          field: 'comm_cd:comm2_cd',
+          headerName: '소모품목코드',
+          field: 'bom_config:item2_id',
           editable: false,
+          width: 150,
         },
         {
-          headerName: '대표품목 환산수량',
-          field: 'comm_cd:comm2_cd',
+          headerName: '소모품목명',
+          field: 'bom_config:item2_nm',
           editable: false,
+          width: 200,
         },
         {
-          headerName: '연결품목 환산수량',
-          field: 'comm_cd:comm2_cd',
-          editable: false,
+          headerName: '생산수량',
+          field: 'bom_config:prod_qty',
+          type: 'numericColumn',
+          width: 100,
         },
         {
-          headerName: '품목',
-          field: 'comm_cd:comm2_cd',
-          editable: false,
+          headerName: '소요량',
+          field: 'bom_config:use_qty',
+          type: 'numericColumn',
+          width: 100,
         },
-        {
-          headerName: '그룹1',
-          field: 'comm_cd:comm2_cd',
-          editable: false,
-        },
-        {
-          headerName: '그룹2',
-          field: 'comm_cd:comm2_cd',
-          editable: false,
-        },
-        {
-          headerName: '단위(대)',
-          field: 'comm_cd:comm2_nm',
-        },
-        {
-          headerName: '수량(대)',
-          field: 'comm_cd:comm2_nm',
-        },
-        {
-          headerName: '단위(중)',
-          field: 'comm_cd:comm2_nm',
-        },
-        {
-          headerName: '수량(중)',
-          field: 'comm_cd:comm2_nm',
-        },
-        {
-          headerName: '단위(소)',
-          field: 'comm_cd:comm2_nm',
-        },
-        {
-          headerName: '수량(소)',
-          field: 'comm_cd:comm2_nm',
-        }
       ],
     }
   },
 
   computed: {
+    items2Comp: function () {
+      return this.items2.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+
     paginationParam: function () {
       return {
         page: this.pagination.page,
@@ -422,7 +415,39 @@ export default {
     },
 
     handleSelected (tr) {
-      // 
+      this.spinner();
+
+      let search_params = {};
+
+      if (this.searchType != null) {
+        search_params["item1_id"] = tr['item_mst:item_id'];
+      }
+
+      bom_config
+        .fetch({
+          limit: -1,
+          ...search_params,
+        })
+        .then((res) => {
+          this.spinner(false);
+          this.items2 = res.data.data;
+        })
+        .catch(() => {
+          this.displayErrors(
+            err.response.data.hasOwnProperty("errors")
+              ? err.response.data.errors
+              : null
+          );
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
     },
 
     loadDataInTable ({ results, header, meta }) {
@@ -482,6 +507,65 @@ export default {
             text: err.response.data.message,
           });
         });
+    },
+
+    save () {
+      this.spinner();
+
+      bom_config
+        .sync({
+          'sync': this.gridOptions.rowData
+        })
+        .then((res) => {
+          this.spinner(false);
+
+          if (res.data.success) {
+            this.$vs.notify({
+              title: this.$t("SuccessSaveData"),
+              position: "top-right",
+              color: "success",
+              text: res.data.message,
+            });
+            this.query();
+          } else {
+            this.$vs.notify({
+              title: this.$t("Error"),
+              position: "top-right",
+              color: "warning",
+              iconPack: "feather",
+              icon: "icon-alert-circle",
+              text: res.data.message,
+            });
+          }
+        })
+        .catch((err) => {
+          this.displayErrors(
+            err.response.data.hasOwnProperty("errors")
+              ? err.response.data.errors
+              : null
+          );
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
+
+    saveDialog() {
+      this.$vs.dialog({
+        type: "confirm",
+        color: "success",
+        title: this.$t("Confirmation"),
+        text: this.$t("SaveData"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => this.save(),
+      });
     },
 
     importExcelDialog () {

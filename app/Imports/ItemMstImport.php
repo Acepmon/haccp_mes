@@ -8,11 +8,19 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Mockery\Undefined;
 
 class ItemMstImport implements ToCollection
 {
     public $updateCount = 0;
     public $insertCount = 0;
+
+    public $cache;
+
+    public function __construct()
+    {
+        $this->cache = collect();
+    }
 
     public function collection(Collection $rows)
     {
@@ -27,30 +35,9 @@ class ItemMstImport implements ToCollection
                     continue;
                 }
 
-                if (DB::table('item_mst')->where('ITEM_ID', $row[0])->exists()) {
+                if (DB::table('ITEM_MST')->where('ITEM_ID', $row[0])->exists()) {
                     // Update
-                    DB::table('item_mst')->where('ITEM_ID', $row[0])->update([
-                        'ITEM_NM' => $row[1],
-                        'SPEC' => $row[2],
-                        'UNIT' => $row[3],
-                        'QTY1' => doubleval($row[4]),
-                        'QTY2' => doubleval($row[5]),
-                        'CONN_NO' => doubleval($row[6]),
-                        'CONN_QTY' => doubleval($row[7]),
-                        'IN_AMT' => doubleval($row[8]),
-                        'OUT_AMT' => doubleval($row[9]),
-                        'ITEM_CD' => $this->parseCommNm('B10', $row[10]),
-                        'GRP1_CD' => $this->parseCommNm('B11', $row[11]),
-                        'GRP2_CD' => $this->parseCommNm('B12', $row[12]),
-                        'GRP3_CD' => $this->parseCommNm('B13', $row[13]),
-                        'USE_YN' => $this->parseUseYn($row[14]),
-                        'PROCESS_CD' => $this->parseCommNm('B14', $row[15]),
-                    ]);
-                    $this->updateCount++;
-                } else {
-                    // Insert
-                    DB::table('item_mst')->insert([
-                        'ITEM_ID' => $row[0],
+                    DB::table('ITEM_MST')->where('ITEM_ID', $row[0])->update([
                         'ITEM_NM' => $row[1],
                         'SPEC' => $row[2],
                         'UNIT' => $row[3],
@@ -67,7 +54,30 @@ class ItemMstImport implements ToCollection
                         'USE_YN' => $this->parseUseYn($row[14]),
                         'PROCESS_CD' => $this->getCodeByName('B14', $row[15]),
                     ]);
-                    $this->insertCount++;
+                    $this->updateCount++;
+                } else {
+                    // Insert
+                    if ($row[0] != null && $row[0] != '') {
+                        DB::table('ITEM_MST')->insert([
+                            'ITEM_ID' => $row[0],
+                            'ITEM_NM' => $row[1],
+                            'SPEC' => $row[2],
+                            'UNIT' => $row[3],
+                            'QTY1' => doubleval($row[4]),
+                            'QTY2' => doubleval($row[5]),
+                            'CONN_NO' => doubleval($row[6]),
+                            'CONN_QTY' => doubleval($row[7]),
+                            'IN_AMT' => doubleval($row[8]),
+                            'OUT_AMT' => doubleval($row[9]),
+                            'ITEM_CD' => $this->getCodeByName('B10', $row[10]),
+                            'GRP1_CD' => $this->getCodeByName('B11', $row[11]),
+                            'GRP2_CD' => $this->getCodeByName('B12', $row[12]),
+                            'GRP3_CD' => $this->getCodeByName('B13', $row[13]),
+                            'USE_YN' => $this->parseUseYn($row[14]),
+                            'PROCESS_CD' => $this->getCodeByName('B14', $row[15]),
+                        ]);
+                        $this->insertCount++;
+                    }
                 }
             }
         });
@@ -75,17 +85,12 @@ class ItemMstImport implements ToCollection
         session(['update_count' => $this->updateCount, 'insert_count' => $this->insertCount]);
     }
 
-    private function parseCommNm($cd1, $cdnm)
-    {
-        $cd = CommCd::where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_NM', $cdnm)->first();
-        if ($cd) {
-            return $cd->COMM2_CD;
-        }
-        return null;
-    }
-
     private function getCodeByName($cd1, $cdnm)
     {
+        if ($this->cache->has($cd1 . ':' . $cdnm)) {
+            return $this->cache->get($cd1 . ':' . $cdnm);
+        }
+
         if ($this->getCodeByNameExists()) {
             $item = DB::select('select get_codebyname(?, ?) as COMM2_CD', [$cd1, $cdnm]);
 
@@ -98,6 +103,8 @@ class ItemMstImport implements ToCollection
             $item = CommCd::where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_NM', $cdnm)->first();
             $item = $item ? $item->COMM2_CD : '';
         }
+
+        $this->cache->put($cd1 . ':' . $cdnm, $item);
 
         return $item;
     }

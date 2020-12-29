@@ -75,5 +75,6 @@ Route::group([
 
     Route::get('bom_config/export', 'BomConfigController@export')->name('bom_config.export');
     Route::post('bom_config/import', 'BomConfigController@import')->name('bom_config.import');
+    Route::post('bom_config/sync', 'BomConfigController@sync')->name('bom_config.sync');
     Route::apiResource('bom_config', 'BomConfigController');
 });

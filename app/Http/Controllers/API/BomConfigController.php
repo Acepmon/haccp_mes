@@ -6,8 +6,10 @@ use App\BomConfig;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BomConfigResource;
 use App\Http\Resources\ItemMstResource;
+use App\Imports\BomConfigImport;
 use App\ItemMst;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BomConfigController extends Controller
 {
@@ -18,26 +20,16 @@ class BomConfigController extends Controller
      */
     public function index(Request $request)
     {
-        $items = ItemMst::query();
+        $items = BomConfig::query();
 
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
         $sort = $request->input('sort', 'REG_DTM');
         $order = $request->input('order', 'ASC');
 
-        if ($request->has('item_nm')) {
-            $itemNm = $request->input('item_nm');
-            $items = $items->where('ITEM_NM', 'LIKE', '%'.$itemNm.'%');
-        }
-
-        if ($request->has('item_id')) {
-            $itemDesc = $request->input('item_id');
-            $items = $items->where('ITEM_ID', 'LIKE', '%'.$itemDesc.'%');
-        }
-
-        if ($request->has('item_cd')) {
-            $typeCd = $request->input('item_cd');
-            $items = $items->where('ITEM_CD', $typeCd);
+        if ($request->has('item1_id')) {
+            $item1id = $request->input('item1_id');
+            $items = $items->where('ITEM1_ID', $item1id);
         }
 
         if ($limit == -1) {
@@ -46,7 +38,30 @@ class BomConfigController extends Controller
             $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
         }
 
-        return ItemMstResource::collection($items);
+        return BomConfigResource::collection($items);
+    }
+
+    public function sync(Request $request)
+    {
+        $request->validate([
+            'sync' => 'required|array'
+        ]);
+
+        collect($request->input('sync'))->map(function ($item) {
+            return [
+                'ITEM1_ID' => $item['bom_config:item1_id'],
+                'ITEM2_ID' => $item['bom_config:item2_id'],
+                'PROD_QTY' => $item['bom_config:prod_qty'],
+                'USE_QTY' => $item['bom_config:use_qty'],
+            ];
+        })->each(function ($item) {
+            BomConfig::where('ITEM1_ID', $item['ITEM1_ID'])->where('ITEM2_ID', $item['ITEM2_ID'])->update($item);
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => __('Successfully synced'),
+        ]);
     }
 
     /**
@@ -101,6 +116,22 @@ class BomConfigController extends Controller
 
     public function import(Request $request)
     {
-        // 
+        $request->validate([
+            'file' => 'required|file'
+        ]);
+
+        $result = Excel::import(new BomConfigImport(), $request->file('file'));
+        $upCnt = session()->get('update_count');
+        $inCnt = session()->get('insert_count');
+
+        return response()->json([
+            'success' => true,
+            'result' => [
+                'import' => $result,
+                'update_count' => $upCnt,
+                'insert_count' => $inCnt,
+            ],
+            'message' => 'Updated ' . $upCnt . ' records and inserted ' . $inCnt . ' records',
+        ]);
     }
 }

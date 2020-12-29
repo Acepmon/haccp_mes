@@ -92,9 +92,16 @@
         style="max-height: 500px;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
-        :onGridReady="fillAllCellsWithWidthMeasurement"
-        :rowData="itemsComp">
+        :rowData="itemsComp"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize"
+        :suppressPaginationPanel="true">
       </ag-grid-vue>
+
+      <vs-pagination
+        :total="totalPages"
+        :max="maxPageNumbers"
+        v-model="currentPage" />
 
       <div class="overflow-y-auto" style="max-height: 500px; display: none;">
         <vs-table
@@ -287,7 +294,9 @@ export default {
       header: [],
       sheetName: '',
 
+      maxPageNumbers: 7,
       gridOptions: {},
+      gridApi: null,
       defaultColDef: {
         sortable: true,
         editable: true,
@@ -423,6 +432,28 @@ export default {
         order: this.sorting.order != null ? this.sorting.order : "desc",
       };
     },
+
+    totalPages () {
+      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      else return 0
+    },
+    paginationPageSize () {
+      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      else return 50
+    },
+    currentPage: {
+      get () {
+        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        else return 1
+      },
+      set (val) {
+        this.gridApi.paginationGoToPage(val - 1)
+      }
+    }
+  },
+
+  mounted () {
+    this.gridApi = this.gridOptions.api
   },
 
   methods: {
@@ -485,6 +516,7 @@ export default {
         .fetch({
           ...this.paginationParam,
           ...this.sortParam,
+          limit: -1,
           ...search_params,
         })
         .then((res) => {

@@ -27,9 +27,9 @@ class DatabaseSeeder extends Seeder
             $this->call(TestLoginHistSeeder::class);
             $this->call(TestCompInfoSeeder::class);
             $this->call(TestWorkerSeeder::class);
-            $this->call(TestHaccpMstFileSeeder::class);
-            $this->call(TestDocMgmtSeeder::class);
-            $this->call(TestSecuDocMgmtSeeder::class);
+            // $this->call(TestHaccpMstFileSeeder::class);
+            // $this->call(TestDocMgmtSeeder::class);
+            // $this->call(TestSecuDocMgmtSeeder::class);
         }
     }
 }

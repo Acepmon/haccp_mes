@@ -6,6 +6,7 @@ use App\BomConfig;
 use App\CommCd;
 use App\ItemMst;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -13,6 +14,13 @@ class BomConfigImport implements ToCollection
 {
     public $updateCount = 0;
     public $insertCount = 0;
+
+    public $cache;
+
+    public function __construct()
+    {
+        $this->cache = collect();
+    }
 
     public function collection(Collection $rows)
     {
@@ -27,46 +35,48 @@ class BomConfigImport implements ToCollection
                     continue;
                 }
 
-                if (DB::table('bom_config')->where('ITEM_ID', $row[0])->exists()) {
+                if (DB::table('BOM_CONFIG')->where('ITEM1_ID', $row[0])->where('ITEM2_ID', $row[4])->where('BOM_VER', $row[3])->exists()) {
                     // Update
-                    DB::table('bom_config')->where('ITEM_ID', $row[0])->update([
-                        'ITEM_NM' => $row[1],
-                        'SPEC' => $row[2],
-                        'UNIT' => $row[3],
-                        'QTY1' => doubleval($row[4]),
-                        'QTY2' => doubleval($row[5]),
-                        'CONN_NO' => doubleval($row[6]),
-                        'CONN_QTY' => doubleval($row[7]),
-                        'IN_AMT' => doubleval($row[8]),
-                        'OUT_AMT' => doubleval($row[9]),
-                        'ITEM_CD' => $this->parseCommNm('B10', $row[10]),
-                        'GRP1_CD' => $this->parseCommNm('B11', $row[11]),
-                        'GRP2_CD' => $this->parseCommNm('B12', $row[12]),
-                        'GRP3_CD' => $this->parseCommNm('B13', $row[13]),
-                        'USE_YN' => $this->parseUseYn($row[14]),
-                        'PROCESS_CD' => $this->parseCommNm('B14', $row[15]),
+                    DB::table('BOM_CONFIG')->where('ITEM1_ID', $row[0])->where('ITEM2_ID', $row[4])->update([
+                        'BOM_YN' => 'Y',
+                        'PROD_QTY' => doubleval($row[6]),
+                        'USE_QTY' => doubleval($row[7]),
                     ]);
+
+                    if (!DB::table('ITEM_MST')->where('ITEM_ID', $row[4])->exists()) {
+                        DB::table('ITEM_MST')->insert([
+                            'ITEM_ID' => $row[4],
+                            'ITEM_NM' => $row[5],
+                            'USE_YN' => 'Y',
+                            'PROCESS_CD' => $this->getCodeByName('B14', $row[2]),
+                        ]);
+                        $this->insertCount++;
+                    }
+
                     $this->updateCount++;
                 } else {
                     // Insert
-                    DB::table('bom_config')->insert([
-                        'ITEM_ID' => $row[0],
-                        'ITEM_NM' => $row[1],
-                        'SPEC' => $row[2],
-                        'UNIT' => $row[3],
-                        'QTY1' => doubleval($row[4]),
-                        'QTY2' => doubleval($row[5]),
-                        'CONN_NO' => doubleval($row[6]),
-                        'CONN_QTY' => doubleval($row[7]),
-                        'IN_AMT' => doubleval($row[8]),
-                        'OUT_AMT' => doubleval($row[9]),
-                        'ITEM_CD' => $this->getCodeByName('B10', $row[10]),
-                        'GRP1_CD' => $this->getCodeByName('B11', $row[11]),
-                        'GRP2_CD' => $this->getCodeByName('B12', $row[12]),
-                        'GRP3_CD' => $this->getCodeByName('B13', $row[13]),
-                        'USE_YN' => $this->parseUseYn($row[14]),
-                        'PROCESS_CD' => $this->getCodeByName('B14', $row[15]),
+                    DB::table('BOM_CONFIG')->insert([
+                        'ITEM1_ID' => $row[0],
+                        'BOM_VER' => $row[3],
+                        'ITEM2_ID' => $row[4],
+                        'BOM_YN' => 'Y',
+                        'PROD_QTY' => doubleval($row[6]),
+                        'USE_QTY' => doubleval($row[7]),
+                        'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+                        'REG_DTM' => now()->format('Ymdhis'),
                     ]);
+
+                    if (!DB::table('ITEM_MST')->where('ITEM_ID', $row[4])->exists()) {
+                        DB::table('ITEM_MST')->insert([
+                            'ITEM_ID' => $row[4],
+                            'ITEM_NM' => $row[5],
+                            'USE_YN' => 'Y',
+                            'PROCESS_CD' => $this->getCodeByName('B14', $row[2]),
+                        ]);
+                        $this->insertCount++;
+                    }
+
                     $this->insertCount++;
                 }
             }
@@ -75,17 +85,12 @@ class BomConfigImport implements ToCollection
         session(['update_count' => $this->updateCount, 'insert_count' => $this->insertCount]);
     }
 
-    private function parseCommNm($cd1, $cdnm)
-    {
-        $cd = CommCd::where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_NM', $cdnm)->first();
-        if ($cd) {
-            return $cd->COMM2_CD;
-        }
-        return null;
-    }
-
     private function getCodeByName($cd1, $cdnm)
     {
+        if ($this->cache->has($cd1 . ':' . $cdnm)) {
+            return $this->cache->get($cd1 . ':' . $cdnm);
+        }
+
         if ($this->getCodeByNameExists()) {
             $item = DB::select('select get_codebyname(?, ?) as COMM2_CD', [$cd1, $cdnm]);
 
@@ -98,6 +103,8 @@ class BomConfigImport implements ToCollection
             $item = CommCd::where('COMM1_CD', $cd1)->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_NM', $cdnm)->first();
             $item = $item ? $item->COMM2_CD : '';
         }
+
+        $this->cache->put($cd1 . ':' . $cdnm, $item);
 
         return $item;
     }
