@@ -6,16 +6,13 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-2">
               <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <vs-select placeholder="검색항목" v-model="searchBy">
-                  <vs-select-item
-                    value="doc_nm"
-                    text="문서이름"
-                  ></vs-select-item>
-                  <vs-select-item
-                    value="doc_desc"
-                    text="설명(제품명)"
-                  ></vs-select-item>
-                </vs-select>
+                <v-select 
+                  :placeholder="'검색항목'" 
+                  :options="[{label: '문서이름', value: 'doc_nm'}, {label: '설명(제품명)', value: 'doc_desc'}]" 
+                  :reduce="item => item.value" 
+                  label="label" 
+                  v-model="searchBy" 
+                  :searchable="false" />
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input v-model="searchKeyword" />
@@ -28,15 +25,12 @@
                 <span class="pt-2">문서종류</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                <vs-select v-model="searchType">
-                  <vs-select-item value="" text=" "></vs-select-item>
-                  <vs-select-item
-                    v-for="(type, index) in types"
-                    :key="index"
-                    :value="type.comm2_cd"
-                    :text="type.comm2_nm"
-                  ></vs-select-item>
-                </vs-select>
+                <v-select 
+                  :options="types" 
+                  :reduce="item => item.comm2_cd" 
+                  label="comm2_nm" 
+                  v-model="searchType" 
+                  :searchable="false" />
                 <vs-button
                   @click="query()"
                   class="mx-1 px-4 flex-shrink-0"
@@ -113,18 +107,16 @@
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <vs-select
-                  v-model="item['doc_mgmt:type_cd']"
-                  :danger="errors['doc_mgmt:type_cd'] != null"
-                  :danger-text="errors['doc_mgmt:type_cd']"
+                <v-select :options="types" :reduce="item => item.comm2_cd" label="comm2_nm" v-model="item['doc_mgmt:type_cd']" />
+                <div
+                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+                  v-if="errors['doc_mgmt:type_cd'] != null"
                 >
-                  <vs-select-item
-                    v-for="(type, index) in types"
-                    :key="index"
-                    :value="type.comm2_cd"
-                    :text="type.comm2_nm"
-                  ></vs-select-item>
-                </vs-select>
+                  <span
+                    class="span-text-validation"
+                    v-text="errors['doc_mgmt:type_cd']"
+                  ></span>
+                </div>
               </div>
             </div>
           </div>

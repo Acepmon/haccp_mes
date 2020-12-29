@@ -15,7 +15,7 @@
 
     <vs-divider></vs-divider>
     {{ item3 }}
-    <v-select v-model="item3" :options="items3" :reduce="item => item.comm2_cd" label="comm2_nm" />
+    <v-select v-model="item3" :options="items3" :reduce="item => item.comm2_cd" label="comm2_nm" :searchable="false" />
   </vx-card>
 </template>
 
@@ -42,3 +42,9 @@ export default {
   },
 };
 </script>
+
+<style lang="css" scoped>
+.v-select:focus {
+  background-color: red;
+}
+</style>

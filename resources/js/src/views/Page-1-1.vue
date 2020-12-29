@@ -316,14 +316,7 @@
     >
       <div class="con-exemple-prompt">
         <span>Select User</span>
-        <vs-select class="mt-3 w-full" v-model="selectedUser">
-          <vs-select-item
-            v-for="(user, index) in users"
-            :key="index"
-            :text="user['user:user_nm']"
-            :value="user"
-          ></vs-select-item>
-        </vs-select>
+        <v-select :options="users" v-model="selectedUser" label="user:user_nm" />
       </div>
     </vs-prompt>
   </div>

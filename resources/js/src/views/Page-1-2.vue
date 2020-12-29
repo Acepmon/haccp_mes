@@ -219,18 +219,16 @@
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <vs-select
-                  v-model="selected['user:job_cd']"
-                  :danger="errors['user:job_cd'] != null"
-                  :danger-text="errors['user:job_cd']"
+                <v-select :options="jobs" :reduce="item => item.comm2_cd" label="comm2_nm" v-model="selected['user:job_cd']" />
+                <div
+                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+                  v-if="errors['user:job_cd'] != null"
                 >
-                  <vs-select-item
-                    :key="index"
-                    :value="item.comm2_cd"
-                    :text="item.comm2_nm"
-                    v-for="(item, index) in jobs"
-                  ></vs-select-item>
-                </vs-select>
+                  <span
+                    class="span-text-validation"
+                    v-text="errors['user:job_cd']"
+                  ></span>
+                </div>
               </div>
             </div>
           </div>
@@ -243,18 +241,16 @@
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <vs-select
-                  v-model="selected['user:user_sts_yn']"
-                  :danger="errors['user:user_sts_yn'] != null"
-                  :danger-text="errors['user:user_sts_yn']"
+                <v-select :options="status" :reduce="item => item.value" label="text" v-model="selected['user:user_sts_yn']" />
+                <div
+                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+                  v-if="errors['user:user_sts_yn'] != null"
                 >
-                  <vs-select-item
-                    :key="index"
-                    :value="item.value"
-                    :text="item.text"
-                    v-for="(item, index) in status"
-                  ></vs-select-item>
-                </vs-select>
+                  <span
+                    class="span-text-validation"
+                    v-text="errors['user:user_sts_yn']"
+                  ></span>
+                </div>
               </div>
             </div>
           </div>

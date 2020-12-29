@@ -88,18 +88,16 @@
                 <span class="pt-2">업무구분</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <vs-select
-                  v-model="worker['worker:work_cd']"
-                  :danger="errors['worker:work_cd'] != null"
-                  :danger-text="errors['worker:work_cd']"
+                <v-select :options="works" :reduce="item => item.comm2_cd" label="comm2_nm" v-model="worker['worker:work_cd']" />
+                <div
+                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+                  v-if="errors['worker:work_cd'] != null"
                 >
-                  <vs-select-item
-                    :key="index"
-                    :value="item.comm2_cd"
-                    :text="item.comm2_nm"
-                    v-for="(item, index) in works"
-                  ></vs-select-item>
-                </vs-select>
+                  <span
+                    class="span-text-validation"
+                    v-text="errors['worker:work_cd']"
+                  ></span>
+                </div>
               </div>
             </div>
           </div>
@@ -153,18 +151,16 @@
                 <span class="pt-2">정/부 구분</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <vs-select
-                  v-model="worker['worker:role_cd']"
-                  :danger="errors['worker:role_cd'] != null"
-                  :danger-text="errors['worker:role_cd']"
+                <v-select :options="roles" :reduce="item => item.comm2_cd" label="comm2_nm" v-model="worker['worker:role_cd']" />
+                <div
+                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+                  v-if="errors['worker:role_cd'] != null"
                 >
-                  <vs-select-item
-                    :key="index"
-                    :value="item.comm2_cd"
-                    :text="item.comm2_nm"
-                    v-for="(item, index) in roles"
-                  ></vs-select-item>
-                </vs-select>
+                  <span
+                    class="span-text-validation"
+                    v-text="errors['worker:role_cd']"
+                  ></span>
+                </div>
               </div>
             </div>
           </div>
