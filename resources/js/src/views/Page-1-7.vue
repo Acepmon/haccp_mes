@@ -76,10 +76,10 @@
 
       <ag-grid-vue
         ref="agGridTable"
-        :gridOptions="gridOptions"
+        :gridOptions="gridOptions2"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 300px;"
-        :columnDefs="columnDefs"
+        style="max-height: 200px;"
+        :columnDefs="columnDefs2"
         :defaultColDef="defaultColDef"
         :rowData="items2Comp">
       </ag-grid-vue>
@@ -97,115 +97,25 @@
         >
       </div>
 
-      <div class="overflow-y-auto" style="max-height: 500px">
-        <vs-table
-          stripe
-          pagination
-          description
-          sst
-          :max-items="pagination.limit"
-          :data="items"
-          :total="pagination.total"
-          @change-page="handleChangePage"
-          @sort="handleSort"
-          v-model="item"
-          @selected="handleSelected"
-        >
-          <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="item_id">목ID</vs-th>
-            <vs-th sort-key="item_nm">품목명</vs-th>
-            <vs-th sort-key="spec">규격명</vs-th>
-            <vs-th sort-key="unit">단위</vs-th>
-            <vs-th sort-key="qty1">당수량(분자)</vs-th>
-            <vs-th sort-key="qty2">봉수량</vs-th>
-            <vs-th sort-key="conn_no">대표품목 환산수량</vs-th>
-            <vs-th sort-key="conn_qty">연결품목 환산수량</vs-th>
-            <vs-th sort-key="in_amt">입고가</vs-th>
-            <vs-th sort-key="out_amt">출고가</vs-th>
-            <vs-th sort-key="item_cd">품목</vs-th>
-            <vs-th sort-key="grp1_cd">그룹1</vs-th>
-            <vs-th sort-key="grp2_cd">그룹2</vs-th>
-            <vs-th sort-key="grp3_cd">그룹3</vs-th>
-            <vs-th sort-key="use_yn">사용</vs-th>
-            <vs-th sort-key="process_cd">생산공정</vs-th>
-          </template>
+      <ag-grid-vue
+        ref="agGridTable"
+        rowSelection="single"
+        @rowSelected="handleSelected"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 400px;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize"
+        :suppressPaginationPanel="true">
+      </ag-grid-vue>
 
-          <template slot-scope="{ data }">
-            <vs-tr :data="tr" :key="index" v-for="(tr, index) in items">
-
-              <vs-td :data="rowIndex(index)">
-                {{ rowIndex(index) }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:item_id']">
-                {{ data[index]["item_mst:item_id"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:item_nm']">
-                {{ data[index]["item_mst:item_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:spec']">
-                {{ data[index]["item_mst:spec"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:unit']">
-                {{ data[index]["item_mst:unit"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:qty1']" class="text-right">
-                {{ data[index]["item_mst:qty1"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:qty2']" class="text-right">
-                {{ data[index]["item_mst:qty2"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:conn_no']" class="text-right">
-                {{ data[index]["item_mst:conn_no"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:conn_qty']" class="text-right">
-                {{ data[index]["item_mst:conn_qty"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:in_amt']" class="text-right">
-                {{ data[index]["item_mst:in_amt"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:out_amt']" class="text-right">
-                {{ data[index]["item_mst:out_amt"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:item_cd']">
-                {{ data[index]["item_mst:item_cd_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:grp1_cd']">
-                {{ data[index]["item_mst:grp1_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:grp2_cd']">
-                {{ data[index]["item_mst:grp2_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:grp3_cd']">
-                {{ data[index]["item_mst:grp3_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:use_yn']">
-                {{ data[index]["item_mst:use_yn"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:process_cd']">
-                {{ data[index]["item_mst:process_nm"] }}
-              </vs-td>
-
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
+      <vs-pagination
+        :total="totalPages"
+        :max="maxPageNumbers"
+        v-model="currentPage" />
     </vx-card>
 
     <vs-popup fullscreen :title="$t('UploadExcel')" :active.sync="importDialog" button-close-hidden>
@@ -294,7 +204,11 @@ export default {
       header: [],
       sheetName: '',
 
+      maxPageNumbers: 7,
+      gridApi: null,
+      gridApi2: null,
       gridOptions: {},
+      gridOptions2: {},
       defaultColDef: {
         sortable: true,
         editable: true,
@@ -302,7 +216,7 @@ export default {
         suppressMenu: false
       },
 
-      columnDefs: [
+      columnDefs2: [
         {
           headerName: 'No',
           field: 'no',
@@ -359,10 +273,128 @@ export default {
           width: 100,
         },
       ],
+
+      columnDefs: [
+        {
+          headerName: 'No',
+          field: 'no',
+          filter: false,
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '코드',
+          field: 'item_mst:item_id',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '품목명',
+          field: 'item_mst:item_nm',
+          editable: false,
+          width: 200,
+        },
+        {
+          headerName: '규격명',
+          field: 'item_mst:spec',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '단위',
+          field: 'item_mst:unit',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '당수량(분자)',
+          field: 'item_mst:qty1',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '대표품목 환산수량',
+          field: 'item_mst:conn_no',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '연결품목 환산수량',
+          field: 'item_mst:conn_qty',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '품목',
+          field: 'item_mst:item_cd_nm',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '그룹1',
+          field: 'item_mst:grp1_nm',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '그룹2',
+          field: 'item_mst:grp2_nm',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '단위(대)',
+          field: 'item_mst:unit1_nm',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '수량(대)',
+          field: 'item_mst:unit1_qty',
+          type: 'numericColumn',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '단위(중)',
+          field: 'item_mst:unit2_nm',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '수량(중)',
+          field: 'item_mst:unit2_qty',
+          type: 'numericColumn',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '단위(소)',
+          field: 'item_mst:unit3_nm',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '수량(소)',
+          field: 'item_mst:unit3_qty',
+          type: 'numericColumn',
+          editable: false,
+          width: 100,
+        }
+      ],
     }
   },
 
   computed: {
+    itemsComp: function () {
+      return this.items.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+
     items2Comp: function () {
       return this.items2.map((item, index) => {
         return {
@@ -385,6 +417,28 @@ export default {
         order: this.sorting.order != null ? this.sorting.order : "desc",
       };
     },
+
+    totalPages () {
+      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      else return 0
+    },
+    paginationPageSize () {
+      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      else return 50
+    },
+    currentPage: {
+      get () {
+        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        else return 1
+      },
+      set (val) {
+        this.gridApi.paginationGoToPage(val - 1)
+      }
+    }
+  },
+
+  mounted () {
+    this.gridApi = this.gridOptions.api
   },
 
   methods: {
@@ -414,13 +468,13 @@ export default {
       this.query();
     },
 
-    handleSelected (tr) {
+    handleSelected (grid) {
       this.spinner();
-
+      let tr = grid.data
       let search_params = {};
 
       if (this.searchType != null) {
-        search_params["item1_id"] = tr['item_mst:item_id'];
+        search_params["item1_id"] = "" + tr['item_mst:item_id'];
       }
 
       bom_config
@@ -432,7 +486,7 @@ export default {
           this.spinner(false);
           this.items2 = res.data.data;
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors
@@ -483,6 +537,7 @@ export default {
         .fetch({
           ...this.paginationParam,
           ...this.sortParam,
+          limit: -1,
           ...search_params,
         })
         .then((res) => {
