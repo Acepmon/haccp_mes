@@ -100,7 +100,7 @@
       <ag-grid-vue
         ref="agGridTable"
         rowSelection="single"
-        @rowSelected="handleSelected"
+        @selection-changed="handleSelected"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         style="max-height: 400px;"
@@ -439,6 +439,7 @@ export default {
 
   mounted () {
     this.gridApi = this.gridOptions.api
+    this.gridApi2 = this.gridOptions2.api
   },
 
   methods: {
@@ -457,6 +458,12 @@ export default {
       }
     },
 
+    displayErrors(errors) {
+      for (const [key, value] of Object.entries(errors)) {
+        this.$set(this.errors, key, Array.isArray(value) ? value[0] : value);
+      }
+    },
+
     handleChangePage(page) {
       this.pagination.page = page;
       this.query();
@@ -468,40 +475,13 @@ export default {
       this.query();
     },
 
-    handleSelected (grid) {
-      this.spinner();
-      let tr = grid.data
-      let search_params = {};
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
 
-      if (this.searchType != null) {
-        search_params["item1_id"] = "" + tr['item_mst:item_id'];
+      if (rows.length > 0) {
+        this.$set(this, 'item', rows[0])
+        this.query2(rows[0]['item_mst:item_id'])
       }
-
-      bom_config
-        .fetch({
-          limit: -1,
-          ...search_params,
-        })
-        .then((res) => {
-          this.spinner(false);
-          this.items2 = res.data.data;
-        })
-        .catch((err) => {
-          this.displayErrors(
-            err.response.data.hasOwnProperty("errors")
-              ? err.response.data.errors
-              : null
-          );
-          this.spinner(false);
-          this.$vs.notify({
-            title: this.$t("Error"),
-            position: "top-right",
-            color: "warning",
-            iconPack: "feather",
-            icon: "icon-alert-circle",
-            text: err.response.data.message,
-          });
-        });
     },
 
     loadDataInTable ({ results, header, meta }) {
@@ -518,6 +498,41 @@ export default {
         index +
         1
       );
+    },
+
+    query2(item1_id) {
+      this.spinner();
+
+      let search_params = {
+        item1_id: item1_id
+      };
+
+      bom_config
+        .fetch({
+          limit: -1,
+          ...search_params,
+        })
+        .then((res) => {
+          this.spinner(false);
+          this.items2 = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err)
+          this.displayErrors(
+            err.response.data.hasOwnProperty("errors")
+              ? err.response.data.errors
+              : null
+          );
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
     },
 
     query() {
@@ -543,10 +558,11 @@ export default {
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
-          this.pagination.total = res.data.meta.total;
-          this.pagination.page = res.data.meta.current_page;
+          // this.pagination.total = res.data.meta.total;
+          // this.pagination.page = res.data.meta.current_page;
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err)
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors
@@ -569,7 +585,7 @@ export default {
 
       bom_config
         .sync({
-          'sync': this.gridOptions.rowData
+          'sync': this.gridOptions2.rowData
         })
         .then((res) => {
           this.spinner(false);
@@ -581,7 +597,7 @@ export default {
               color: "success",
               text: res.data.message,
             });
-            this.query();
+            this.query2(this.item['item_mst:item_id']);
           } else {
             this.$vs.notify({
               title: this.$t("Error"),

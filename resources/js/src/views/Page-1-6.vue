@@ -472,6 +472,12 @@ export default {
       }
     },
 
+    displayErrors(errors) {
+      for (const [key, value] of Object.entries(errors)) {
+        this.$set(this.errors, key, Array.isArray(value) ? value[0] : value);
+      }
+    },
+
     handleChangePage(page) {
       this.pagination.page = page;
       this.query();
