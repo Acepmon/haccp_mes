@@ -1,5 +1,5 @@
 {
-    "/js/app.js": "/js/app.js?id=58d26a87f0c2e462100b",
+    "/js/app.js": "/js/app.js?id=d06659ec8e6c8056f342",
     "/css/app.css": "/css/app.css?id=317804d2429f81880383",
     "/css/main.css": "/css/main.css?id=cbc2c4e109c90c318e21",
     "/js/chunks/empty.js": "/js/chunks/empty.js?id=f4462085ff535c340454",
@@ -40,5 +40,6 @@
     "/js/chunks/home~page-1-7~page-7-1.js": "/js/chunks/home~page-1-7~page-7-1.js?id=c8caaa375befb405fb17",
     "/js/chunks/vendors~home~page-1-7~page-7-1.js": "/js/chunks/vendors~home~page-1-7~page-7-1.js?id=43192379dd9ed17060c7",
     "/js/chunks/home~page-1-6~page-1-7~page-7-1.js": "/js/chunks/home~page-1-6~page-1-7~page-7-1.js?id=b8370b449770b1a45ceb",
-    "/js/chunks/vendors~home~page-1-6~page-1-7~page-7-1.js": "/js/chunks/vendors~home~page-1-6~page-1-7~page-7-1.js?id=cfcda68bcf1b601fe0d6"
+    "/js/chunks/vendors~home~page-1-6~page-1-7~page-7-1.js": "/js/chunks/vendors~home~page-1-6~page-1-7~page-7-1.js?id=cfcda68bcf1b601fe0d6",
+    "/js/chunks/page-2-1.js": "/js/chunks/page-2-1.js?id=dd5cab941ca36295d7d9"
 }

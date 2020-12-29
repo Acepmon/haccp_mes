@@ -150,14 +150,14 @@ export default [
   },
   {
     url: "/2",
-    name: "구매관리",
-    slug: "구매관리",
+    name: "생산관리",
+    slug: "생산관리",
     showSubmenuOn: '/2',
     submenu: [
       {
         url: "/2/1",
-        name: "원료재고관리",
-        slug: "원료재고관리",
+        name: "제품별 표준공정등록",
+        slug: "제품별 표준공정등록",
         showSubmenuOn: '/2',
       },
       {
@@ -202,8 +202,8 @@ export default [
   },
   {
     url: "/3",
-    name: "주문처리",
-    slug: "주문처리",
+    name: "거래처관리",
+    slug: "거래처관리",
     showSubmenuOn: '/3',
     submenu: [
       {
@@ -222,8 +222,8 @@ export default [
   },
   {
     url: "/4",
-    name: "생산관리",
-    slug: "생산관리",
+    name: "재고관리",
+    slug: "재고관리",
     showSubmenuOn: '/4',
     submenu: [
       {

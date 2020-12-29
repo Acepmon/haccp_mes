@@ -129,6 +129,12 @@ const router = new Router({
                 component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
               },
               {
+                path: '/2/1',
+                name: '제품별 표준공정등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/2/1', value: 'page-2-1', label: '제품별 표준공정등록', component: 'page-2-1'}) } }
+              },
+
+              {
                 path: '/3',
                 name: '주문처리',
                 component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
