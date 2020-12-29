@@ -180,6 +180,11 @@ const router = new Router({
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/password', value: 'profile-password', label: 'Change Password', component: 'profile-password'}) } }
               },
               {
+                path: '/dropdown-test',
+                name: 'Dropdown Test',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/dropdown-test', value: 'dropdown-test', label: 'Dropdown Test', component: 'dropdown-test'}) } }
+              },
+              {
                 path: '/user-entry',
                 name: 'User Entry',
                 component: () => import(/* webpackChunkName: "user-entry" */ './views/UserEntry.vue')

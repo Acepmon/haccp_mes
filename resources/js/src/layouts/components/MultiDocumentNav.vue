@@ -207,6 +207,10 @@ export default {
       lazyLoadView(
         import(/* webpackChunkName: "profile-password" */ "@/views/ProfilePassword.vue")
       ),
+    "tab-dropdown-test": () =>
+      lazyLoadView(
+        import(/* webpackChunkName: "dropdown-test" */ "@/views/DropdownTest.vue")
+      ),
   },
 
   data() {
