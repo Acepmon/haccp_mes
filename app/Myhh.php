@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Myhh extends Model
 {
-    protected $table = 'myhh';
+    protected $table = 'MYHH';
     protected $primaryKey = 'MYHH_ID';
     public $incrementing = false;
     public $timestamps = false;
