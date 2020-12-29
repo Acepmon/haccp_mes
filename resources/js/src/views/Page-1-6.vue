@@ -49,6 +49,16 @@
           </div>
         </div>
         <div class="w-full sm:w-1/3 px-1 flex justify-end">
+          <div>
+            <vs-button
+              :disabled="items.length <= 0"
+              @click="saveDialog()"
+              class="mx-1 flex-shrink-0"
+              color="dark"
+              type="border"
+              >{{ $t("Save") }}</vs-button
+            >
+          </div>
           <import-excel :onSuccess="loadDataInTable" v-model="importFile"></import-excel>
           <div>
             <vs-button
@@ -75,7 +85,18 @@
         >
       </div>
 
-      <div class="overflow-y-auto" style="max-height: 500px">
+      <ag-grid-vue
+        ref="agGridTable"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 500px;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :onGridReady="fillAllCellsWithWidthMeasurement"
+        :rowData="itemsComp">
+      </ag-grid-vue>
+
+      <div class="overflow-y-auto" style="max-height: 500px; display: none;">
         <vs-table
           stripe
           pagination
@@ -233,10 +254,14 @@ import comm_cd from "@/services/comm_cd";
 import api from "@/services/item_mst";
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
+import { AgGridVue } from 'ag-grid-vue'
+
+import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
   components: {
-    ImportExcel
+    ImportExcel,
+    AgGridVue
   },
 
   data () {
@@ -260,11 +285,131 @@ export default {
 
       tableData: [],
       header: [],
-      sheetName: ''
+      sheetName: '',
+
+      gridOptions: {},
+      defaultColDef: {
+        sortable: true,
+        editable: true,
+        resizable: true,
+        suppressMenu: false
+      },
+
+      columnDefs: [
+        {
+          headerName: 'No',
+          field: 'no',
+          filter: false,
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '코드',
+          field: 'item_mst:item_id',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '품목명',
+          field: 'item_mst:item_nm',
+          editable: false,
+          width: 200,
+        },
+        {
+          headerName: '규격명',
+          field: 'item_mst:spec',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '단위',
+          field: 'item_mst:unit',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '당수량(분자)',
+          field: 'item_mst:qty1',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '대표품목 환산수량',
+          field: 'item_mst:conn_no',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '연결품목 환산수량',
+          field: 'item_mst:conn_qty',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '품목',
+          field: 'item_mst:item_cd_nm',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '그룹1',
+          field: 'item_mst:grp1_nm',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '그룹2',
+          field: 'item_mst:grp2_nm',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '단위(대)',
+          field: 'item_mst:unit1_nm',
+          width: 100,
+        },
+        {
+          headerName: '수량(대)',
+          field: 'item_mst:unit1_qty',
+          type: 'numericColumn',
+          width: 100,
+        },
+        {
+          headerName: '단위(중)',
+          field: 'item_mst:unit2_nm',
+          width: 100,
+        },
+        {
+          headerName: '수량(중)',
+          field: 'item_mst:unit2_qty',
+          type: 'numericColumn',
+          width: 100,
+        },
+        {
+          headerName: '단위(소)',
+          field: 'item_mst:unit3_nm',
+          width: 100,
+        },
+        {
+          headerName: '수량(소)',
+          field: 'item_mst:unit3_qty',
+          type: 'numericColumn',
+          width: 100,
+        }
+      ],
     }
   },
 
   computed: {
+    itemsComp: function () {
+      return this.items.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+
     paginationParam: function () {
       return {
         page: this.pagination.page,
@@ -364,6 +509,65 @@ export default {
             text: err.response.data.message,
           });
         });
+    },
+
+    save () {
+      this.spinner();
+
+      api
+        .sync({
+          'sync': this.gridOptions.rowData
+        })
+        .then((res) => {
+          this.spinner(false);
+
+          if (res.data.success) {
+            this.$vs.notify({
+              title: this.$t("SuccessSaveData"),
+              position: "top-right",
+              color: "success",
+              text: res.data.message,
+            });
+            this.query();
+          } else {
+            this.$vs.notify({
+              title: this.$t("Error"),
+              position: "top-right",
+              color: "warning",
+              iconPack: "feather",
+              icon: "icon-alert-circle",
+              text: res.data.message,
+            });
+          }
+        })
+        .catch((err) => {
+          this.displayErrors(
+            err.response.data.hasOwnProperty("errors")
+              ? err.response.data.errors
+              : null
+          );
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
+
+    saveDialog() {
+      this.$vs.dialog({
+        type: "confirm",
+        color: "success",
+        title: this.$t("Confirmation"),
+        text: this.$t("SaveData"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => this.save(),
+      });
     },
 
     importExcelDialog () {

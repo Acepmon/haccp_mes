@@ -332,7 +332,7 @@ export default {
 
       api
         .sync(this.item2["comm_cd:comm1_cd"], {
-          'rowData': this.gridOptions.rowData
+          'sync': this.gridOptions.rowData
         })
         .then((res) => {
           this.spinner(false);

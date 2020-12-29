@@ -70,6 +70,7 @@ Route::group([
 
     Route::get('item_mst/export', 'ItemMstController@export')->name('item_mst.export');
     Route::post('item_mst/import', 'ItemMstController@import')->name('item_mst.import');
+    Route::post('item_mst/sync', 'ItemMstController@sync')->name('item_mst.sync');
     Route::apiResource('item_mst', 'ItemMstController');
 
     Route::get('bom_config/export', 'BomConfigController@export')->name('bom_config.export');

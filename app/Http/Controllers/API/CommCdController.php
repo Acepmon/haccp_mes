@@ -73,10 +73,10 @@ class CommCdController extends Controller
         $items = CommCd::query();
 
         $request->validate([
-            'rowData' => 'required|array'
+            'sync' => 'required|array'
         ]);
 
-        $datas = collect($request->input('rowData'))->map(function ($item) {
+        collect($request->input('sync'))->map(function ($item) {
             return [
                 'COMM1_CD' => $item['comm_cd:comm1_cd'],
                 'COMM2_CD' => $item['comm_cd:comm2_cd'],

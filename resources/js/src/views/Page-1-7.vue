@@ -64,7 +64,16 @@
 
       <vs-divider />
 
-      selected-item-here
+      <ag-grid-vue
+        ref="agGridTable"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 300px;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :onGridReady="fillAllCellsWithWidthMeasurement"
+        :rowData="itemsComp">
+      </ag-grid-vue>
 
       <vs-divider />
 
@@ -240,10 +249,14 @@ import api from "@/services/item_mst";
 import bom_config from '@/services/bom_config';
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
+import { AgGridVue } from 'ag-grid-vue'
+
+import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
   components: {
-    ImportExcel
+    ImportExcel,
+    AgGridVue
   },
 
   data () {
@@ -269,7 +282,99 @@ export default {
 
       tableData: [],
       header: [],
-      sheetName: ''
+      sheetName: '',
+
+      gridOptions: {},
+      defaultColDef: {
+        sortable: true,
+        editable: true,
+        resizable: true,
+        suppressMenu: false
+      },
+
+      columnDefs: [
+        {
+          headerName: 'No',
+          field: 'no',
+          filter: false,
+          editable: false,
+          minWidth: 100,
+        },
+        {
+          headerName: '코드',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+        },
+        {
+          headerName: '품목명',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+        },
+        {
+          headerName: '규격명',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+        },
+        {
+          headerName: '단위',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+        },
+        {
+          headerName: '당수량(분자)',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+        },
+        {
+          headerName: '대표품목 환산수량',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+        },
+        {
+          headerName: '연결품목 환산수량',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+        },
+        {
+          headerName: '품목',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+        },
+        {
+          headerName: '그룹1',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+        },
+        {
+          headerName: '그룹2',
+          field: 'comm_cd:comm2_cd',
+          editable: false,
+        },
+        {
+          headerName: '단위(대)',
+          field: 'comm_cd:comm2_nm',
+        },
+        {
+          headerName: '수량(대)',
+          field: 'comm_cd:comm2_nm',
+        },
+        {
+          headerName: '단위(중)',
+          field: 'comm_cd:comm2_nm',
+        },
+        {
+          headerName: '수량(중)',
+          field: 'comm_cd:comm2_nm',
+        },
+        {
+          headerName: '단위(소)',
+          field: 'comm_cd:comm2_nm',
+        },
+        {
+          headerName: '수량(소)',
+          field: 'comm_cd:comm2_nm',
+        }
+      ],
     }
   },
 

@@ -50,6 +50,32 @@ class ItemMstController extends Controller
         return ItemMstResource::collection($items);
     }
 
+    public function sync(Request $request)
+    {
+        $request->validate([
+            'sync' => 'required|array'
+        ]);
+
+        collect($request->input('sync'))->map(function ($item) {
+            return [
+                'ITEM_ID' => $item['item_mst:item_id'],
+                'UNIT1_NM' => $item['item_mst:unit1_nm'],
+                'UNIT1_QTY' => $item['item_mst:unit1_qty'],
+                'UNIT2_NM' => $item['item_mst:unit2_nm'],
+                'UNIT2_QTY' => $item['item_mst:unit2_qty'],
+                'UNIT3_NM' => $item['item_mst:unit3_nm'],
+                'UNIT3_QTY' => $item['item_mst:unit3_qty'],
+            ];
+        })->each(function ($item) {
+            ItemMst::where('ITEM_ID', $item['ITEM_ID'])->update($item);
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => __('Successfully synced'),
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
