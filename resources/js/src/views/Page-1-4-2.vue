@@ -7,6 +7,7 @@
             <div class="vx-row mb-2">
               <div class="vx-col sm:w-1/3 w-full flex justify-end">
                 <v-select 
+                  style="width: 150px;"
                   :placeholder="'검색항목'" 
                   :options="[{label: '문서이름', value: 'doc_nm'}, {label: '설명(제품명)', value: 'doc_desc'}]" 
                   :reduce="item => item.value" 
@@ -26,6 +27,7 @@
               </div>
               <div class="vx-col sm:w-2/3 w-full flex flex-row">
                 <v-select 
+                  style="width: 150px;"
                   :options="types" 
                   :reduce="item => item.comm2_cd" 
                   label="comm2_nm" 
@@ -107,7 +109,13 @@
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <v-select :options="types" :reduce="item => item.comm2_cd" label="comm2_nm" v-model="item['doc_mgmt:type_cd']" />
+                <v-select 
+                  style="width: 200px;"
+                  :options="types" 
+                  :reduce="item => item.comm2_cd" 
+                  label="comm2_nm" 
+                  v-model="item['doc_mgmt:type_cd']" 
+                  :searchable="false" />
                 <div
                   class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
                   v-if="errors['doc_mgmt:type_cd'] != null"

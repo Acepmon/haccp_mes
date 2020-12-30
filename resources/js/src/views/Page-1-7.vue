@@ -6,16 +6,14 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-2">
               <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <vs-select placeholder="검색항목" v-model="searchBy">
-                  <vs-select-item
-                    value="item_nm"
-                    text="품목명"
-                  ></vs-select-item>
-                  <vs-select-item
-                    value="item_id"
-                    text="품목 ID"
-                  ></vs-select-item>
-                </vs-select>
+                <v-select
+                  style="width: 150px;"
+                  placeholder="검색항목"
+                  :options="[{l: '품목명', v: 'item_nm'},{l: '품목 ID', v: 'item_id'}]" 
+                  :reduce="item => item.v" 
+                  label="l" 
+                  v-model="searchBy" 
+                  :searchable="false" />
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <vs-input v-model="searchKeyword" />
@@ -28,15 +26,13 @@
                 <span class="pt-2">문서종류</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                <vs-select v-model="searchType">
-                  <vs-select-item value="" text=" "></vs-select-item>
-                  <vs-select-item
-                    v-for="(type, index) in types"
-                    :key="index"
-                    :value="type.comm2_cd"
-                    :text="type.comm2_nm"
-                  ></vs-select-item>
-                </vs-select>
+                <v-select
+                  style="width: 150px;"
+                  :options="types" 
+                  :reduce="item => item.comm2_cd" 
+                  label="comm2_nm" 
+                  v-model="searchType" 
+                  :searchable="false" />
                 <vs-button
                   @click="query()"
                   class="mx-1 px-4 flex-shrink-0"

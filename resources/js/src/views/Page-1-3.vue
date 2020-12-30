@@ -88,7 +88,13 @@
                 <span class="pt-2">업무구분</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <v-select :options="works" :reduce="item => item.comm2_cd" label="comm2_nm" v-model="worker['worker:work_cd']" />
+                <v-select 
+                  style="width: 200px;"
+                  :options="works" 
+                  :reduce="item => item.comm2_cd" 
+                  label="comm2_nm" 
+                  v-model="worker['worker:work_cd']" 
+                  :searchable="false" />
                 <div
                   class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
                   v-if="errors['worker:work_cd'] != null"
@@ -151,7 +157,13 @@
                 <span class="pt-2">정/부 구분</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <v-select :options="roles" :reduce="item => item.comm2_cd" label="comm2_nm" v-model="worker['worker:role_cd']" />
+                <v-select 
+                  style="width: 200px;"
+                  :options="roles" 
+                  :reduce="item => item.comm2_cd" 
+                  label="comm2_nm" 
+                  v-model="worker['worker:role_cd']" 
+                  :searchable="false" />
                 <div
                   class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
                   v-if="errors['worker:role_cd'] != null"

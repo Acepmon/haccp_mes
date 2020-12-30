@@ -312,10 +312,13 @@
       @cancel="selectedUser = null"
       @accept="selectUser"
       @close="close"
+      :title="$t('SelectUser')"
+      :accept-text="$t('Accept')"
+      :cancel-text="$t('Cancel')"
       :active.sync="userSelectionPrompt"
     >
       <div class="con-exemple-prompt">
-        <span>Select User</span>
+        <span>{{ $t('SelectUser') }}</span>
         <v-select :options="users" v-model="selectedUser" label="user:user_nm" />
       </div>
     </vs-prompt>

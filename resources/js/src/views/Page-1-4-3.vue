@@ -19,7 +19,8 @@
                 <span class="pt-2">업무종류</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <v-select style="width=150px"
+                <v-select 
+                  style="width: 150px;"
                   :options="types" 
                   :reduce="item => item.comm2_cd" 
                   label="comm2_nm" 
@@ -34,7 +35,8 @@
                 <span class="pt-2">사용구분</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                <v-select style="width=150px"
+                <v-select
+                  style="width: 150px;"
                   :options="[{l: 'YES', v: 'Y'},{l: 'NO', v: 'N'}]" 
                   :reduce="item => item.v" 
                   label="l" 
@@ -104,6 +106,7 @@
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <v-select 
+                  style="width: 200px;"
                   :options="types" 
                   :reduce="item => item.comm2_cd" 
                   label="comm2_nm" 
@@ -154,6 +157,7 @@
               </div>
               <div class="vx-col sm:w-2/3 w-full flex">
                 <v-select 
+                  style="width: 200px;"
                   :options="periods" 
                   :reduce="item => item.comm2_cd" 
                   label="comm2_nm" 
@@ -206,6 +210,7 @@
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <v-select 
+                  style="width: 200px;"
                   :options="[{l: 'YES', v: 'Y'},{l: 'NO', v: 'N'}]" 
                   :reduce="item => item.v" 
                   label="l" 
@@ -236,6 +241,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <!-- <vs-input v-model="item['edoc_file:work_id']" :danger="errors['edoc_file:work_id'] != null" :danger-text="errors['edoc_file:work_id']" /> -->
                 <v-select 
+                  style="width: 200px;"
                   :options="work_users" 
                   :reduce="item => item['user:user_id']" 
                   label="user:user_id" 
@@ -264,6 +270,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <!-- <vs-input v-model="item['edoc_file:app_id']" :danger="errors['edoc_file:app_id'] != null" :danger-text="errors['edoc_file:app_id']" /> -->
                 <v-select 
+                  style="width: 200px;"
                   :options="app_users" 
                   :reduce="item => item['user:user_id']" 
                   label="user:user_id" 

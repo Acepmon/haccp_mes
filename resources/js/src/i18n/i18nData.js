@@ -32,6 +32,8 @@ export default {
     Cancel: 'Cancel',
 
     TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.',
+
+    SelectUser: 'Select User',
   },
   kr: {
     Login: '로그인',
@@ -65,5 +67,7 @@ export default {
     Cancel: '아니오',
 
     TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.',
+
+    SelectUser: 'Select User',
   }
 }

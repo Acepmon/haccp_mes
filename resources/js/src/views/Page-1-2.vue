@@ -219,7 +219,13 @@
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <v-select :options="jobs" :reduce="item => item.comm2_cd" label="comm2_nm" v-model="selected['user:job_cd']" />
+                <v-select 
+                  style="width: 200px;"
+                  :options="jobs" 
+                  :reduce="item => item.comm2_cd" 
+                  label="comm2_nm" 
+                  v-model="selected['user:job_cd']"
+                  :searchable="false" />
                 <div
                   class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
                   v-if="errors['user:job_cd'] != null"
@@ -241,7 +247,13 @@
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <v-select :options="status" :reduce="item => item.value" label="text" v-model="selected['user:user_sts_yn']" />
+                <v-select 
+                  style="width: 200px;"
+                  :options="status" 
+                  :reduce="item => item.value" 
+                  label="text" 
+                  v-model="selected['user:user_sts_yn']"
+                  :searchable="false" />
                 <div
                   class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
                   v-if="errors['user:user_sts_yn'] != null"
