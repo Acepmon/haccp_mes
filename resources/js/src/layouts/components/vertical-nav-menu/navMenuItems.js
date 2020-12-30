@@ -361,11 +361,6 @@ export default [
     ]
   },
   {
-    url: '/dropdown-test',
-    name: 'Dropdown Test',
-    slug: 'dropdown-test'
-  },
-  {
     url: "/profile",
     name: "Profile",
     slug: "Profile",

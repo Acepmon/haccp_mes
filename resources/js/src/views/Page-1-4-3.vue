@@ -19,14 +19,12 @@
                 <span class="pt-2">업무종류</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <vs-select v-model="searchType" style="width: 150px">
-                  <vs-select-item
-                    v-for="(type, index) in types"
-                    :key="index"
-                    :value="type.comm2_cd"
-                    :text="type.comm2_nm"
-                  ></vs-select-item>
-                </vs-select>
+                <v-select style="width=150px"
+                  :options="types" 
+                  :reduce="item => item.comm2_cd" 
+                  label="comm2_nm" 
+                  v-model="searchType" 
+                  :searchable="false" />
               </div>
             </div>
           </div>
@@ -36,10 +34,12 @@
                 <span class="pt-2">사용구분</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                <vs-select v-model="searchUseYn">
-                  <vs-select-item value="Y" text="YES"></vs-select-item>
-                  <vs-select-item value="N" text="NO"></vs-select-item>
-                </vs-select>
+                <v-select style="width=150px"
+                  :options="[{l: 'YES', v: 'Y'},{l: 'NO', v: 'N'}]" 
+                  :reduce="item => item.v" 
+                  label="l" 
+                  v-model="searchUseYn" 
+                  :searchable="false" />
                 <vs-button
                   @click="query()"
                   class="mx-1 flex-shrink-0"
@@ -103,18 +103,21 @@
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <vs-select
+                <v-select 
+                  :options="types" 
+                  :reduce="item => item.comm2_cd" 
+                  label="comm2_nm" 
                   v-model="item['edoc_file:type_cd']"
-                  :danger="errors['edoc_file:type_cd'] != null"
-                  :danger-text="errors['edoc_file:type_cd']"
+                  :searchable="false" />
+                <div
+                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+                  v-if="errors['edoc_file:type_cd'] != null"
                 >
-                  <vs-select-item
-                    v-for="(type, index) in types"
-                    :key="index"
-                    :value="type.comm2_cd"
-                    :text="type.comm2_nm"
-                  ></vs-select-item>
-                </vs-select>
+                  <span
+                    class="span-text-validation"
+                    v-text="errors['edoc_file:type_cd']"
+                  ></span>
+                </div>
               </div>
             </div>
           </div>
@@ -150,18 +153,21 @@
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full flex">
-                <vs-select
+                <v-select 
+                  :options="periods" 
+                  :reduce="item => item.comm2_cd" 
+                  label="comm2_nm" 
                   v-model="item['edoc_file:period_cd']"
-                  :danger="errors['edoc_file:period_cd'] != null"
-                  :danger-text="errors['edoc_file:period_cd']"
+                  :searchable="false" />
+                <div
+                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+                  v-if="errors['edoc_file:period_cd'] != null"
                 >
-                  <vs-select-item
-                    v-for="(period, index) in periods"
-                    :key="index"
-                    :value="period.comm2_cd"
-                    :text="period.comm2_nm"
-                  ></vs-select-item>
-                </vs-select>
+                  <span
+                    class="span-text-validation"
+                    v-text="errors['edoc_file:period_cd']"
+                  ></span>
+                </div>
 
                 <div
                   class="flex flex-row"
@@ -199,14 +205,21 @@
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full">
-                <vs-select
+                <v-select 
+                  :options="[{l: 'YES', v: 'Y'},{l: 'NO', v: 'N'}]" 
+                  :reduce="item => item.v" 
+                  label="l" 
                   v-model="item['edoc_file:use_yn']"
-                  :danger="errors['edoc_file:use_yn'] != null"
-                  :danger-text="errors['edoc_file:use_yn']"
+                  :searchable="false" />
+                <div
+                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+                  v-if="errors['edoc_file:use_yn'] != null"
                 >
-                  <vs-select-item value="Y" text="YES"></vs-select-item>
-                  <vs-select-item value="N" text="NO"></vs-select-item>
-                </vs-select>
+                  <span
+                    class="span-text-validation"
+                    v-text="errors['edoc_file:use_yn']"
+                  ></span>
+                </div>
               </div>
             </div>
           </div>
@@ -222,18 +235,21 @@
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <!-- <vs-input v-model="item['edoc_file:work_id']" :danger="errors['edoc_file:work_id'] != null" :danger-text="errors['edoc_file:work_id']" /> -->
-                <vs-select
+                <v-select 
+                  :options="work_users" 
+                  :reduce="item => item['user:user_id']" 
+                  label="user:user_id" 
                   v-model="item['edoc_file:work_id']"
-                  :danger="errors['edoc_file:work_id'] != null"
-                  :danger-text="errors['edoc_file:work_id']"
+                  :searchable="false" />
+                <div
+                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+                  v-if="errors['edoc_file:work_id'] != null"
                 >
-                  <vs-select-item
-                    v-for="(user, index) in work_users"
-                    :key="index"
-                    :value="user['user:user_id']"
-                    :text="user['user:user_id']"
-                  ></vs-select-item>
-                </vs-select>
+                  <span
+                    class="span-text-validation"
+                    v-text="errors['edoc_file:work_id']"
+                  ></span>
+                </div>
               </div>
             </div>
           </div>
@@ -247,18 +263,21 @@
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <!-- <vs-input v-model="item['edoc_file:app_id']" :danger="errors['edoc_file:app_id'] != null" :danger-text="errors['edoc_file:app_id']" /> -->
-                <vs-select
+                <v-select 
+                  :options="app_users" 
+                  :reduce="item => item['user:user_id']" 
+                  label="user:user_id" 
                   v-model="item['edoc_file:app_id']"
-                  :danger="errors['edoc_file:app_id'] != null"
-                  :danger-text="errors['edoc_file:app_id']"
+                  :searchable="false" />
+                <div
+                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+                  v-if="errors['edoc_file:app_id'] != null"
                 >
-                  <vs-select-item
-                    v-for="(user, index) in app_users"
-                    :key="index"
-                    :value="user['user:user_id']"
-                    :text="user['user:user_id']"
-                  ></vs-select-item>
-                </vs-select>
+                  <span
+                    class="span-text-validation"
+                    v-text="errors['edoc_file:app_id']"
+                  ></span>
+                </div>
               </div>
             </div>
           </div>
