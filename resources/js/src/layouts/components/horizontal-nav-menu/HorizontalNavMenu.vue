@@ -88,5 +88,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@sass/vuexy/components/horizontalNavMenu.scss"
+@import "@sass/vuexy/components/horizontalNavMenu.scss";
 </style>

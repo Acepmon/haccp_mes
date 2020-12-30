@@ -17,12 +17,14 @@
   padding: 0.5rem !important;
 }
 
-[dir] .v-select .vs__dropdown-toggle {
-  padding: 0px 0 0px 0;
+[dir=ltr] .vs-input--input.hasIcon {
+  padding: 0.7rem 1rem 0.7rem 3rem !important;
 }
 
-[dir] .vs__selected {
-  margin: 0px 2px 0px 2px;
-  padding: 0 0.25em;
+[dir] .vs-button:not(.vs-radius):not(.includeIconOnly):not(.small):not(.large) {
+  padding: 0.579rem 1.2rem;
 }
 
+[dir] .vs-button:not(.vs-radius):not(.includeIconOnly):not(.small):not(.large).vs-button-border {
+  padding: 0.579rem 1.2rem;
+}

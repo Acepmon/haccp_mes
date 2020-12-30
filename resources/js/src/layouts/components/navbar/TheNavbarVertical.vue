@@ -24,7 +24,7 @@
         </vs-navbar-title> -->
 
         <vs-navbar-item :index="index" v-for="(item, index) in menuItemsUpdated" :key="index">
-          <router-link :to="item.url" v-text="item.name" active-class="active" exact="active"></router-link>
+          <router-link :to="item.url" v-text="item.name"></router-link>
         </vs-navbar-item>
 
         <!-- <bookmarks :navbarColor="navbarColor" v-if="windowWidth >= 992" /> -->
@@ -129,10 +129,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css">
-.vs-navbar--item.active,
-.vs-navbar--item .active {
-  border-bottom: 1px solid #857bf0;
-}
-</style>

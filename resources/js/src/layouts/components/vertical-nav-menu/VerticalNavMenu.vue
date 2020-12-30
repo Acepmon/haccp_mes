@@ -350,5 +350,5 @@ export default {
 
 
 <style lang="scss">
-@import "@sass/vuexy/components/verticalNavMenu.scss"
+@import "@sass/vuexy/components/verticalNavMenu.scss";
 </style>

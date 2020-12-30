@@ -51,7 +51,7 @@ $primary-color: #7367F0;
     padding: 0.3rem;
     background: transparent;
     border-radius: 5px;
-    border: 1px solid rgba(0, 0, 0, .2);
+    border: 1px solid rgba(0, 0, 0, .4);
   }
 
   // style input of column header filter input
@@ -130,6 +130,12 @@ $primary-color: #7367F0;
      background: $theme-background;
      border-radius: 20px;
     }
+}
+
+.ag-grid-table {
+  .ag-cell {
+    line-height: 36px;
+  }
 }
 
 // Can not use vuexy admin variables

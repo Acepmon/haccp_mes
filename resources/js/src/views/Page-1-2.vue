@@ -1,5 +1,40 @@
 <template>
   <div>
+    <vx-card>
+      <app-form>
+        <app-form-group>
+          <app-form-label>
+            <span class="text-danger">*</span> 휴대폰번호(ID)
+          </app-form-label>
+
+          <app-form-field>
+            <vs-input
+              maxlength="15"
+              v-model="selected['user:user_id']"
+              :danger="errors['user:user_id'] != null"
+              :danger-text="errors['user:user_id']"
+            />
+          </app-form-field>
+        </app-form-group>
+
+        <app-form-group>
+          <app-form-label> this is the label 2 </app-form-label>
+
+          <app-form-field>
+            <vs-input />
+          </app-form-field>
+        </app-form-group>
+
+        <app-form-group>
+          <app-form-label> this is the label 2 </app-form-label>
+
+          <app-form-field>
+            <vs-input />
+          </app-form-field>
+        </app-form-group>
+      </app-form>
+    </vx-card>
+
     <vx-card id="div-with-loading" class="vs-con-loading__container pt-0">
       <div class="flex flex-wrap mb-4" style="margin-top: -14px">
         <div class="w-full sm:w-1/2 px-1 flex justify-end"></div>
@@ -11,12 +46,20 @@
             type="border"
             >{{ $t("Query") }}</vs-button
           >
-          <vs-button @click="add()" class="mx-1" color="primary" type="border">{{
-            $t("Add")
-          }}</vs-button>
-          <vs-button @click="save()" class="mx-1" color="primary" type="border">{{
-            $t("Save")
-          }}</vs-button>
+          <vs-button
+            @click="add()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >{{ $t("Add") }}</vs-button
+          >
+          <vs-button
+            @click="save()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >{{ $t("Save") }}</vs-button
+          >
           <vs-button
             @click="remove()"
             class="mx-1"
@@ -39,7 +82,7 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-3">
               <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-2"
+                <span class="pt-1"
                   ><span class="text-danger">*</span> 휴대폰번호(ID)</span
                 >
               </div>
@@ -57,7 +100,7 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-3">
               <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-2"
+                <span class="pt-1"
                   ><span class="text-danger">*</span> 이름</span
                 >
               </div>
@@ -77,7 +120,7 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-3">
               <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-2"
+                <span class="pt-1"
                   ><span class="text-danger">*</span> 비밀번호</span
                 >
               </div>
@@ -95,7 +138,7 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-3">
               <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-2">비밀번호확인</span>
+                <span class="pt-1">비밀번호확인</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full pl-2">
                 <vs-input
@@ -113,7 +156,7 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-3">
               <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-2">이메일</span>
+                <span class="pt-1">이메일</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full pl-2">
                 <vs-input
@@ -132,7 +175,7 @@
           <div class="w-full sm:w-2/2 px-1">
             <div class="vx-row mb-3">
               <div class="vx-col sm:w-1/6 w-full flex justify-end pr-0">
-                <span class="pt-2"
+                <span class="pt-1"
                   ><span class="text-danger">*</span> 메뉴접근권한</span
                 >
               </div>
@@ -172,7 +215,7 @@
           <div class="w-full sm:w-12/2 px-1">
             <div class="vx-row mb-3">
               <div class="vx-col sm:w-1/6 w-full flex justify-end pr-0">
-                <span class="pt-2"
+                <span class="pt-1"
                   ><span class="text-danger">*</span> 담당업무</span
                 >
               </div>
@@ -214,18 +257,19 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-3">
               <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-2"
+                <span class="pt-1"
                   ><span class="text-danger">*</span> 업무권한</span
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full pl-2">
-                <v-select 
-                  style="width: 200px;"
-                  :options="jobs" 
-                  :reduce="item => item.comm2_cd" 
-                  label="comm2_nm" 
+                <v-select
+                  style="width: 200px"
+                  :options="jobs"
+                  :reduce="(item) => item.comm2_cd"
+                  label="comm2_nm"
                   v-model="selected['user:job_cd']"
-                  :searchable="false" />
+                  :searchable="false"
+                />
                 <div
                   class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
                   v-if="errors['user:job_cd'] != null"
@@ -242,18 +286,19 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-3">
               <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-2"
+                <span class="pt-1"
                   ><span class="text-danger">*</span> 사용여부</span
                 >
               </div>
               <div class="vx-col sm:w-2/3 w-full pl-2">
-                <v-select 
-                  style="width: 200px;"
-                  :options="status" 
-                  :reduce="item => item.value" 
-                  label="text" 
+                <v-select
+                  style="width: 200px"
+                  :options="status"
+                  :reduce="(item) => item.value"
+                  label="text"
                   v-model="selected['user:user_sts_yn']"
-                  :searchable="false" />
+                  :searchable="false"
+                />
                 <div
                   class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
                   v-if="errors['user:user_sts_yn'] != null"
@@ -354,7 +399,18 @@ import comm_cd from "@/services/comm_cd";
 import api from "@/services/user";
 import { mapActions } from "vuex";
 
+import AppForm from "@/views/ui-elements/AppForm";
+import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+import AppFormLabel from "@/views/ui-elements/AppFormLabel";
+import AppFormField from "@/views/ui-elements/AppFormField";
+
 export default {
+  components: {
+    AppForm,
+    AppFormGroup,
+    AppFormLabel,
+    AppFormField,
+  },
   data() {
     return {
       roles: [],
@@ -373,7 +429,7 @@ export default {
         "user:role_cd": [],
         "user:appr_cd": [],
         "user:job_cd": null,
-        "user:user_sts_yn": 'Y',
+        "user:user_sts_yn": "Y",
       },
       errors: {
         "user:user_id": null,
@@ -399,14 +455,14 @@ export default {
         order: "desc",
       },
       required: {
-        'user:user_id': '휴대폰번호(ID)',
-        'user:user_pw': '비밀번호',
-        'user:user_nm': '이름',
-        'user:role_cd': '메뉴접근권한',
-        'user:appr_cd': '담당업무',
-        'user:job_cd': '업무권한',
-        'user:user_sts_yn': '사용여부',
-      }
+        "user:user_id": "휴대폰번호(ID)",
+        "user:user_pw": "비밀번호",
+        "user:user_nm": "이름",
+        "user:role_cd": "메뉴접근권한",
+        "user:appr_cd": "담당업무",
+        "user:job_cd": "업무권한",
+        "user:user_sts_yn": "사용여부",
+      },
     };
   },
   computed: {
@@ -438,27 +494,30 @@ export default {
     }),
 
     validateRequired(except = []) {
-      let passed = true
+      let passed = true;
       for (const [key, value] of Object.entries(this.required)) {
-        if (except.includes(key)){
+        if (except.includes(key)) {
           continue;
         }
 
         if (Array.isArray(this.selected[key])) {
-          if (this.selected[key] === undefined || this.selected[key].length == 0) {
-            this.$set(this.errors, key, '')
-            passed = false
+          if (
+            this.selected[key] === undefined ||
+            this.selected[key].length == 0
+          ) {
+            this.$set(this.errors, key, "");
+            passed = false;
           }
         } else {
           if (this.selected[key]) {
           } else {
-            this.$set(this.errors, key, '')
-            passed = false
+            this.$set(this.errors, key, "");
+            passed = false;
           }
         }
       }
 
-      return passed
+      return passed;
     },
 
     rowIndex: function (index) {
@@ -472,7 +531,7 @@ export default {
 
     handleSelected: function (tr) {
       this.isSelected = true;
-      this.clearErrors()
+      this.clearErrors();
     },
 
     handleChangePage(page) {
@@ -534,7 +593,7 @@ export default {
         "user:role_cd": [],
         "user:appr_cd": [],
         "user:job_cd": null,
-        "user:user_sts_yn": 'Y',
+        "user:user_sts_yn": "Y",
       });
     },
 
@@ -570,7 +629,7 @@ export default {
           accept: () => {
             this.clearErrors();
             this.spinner();
-  
+
             api
               .post(this.selected)
               .then((res) => {
@@ -608,7 +667,7 @@ export default {
     },
 
     save() {
-      if (this.validateRequired(['user:user_pw'])) {
+      if (this.validateRequired(["user:user_pw"])) {
         this.$vs.dialog({
           type: "confirm",
           color: "success",
@@ -619,7 +678,7 @@ export default {
           accept: () => {
             this.clearErrors();
             this.spinner();
-  
+
             api
               .put(this.selected["user:user_id"], this.selected)
               .then((res) => {

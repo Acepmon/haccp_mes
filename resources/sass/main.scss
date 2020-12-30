@@ -58,3 +58,14 @@
 .vs-inputx:read-only {
   background-color: #f1f2f3;
 }
+
+.vs-navbar--item a {
+  font-size: 16px;
+}
+
+.vs-navbar--item a.router-link-active {
+  background: linear-gradient(118deg, rgba(var(--vs-primary), 1), rgba(var(--vs-primary), 0.7));
+  box-shadow: 0px 0px 10px 1px rgba(var(--vs-primary), 0.7);
+  border-radius: 4px;
+  color: #fff;
+}

@@ -5,7 +5,7 @@
         <vs-button @click="addTab({path: '/1/2', value: 'page-1-2', label: 'Page-1-2', component: 'page-1-2'})">Page 1-2</vs-button>
         <vs-button @click="addTab({path: '/1/3', value: 'page-1-3', label: 'Page-1-3', component: 'page-1-3'})">Page 1-3</vs-button> -->
 
-    <div v-if="tabs.length > 0" class="flex flex-row overflow-x-auto mt-12">
+    <div v-if="tabs.length > 0" class="flex flex-row overflow-x-auto mt-16">
       <vs-button
         v-for="(tab, key) in tabs"
         :key="key"

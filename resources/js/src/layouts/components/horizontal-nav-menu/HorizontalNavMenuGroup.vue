@@ -190,5 +190,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@sass/vuexy/components/horizontalNavMenuGroup.scss"
+@import "@sass/vuexy/components/horizontalNavMenuGroup.scss";
 </style>

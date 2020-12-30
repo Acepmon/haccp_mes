@@ -172,7 +172,7 @@ export default {
       items2: [],
 
       gridOptions: {
-        // rowHeight: 45
+        rowHeight: 40
       },
       defaultColDef: {
         sortable: true,
