@@ -36,7 +36,7 @@
                 <vs-button
                   @click="query()"
                   class="mx-1 px-4 flex-shrink-0"
-                  color="dark"
+                  color="primary"
                   type="border"
                   >{{ $t("Query") }}</vs-button
                 >
@@ -51,28 +51,28 @@
           <vs-button
             @click="addDialog()"
             class="mx-1 px-4 flex-shrink-0"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Add") }}</vs-button
           >
           <vs-button
             @click="saveDialog()"
             class="mx-1 px-4 flex-shrink-0"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Save") }}</vs-button
           >
           <vs-button
             @click="removeDialog()"
             class="mx-1 px-4 flex-shrink-0"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Delete") }}</vs-button
           >
           <vs-button
             @click="closeDialog()"
             class="mx-1 px-4 flex-shrink-0"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Close") }}</vs-button
           >
@@ -160,7 +160,7 @@
               <div class="vx-col sm:w-2/3 w-full">
                 <div class="flex flex-row">
                   <file-select v-model="item['doc_mgmt:att']"></file-select>
-                  <!-- <vs-button type="border" color="dark" @click.native="item['doc_mgmt:att'] = null" v-if="item['doc_mgmt:att']" class="ml-1 px-4">
+                  <!-- <vs-button type="border" color="primary" @click.native="item['doc_mgmt:att'] = null" v-if="item['doc_mgmt:att']" class="ml-1 px-4">
 										<vs-icon icon="close" />
 									</vs-button> -->
                   <vs-button
@@ -202,7 +202,7 @@
         <vs-button
           @click="excel()"
           class="mx-1"
-          color="dark"
+          color="primary"
           type="border"
           :disabled="items.length <= 0"
           >{{ $t("ToExcel") }}</vs-button
@@ -369,13 +369,13 @@ export default {
       for (const [key, value] of Object.entries(this.required)) {
         if (Array.isArray(this.item[key])) {
           if (this.item[key] === undefined || this.item[key].length == 0) {
-            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            this.$set(this.errors, key, '')
             passed = false
           }
         } else {
           if (this.item[key]) {
           } else {
-            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            this.$set(this.errors, key, '')
             passed = false
           }
         }

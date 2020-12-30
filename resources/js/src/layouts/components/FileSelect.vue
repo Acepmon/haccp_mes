@@ -2,7 +2,7 @@
     <label class="file-select">
         <vs-button type="border" color="dark" @click="$refs.file.click()">
             <span v-if="value">{{value.name}}</span>
-            <span v-else>Select File</span>
+            <span v-else>화일선택</span>
         </vs-button>
         <input type="file" ref="file" @change="handleFileChange" accept=".docx, .doc, .xls, .xlsx, .pdf, .hwp, image/*"/>
     </label>

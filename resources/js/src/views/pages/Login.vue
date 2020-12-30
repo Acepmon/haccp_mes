@@ -29,7 +29,7 @@
 
                 <div class="vx-card__title mb-4">
                   <h4 class="mb-4">{{ $t('Login') }}</h4>
-                  <p>Welcome back, please login to your account.</p>
+                  <p>HACCP MES에 오신걸 환영합니다. 로그인 하세요!</p>
                 </div>
 
                 <vs-alert class="mb-4" :active="resError" color="danger" icon-pack="feather" icon="icon-info">

@@ -36,7 +36,7 @@
                 <vs-button
                   @click="query()"
                   class="mx-1 px-4 flex-shrink-0"
-                  color="dark"
+                  color="primary"
                   type="border"
                   >{{ $t("Query") }}</vs-button
                 >
@@ -50,7 +50,7 @@
               :disabled="items.length <= 0"
               @click="saveDialog()"
               class="mx-1 flex-shrink-0"
-              color="dark"
+              color="primary"
               type="border"
               >{{ $t("Save") }}</vs-button
             >
@@ -60,7 +60,7 @@
             <vs-button
               @click="closeDialog()"
               class="mx-1 flex-shrink-0 py-3"
-              color="dark"
+              color="primary"
               type="border"
               >{{ $t("Close") }}</vs-button
             >
@@ -86,7 +86,7 @@
         <vs-button
           @click="exportExcel()"
           class="mx-1"
-          color="dark"
+          color="primary"
           type="border"
           :disabled="items.length <= 0"
           >{{ $t("ToExcel") }}</vs-button
@@ -121,14 +121,14 @@
           <vs-button
             @click="importExcelDialog()"
             class="mx-1"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Save") }}</vs-button
           >
           <vs-button
             @click="importDialog = false"
             class="mx-1"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Close") }}</vs-button
           >

@@ -72,7 +72,7 @@ class ItemMstController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => __('Successfully synced'),
+            'message' => __('Successfully saved'),
         ]);
     }
 

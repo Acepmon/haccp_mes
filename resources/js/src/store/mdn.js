@@ -15,7 +15,7 @@ const mdn = {
     state: () => ({
         activeTab: 0,
         tabs: [],
-        maxTabs: 10
+        maxTabs: 7
     }),
 
     mutations: {

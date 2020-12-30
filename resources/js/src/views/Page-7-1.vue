@@ -15,7 +15,7 @@
                 <vs-button
                   @click="query()"
                   class="mx-1 flex-shrink-0"
-                  color="dark"
+                  color="primary"
                   type="border"
                   >{{ $t("Query") }}</vs-button
                 >
@@ -30,28 +30,28 @@
           <vs-button
             @click="addRow()"
             class="mx-1 flex-shrink-0"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Add") }}</vs-button
           >
           <vs-button
             @click="saveDialog()"
             class="mx-1 flex-shrink-0"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Save") }}</vs-button
           >
           <vs-button
             @click="removeDialog()"
             class="mx-1 flex-shrink-0"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Delete") }}</vs-button
           >
           <vs-button
             @click="closeDialog()"
             class="mx-1 flex-shrink-0"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Close") }}</vs-button
           >
@@ -86,7 +86,7 @@
         <vs-button
           @click="excel()"
           class="mx-1"
-          color="dark"
+          color="primary"
           type="border"
           :disabled="items2.length <= 0"
           >{{ $t("ToExcel") }}</vs-button
@@ -171,7 +171,9 @@ export default {
       items1: [],
       items2: [],
 
-      gridOptions: {},
+      gridOptions: {
+        // rowHeight: 45
+      },
       defaultColDef: {
         sortable: true,
         editable: true,
@@ -192,13 +194,13 @@ export default {
           field: 'comm_cd:comm2_cd',
           editable: false,
           minWidth: 200,
-          width: 500,
+          width: 500
         },
         {
           headerName: '코드명',
           field: 'comm_cd:comm2_nm',
-          width: 200,
-          width: 500,
+          minWidth: 200,
+          width: 500
         }
       ],
     };
@@ -341,8 +343,7 @@ export default {
             this.$vs.notify({
               title: this.$t("SuccessSaveData"),
               position: "top-right",
-              color: "success",
-              text: res.data.message,
+              color: "success"
             });
             this.query();
             this.clear();
@@ -495,8 +496,10 @@ export default {
     }
   },
 
-  created() {
-    //
-  },
-};
+  created () {
+    setTimeout(() => {
+      this.query()
+    }, 500)
+  }
+}
 </script>

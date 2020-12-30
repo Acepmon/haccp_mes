@@ -43,31 +43,31 @@ export default {
     Query: '조회',
     Delete: '삭제',
     Close: '닫기',
-    ToExcel: 'To Excel',
-    UploadExcel: 'Upload Excel',
+    ToExcel: 'Excel 전환',
+    UploadExcel: 'Excel 올리기',
     Confirmation: '확인',
-    CloseDocument: 'Close document?',
-    ImportExcel: 'Import Excel?',
-    Download: 'Download',
+    CloseDocument: '현재메뉴를 닫겠습니까?',
+    ImportExcel: 'Excel로 전환하겠습니까?',
+    Download: '아운로드',
 
-    DeleteData: 'Are you sure to delete data?',
-    SuccessDeleteData: 'Successfully deleted data',
-    FailDeleteData: 'Failed to delete data',
+    DeleteData: '삭제하시겠습니까?',
+    SuccessDeleteData: '삭제되었습니다.',
+    FailDeleteData: '데이터 삭제에 실패했습니다.',
 
-    AddData: 'Are you sure to add data?',
-    SuccessAddData: 'Successfully added data',
-    FailAddData: 'Failed to add data',
+    AddData: '데이터를 추가하겠습니까?',
+    SuccessAddData: '데이터가 추가되었습니다',
+    FailAddData: '데이터 삭제에 실패했습니다.',
 
-    SaveData: 'Are you sure to save data?',
-    SuccessSaveData: 'Successfully saved data',
-    FailSaveData: 'Failed to save data',
+    SaveData: '저장하겠습니까?',
+    SuccessSaveData: '수정되었습니다.',
+    FailSaveData: '데이터 수정에 실패했습니다.',
 
-    EmailValid: 'Email valid',
+    EmailValid: 'Email 오류',
     Accept: '네',
     Cancel: '아니오',
 
-    TabLimitReached: 'Your tab limit exceeded. Close some menus to access new page.',
+    TabLimitReached: '설정된 메뉴 갯수(7개)가 초과되었습니다.',
 
-    SelectUser: 'Select User',
+    SelectUser: '담당자 선택',
   }
 }

@@ -1,33 +1,33 @@
 <template>
   <div>
-    <vx-card id="div-with-loading" class="vs-con-loading__container">
-      <div class="flex flex-wrap mb-2">
+    <vx-card id="div-with-loading" class="vs-con-loading__container pt-0">
+      <div class="flex flex-wrap mb-4" style="margin-top: -14px">
         <div class="w-full sm:w-1/2 px-1 flex justify-end"></div>
         <div class="w-full sm:w-1/2 px-1 flex justify-end">
           <vs-button
             @click="query()"
             class="mx-1 mr-16"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Query") }}</vs-button
           >
-          <vs-button @click="add()" class="mx-1" color="dark" type="border">{{
+          <vs-button @click="add()" class="mx-1" color="primary" type="border">{{
             $t("Add")
           }}</vs-button>
-          <vs-button @click="save()" class="mx-1" color="dark" type="border">{{
+          <vs-button @click="save()" class="mx-1" color="primary" type="border">{{
             $t("Save")
           }}</vs-button>
           <vs-button
             @click="remove()"
             class="mx-1"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Delete") }}</vs-button
           >
           <vs-button
             @click="closeDialog()"
             class="mx-1"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Close") }}</vs-button
           >
@@ -37,13 +37,13 @@
       <form ref="form">
         <div class="flex flex-wrap">
           <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
+            <div class="vx-row mb-3">
+              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
                 <span class="pt-2"
                   ><span class="text-danger">*</span> 휴대폰번호(ID)</span
                 >
               </div>
-              <div class="vx-col sm:w-2/3 w-full">
+              <div class="vx-col sm:w-2/3 w-full pl-2">
                 <vs-input
                   maxlength="15"
                   v-model="selected['user:user_id']"
@@ -55,13 +55,13 @@
           </div>
 
           <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
+            <div class="vx-row mb-3">
+              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
                 <span class="pt-2"
                   ><span class="text-danger">*</span> 이름</span
                 >
               </div>
-              <div class="vx-col sm:w-2/3 w-full">
+              <div class="vx-col sm:w-2/3 w-full pl-2">
                 <vs-input
                   maxlength="20"
                   v-model="selected['user:user_nm']"
@@ -75,13 +75,13 @@
 
         <div class="flex flex-wrap">
           <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
+            <div class="vx-row mb-3">
+              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
                 <span class="pt-2"
                   ><span class="text-danger">*</span> 비밀번호</span
                 >
               </div>
-              <div class="vx-col sm:w-2/3 w-full">
+              <div class="vx-col sm:w-2/3 w-full pl-2">
                 <vs-input
                   v-model="selected['user:user_pw']"
                   type="password"
@@ -93,11 +93,11 @@
           </div>
 
           <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
+            <div class="vx-row mb-3">
+              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
                 <span class="pt-2">비밀번호확인</span>
               </div>
-              <div class="vx-col sm:w-2/3 w-full">
+              <div class="vx-col sm:w-2/3 w-full pl-2">
                 <vs-input
                   v-model="selected['user:user_pw_confirmation']"
                   type="password"
@@ -111,11 +111,11 @@
 
         <div class="flex flex-wrap">
           <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
+            <div class="vx-row mb-3">
+              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
                 <span class="pt-2">이메일</span>
               </div>
-              <div class="vx-col sm:w-2/3 w-full">
+              <div class="vx-col sm:w-2/3 w-full pl-2">
                 <vs-input
                   maxlength="50"
                   v-model="selected['user:email']"
@@ -130,13 +130,13 @@
 
         <div class="flex flex-wrap">
           <div class="w-full sm:w-2/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/6 w-full flex justify-end">
+            <div class="vx-row mb-3">
+              <div class="vx-col sm:w-1/6 w-full flex justify-end pr-0">
                 <span class="pt-2"
                   ><span class="text-danger">*</span> 메뉴접근권한</span
                 >
               </div>
-              <div class="vx-col sm:w-5/6 w-full">
+              <div class="vx-col sm:w-5/6 w-full pl-2">
                 <div class="flex flex-row flex-wrap">
                   <vs-button
                     v-for="(role, index) in roles"
@@ -170,13 +170,13 @@
 
         <div class="flex flex-wrap">
           <div class="w-full sm:w-12/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/6 w-full flex justify-end">
+            <div class="vx-row mb-3">
+              <div class="vx-col sm:w-1/6 w-full flex justify-end pr-0">
                 <span class="pt-2"
                   ><span class="text-danger">*</span> 담당업무</span
                 >
               </div>
-              <div class="vx-col sm:w-5/6 w-full">
+              <div class="vx-col sm:w-5/6 w-full pl-2">
                 <div class="flex flex-row flex-wrap">
                   <vs-button
                     v-for="(appr, index) in approvals"
@@ -212,13 +212,13 @@
 
         <div class="flex flex-wrap">
           <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
+            <div class="vx-row mb-3">
+              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
                 <span class="pt-2"
                   ><span class="text-danger">*</span> 업무권한</span
                 >
               </div>
-              <div class="vx-col sm:w-2/3 w-full">
+              <div class="vx-col sm:w-2/3 w-full pl-2">
                 <v-select 
                   style="width: 200px;"
                   :options="jobs" 
@@ -240,13 +240,13 @@
           </div>
 
           <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
+            <div class="vx-row mb-3">
+              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
                 <span class="pt-2"
                   ><span class="text-danger">*</span> 사용여부</span
                 >
               </div>
-              <div class="vx-col sm:w-2/3 w-full">
+              <div class="vx-col sm:w-2/3 w-full pl-2">
                 <v-select 
                   style="width: 200px;"
                   :options="status" 
@@ -275,7 +275,7 @@
         <vs-button
           @click="excel()"
           class="mx-1"
-          color="dark"
+          color="primary"
           type="border"
           :disabled="datas.length <= 0"
           >{{ $t("ToExcel") }}</vs-button
@@ -446,13 +446,13 @@ export default {
 
         if (Array.isArray(this.selected[key])) {
           if (this.selected[key] === undefined || this.selected[key].length == 0) {
-            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            this.$set(this.errors, key, '')
             passed = false
           }
         } else {
           if (this.selected[key]) {
           } else {
-            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            this.$set(this.errors, key, '')
             passed = false
           }
         }

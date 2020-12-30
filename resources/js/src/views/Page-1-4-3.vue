@@ -45,7 +45,7 @@
                 <vs-button
                   @click="query()"
                   class="mx-1 flex-shrink-0"
-                  color="dark"
+                  color="primary"
                   type="border"
                   >{{ $t("Query") }}</vs-button
                 >
@@ -60,7 +60,7 @@
           <vs-button
             @click="saveDialog()"
             class="mx-1"
-            color="dark"
+            color="primary"
             type="border"
             :disabled="!item['edoc_file:doc_id']"
             >{{ $t("Save") }}</vs-button
@@ -68,7 +68,7 @@
           <vs-button
             @click="closeDialog()"
             class="mx-1"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Close") }}</vs-button
           >
@@ -297,7 +297,7 @@
         <vs-button
           @click="excel()"
           class="mx-1"
-          color="dark"
+          color="primary"
           type="border"
           :disabled="items.length <= 0"
           >{{ $t("ToExcel") }}</vs-button
@@ -480,13 +480,13 @@ export default {
       for (const [key, value] of Object.entries(this.required)) {
         if (Array.isArray(this.item[key])) {
           if (this.item[key] === undefined || this.item[key].length == 0) {
-            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            this.$set(this.errors, key, '')
             passed = false
           }
         } else {
           if (this.item[key]) {
           } else {
-            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            this.$set(this.errors, key, '')
             passed = false
           }
         }

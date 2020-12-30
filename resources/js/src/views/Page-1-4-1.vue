@@ -7,35 +7,35 @@
           <vs-button
             @click="query()"
             class="mx-1 mr-16"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Query") }}</vs-button
           >
           <vs-button
             @click="addDialog()"
             class="mx-1"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Add") }}</vs-button
           >
           <vs-button
             @click="saveDialog()"
             class="mx-1"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Save") }}</vs-button
           >
           <vs-button
             @click="removeDialog()"
             class="mx-1"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Delete") }}</vs-button
           >
           <vs-button
             @click="closeDialog()"
             class="mx-1"
-            color="dark"
+            color="primary"
             type="border"
             >{{ $t("Close") }}</vs-button
           >
@@ -143,7 +143,7 @@
                   ></file-select>
                   <vs-button
                     type="border"
-                    color="dark"
+                    color="primary"
                     @click.native="haccp_mst_file['haccp_mst_file:att'] = null"
                     v-if="haccp_mst_file['haccp_mst_file:att']"
                     class="ml-1 px-4"
@@ -189,7 +189,7 @@
         <vs-button
           @click="excel()"
           class="mx-1"
-          color="dark"
+          color="primary"
           type="border"
           :disabled="haccp_mst_files.length <= 0"
           >{{ $t("ToExcel") }}</vs-button
@@ -362,13 +362,13 @@ export default {
       for (const [key, value] of Object.entries(this.required)) {
         if (Array.isArray(this.haccp_mst_file[key])) {
           if (this.haccp_mst_file[key] === undefined || this.haccp_mst_file[key].length == 0) {
-            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            this.$set(this.errors, key, '')
             passed = false
           }
         } else {
           if (this.haccp_mst_file[key]) {
           } else {
-            this.$set(this.errors, key, 'The ' + value + ' field is required.')
+            this.$set(this.errors, key, '')
             passed = false
           }
         }
