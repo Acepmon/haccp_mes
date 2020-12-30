@@ -249,42 +249,80 @@ export default {
     },
 
     contextClose() {
-      this.removeTab(this.contextTab);
+      this.$vs.dialog({
+        type: "confirm",
+        color: "dark",
+        title: this.$t("Confirmation"),
+        text: this.$t("CloseDocument"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => this.removeTab(this.contextTab),
+      });
     },
 
     contextCloseOther() {
-      let tabsToRemove = [];
-      let tabsClone = [...this.tabs];
+      this.$vs.dialog({
+        type: "confirm",
+        color: "dark",
+        title: this.$t("Confirmation"),
+        text: this.$t("CloseDocument"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => {
+          let tabsToRemove = [];
+          let tabsClone = [...this.tabs];
 
-      tabsClone.forEach((tab) => {
-        if (tab.value != this.contextTab) {
-          tabsToRemove.push(tab);
-        }
+          tabsClone.forEach((tab) => {
+            if (tab.value != this.contextTab) {
+              tabsToRemove.push(tab);
+            }
+          });
+
+          this.removeTabs(tabsToRemove);
+        },
       });
-
-      this.removeTabs(tabsToRemove);
     },
 
     contextCloseRight() {
-      let tabsToRemove = [];
-      let tabsClone = [...this.tabs];
-      let found = false;
+      this.$vs.dialog({
+        type: "confirm",
+        color: "dark",
+        title: this.$t("Confirmation"),
+        text: this.$t("CloseDocument"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => {
+          let tabsToRemove = [];
+          let tabsClone = [...this.tabs];
+          let found = false;
 
-      tabsClone.forEach((tab) => {
-        if (found) {
-          tabsToRemove.push(tab);
-        }
-        if (tab.value == this.contextTab) {
-          found = true;
-        }
+          tabsClone.forEach((tab) => {
+            if (found) {
+              tabsToRemove.push(tab);
+            }
+            if (tab.value == this.contextTab) {
+              found = true;
+            }
+          });
+
+          this.removeTabs(tabsToRemove);
+        },
       });
-
-      this.removeTabs(tabsToRemove);
     },
 
     contextCloseAll() {
-      let tabsClone = [...this.tabs];
-      this.removeTabs(tabsClone);
+      this.$vs.dialog({
+        type: "confirm",
+        color: "dark",
+        title: this.$t("Confirmation"),
+        text: this.$t("CloseDocument"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => {
+          let tabsClone = [...this.tabs];
+          this.removeTabs(tabsClone);
+        },
+      });
     },
   },
 };
