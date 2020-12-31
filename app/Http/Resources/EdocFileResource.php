@@ -15,25 +15,26 @@ class EdocFileResource extends JsonResource
     public function toArray($request)
     {
         $periods = [
-            1 => "월",
-            2 => "화",
-            3 => "수",
-            4 => "목",
-            5 => "금",
-            6 => "토",
-            7 => "일",
+            ['label' => "월", 'value' => 0],
+            ['label' => "화", 'value' => 1],
+            ['label' => "수", 'value' => 2],
+            ['label' => "목", 'value' => 3],
+            ['label' => "금", 'value' => 4],
+            ['label' => "토", 'value' => 5],
+            ['label' => "일", 'value' => 6],
         ];
 
-        if (!empty($this->PERIOD_DATA)) {
-            $period_data = empty($this->PERIOD_DATA) ? '' : $this->PERIOD_DATA;
-            $period_data = explode(',', $period_data);
+        if (!empty($this->PERIOD_DATA) || $this->PERIOD_DATA == '0') {
+            $period_data = explode(',', $this->PERIOD_DATA);
             sort($period_data);
-    
+
             $period_data_parsed = array_map(function ($period) use ($periods) {
-                if (array_key_exists(intval($period) + 1, $periods)) {
-                    return $periods[intval($period) + 1];
+                for ($i=0; $i < count($periods); $i++) {
+                    if ($periods[$i]['value'] === intval($period)) {
+                        return $periods[$i]['label'];
+                    }
                 }
-                return "";
+                return '';
             }, $period_data);
         } else {
             $period_data_parsed = [];

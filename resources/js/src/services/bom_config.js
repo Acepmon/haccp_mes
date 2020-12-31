@@ -11,8 +11,8 @@ export default {
         let params = {
             page: 1,
             limit: 15,
-            sort: 'reg_dtm',
-            order: 'asc',
+            sort: 'REG_DTM',
+            order: 'DESC',
             with: 'item1,item2',
             ...args
         }

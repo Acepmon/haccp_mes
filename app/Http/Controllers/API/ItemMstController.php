@@ -42,6 +42,12 @@ class ItemMstController extends Controller
             $items = $items->where('ITEM_CD', $itemCd);
         }
 
+        if ($request->has('groupBy')) {
+            $items = $items->whereIn('ITEM_ID', function ($query) {
+                $query->select('ITEM1_ID')->from('BOM_CONFIG')->groupBy('ITEM1_ID');
+            });
+        }
+
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();
         } else {

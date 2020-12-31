@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\BomConfig;
+use App\Exports\BomConfigExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BomConfigResource;
 use App\Http\Resources\ItemMstResource;
@@ -26,11 +27,41 @@ class BomConfigController extends Controller
         $limit = $request->input('limit', 15);
         $sort = $request->input('sort', 'REG_DTM');
         $order = $request->input('order', 'ASC');
+        $group = $request->input('groupBy');
 
         if ($request->has('item1_id')) {
             $item1id = $request->input('item1_id');
             $items = $items->where('ITEM1_ID', $item1id);
         }
+
+        if ($request->has('item_nm')) {
+            $itemNm = $request->input('item_nm');
+            $items = $items->whereHas('item1', function ($query) use ($itemNm) {
+                $query->where('ITEM_NM', 'LIKE', '%'.$itemNm.'%');
+            });
+        }
+
+        if ($request->has('item_id')) {
+            $itemId = $request->input('item_id');
+            $items = $items->whereHas('item1', function ($query) use ($itemId) {
+                $query->where('ITEM_ID', 'LIKE', '%'.$itemId.'%');
+            });
+        }
+
+        if ($request->has('item_cd') && !empty($request->input('item_cd'))) {
+            $itemCd = $request->input('item_cd');
+            $items = $items->whereHas('item1', function ($query) use ($itemCd) {
+                $query->where('ITEM_CD', $itemCd);
+            });
+        }
+
+        // SELECT * FROM ITEM_MST WHERE ITEM_ID IN (SELECT ITEM1_ID FROM BOM_CONFIG GROUP BY ITEM1_ID)
+
+        // $items = $items->whereIn('ITEM1_ID', function ($query) {
+        //     $query->select('ITEM1_ID')->from('BOM_CONFIG')->groupBy('ITEM1_ID');
+        // });
+
+        // $items->dd();
 
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();
@@ -111,7 +142,11 @@ class BomConfigController extends Controller
 
     public function export(Request $request)
     {
-        // 
+        $itemNm = $request->input('item_nm');
+        $itemId = $request->input('item_id');
+        $itemCd = $request->input('item_cd');
+
+        return Excel::download(new BomConfigExport($itemNm, $itemId, $itemCd), 'BOM-CONFIG-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     public function import(Request $request)

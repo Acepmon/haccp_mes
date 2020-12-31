@@ -35,6 +35,7 @@ class BomConfigResource extends JsonResource
             'bom_config:use_qty' => $this->USE_QTY,
             'bom_config:reg_id' => $this->REG_ID,
             'bom_config:reg_dtm' => now()->parse($this->REG_DTM)->format('Y-m-d'),
+            $this->mergeWhen($this->whenLoaded('item1'), new ItemMstResource($this->item1)),
         ];
     }
 }

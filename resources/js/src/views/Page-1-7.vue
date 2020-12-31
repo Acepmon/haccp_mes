@@ -21,7 +21,7 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-2">
               <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">문서종류</span>
+                <span class="pt-2">품목</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full flex flex-row">
                 <v-select
@@ -201,8 +201,12 @@ export default {
       maxPageNumbers: 7,
       gridApi: null,
       gridApi2: null,
-      gridOptions: {},
-      gridOptions2: {},
+      gridOptions: {
+        rowHeight: 40
+      },
+      gridOptions2: {
+        rowHeight: 40
+      },
       defaultColDef: {
         sortable: true,
         editable: true,
@@ -218,30 +222,24 @@ export default {
           editable: false,
           width: 100,
         },
-        {
-          headerName: '생산품목코드',
-          field: 'bom_config:item1_id',
-          editable: false,
-          width: 150,
-        },
-        {
-          headerName: '생산품목명',
-          field: 'bom_config:item1_nm',
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '생산공정명',
-          field: 'bom_config:process_nm',
-          editable: false,
-          width: 150,
-        },
-        {
-          headerName: 'BOM버전',
-          field: 'bom_config:bom_ver',
-          editable: false,
-          width: 200,
-        },
+        // {
+        //   headerName: '생산품목코드',
+        //   field: 'bom_config:item1_id',
+        //   editable: false,
+        //   width: 150,
+        // },
+        // {
+        //   headerName: '생산품목명',
+        //   field: 'bom_config:item1_nm',
+        //   editable: false,
+        //   width: 200,
+        // },
+        // {
+        //   headerName: '생산공정명',
+        //   field: 'bom_config:process_nm',
+        //   editable: false,
+        //   width: 150,
+        // },
         {
           headerName: '소모품목코드',
           field: 'bom_config:item2_id',
@@ -255,6 +253,12 @@ export default {
           width: 200,
         },
         {
+          headerName: 'BOM버전',
+          field: 'bom_config:bom_ver',
+          editable: false,
+          width: 200,
+        },
+        {
           headerName: '생산수량',
           field: 'bom_config:prod_qty',
           type: 'numericColumn',
@@ -264,76 +268,6 @@ export default {
           headerName: '소요량',
           field: 'bom_config:use_qty',
           type: 'numericColumn',
-          width: 100,
-        },
-      ],
-
-      columnDefs: [
-        {
-          headerName: 'No',
-          field: 'no',
-          filter: false,
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '코드',
-          field: 'item_mst:item_id',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '품목명',
-          field: 'item_mst:item_nm',
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '규격명',
-          field: 'item_mst:spec',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '단위',
-          field: 'item_mst:unit',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '당수량(분자)',
-          field: 'item_mst:qty1',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '대표품목 환산수량',
-          field: 'item_mst:conn_no',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '연결품목 환산수량',
-          field: 'item_mst:conn_qty',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '품목',
-          field: 'item_mst:item_cd_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '그룹1',
-          field: 'item_mst:grp1_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '그룹2',
-          field: 'item_mst:grp2_nm',
-          editable: false,
           width: 100,
         },
         {
@@ -368,13 +302,118 @@ export default {
           editable: false,
           width: 100,
         },
+      ],
+
+      columnDefs: [
         {
-          headerName: '수량(소)',
-          field: 'item_mst:unit3_qty',
-          type: 'numericColumn',
+          headerName: 'No',
+          field: 'no',
+          filter: false,
           editable: false,
           width: 100,
-        }
+        },
+        {
+          headerName: '코드',
+          field: 'item_mst:item_id',
+          editable: false,
+          width: 150,
+        },
+        {
+          headerName: '품목명',
+          field: 'item_mst:item_nm',
+          editable: false,
+          width: 200,
+        },
+        {
+          headerName: '규격명',
+          field: 'item_mst:spec',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '단위',
+          field: 'item_mst:unit',
+          editable: false,
+          width: 100,
+        },
+        {
+          headerName: '당수량(분자)',
+          field: 'item_mst:qty1',
+          editable: false,
+          type: 'numericColumn',
+          width: 100,
+        },
+        {
+          headerName: '대표품목 환산수량',
+          field: 'item_mst:conn_no',
+          editable: false,
+          type: 'numericColumn',
+          width: 100,
+        },
+        {
+          headerName: '연결품목 환산수량',
+          field: 'item_mst:conn_qty',
+          editable: false,
+          type: 'numericColumn',
+          width: 100,
+        },
+        // {
+        //   headerName: '품목',
+        //   field: 'item_mst:item_cd_nm',
+        //   editable: false,
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '그룹1',
+        //   field: 'item_mst:grp1_nm',
+        //   editable: false,
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '그룹2',
+        //   field: 'item_mst:grp2_nm',
+        //   editable: false,
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '단위(대)',
+        //   field: 'item_mst:unit1_nm',
+        //   editable: false,
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '수량(대)',
+        //   field: 'item_mst:unit1_qty',
+        //   type: 'numericColumn',
+        //   editable: false,
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '단위(중)',
+        //   field: 'item_mst:unit2_nm',
+        //   editable: false,
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '수량(중)',
+        //   field: 'item_mst:unit2_qty',
+        //   type: 'numericColumn',
+        //   editable: false,
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '단위(소)',
+        //   field: 'item_mst:unit3_nm',
+        //   editable: false,
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '수량(소)',
+        //   field: 'item_mst:unit3_qty',
+        //   type: 'numericColumn',
+        //   editable: false,
+        //   width: 100,
+        // }
       ],
     }
   },
@@ -548,6 +587,7 @@ export default {
           ...this.sortParam,
           limit: -1,
           ...search_params,
+          groupBy: 'ITEM1_ID'
         })
         .then((res) => {
           this.spinner(false);
@@ -702,7 +742,7 @@ export default {
         search_params["item_cd"] = this.searchType;
       }
 
-      window.location.href = api.export(search_params);
+      window.location.href = bom_config.export(search_params);
     },
 
     closeDialog() {

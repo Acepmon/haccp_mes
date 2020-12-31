@@ -93,6 +93,11 @@ const router = new Router({
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/6', value: 'page-1-6', label: '원/부자재 관리', component: 'page-1-6'}) } }
               },
               {
+                path: '/1/6-1',
+                name: '원/부자재 관리',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/6-1', value: 'page-1-6-1', label: '원/부자재 단위관리', component: 'page-1-6-1'}) } }
+              },
+              {
                 path: '/1/7',
                 name: 'BOM 관리',
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/7', value: 'page-1-7', label: 'BOM 관리', component: 'page-1-7'}) } }
@@ -163,6 +168,11 @@ const router = new Router({
                 path: '/7/1',
                 name: '공통코드 관리',
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/7/1', value: 'page-7-1', label: '공통코드 관리', component: 'page-7-1'}) } }
+              },
+              {
+                path: '/7/2',
+                name: '공통코드 관리',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/7/2', value: 'page-7-2', label: '공통코드 관리', component: 'page-7-2'}) } }
               },
               {
                 path: '/profile',

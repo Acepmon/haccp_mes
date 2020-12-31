@@ -70,36 +70,42 @@ export default [
           }
         ]
       },
-      {
-        url: "/1/5",
-        name: "원/부자재 기준",
-        slug: "원/부자재 기준",
-        showSubmenuOn: '/1',
-        submenu: [
-          {
-            url: "/1/5/1",
-            name: "가공원료 기준등록",
-            slug: "가공원료 기준등록",
-            showSubmenuOn: '/1',
-          },
-          {
-            url: "/1/5/2",
-            name: "원료 기준등록",
-            slug: "원료 기준등록",
-            showSubmenuOn: '/1',
-          },
-          {
-            url: "/1/5/3",
-            name: "부자재 기준등록",
-            slug: "부자재 기준등록",
-            showSubmenuOn: '/1',
-          }
-        ]
-      },
+      // {
+      //   url: "/1/5",
+      //   name: "원/부자재 기준",
+      //   slug: "원/부자재 기준",
+      //   showSubmenuOn: '/1',
+      //   submenu: [
+      //     {
+      //       url: "/1/5/1",
+      //       name: "가공원료 기준등록",
+      //       slug: "가공원료 기준등록",
+      //       showSubmenuOn: '/1',
+      //     },
+      //     {
+      //       url: "/1/5/2",
+      //       name: "원료 기준등록",
+      //       slug: "원료 기준등록",
+      //       showSubmenuOn: '/1',
+      //     },
+      //     {
+      //       url: "/1/5/3",
+      //       name: "부자재 기준등록",
+      //       slug: "부자재 기준등록",
+      //       showSubmenuOn: '/1',
+      //     }
+      //   ]
+      // },
       {
         url: "/1/6",
         name: "원/부자재 관리",
         slug: "원/부자재 관리",
+        showSubmenuOn: '/1',
+      },
+      {
+        url: "/1/6-1",
+        name: "원/부자재 단위관리",
+        slug: "원/부자재 단위관리",
         showSubmenuOn: '/1',
       },
       {
@@ -108,38 +114,38 @@ export default [
         slug: "BOM 관리",
         showSubmenuOn: '/1',
       },
-      {
-        url: "/1/8",
-        name: "공정순서관리",
-        slug: "공정순서관리",
-        showSubmenuOn: '/1',
-        submenu: [
-          {
-            url: "/1/8/1",
-            name: "전처리공정등록",
-            slug: "전처리공정등록",
-            showSubmenuOn: '/1',
-          },
-          {
-            url: "/1/8/2",
-            name: "제조공정등록",
-            slug: "제조공정등록",
-            showSubmenuOn: '/1',
-          }
-        ]
-      },
-      {
-        url: "/1/9",
-        name: "구매기업정보등록",
-        slug: "구매기업정보등록",
-        showSubmenuOn: '/1',
-      },
-      {
-        url: "/1/10",
-        name: "납품기업정보등록",
-        slug: "납품기업정보등록",
-        showSubmenuOn: '/1',
-      },
+      // {
+      //   url: "/1/8",
+      //   name: "공정순서관리",
+      //   slug: "공정순서관리",
+      //   showSubmenuOn: '/1',
+      //   submenu: [
+      //     {
+      //       url: "/1/8/1",
+      //       name: "전처리공정등록",
+      //       slug: "전처리공정등록",
+      //       showSubmenuOn: '/1',
+      //     },
+      //     {
+      //       url: "/1/8/2",
+      //       name: "제조공정등록",
+      //       slug: "제조공정등록",
+      //       showSubmenuOn: '/1',
+      //     }
+      //   ]
+      // },
+      // {
+      //   url: "/1/9",
+      //   name: "구매기업정보등록",
+      //   slug: "구매기업정보등록",
+      //   showSubmenuOn: '/1',
+      // },
+      // {
+      //   url: "/1/10",
+      //   name: "납품기업정보등록",
+      //   slug: "납품기업정보등록",
+      //   showSubmenuOn: '/1',
+      // },
       {
         url: "/1/11",
         name: "정보보호관리",
@@ -252,26 +258,26 @@ export default [
       }
     ]
   },
-  {
-    url: "/5",
-    name: "출하관리",
-    slug: "출하관리",
-    showSubmenuOn: '/5',
-    submenu: [
-      {
-        url: "/5/1",
-        name: "제품재고현황",
-        slug: "제품재고현황",
-        showSubmenuOn: '/5',
-      },
-      {
-        url: "/5/2",
-        name: "출하관리",
-        slug: "출하관리",
-        showSubmenuOn: '/5',
-      }
-    ]
-  },
+  // {
+  //   url: "/5",
+  //   name: "출하관리",
+  //   slug: "출하관리",
+  //   showSubmenuOn: '/5',
+  //   submenu: [
+  //     {
+  //       url: "/5/1",
+  //       name: "제품재고현황",
+  //       slug: "제품재고현황",
+  //       showSubmenuOn: '/5',
+  //     },
+  //     {
+  //       url: "/5/2",
+  //       name: "출하관리",
+  //       slug: "출하관리",
+  //       showSubmenuOn: '/5',
+  //     }
+  //   ]
+  // },
   {
     url: "/6",
     name: "HACCP모니터링",

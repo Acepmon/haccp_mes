@@ -47,7 +47,7 @@ export default {
     UploadExcel: 'Excel 올리기',
     Confirmation: '확인',
     CloseDocument: '현재메뉴를 닫겠습니까?',
-    ImportExcel: 'Excel로 전환하겠습니까?',
+    ImportExcel: 'Excel 데이터를 DB에 저장하겠습니까?',
     Download: '다운로드',
 
     DeleteData: '삭제하시겠습니까?',

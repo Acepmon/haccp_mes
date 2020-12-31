@@ -586,6 +586,8 @@ export default {
       this.clearErrors();
       this.spinner();
 
+      this.$set(this.item, 'edoc_file:period_data', this.item['edoc_file:period_data'].filter(period => period != ''))
+
       api
         .put(this.item["edoc_file:doc_id"], this.item)
         .then((res) => {

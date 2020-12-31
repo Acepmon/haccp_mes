@@ -46,12 +46,39 @@ class EdocFileExport implements FromCollection, WithHeadings, WithStyles, WithMa
 
     public function map($edocFile): array
     {
+        $periods = [
+            ['label' => "월", 'value' => 0],
+            ['label' => "화", 'value' => 1],
+            ['label' => "수", 'value' => 2],
+            ['label' => "목", 'value' => 3],
+            ['label' => "금", 'value' => 4],
+            ['label' => "토", 'value' => 5],
+            ['label' => "일", 'value' => 6],
+        ];
+
+        if (!empty($edocFile->PERIOD_DATA) || $edocFile->PERIOD_DATA == '0') {
+            $period_data = explode(',', $edocFile->PERIOD_DATA);
+            sort($period_data);
+
+            $period_data_parsed = array_map(function ($period) use ($periods) {
+                for ($i=0; $i < count($periods); $i++) {
+                    if ($periods[$i]['value'] === intval($period)) {
+                        return $periods[$i]['label'];
+                    }
+                }
+                return '';
+            }, $period_data);
+        } else {
+            $period_data_parsed = [];
+        }
+
         return [
             $edocFile->DOC_ID,
             $edocFile->DOC_NM,
             ($edocFile->type ? $edocFile->type->COMM2_NM : null),
             $edocFile->DOC_CONTENT,
             ($edocFile->period ? $edocFile->period->COMM2_NM : null),
+            implode(',', $period_data_parsed),
             $edocFile->USE_YN,
             $edocFile->WORK_ID,
             $edocFile->APP_ID,
@@ -66,6 +93,7 @@ class EdocFileExport implements FromCollection, WithHeadings, WithStyles, WithMa
             '업무종류',
             '문서내용',
             '업무처리주기',
+            '주기내용',
             '사용구분',
             '작업자',
             '승인자',

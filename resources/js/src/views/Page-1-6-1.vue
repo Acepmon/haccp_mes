@@ -46,16 +46,16 @@
         </div>
         <div class="w-full sm:w-1/3 px-1 flex justify-end">
           <div>
-            <!-- <vs-button
+            <vs-button
               :disabled="items.length <= 0"
               @click="saveDialog()"
               class="mx-1 flex-shrink-0"
               color="primary"
               type="border"
-              >{{ $t("Save") }}</vs-button> -->
-            
+              >{{ $t("Save") }}</vs-button
+            >
           </div>
-          <import-excel :onSuccess="loadDataInTable" v-model="importFile"></import-excel>
+          <!-- <import-excel :onSuccess="loadDataInTable" v-model="importFile"></import-excel> -->
           <div>
             <vs-button
               @click="closeDialog()"
@@ -297,7 +297,7 @@ export default {
       gridApi: null,
       defaultColDef: {
         sortable: true,
-        editable: false,
+        editable: true,
         resizable: true,
         suppressMenu: false
       },
@@ -308,13 +308,13 @@ export default {
           field: 'no',
           filter: false,
           editable: false,
-          width: 100,
+          width: 50,
         },
         {
           headerName: '코드',
           field: 'item_mst:item_id',
           editable: false,
-          width: 100,
+          width: 120,
         },
         {
           headerName: '품목명',
@@ -334,82 +334,76 @@ export default {
           editable: false,
           width: 100,
         },
-        {
-          headerName: '당수량(분자)',
-          field: 'item_mst:qty1',
-          editable: false,
-          type: 'numericColumn',
-          width: 100,
-        },
-        {
-          headerName: '대표품목 환산수량',
-          field: 'item_mst:conn_no',
-          editable: false,
-          type: 'numericColumn',
-          width: 100,
-        },
-        {
-          headerName: '연결품목 환산수량',
-          field: 'item_mst:conn_qty',
-          editable: false,
-          type: 'numericColumn',
-          width: 100,
-        },
-        {
-          headerName: '품목',
-          field: 'item_mst:item_cd_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '그룹1',
-          field: 'item_mst:grp1_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '그룹2',
-          field: 'item_mst:grp2_nm',
-          editable: false,
-          width: 100,
-        },
+        // {
+        //   headerName: '당수량(분자)',
+        //   field: 'item_mst:qty1',
+        //   editable: false,
+        //   type: 'numericColumn',
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '대표품목 환산수량',
+        //   field: 'item_mst:conn_no',
+        //   editable: false,
+        //   type: 'numericColumn',
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '연결품목 환산수량',
+        //   field: 'item_mst:conn_qty',
+        //   editable: false,
+        //   type: 'numericColumn',
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '품목',
+        //   field: 'item_mst:item_cd_nm',
+        //   editable: false,
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '그룹1',
+        //   field: 'item_mst:grp1_nm',
+        //   editable: false,
+        //   width: 100,
+        // },
+        // {
+        //   headerName: '그룹2',
+        //   field: 'item_mst:grp2_nm',
+        //   editable: false,
+        //   width: 100,
+        // },
         {
           headerName: '단위(대)',
           field: 'item_mst:unit1_nm',
-          editable: false,
           width: 100,
         },
         {
           headerName: '수량(대)',
           field: 'item_mst:unit1_qty',
           type: 'numericColumn',
-          editable: false,
           width: 100,
         },
         {
           headerName: '단위(중)',
           field: 'item_mst:unit2_nm',
-          editable: false,
           width: 100,
         },
         {
           headerName: '수량(중)',
           field: 'item_mst:unit2_qty',
           type: 'numericColumn',
-          editable: false,
           width: 100,
         },
         {
           headerName: '단위(소)',
           field: 'item_mst:unit3_nm',
-          editable: false,
           width: 100,
         },
         {
           headerName: '수량(소)',
           field: 'item_mst:unit3_qty',
           type: 'numericColumn',
-          editable: false,
           width: 100,
         }
       ],
@@ -571,7 +565,6 @@ export default {
               title: this.$t("SuccessSaveData"),
               position: "top-right",
               color: "success",
-              text: res.data.message,
             });
             this.query();
           } else {
