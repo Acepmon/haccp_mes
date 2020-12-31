@@ -1,44 +1,10 @@
 <template>
   <div>
-    <vx-card>
-      <app-form>
-        <app-form-group>
-          <app-form-label>
-            <span class="text-danger">*</span> 휴대폰번호(ID)
-          </app-form-label>
-
-          <app-form-field>
-            <vs-input
-              maxlength="15"
-              v-model="selected['user:user_id']"
-              :danger="errors['user:user_id'] != null"
-              :danger-text="errors['user:user_id']"
-            />
-          </app-form-field>
-        </app-form-group>
-
-        <app-form-group>
-          <app-form-label> this is the label 2 </app-form-label>
-
-          <app-form-field>
-            <vs-input />
-          </app-form-field>
-        </app-form-group>
-
-        <app-form-group>
-          <app-form-label> this is the label 2 </app-form-label>
-
-          <app-form-field>
-            <vs-input />
-          </app-form-field>
-        </app-form-group>
-      </app-form>
-    </vx-card>
-
     <vx-card id="div-with-loading" class="vs-con-loading__container pt-0">
-      <div class="flex flex-wrap mb-4" style="margin-top: -14px">
-        <div class="w-full sm:w-1/2 px-1 flex justify-end"></div>
-        <div class="w-full sm:w-1/2 px-1 flex justify-end">
+      <app-control flush>
+        <template v-slot:filter> </template>
+
+        <template v-slot:action>
           <vs-button
             @click="query()"
             class="mx-1 mr-16"
@@ -74,258 +40,219 @@
             type="border"
             >{{ $t("Close") }}</vs-button
           >
-        </div>
-      </div>
+        </template>
+      </app-control>
 
-      <form ref="form">
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-3">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-1"
-                  ><span class="text-danger">*</span> 휴대폰번호(ID)</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full pl-2">
-                <vs-input
-                  maxlength="15"
-                  v-model="selected['user:user_id']"
-                  :danger="errors['user:user_id'] != null"
-                  :danger-text="errors['user:user_id']"
-                />
-              </div>
-            </div>
-          </div>
+      <app-form>
+        <app-form-group>
+          <template v-slot:label>
+            <span class="text-danger">*</span> 휴대폰번호(ID)
+          </template>
 
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-3">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-1"
-                  ><span class="text-danger">*</span> 이름</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full pl-2">
-                <vs-input
-                  maxlength="20"
-                  v-model="selected['user:user_nm']"
-                  :danger="errors['user:user_nm'] != null"
-                  :danger-text="errors['user:user_nm']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+          <vs-input
+            maxlength="15"
+            v-model="selected['user:user_id']"
+            :danger="errors['user:user_id'] != null && ['user:user_id'] != ''"
+            :danger-text="errors['user:user_id']"
+          />
+        </app-form-group>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-3">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-1"
-                  ><span class="text-danger">*</span> 비밀번호</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full pl-2">
-                <vs-input
-                  v-model="selected['user:user_pw']"
-                  type="password"
-                  :danger="errors['user:user_pw'] != null"
-                  :danger-text="errors['user:user_pw']"
-                />
-              </div>
-            </div>
-          </div>
+        <app-form-group>
+          <template v-slot:label>
+            <span class="text-danger">*</span> 이름
+          </template>
 
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-3">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-1">비밀번호확인</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full pl-2">
-                <vs-input
-                  v-model="selected['user:user_pw_confirmation']"
-                  type="password"
-                  :danger="errors['user:user_pw_confirmation'] != null"
-                  :danger-text="errors['user:user_pw_confirmation']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+          <vs-input
+            maxlength="20"
+            v-model="selected['user:user_nm']"
+            :danger="errors['user:user_nm'] != null && ['user:user_nm'] != ''"
+            :danger-text="errors['user:user_nm']"
+          />
+        </app-form-group>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-3">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-1">이메일</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full pl-2">
-                <vs-input
-                  maxlength="50"
-                  v-model="selected['user:email']"
-                  type="email"
-                  :danger="errors['user:email'] != null"
-                  :danger-text="errors['user:email']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <app-form-group>
+          <template v-slot:label>
+            <span class="text-danger">*</span> 비밀번호
+          </template>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-2/2 px-1">
-            <div class="vx-row mb-3">
-              <div class="vx-col sm:w-1/6 w-full flex justify-end pr-0">
-                <span class="pt-1"
-                  ><span class="text-danger">*</span> 메뉴접근권한</span
-                >
-              </div>
-              <div class="vx-col sm:w-5/6 w-full pl-2">
-                <div class="flex flex-row flex-wrap">
-                  <vs-button
-                    v-for="(role, index) in roles"
-                    :key="index"
-                    @click="toggleRole(role.comm2_cd)"
-                    :color="selectedRoleHas(role.comm2_cd) ? 'primary' : 'dark'"
-                    class="px-3 mt-1 flex-shrink-0 ml-1"
-                    type="border"
-                  >
-                    <vs-icon
-                      v-if="selectedRoleHas(role.comm2_cd)"
-                      icon-pack="feather"
-                      icon="icon-check"
-                    />
-                    <span v-text="role.comm2_nm"></span>
-                  </vs-button>
-                </div>
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['user:role_cd'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['user:role_cd']"
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          <vs-input
+            v-model="selected['user:user_pw']"
+            type="password"
+            :danger="errors['user:user_pw'] != null && ['user:user_pw'] != ''"
+            :danger-text="errors['user:user_pw']"
+          />
+        </app-form-group>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-12/2 px-1">
-            <div class="vx-row mb-3">
-              <div class="vx-col sm:w-1/6 w-full flex justify-end pr-0">
-                <span class="pt-1"
-                  ><span class="text-danger">*</span> 담당업무</span
-                >
-              </div>
-              <div class="vx-col sm:w-5/6 w-full pl-2">
-                <div class="flex flex-row flex-wrap">
-                  <vs-button
-                    v-for="(appr, index) in approvals"
-                    :key="index"
-                    @click="toggleApproval(appr.comm2_cd)"
-                    :color="
-                      selectedApprovalHas(appr.comm2_cd) ? 'primary' : 'dark'
-                    "
-                    class="px-3 mt-1 flex-shrink-0 ml-1"
-                    type="border"
-                  >
-                    <vs-icon
-                      v-if="selectedApprovalHas(appr.comm2_cd)"
-                      icon-pack="feather"
-                      icon="icon-check"
-                    />
-                    <span v-text="appr.comm2_nm"></span>
-                  </vs-button>
-                </div>
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['user:appr_cd'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['user:appr_cd']"
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <app-form-group>
+          <template v-slot:label> 비밀번호확인 </template>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-3">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-1"
-                  ><span class="text-danger">*</span> 업무권한</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full pl-2">
-                <v-select
-                  style="width: 200px"
-                  :options="jobs"
-                  :reduce="(item) => item.comm2_cd"
-                  label="comm2_nm"
-                  v-model="selected['user:job_cd']"
-                  :searchable="false"
-                />
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['user:job_cd'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['user:job_cd']"
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <vs-input
+            v-model="selected['user:user_pw_confirmation']"
+            type="password"
+            :danger="
+              errors['user:user_pw_confirmation'] != null &&
+              ['user:user_pw_confirmation'] != ''
+            "
+            :danger-text="errors['user:user_pw_confirmation']"
+          />
+        </app-form-group>
 
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-3">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
-                <span class="pt-1"
-                  ><span class="text-danger">*</span> 사용여부</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full pl-2">
-                <v-select
-                  style="width: 200px"
-                  :options="status"
-                  :reduce="(item) => item.value"
-                  label="text"
-                  v-model="selected['user:user_sts_yn']"
-                  :searchable="false"
-                />
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['user:user_sts_yn'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['user:user_sts_yn']"
-                  ></span>
-                </div>
-              </div>
-            </div>
+        <app-form-group>
+          <template v-slot:label> 이메일 </template>
+
+          <vs-input
+            maxlength="50"
+            v-model="selected['user:email']"
+            type="email"
+            :danger="errors['user:email'] != null && ['user:email'] != ''"
+            :danger-text="errors['user:email']"
+          />
+        </app-form-group>
+
+        <app-form-group></app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>
+            <span class="text-danger">*</span> 메뉴접근권한
+          </template>
+
+          <div class="flex flex-row flex-wrap">
+            <vs-button
+              v-for="(role, index) in roles"
+              :key="index"
+              @click="toggleRole(role.comm2_cd)"
+              :color="selectedRoleHas(role.comm2_cd) ? 'primary' : 'dark'"
+              class="px-3 mt-1 flex-shrink-0"
+              :class="{ 'ml-1': index != 0 }"
+              type="border"
+            >
+              <vs-icon
+                v-if="selectedRoleHas(role.comm2_cd)"
+                icon-pack="feather"
+                icon="icon-check"
+              />
+              <span v-text="role.comm2_nm"></span>
+            </vs-button>
           </div>
-        </div>
-      </form>
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="
+              errors['user:role_cd'] != null && errors['user:role_cd'] != ''
+            "
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['user:role_cd']"
+            ></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group></app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>
+            <span class="text-danger">*</span> 담당업무
+          </template>
+
+          <div class="flex flex-row flex-wrap">
+            <vs-button
+              v-for="(appr, index) in approvals"
+              :key="index"
+              @click="toggleApproval(appr.comm2_cd)"
+              :color="selectedApprovalHas(appr.comm2_cd) ? 'primary' : 'dark'"
+              class="px-3 mt-1 flex-shrink-0"
+              :class="{ 'ml-1': index != 0 }"
+              type="border"
+            >
+              <vs-icon
+                v-if="selectedApprovalHas(appr.comm2_cd)"
+                icon-pack="feather"
+                icon="icon-check"
+              />
+              <span v-text="appr.comm2_nm"></span>
+            </vs-button>
+          </div>
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="
+              errors['user:appr_cd'] != null && errors['user:appr_cd'] != ''
+            "
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['user:appr_cd']"
+            ></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group></app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>
+            <span class="text-danger">*</span> 업무권한
+          </template>
+
+          <v-select
+            style="width: 200px"
+            :options="jobs"
+            :reduce="(item) => item.comm2_cd"
+            label="comm2_nm"
+            v-model="selected['user:job_cd']"
+            :searchable="false"
+          />
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['user:job_cd'] != null && errors['user:job_cd'] != ''"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['user:job_cd']"
+            ></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>
+            <span class="text-danger">*</span> 사용여부
+          </template>
+
+          <v-select
+            style="width: 200px"
+            :options="status"
+            :reduce="(item) => item.value"
+            label="text"
+            v-model="selected['user:user_sts_yn']"
+            :searchable="false"
+          />
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="
+              errors['user:user_sts_yn'] != null &&
+              errors['user:user_sts_yn'] != ''
+            "
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['user:user_sts_yn']"
+            ></span>
+          </div>
+        </app-form-group>
+      </app-form>
 
       <vs-divider />
 
-      <div class="flex flex-wrap justify-end mb-2">
-        <vs-button
-          @click="excel()"
-          class="mx-1"
-          color="primary"
-          type="border"
-          :disabled="datas.length <= 0"
-          >{{ $t("ToExcel") }}</vs-button
-        >
-      </div>
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="excel()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            :disabled="datas.length <= 0"
+            >{{ $t("ToExcel") }}</vs-button
+          >
+        </template>
+      </app-control>
 
       <div class="overflow-y-auto" style="max-height: 300px">
         <vs-table
@@ -399,17 +326,15 @@ import comm_cd from "@/services/comm_cd";
 import api from "@/services/user";
 import { mapActions } from "vuex";
 
+import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
-import AppFormLabel from "@/views/ui-elements/AppFormLabel";
-import AppFormField from "@/views/ui-elements/AppFormField";
 
 export default {
   components: {
+    AppControl,
     AppForm,
     AppFormGroup,
-    AppFormLabel,
-    AppFormField,
   },
   data() {
     return {
