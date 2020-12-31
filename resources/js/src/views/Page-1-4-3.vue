@@ -355,7 +355,7 @@
               </vs-td>
 
               <vs-td :data="data[index]['edoc_file:period_data']">
-                {{ parsePeriodDaysText(data[index]['edoc_file:period_data']).join(',') }}
+                {{ data[index]["edoc_file:period_data_parsed"].join(',') }}
               </vs-td>
 
               <vs-td :data="data[index]['edoc_file:use_yn']">
@@ -403,6 +403,7 @@ export default {
         "edoc_file:period_cd": null,
         "edoc_file:period_nm": null,
         "edoc_file:period_data": [],
+        "edoc_file:period_data_parsed": [],
         "edoc_file:use_yn": null,
         "edoc_file:work_id": null,
         "edoc_file:app_id": null,
@@ -732,20 +733,6 @@ export default {
         let index = this.item["edoc_file:period_data"].indexOf(parsed);
         this.item["edoc_file:period_data"].splice(index, 1);
       }
-    },
-
-    parsePeriodDaysText(periodArray = []) {
-      return periodArray.sort().map((item) => {
-        let txt = ''
-
-        this.periodEdDays.forEach(period => {
-          if (period.value == parseInt(item)) {
-            txt = period.text
-          }
-        })
-
-        return txt
-      })
     }
   },
 
@@ -765,6 +752,6 @@ export default {
     user.fetch({ appr_cd: "20", limit: -1 }).then((res) => {
       this.app_users = res.data.data;
     });
-  },
+  }
 };
 </script>
