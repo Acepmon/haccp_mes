@@ -28,7 +28,7 @@ class EdocFileResource extends JsonResource
             'edoc_file:period_nm' => $this->whenLoaded('period', function () {
                 return $this->period->COMM2_NM;
             }),
-            'edoc_file:period_data' => array_filter(explode(',', $this->PERIOD_DATA)),
+            'edoc_file:period_data' => explode(',', $this->PERIOD_DATA),
             'edoc_file:use_yn' => $this->USE_YN,
             'edoc_file:work_id' => $this->WORK_ID,
             'edoc_file:app_id' => $this->APP_ID,

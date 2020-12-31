@@ -141,7 +141,7 @@
                   <file-select
                     v-model="haccp_mst_file['haccp_mst_file:att']"
                   ></file-select>
-                  <vs-button
+                  <!-- <vs-button
                     type="border"
                     color="primary"
                     @click.native="haccp_mst_file['haccp_mst_file:att'] = null"
@@ -149,7 +149,7 @@
                     class="ml-1 px-4"
                   >
                     <vs-icon icon="close" />
-                  </vs-button>
+                  </vs-button> -->
                   <vs-button
                     class="ml-1"
                     v-if="
@@ -362,13 +362,13 @@ export default {
       for (const [key, value] of Object.entries(this.required)) {
         if (Array.isArray(this.haccp_mst_file[key])) {
           if (this.haccp_mst_file[key] === undefined || this.haccp_mst_file[key].length == 0) {
-            this.$set(this.errors, key, '')
+            this.$set(this.errors, key, '필수항목입니다.')
             passed = false
           }
         } else {
           if (this.haccp_mst_file[key]) {
           } else {
-            this.$set(this.errors, key, '')
+            this.$set(this.errors, key, '필수항목입니다.')
             passed = false
           }
         }

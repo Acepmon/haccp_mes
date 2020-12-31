@@ -141,7 +141,7 @@
 
         <app-form-group></app-form-group>
 
-        <app-form-group required>
+        <app-form-group>
           <template v-slot:label>담당업무</template>
 
           <div class="flex flex-row flex-wrap">
@@ -370,7 +370,7 @@ export default {
         "user:user_pw": "비밀번호",
         "user:user_nm": "이름",
         "user:role_cd": "메뉴접근권한",
-        "user:appr_cd": "담당업무",
+        // "user:appr_cd": "담당업무",
         "user:job_cd": "업무권한",
         "user:user_sts_yn": "사용여부",
       },

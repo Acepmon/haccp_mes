@@ -306,8 +306,8 @@ export default {
         total: 0,
       },
       sorting: {
-        sort: "reg_dtm",
-        order: "desc",
+        sort: "REG_DTM",
+        order: "DESC",
       },
       required: {
         'worker:worker_nm': '이름',
@@ -326,8 +326,8 @@ export default {
 
     sortParam: function () {
       return {
-        sort: this.sorting.sort != null ? this.sorting.sort : "login_dtm",
-        order: this.sorting.order != null ? this.sorting.order : "asc",
+        sort: this.sorting.sort != null ? this.sorting.sort : "REG_DTM",
+        order: this.sorting.order != null ? this.sorting.order : "DESC",
       };
     },
   },
@@ -342,14 +342,14 @@ export default {
       for (const [key, value] of Object.entries(this.required)) {
         if (Array.isArray(this.worker[key])) {
           if (this.worker[key] === undefined || this.worker[key].length == 0) {
-            this.$set(this.errors, key, '')
+            this.$set(this.errors, key, '필수항목입니다.')
             passed = false
           }
         } else {
           if (this.worker[key]) {
           } else {
-            // this.$set(this.errors, key, '')
-            this.$set(this.errors, key, '')
+            // this.$set(this.errors, key, '필수항목입니다.')
+            this.$set(this.errors, key, '필수항목입니다.')
             passed = false
           }
         }

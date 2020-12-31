@@ -48,7 +48,7 @@ export default {
     Confirmation: '확인',
     CloseDocument: '현재메뉴를 닫겠습니까?',
     ImportExcel: 'Excel로 전환하겠습니까?',
-    Download: '아운로드',
+    Download: '다운로드',
 
     DeleteData: '삭제하시겠습니까?',
     SuccessDeleteData: '삭제되었습니다.',

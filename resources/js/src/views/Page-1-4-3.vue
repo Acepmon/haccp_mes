@@ -155,14 +155,37 @@
                   ><span class="text-danger">*</span> 업무처리주기</span
                 >
               </div>
-              <div class="vx-col sm:w-2/3 w-full flex">
-                <v-select 
-                  style="width: 200px;"
-                  :options="periods" 
-                  :reduce="item => item.comm2_cd" 
-                  label="comm2_nm" 
-                  v-model="item['edoc_file:period_cd']"
-                  :searchable="false" />
+              <div class="vx-col sm:w-2/3 w-full flex" style="flex-direction: column;">
+                <div class="flex flex-row">
+                  <v-select 
+                    style="width: 200px;"
+                    :options="periods" 
+                    :reduce="item => item.comm2_cd" 
+                    label="comm2_nm" 
+                    v-model="item['edoc_file:period_cd']"
+                    :searchable="false" />
+
+                  <div
+                    class="flex flex-row"
+                    v-if="item['edoc_file:period_cd'] == 'ED'"
+                  >
+                    <vs-button
+                      v-for="(item, index) in periodEdDays"
+                      :key="index"
+                      @click="toggleEd(item.value)"
+                      :color="selectedEdHas(item.value) ? 'primary' : 'dark'"
+                      class="px-3 flex-shrink-0 ml-1"
+                      type="border"
+                    >
+                      <vs-icon
+                        v-if="selectedEdHas(item.value)"
+                        icon-pack="feather"
+                        icon="icon-check"
+                      />
+                      <span v-text="item.text"></span>
+                    </vs-button>
+                  </div>
+                </div>
                 <div
                   class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
                   v-if="errors['edoc_file:period_cd'] != null"
@@ -171,27 +194,6 @@
                     class="span-text-validation"
                     v-text="errors['edoc_file:period_cd']"
                   ></span>
-                </div>
-
-                <div
-                  class="flex flex-row"
-                  v-if="item['edoc_file:period_cd'] == 'ED'"
-                >
-                  <vs-button
-                    v-for="(item, index) in periodEdDays"
-                    :key="index"
-                    @click="toggleEd(item.value)"
-                    :color="selectedEdHas(item.value) ? 'primary' : 'dark'"
-                    class="px-3 flex-shrink-0 ml-1"
-                    type="border"
-                  >
-                    <vs-icon
-                      v-if="selectedEdHas(item.value)"
-                      icon-pack="feather"
-                      icon="icon-check"
-                    />
-                    <span v-text="item.text"></span>
-                  </vs-button>
                 </div>
               </div>
             </div>
@@ -324,6 +326,7 @@
             <vs-th sort-key="type_nm">업무종류</vs-th>
             <vs-th sort-key="doc_content">문서내용</vs-th>
             <vs-th sort-key="period_nm">업무처리주기</vs-th>
+            <vs-th sort-key="period_data">주기내용</vs-th>
             <vs-th sort-key="use_yn">사용구분</vs-th>
             <vs-th sort-key="work_id">작업자</vs-th>
             <vs-th sort-key="app_id">승인자</vs-th>
@@ -349,6 +352,10 @@
 
               <vs-td :data="data[index]['edoc_file:period_nm']">
                 {{ data[index]["edoc_file:period_nm"] }}
+              </vs-td>
+
+              <vs-td :data="data[index]['edoc_file:period_data']">
+                {{ parsePeriodDaysText(data[index]['edoc_file:period_data']).join(',') }}
               </vs-td>
 
               <vs-td :data="data[index]['edoc_file:use_yn']">
@@ -480,13 +487,13 @@ export default {
       for (const [key, value] of Object.entries(this.required)) {
         if (Array.isArray(this.item[key])) {
           if (this.item[key] === undefined || this.item[key].length == 0) {
-            this.$set(this.errors, key, '')
+            this.$set(this.errors, key, '필수항목입니다.')
             passed = false
           }
         } else {
           if (this.item[key]) {
           } else {
-            this.$set(this.errors, key, '')
+            this.$set(this.errors, key, '필수항목입니다.')
             passed = false
           }
         }
@@ -726,6 +733,20 @@ export default {
         this.item["edoc_file:period_data"].splice(index, 1);
       }
     },
+
+    parsePeriodDaysText(periodArray = []) {
+      return periodArray.sort().map((item) => {
+        let txt = ''
+
+        this.periodEdDays.forEach(period => {
+          if (period.value == parseInt(item)) {
+            txt = period.text
+          }
+        })
+
+        return txt
+      })
+    }
   },
 
   created() {

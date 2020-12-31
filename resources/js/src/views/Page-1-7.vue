@@ -5,7 +5,7 @@
         <div class="w-full sm:w-2/3 px-1 flex justify-end">
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
+              <div class="vx-col sm:w-3/3 w-full flex">
                 <v-select
                   style="width: 150px;"
                   placeholder="검색항목"
@@ -14,9 +14,7 @@
                   label="l" 
                   v-model="searchBy" 
                   :searchable="false" />
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input v-model="searchKeyword" />
+                <vs-input v-model="searchKeyword" class="ml-2" />
               </div>
             </div>
           </div>

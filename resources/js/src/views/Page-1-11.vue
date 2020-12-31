@@ -403,13 +403,13 @@ export default {
       for (const [key, value] of Object.entries(this.required)) {
         if (Array.isArray(this.item[key])) {
           if (this.item[key] === undefined || this.item[key].length == 0) {
-            this.$set(this.errors, key, '')
+            this.$set(this.errors, key, '필수항목입니다.')
             passed = false
           }
         } else {
           if (this.item[key]) {
           } else {
-            this.$set(this.errors, key, '')
+            this.$set(this.errors, key, '필수항목입니다.')
             passed = false
           }
         }
