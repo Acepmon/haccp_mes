@@ -3,6 +3,7 @@
     <div class="vx-row mb-3">
       <div class="vx-col sm:w-1/3 w-full flex justify-end pr-0">
         <span class="pt-1">
+          <span class="text-danger" v-if="required">*</span>
           <slot name="label"></slot>
         </span>
       </div>
@@ -24,6 +25,10 @@ export default {
 
   props: {
     full: {
+      type: Boolean,
+      default: false
+    },
+    required: {
       type: Boolean,
       default: false
     }

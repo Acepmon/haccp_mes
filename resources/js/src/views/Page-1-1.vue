@@ -1,9 +1,8 @@
 <template>
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container">
-      <div class="flex flex-wrap mb-2">
-        <div class="w-full sm:w-1/2 px-1 flex justify-end"></div>
-        <div class="w-full sm:w-1/2 px-1 flex justify-end">
+      <app-control>
+        <template v-slot:action>
           <vs-button
             @click="query()"
             class="mx-1 mr-16"
@@ -34,278 +33,181 @@
             type="border"
             >{{ $t("Close") }}</vs-button
           >
-        </div>
-      </div>
+        </template>
+      </app-control>
 
       <vs-divider />
 
-      <form action="#">
-        <!-- Row 1 -->
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 사업자등록번호</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="20"
-                  v-model="item['comp_info:comp_id']"
-                  :danger="errors['comp_info:comp_id'] != null"
-                  :danger-text="errors['comp_info:comp_id']"
-                />
-              </div>
-            </div>
-          </div>
+      <app-form>
+        <app-form-group required>
+          <template v-slot:label>사업자등록번호</template>
 
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 회사명</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="60"
-                  v-model="item['comp_info:comp_nm']"
-                  :danger="errors['comp_info:comp_nm'] != null"
-                  :danger-text="errors['comp_info:comp_nm']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /row 1 -->
+          <vs-input
+            maxlength="20"
+            v-model="item['comp_info:comp_id']"
+            :danger="errors['comp_info:comp_id'] != null"
+            :danger-text="errors['comp_info:comp_id']"
+          />
+        </app-form-group>
 
-        <!-- Row 2 -->
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 대표자명</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="60"
-                  v-model="item['comp_info:ceo_nm']"
-                  :danger="errors['comp_info:ceo_nm'] != null"
-                  :danger-text="errors['comp_info:ceo_nm']"
-                />
-              </div>
-            </div>
-          </div>
+        <app-form-group required>
+          <template v-slot:label>회사명</template>
 
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">홈페이지</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="30"
-                  v-model="item['comp_info:url']"
-                  :danger="errors['comp_info:url'] != null"
-                  :danger-text="errors['comp_info:url']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /row 2 -->
+          <vs-input
+            maxlength="60"
+            v-model="item['comp_info:comp_nm']"
+            :danger="errors['comp_info:comp_nm'] != null"
+            :danger-text="errors['comp_info:comp_nm']"
+          />
+        </app-form-group>
 
-        <!-- Row 3 -->
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">전화번호</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="20"
-                  v-model="item['comp_info:tel_no']"
-                  :danger="errors['comp_info:tel_no'] != null"
-                  :danger-text="errors['comp_info:tel_no']"
-                />
-              </div>
-            </div>
-          </div>
+        <app-form-group required>
+          <template v-slot:label>대표자명</template>
 
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">팩스번호</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="20"
-                  v-model="item['comp_info:fax_no']"
-                  :danger="errors['comp_info:fax_no'] != null"
-                  :danger-text="errors['comp_info:fax_no']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /row 3 -->
+          <vs-input
+            maxlength="60"
+            v-model="item['comp_info:ceo_nm']"
+            :danger="errors['comp_info:ceo_nm'] != null"
+            :danger-text="errors['comp_info:ceo_nm']"
+          />
+        </app-form-group>
 
-        <!-- Row 4 -->
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">우편번호</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="20"
-                  v-model="item['comp_info:zip_cd']"
-                  :danger="errors['comp_info:zip_cd'] != null"
-                  :danger-text="errors['comp_info:zip_cd']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /row 4 -->
+        <app-form-group>
+          <template v-slot:label>홈페이지</template>
 
-        <!-- Row 5 -->
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">주소</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  class="w-full"
-                  maxlength="60"
-                  v-model="item['comp_info:addr1']"
-                  :danger="errors['comp_info:addr1'] != null"
-                  :danger-text="errors['comp_info:addr1']"
-                />
-              </div>
-            </div>
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end"></div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  class="w-full"
-                  maxlength="60"
-                  v-model="item['comp_info:addr2']"
-                  :danger="errors['comp_info:addr2'] != null"
-                  :danger-text="errors['comp_info:addr2']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /row 5 -->
+          <vs-input
+            maxlength="30"
+            v-model="item['comp_info:url']"
+            :danger="errors['comp_info:url'] != null"
+            :danger-text="errors['comp_info:url']"
+          />
+        </app-form-group>
 
-        <!-- Row 6 -->
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">HACCP 팀장 정보</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-button
-                  @click="chooseUserDialog()"
-                  color="primary"
-                  type="border"
-                  >담당자 변경</vs-button
-                >
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['comp_info:haccp_id'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['comp_info:haccp_id']"
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /row 6 -->
+        <app-form-group>
+          <template v-slot:label>전화번호</template>
 
-        <!-- Row 7 -->
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">이름</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  v-model="item['comp_info:haccp_user']['user:user_nm']"
-                  readonly
-                />
-              </div>
-            </div>
-          </div>
+          <vs-input
+            maxlength="20"
+            v-model="item['comp_info:tel_no']"
+            :danger="errors['comp_info:tel_no'] != null"
+            :danger-text="errors['comp_info:tel_no']"
+          />
+        </app-form-group>
 
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">휴대폰번호(ID)</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  v-model="item['comp_info:haccp_user']['user:user_id']"
-                  readonly
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /row 7 -->
+        <app-form-group>
+          <template v-slot:label>팩스번호</template>
 
-        <!-- Row 8 -->
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">이메일</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  v-model="item['comp_info:haccp_user']['user:email']"
-                  readonly
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /row 8 -->
+          <vs-input
+            maxlength="20"
+            v-model="item['comp_info:fax_no']"
+            :danger="errors['comp_info:fax_no'] != null"
+            :danger-text="errors['comp_info:fax_no']"
+          />
+        </app-form-group>
 
-        <!-- Row 9 -->
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">HACCP 젹용 품목류</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="100"
-                  v-model="item['comp_info:haccp_item']"
-                  :danger="errors['comp_info:haccp_item'] != null"
-                  :danger-text="errors['comp_info:haccp_item']"
-                />
-              </div>
-            </div>
+        <app-form-group>
+          <template v-slot:label>우편번호</template>
+
+          <vs-input
+            maxlength="20"
+            v-model="item['comp_info:zip_cd']"
+            :danger="errors['comp_info:zip_cd'] != null"
+            :danger-text="errors['comp_info:zip_cd']"
+          />
+        </app-form-group>
+
+        <app-form-group></app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>주소</template>
+
+          <vs-input
+            class="w-full"
+            maxlength="60"
+            v-model="item['comp_info:addr1']"
+            :danger="errors['comp_info:addr1'] != null"
+            :danger-text="errors['comp_info:addr1']"
+          />
+        </app-form-group>
+
+        <app-form-group></app-form-group>
+
+        <app-form-group>
+          <template v-slot:label></template>
+          
+          <vs-input
+            class="w-full"
+            maxlength="60"
+            v-model="item['comp_info:addr2']"
+            :danger="errors['comp_info:addr2'] != null"
+            :danger-text="errors['comp_info:addr2']"
+          />
+        </app-form-group>
+
+        <app-form-group></app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>HACCP 팀장 정보</template>
+
+          <vs-button
+            @click="chooseUserDialog()"
+            color="primary"
+            type="border"
+            >담당자 변경</vs-button
+          >
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['comp_info:haccp_id'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['comp_info:haccp_id']"
+            ></span>
           </div>
-        </div>
-        <!-- /row 9 -->
-      </form>
+        </app-form-group>
+
+        <app-form-group></app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>이름</template>
+
+          <vs-input
+            v-model="item['comp_info:haccp_user']['user:user_nm']"
+            readonly
+          />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>휴대폰번호(ID)</template>
+
+          <vs-input
+            v-model="item['comp_info:haccp_user']['user:user_id']"
+            readonly
+          />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>이메일</template>
+
+          <vs-input
+            v-model="item['comp_info:haccp_user']['user:email']"
+            readonly
+          />
+        </app-form-group>
+
+        <app-form-group></app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>HACCP 젹용 품목류</template>
+
+          <vs-input
+            maxlength="100"
+            v-model="item['comp_info:haccp_item']"
+            :danger="errors['comp_info:haccp_item'] != null"
+            :danger-text="errors['comp_info:haccp_item']"
+          />
+        </app-form-group>
+      </app-form>
     </vx-card>
 
     <vs-prompt
@@ -332,7 +234,16 @@ import user from "@/services/user";
 import api from "@/services/comp_info";
 import { mapActions } from "vuex";
 
+import AppControl from "@/views/ui-elements/AppControl";
+import AppForm from "@/views/ui-elements/AppForm";
+import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+
 export default {
+  components: {
+    AppControl,
+    AppForm,
+    AppFormGroup,
+  },
   data() {
     return {
       userSelectionPrompt: false,

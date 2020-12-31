@@ -44,10 +44,8 @@
       </app-control>
 
       <app-form>
-        <app-form-group>
-          <template v-slot:label>
-            <span class="text-danger">*</span> 휴대폰번호(ID)
-          </template>
+        <app-form-group required>
+          <template v-slot:label>휴대폰번호(ID)</template>
 
           <vs-input
             maxlength="15"
@@ -57,10 +55,8 @@
           />
         </app-form-group>
 
-        <app-form-group>
-          <template v-slot:label>
-            <span class="text-danger">*</span> 이름
-          </template>
+        <app-form-group required>
+          <template v-slot:label>이름</template>
 
           <vs-input
             maxlength="20"
@@ -70,10 +66,8 @@
           />
         </app-form-group>
 
-        <app-form-group>
-          <template v-slot:label>
-            <span class="text-danger">*</span> 비밀번호
-          </template>
+        <app-form-group required>
+          <template v-slot:label>비밀번호</template>
 
           <vs-input
             v-model="selected['user:user_pw']"
@@ -84,7 +78,7 @@
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label> 비밀번호확인 </template>
+          <template v-slot:label>비밀번호확인</template>
 
           <vs-input
             v-model="selected['user:user_pw_confirmation']"
@@ -98,7 +92,7 @@
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label> 이메일 </template>
+          <template v-slot:label>이메일</template>
 
           <vs-input
             maxlength="50"
@@ -111,10 +105,8 @@
 
         <app-form-group></app-form-group>
 
-        <app-form-group>
-          <template v-slot:label>
-            <span class="text-danger">*</span> 메뉴접근권한
-          </template>
+        <app-form-group required>
+          <template v-slot:label>메뉴접근권한</template>
 
           <div class="flex flex-row flex-wrap">
             <vs-button
@@ -149,10 +141,8 @@
 
         <app-form-group></app-form-group>
 
-        <app-form-group>
-          <template v-slot:label>
-            <span class="text-danger">*</span> 담당업무
-          </template>
+        <app-form-group required>
+          <template v-slot:label>담당업무</template>
 
           <div class="flex flex-row flex-wrap">
             <vs-button
@@ -187,10 +177,8 @@
 
         <app-form-group></app-form-group>
 
-        <app-form-group>
-          <template v-slot:label>
-            <span class="text-danger">*</span> 업무권한
-          </template>
+        <app-form-group required>
+          <template v-slot:label>업무권한</template>
 
           <v-select
             style="width: 200px"
@@ -211,10 +199,8 @@
           </div>
         </app-form-group>
 
-        <app-form-group>
-          <template v-slot:label>
-            <span class="text-danger">*</span> 사용여부
-          </template>
+        <app-form-group required>
+          <template v-slot:label>사용여부</template>
 
           <v-select
             style="width: 200px"

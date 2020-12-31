@@ -1,5 +1,5 @@
 {
-    "/js/app.js": "/js/app.js?id=46ba3a7c99cf4f9eef1d",
+    "/js/app.js": "/js/app.js?id=e4c1df633c786e5444ab",
     "/css/app.css": "/css/app.css?id=ef35cd4ec28160be7e07",
     "/css/main.css": "/css/main.css?id=cbc2c4e109c90c318e21",
     "/js/chunks/dropdown-test.js": "/js/chunks/dropdown-test.js?id=f3610dd07cca24ac0603",
@@ -8,10 +8,10 @@
     "/js/chunks/home.js": "/js/chunks/home.js?id=e736760dd667c3f3848b",
     "/js/chunks/home~page-1-6~page-1-7~page-7-1.js": "/js/chunks/home~page-1-6~page-1-7~page-7-1.js?id=c22d65736be01435f1aa",
     "/js/chunks/login-hist.js": "/js/chunks/login-hist.js?id=a697d3d0518f3cc1bffd",
-    "/js/chunks/page-1-1.js": "/js/chunks/page-1-1.js?id=034e2379c0df474b6b59",
+    "/js/chunks/page-1-1.js": "/js/chunks/page-1-1.js?id=5196460f93a1756e90e6",
     "/js/chunks/page-1-10.js": "/js/chunks/page-1-10.js?id=c7fa5adf2170b6b1a378",
     "/js/chunks/page-1-11.js": "/js/chunks/page-1-11.js?id=0ec7f5b821d587ab0e5f",
-    "/js/chunks/page-1-2.js": "/js/chunks/page-1-2.js?id=424f8373367cb3e04b22",
+    "/js/chunks/page-1-2.js": "/js/chunks/page-1-2.js?id=1259269589565879b0ef",
     "/js/chunks/page-1-3.js": "/js/chunks/page-1-3.js?id=f5ea7a7f39a7204a8607",
     "/js/chunks/page-1-4-1.js": "/js/chunks/page-1-4-1.js?id=370ac7c88b227362594a",
     "/js/chunks/page-1-4-2.js": "/js/chunks/page-1-4-2.js?id=501dda270cedacb5c8d1",
@@ -37,5 +37,6 @@
     "/css/vuesax.css": "/css/vuesax.css?id=8b2f64cc5679147ac37e",
     "/css/iconfont.css": "/css/iconfont.css?id=667273af1a014bd141bd",
     "/css/material-icons/material-icons.css": "/css/material-icons/material-icons.css?id=6b78e76e7f2f5210131a",
-    "/css/prism-tomorrow.css": "/css/prism-tomorrow.css?id=f46d7519e3b65a691281"
+    "/css/prism-tomorrow.css": "/css/prism-tomorrow.css?id=f46d7519e3b65a691281",
+    "/js/chunks/page-1-1~page-1-2.js": "/js/chunks/page-1-1~page-1-2.js?id=bc0229e5c3c8f3813863"
 }
