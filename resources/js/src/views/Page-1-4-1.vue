@@ -325,8 +325,8 @@ export default {
         total: 0,
       },
       sorting: {
-        sort: "reg_dtm",
-        order: "desc",
+        sort: "REG_DTM",
+        order: "DESC",
       },
       required: {
         'haccp_mst_file:rev_no': '개정번호',
@@ -346,8 +346,8 @@ export default {
 
     sortParam: function () {
       return {
-        sort: this.sorting.sort != null ? this.sorting.sort : "login_dtm",
-        order: this.sorting.order != null ? this.sorting.order : "asc",
+        sort: this.sorting.sort != null ? this.sorting.sort : "REG_DTM",
+        order: this.sorting.order != null ? this.sorting.order : "DESC",
       };
     },
   },

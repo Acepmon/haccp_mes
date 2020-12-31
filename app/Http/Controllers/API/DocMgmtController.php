@@ -25,22 +25,22 @@ class DocMgmtController extends Controller
 
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
-        $sort = $request->input('sort', 'reg_dtm');
-        $order = $request->input('order', 'desc');
+        $sort = $request->input('sort', 'REG_DTM');
+        $order = $request->input('order', 'DESC');
 
         if ($request->has('doc_nm')) {
             $docNm = $request->input('doc_nm');
-            $items = $items->where('doc_nm', 'LIKE', '%'.$docNm.'%');
+            $items = $items->where('DOC_NM', 'LIKE', '%'.$docNm.'%');
         }
 
         if ($request->has('doc_desc')) {
             $docDesc = $request->input('doc_desc');
-            $items = $items->where('doc_desc', 'LIKE', '%'.$docDesc.'%');
+            $items = $items->where('DOC_DESC', 'LIKE', '%'.$docDesc.'%');
         }
 
         if ($request->has('type_cd')) {
             $typeCd = $request->input('type_cd');
-            $items = $items->where('type_cd', $typeCd);
+            $items = $items->where('TYPE_CD', $typeCd);
         }
 
         if ($limit == -1) {
@@ -187,6 +187,8 @@ class DocMgmtController extends Controller
             'DOC_NM' => $request->input('doc_mgmt:doc_nm'),
             'DOC_DESC' => $request->input('doc_mgmt:doc_desc'),
             'ATT_DTM' => $request->hasFile('doc_mgmt:att') ? $dtm : $item->ATT_DTM,
+            'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+            'REG_DTM' => now()->format('Ymdhis'),
         ]);
 
         return response()->json([

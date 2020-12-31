@@ -50,7 +50,7 @@
           <vs-input
             maxlength="15"
             v-model="selected['user:user_id']"
-            :danger="errors['user:user_id'] != null && ['user:user_id'] != ''"
+            :danger="errors['user:user_id'] != null"
             :danger-text="errors['user:user_id']"
           />
         </app-form-group>
@@ -61,7 +61,7 @@
           <vs-input
             maxlength="20"
             v-model="selected['user:user_nm']"
-            :danger="errors['user:user_nm'] != null && ['user:user_nm'] != ''"
+            :danger="errors['user:user_nm'] != null"
             :danger-text="errors['user:user_nm']"
           />
         </app-form-group>
@@ -72,7 +72,7 @@
           <vs-input
             v-model="selected['user:user_pw']"
             type="password"
-            :danger="errors['user:user_pw'] != null && ['user:user_pw'] != ''"
+            :danger="errors['user:user_pw'] != null"
             :danger-text="errors['user:user_pw']"
           />
         </app-form-group>
@@ -98,7 +98,7 @@
             maxlength="50"
             v-model="selected['user:email']"
             type="email"
-            :danger="errors['user:email'] != null && ['user:email'] != ''"
+            :danger="errors['user:email'] != null"
             :danger-text="errors['user:email']"
           />
         </app-form-group>
@@ -362,8 +362,8 @@ export default {
         total: 0,
       },
       sorting: {
-        sort: "reg_dtm",
-        order: "desc",
+        sort: "REG_DTM",
+        order: "DESC",
       },
       required: {
         "user:user_id": "휴대폰번호(ID)",
@@ -394,8 +394,8 @@ export default {
 
     sortParam: function () {
       return {
-        sort: this.sorting.sort != null ? this.sorting.sort : "login_dtm",
-        order: this.sorting.order != null ? this.sorting.order : "asc",
+        sort: this.sorting.sort != null ? this.sorting.sort : "REG_DTM",
+        order: this.sorting.order != null ? this.sorting.order : "DESC",
       };
     },
   },
@@ -416,13 +416,13 @@ export default {
             this.selected[key] === undefined ||
             this.selected[key].length == 0
           ) {
-            this.$set(this.errors, key, "");
+            this.$set(this.errors, key, '필수항목입니다.')
             passed = false;
           }
         } else {
           if (this.selected[key]) {
           } else {
-            this.$set(this.errors, key, "");
+            this.$set(this.errors, key, '필수항목입니다.')
             passed = false;
           }
         }

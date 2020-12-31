@@ -25,8 +25,8 @@ class HaccpMstFileController extends Controller
 
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
-        $sort = $request->input('sort', 'reg_dtm');
-        $order = $request->input('order', 'asc');
+        $sort = $request->input('sort', 'REG_DTM');
+        $order = $request->input('order', 'ASC');
 
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();
@@ -175,7 +175,9 @@ class HaccpMstFileController extends Controller
             'REV_DT' => now()->parse($request->input('haccp_mst_file:rev_dt'))->format('Ymd'),
             'ATT_DTM' => $request->hasFile('haccp_mst_file:att') ? $dtm : $item->ATT_DTM,
             'REV_CONTENT' => $request->input('haccp_mst_file:rev_content'),
-            'REV_REASON' => $request->input('haccp_mst_file:rev_reason')
+            'REV_REASON' => $request->input('haccp_mst_file:rev_reason'),
+            'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+            'REG_DTM' => now()->format('Ymdhis'),
         ]);
 
         return response()->json([

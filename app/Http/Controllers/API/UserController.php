@@ -25,8 +25,8 @@ class UserController extends Controller
 
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
-        $sort = $request->input('sort', 'reg_dtm');
-        $order = $request->input('order', 'asc');
+        $sort = $request->input('sort', 'REG_DTM');
+        $order = $request->input('order', 'DESC');
 
         if ($request->has('appr_cd')) {
             $items = $items->where('APPR_CD', $request->input('appr_cd'));
@@ -123,6 +123,7 @@ class UserController extends Controller
             'APPR_CD' => implode(',', $request->input('user:appr_cd')),
             'JOB_CD' => $request->input('user:job_cd'),
             'USER_STS_YN' => $request->input('user:user_sts_yn'),
+            'REG_DTM' => now()->format('YmdHis'),
         ]);
 
         if ($request->has('user:user_pw') && !empty($request->input('user:user_pw'))) {

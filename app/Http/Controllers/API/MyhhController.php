@@ -22,8 +22,8 @@ class MyhhController extends Controller
 
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
-        $sort = $request->input('sort', 'reg_dtm');
-        $order = $request->input('order', 'asc');
+        $sort = $request->input('sort', 'REG_DTM');
+        $order = $request->input('order', 'ASC');
 
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();

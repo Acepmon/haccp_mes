@@ -213,7 +213,6 @@
     <vs-prompt
       @cancel="selectedUser = null"
       @accept="selectUser"
-      @close="close"
       :title="$t('SelectUser')"
       :accept-text="$t('Accept')"
       :cancel-text="$t('Cancel')"
@@ -291,8 +290,6 @@ export default {
   },
 
   created() {
-    console.log(this.$vs.loading.close);
-
     setTimeout(() => {
       this.query();
     }, 200);

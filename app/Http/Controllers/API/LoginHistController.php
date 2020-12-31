@@ -45,7 +45,7 @@ class LoginHistController extends Controller
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 50);
         $sort = $request->input('sort', 'LOGIN_DTM');
-        $order = $request->input('order', 'asc');
+        $order = $request->input('order', 'ASC');
 
         $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
 

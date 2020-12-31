@@ -447,8 +447,8 @@ export default {
         total: 0,
       },
       sorting: {
-        sort: "upd_dtm",
-        order: "desc",
+        sort: "UPD_DTM",
+        order: "DESC",
       },
       required: {
         'edoc_file:type_cd': '업무종류',
@@ -471,8 +471,8 @@ export default {
 
     sortParam: function () {
       return {
-        sort: this.sorting.sort != null ? this.sorting.sort : "upd_dtm",
-        order: this.sorting.order != null ? this.sorting.order : "desc",
+        sort: this.sorting.sort != null ? this.sorting.sort : "UPD_DTM",
+        order: this.sorting.order != null ? this.sorting.order : "DESC",
       };
     },
   },

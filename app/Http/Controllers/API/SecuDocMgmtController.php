@@ -25,17 +25,17 @@ class SecuDocMgmtController extends Controller
 
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
-        $sort = $request->input('sort', 'reg_dtm');
-        $order = $request->input('order', 'desc');
+        $sort = $request->input('sort', 'REG_DTM');
+        $order = $request->input('order', 'DESC');
 
         if ($request->has('from_dt')) {
             $fromDt = $request->input('from_dt');
-            $items = $items->where('from_dt', now()->parse($fromDt)->format('Ymd'));
+            $items = $items->where('FROM_DT', now()->parse($fromDt)->format('Ymd'));
         }
 
         if ($request->has('to_dt')) {
             $toDt = $request->input('to_dt');
-            $items = $items->where('to_dt', now()->parse($toDt)->format('Ymd'));
+            $items = $items->where('TO_DT', now()->parse($toDt)->format('Ymd'));
         }
 
         if ($limit == -1) {
@@ -186,6 +186,8 @@ class SecuDocMgmtController extends Controller
             'FROM_DT' => now()->parse($request->input('secu_doc_mgmt:from_dt'))->format('Ymd'),
             'TO_DT' => now()->parse($request->input('secu_doc_mgmt:to_dt'))->format('Ymd'),
             'ATT_DTM' => $request->hasFile('secu_doc_mgmt:att') ? $dtm : $item->ATT_DTM,
+            'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+            'REG_DTM' => now()->format('Ymdhis'),
         ]);
 
         return response()->json([

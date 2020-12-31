@@ -190,8 +190,8 @@ export default {
         total: 0,
       },
       sorting: {
-        sort: "reg_dtm",
-        order: "desc",
+        sort: "REG_DTM",
+        order: "DESC",
       },
 
       tableData: [],
@@ -407,8 +407,8 @@ export default {
 
     sortParam: function () {
       return {
-        sort: this.sorting.sort != null ? this.sorting.sort : "upd_dtm",
-        order: this.sorting.order != null ? this.sorting.order : "desc",
+        sort: this.sorting.sort != null ? this.sorting.sort : "REG_DTM",
+        order: this.sorting.order != null ? this.sorting.order : "DESC",
       };
     },
 

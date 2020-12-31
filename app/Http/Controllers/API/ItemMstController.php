@@ -8,6 +8,7 @@ use App\Http\Resources\ItemMstResource;
 use App\Imports\ItemMstImport;
 use App\ItemMst;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ItemMstController extends Controller
@@ -23,8 +24,8 @@ class ItemMstController extends Controller
 
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
-        $sort = $request->input('sort', 'ITEM_ID');
-        $order = $request->input('order', 'ASC');
+        $sort = $request->input('sort', 'REG_DTM');
+        $order = $request->input('order', 'DESC');
 
         if ($request->has('item_nm')) {
             $itemNm = $request->input('item_nm');
@@ -68,6 +69,10 @@ class ItemMstController extends Controller
             ];
         })->each(function ($item) {
             ItemMst::where('ITEM_ID', $item['ITEM_ID'])->update($item);
+            ItemMst::where('ITEM_ID', $item['ITEM_ID'])->update([
+                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+                'REG_DTM' => now()->format('Ymdhis'),
+            ]);
         });
 
         return response()->json([

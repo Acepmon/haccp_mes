@@ -22,22 +22,22 @@ class EdocFileController extends Controller
 
         $with = array_filter(explode(',', $request->input('with')));
         $limit = $request->input('limit', 15);
-        $sort = $request->input('sort', 'doc_id');
-        $order = $request->input('order', 'asc');
+        $sort = $request->input('sort', 'UPD_DTM');
+        $order = $request->input('order', 'DESC');
 
         if ($request->has('doc_nm')) {
             $docNm = $request->input('doc_nm');
-            $items = $items->where('doc_nm', 'LIKE', '%'.$docNm.'%');
+            $items = $items->where('DOC_NM', 'LIKE', '%'.$docNm.'%');
         }
 
         if ($request->has('type_cd')) {
             $typeCd = $request->input('type_cd');
-            $items = $items->where('type_cd', $typeCd);
+            $items = $items->where('TYPE_CD', $typeCd);
         }
 
         if ($request->has('use_yn')) {
             $useYn = $request->input('use_yn');
-            $items = $items->where('use_yn', $useYn);
+            $items = $items->where('USE_YN', $useYn);
         }
 
         if ($limit == -1) {
