@@ -38,17 +38,17 @@ class CompInfoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            // 'comp_info:comp_id' => 'required|string|max:20',
-            // 'comp_info:comp_nm' => 'required|string|max:60',
-            // 'comp_info:ceo_nm' => 'required|string|max:60',
-            // 'comp_info:tel_no' => 'nullable|string|max:20',
-            // 'comp_info:fax_no' => 'nullable|string|max:20',
-            // 'comp_info:url' => 'nullable|string|max:30',
-            // 'comp_info:zip_cd' => 'nullable|string|max:20',
-            // 'comp_info:addr1' => 'nullable|string|max:60',
-            // 'comp_info:addr2' => 'nullable|string|max:60',
-            // 'comp_info:haccp_id' => 'nullable|string|max:15|exists:USER,USER_ID',
-            // 'comp_info:haccp_item' => 'nullable|string|max:100',
+            'comp_info:comp_id' => 'required|string|max:20',
+            'comp_info:comp_nm' => 'required|string|max:60',
+            'comp_info:ceo_nm' => 'required|string|max:60',
+            'comp_info:tel_no' => 'nullable|string|max:20',
+            'comp_info:fax_no' => 'nullable|string|max:20',
+            'comp_info:url' => 'nullable|string|max:30',
+            'comp_info:zip_cd' => 'nullable|string|max:20',
+            'comp_info:addr1' => 'nullable|string|max:60',
+            'comp_info:addr2' => 'nullable|string|max:60',
+            'comp_info:haccp_id' => 'nullable|string|max:15|exists:USER,USER_ID',
+            'comp_info:haccp_item' => 'nullable|string|max:100',
         ]);
 
         if (CompInfo::count() > 0) {
