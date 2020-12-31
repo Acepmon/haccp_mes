@@ -27,11 +27,11 @@ class SecuDocMgmtExport implements FromCollection, WithHeadings, WithStyles, Wit
         $items = SecuDocMgmt::query();
 
         if (!empty($this->fromDt)) {
-            $items = $items->where('from_dt', now()->parse($this->fromDt)->format('Ymd'));
+            $items = $items->where('FROM_DT', now()->parse($this->fromDt)->format('Ymd'));
         }
 
         if (!empty($this->toDt)) {
-            $items = $items->where('to_dt', now()->parse($this->toDt)->format('Ymd'));
+            $items = $items->where('TO_DT', now()->parse($this->toDt)->format('Ymd'));
         }
 
         $items = $items->orderBy('REG_DTM', 'desc');

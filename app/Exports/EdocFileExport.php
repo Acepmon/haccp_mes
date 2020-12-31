@@ -28,15 +28,15 @@ class EdocFileExport implements FromCollection, WithHeadings, WithStyles, WithMa
         $items = EdocFile::query();
 
         if (!empty($this->docNm)) {
-            $items = $items->where('doc_nm', 'LIKE', '%'.$this->docNm.'%');
+            $items = $items->where('DOC_NM', 'LIKE', '%'.$this->docNm.'%');
         }
 
         if (!empty($this->typeCd)) {
-            $items = $items->where('type_cd', $this->typeCd);
+            $items = $items->where('TYPE_CD', $this->typeCd);
         }
 
         if (!empty($this->useYn)) {
-            $items = $items->where('use_yn', $this->useYn);
+            $items = $items->where('USE_YN', $this->useYn);
         }
 
         $items = $items->orderBy('DOC_ID', 'asc');

@@ -43,16 +43,16 @@ class MyhhController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'Myhh:Myhh_id' => 'required|string|max:60',
-            'Myhh:Myhh_nm' => 'nullable|string|max:20',
-            'Myhh:User_sts_yn' => 'required|string|max:1',
-            'Myhh:Reg_dtm' => 'required|string|date_format:Y-m-d',
+            'myhh:myhh_id' => 'required|string|max:60',
+            'myhh:myhh_nm' => 'nullable|string|max:20',
+            'myhh:user_sts_yn' => 'required|string|max:1',
+            'myhh:Reg_dtm' => 'required|string|date_format:Y-m-d',
         ]);
 
         $item = Myhh::create([
-            'Myhh_ID' => $request->input('Myhh:Myhh_id'),
-            'Myhh_NM' => $request->input('Myhh:Myhh_nm'),
-            'USER_STS_YN' => $request->input('Myhh:User_sts_yn'),
+            'myhh_ID' => $request->input('myhh:myhh_id'),
+            'myhh_NM' => $request->input('myhh:myhh_nm'),
+            'USER_STS_YN' => $request->input('myhh:user_sts_yn'),
             'REG_DTM' => now()->format('Ymdhis'),
         ]);
 
@@ -70,7 +70,7 @@ class MyhhController extends Controller
      */
     public function show($id)
     {
-        $item = Myhh::where('Myhh_ID', $id)->first();
+        $item = Myhh::where('MYHH_ID', $id)->first();
 
         if (!$item) {
             return response()->json([
@@ -94,7 +94,7 @@ class MyhhController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = Myhh::where('Myhh_ID', $id)->first();
+        $item = Myhh::where('MYHH_ID', $id)->first();
 
         if (!$item) {
             return response()->json([
@@ -104,14 +104,14 @@ class MyhhController extends Controller
         }
 
         $request->validate([
-            'Myhh_id' => 'Myhh:required|string|max:60',
-            'Myhh_nm' => 'Myhh:required|string|max:60',
+            'myhh:myhh_id' => 'required|string|max:60',
+            'myhh:myhh_nm' => 'required|string|max:60',
         ]);
 
         $item->update([
-            'Myhh_ID' => $request->input('Myhh:Myhh_id'),
-            'Myhh_NM' => $request->input('Myhh:Myhh_nm'),
-            'USER_STS_YN' => $request->input('Myhh:User_sts_yn'),
+            'MYHH_ID' => $request->input('myhh:myhh_id'),
+            'MYHH_NM' => $request->input('myhh:myhh_nm'),
+            'USER_STS_YN' => $request->input('myhh:User_sts_yn'),
             'REG_DTM' => now()->format('Ymdhis'),
         ]);
 
@@ -129,7 +129,7 @@ class MyhhController extends Controller
      */
     public function destroy($id)
     {
-        $item = Myhh::where('Myhh_ID', $id)->first();
+        $item = Myhh::where('MYHH_ID', $id)->first();
 
         if (!$item) {
             return response()->json([
@@ -148,6 +148,6 @@ class MyhhController extends Controller
 
     public function download(Request $request)
     {
-        return Excel::download(new MyhhExport(), 'Myhh-' . now()->format('Y-m-d') . '.xlsx');
+        return Excel::download(new MyhhExport(), 'MYHH-' . now()->format('Y-m-d') . '.xlsx');
     }
 }

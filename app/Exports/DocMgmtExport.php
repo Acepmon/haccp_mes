@@ -28,15 +28,15 @@ class DocMgmtExport implements FromCollection, WithHeadings, WithStyles, WithMap
         $items = DocMgmt::query();
 
         if (!empty($this->docNm)) {
-            $items = $items->where('doc_nm', 'LIKE', '%'.$this->docNm.'%');
+            $items = $items->where('DOC_NM', 'LIKE', '%'.$this->docNm.'%');
         }
 
         if (!empty($this->docDesc)) {
-            $items = $items->where('doc_desc', 'LIKE', '%'.$this->docDesc.'%');
+            $items = $items->where('DOC_DESC', 'LIKE', '%'.$this->docDesc.'%');
         }
 
         if (!empty($this->typeCd)) {
-            $items = $items->where('type_cd', $this->typeCd);
+            $items = $items->where('TYPE_CD', $this->typeCd);
         }
 
         $items = $items->orderBy('REG_DTM', 'desc');
