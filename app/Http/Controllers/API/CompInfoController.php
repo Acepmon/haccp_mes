@@ -47,7 +47,7 @@ class CompInfoController extends Controller
             'comp_info:zip_cd' => 'nullable|string|max:20',
             'comp_info:addr1' => 'nullable|string|max:60',
             'comp_info:addr2' => 'nullable|string|max:60',
-            'comp_info:haccp_id' => 'nullable|string|max:15|exists:user,USER_ID',
+            'comp_info:haccp_id' => 'nullable|string|max:15|exists:USER,USER_ID',
             'comp_info:haccp_item' => 'nullable|string|max:100',
         ]);
 
