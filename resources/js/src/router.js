@@ -171,8 +171,8 @@ const router = new Router({
               },
               {
                 path: '/7/2',
-                name: '공통코드 관리',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/7/2', value: 'page-7-2', label: '공통코드 관리', component: 'page-7-2'}) } }
+                name: '사용자 로그이력',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/7/2', value: 'page-7-2', label: '사용자로그이력', component: 'page-7-2'}) } }
               },
               {
                 path: '/profile',
@@ -199,11 +199,11 @@ const router = new Router({
                 name: 'User Entry',
                 component: () => import(/* webpackChunkName: "user-entry" */ './views/UserEntry.vue')
               },
-              {
-                path: '/login-history',
-                name: 'Login History',
-                component: () => import(/* webpackChunkName: "login-hist" */ './views/LoginHist.vue')
-              },
+              // {
+              //   path: '/login-history',
+              //   name: 'Login History',
+              //   component: () => import(/* webpackChunkName: "login-hist" */ './views/LoginHist.vue')
+              // },
             ],
         },
         // =============================================================================

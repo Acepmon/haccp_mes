@@ -1,33 +1,35 @@
 <template>
 	<div>
-		<h4>Login History</h4>
-
         <vx-card class="mt-5">
-            <div class="flex flex-wrap">
-                <div class="w-full sm:w-1/3 mb-4 px-1">
-					<p>Date</p>
-					<div class="flex flex-row">
-						<flat-pickr :config="configFromdateTimePicker" v-model="from" placeholder="From Date" @on-change="onFromChange" />
-						<flat-pickr :config="configTodateTimePicker" v-model="to" placeholder="To Date" @on-change="onToChange" />
-					</div>
-                </div>
-                <div class="w-full sm:w-1/3 mb-4 px-1">
-                    <vs-input class="w-full" label="User ID/Name" v-model="keyword" />
-                </div>
-				<div class="w-full sm:w-1/3 mb-4 px-1 text-right">
-					<p>&nbsp;</p>
-                    <vs-button @click="query()" class="mx-1" color="dark" type="border">Query</vs-button>
-                </div>
-            </div>
+			<app-control filterClass="sm:w-3/4" actionClass="sm:w-1/4">
+				<template v-slot:filter>
+					<span class="flex items-center px-5">검색일자</span>
+					<flat-pickr :config="configFromdateTimePicker" v-model="from" placeholder="시작일자" @on-change="onFromChange" class="control-field-dtm mx-1" style="width: 100px;" />
+					<span class="flex items-center px-2">~</span>
+					<flat-pickr :config="configTodateTimePicker" v-model="to" placeholder="종료일자" @on-change="onToChange" class="control-field-dtm mx-1" style="width: 100px;" />
+					<span class="flex items-center px-5">사용자 ID/이름</span>
+					<vs-input v-model="keyword" class="control-field" />
+				</template>
+
+				<template v-slot:action>
+					<vs-button
+						@click="query()"
+						class="mx-1 mr-16"
+						color="primary"
+						type="border"
+						>{{ $t("Query") }}</vs-button
+					>
+				</template>
+			</app-control>
 
             <vs-table stripe pagination description sst :max-items="pagination.limit" :data="datas" :total="pagination.total" @change-page="handleChangePage" @sort="handleSort">
 				<template slot="thead">
 					<vs-th>No</vs-th>
-					<vs-th sort-key="user_id">User ID</vs-th>
-					<vs-th sort-key="user_name">User Name</vs-th>
-					<vs-th sort-key="ip_addr">IP Address</vs-th>
-					<vs-th sort-key="login_dtm">Login Date</vs-th>
-					<vs-th sort-key="logout_dtm">Logout Date</vs-th>
+					<vs-th sort-key="user_id">사용자 ID</vs-th>
+					<vs-th sort-key="user_name">사용자 이름</vs-th>
+					<vs-th sort-key="ip_addr">IP 주소</vs-th>
+					<vs-th sort-key="login_dtm">로그인 일자</vs-th>
+					<vs-th sort-key="logout_dtm">로그아웃 일자</vs-th>
 				</template>
 
 				<template slot-scope="{data}">
@@ -72,9 +74,16 @@ import 'flatpickr/dist/flatpickr.css';
 import {Korean as KoreanLocale} from 'flatpickr/dist/l10n/ko.js';
 import api from '@/services/login_hist'
 
+import AppControl from '@/views/ui-elements/AppControl'
+import AppForm from '@/views/ui-elements/AppForm'
+import AppFormGroup from '@/views/ui-elements/AppFormGroup'
+
 export default {
 	components: {
-		flatPickr
+		flatPickr,
+		AppControl,
+		AppForm,
+		AppFormGroup
 	},
     data() {
         return {

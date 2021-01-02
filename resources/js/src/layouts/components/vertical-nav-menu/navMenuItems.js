@@ -348,8 +348,8 @@ export default [
       },
       {
         url: "/7/2",
-        name: "프로그램권한 권리",
-        slug: "프로그램권한 권리",
+        name: "사용자 로그이력",
+        slug: "사용자 로그이력",
         showSubmenuOn: '/7',
       },
       {

@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-wrap mb-4" :class="{'control-flush': flush}">
-    <div class="w-full sm:w-1/2 flex justify-start">
+    <div class="w-full flex flex-wrap justify-start control-col" :class="filterClass">
       <slot name="filter"></slot>
     </div>
-    <div class="w-full sm:w-1/2 flex justify-end">
+    <div class="w-full flex flex-wrap justify-end control-col" :class="actionClass">
       <slot name="action"></slot>
     </div>
   </div>
@@ -15,6 +15,14 @@ export default {
     flush: {
       type: Boolean,
       default: false
+    },
+    filterClass: {
+      type: String,
+      default: 'sm:w-1/2'
+    },
+    actionClass: {
+      type: String,
+      default: 'sm:w-1/2'
     }
   }
 }
@@ -23,5 +31,15 @@ export default {
 <style lang="css" scoped>
 .control-flush {
   margin-top: -12px;
+}
+.control-col > * {
+  flex-shrink: revert;
+}
+
+.control-field {
+  width: 150px;
+}
+.control-field-dtm {
+  width: 100px;
 }
 </style>
