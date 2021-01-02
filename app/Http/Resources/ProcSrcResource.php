@@ -20,6 +20,8 @@ class ProcSrcResource extends JsonResource
             'proc_src:src_nm' => $this->SRC_NM,
             'proc_src:reg_id' => $this->REG_ID,
             'proc_src:reg_dtm' => now()->parse($this->REG_DTM)->format('Y-m-d'),
+
+            $this->mergeWhen($this->whenLoaded('item_mst'), new ItemMstResource($this->item_mst)),
         ];
     }
 }

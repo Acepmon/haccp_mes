@@ -78,4 +78,14 @@ class ItemMst extends Model
     {
         return $this->belongsTo('App\CommCd', 'PROCESS_CD', 'COMM2_CD')->where('COMM1_CD', 'B14')->whereNotIn('COMM2_CD', ['$$']);
     }
+
+    public function proc_dtl()
+    {
+        return $this->hasMany('App\ProcDtl', 'ITEM_ID', 'ITEM_ID');
+    }
+
+    public function proc_src()
+    {
+        return $this->hasMany('App\ProcSrc', 'ITEM_ID', 'ITEM_ID');
+    }
 }

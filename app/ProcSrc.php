@@ -31,4 +31,9 @@ class ProcSrc extends Model
         'updated' => ProcSrcUpdated::class,
         'deleted' => ProcSrcDeleted::class,
     ];
+
+    public function item_mst()
+    {
+        return $this->belongsTo('App\ItemMst', 'ITEM_ID', 'ITEM_ID');
+    }
 }

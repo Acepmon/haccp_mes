@@ -77,4 +77,18 @@ Route::group([
     Route::post('bom_config/import', 'BomConfigController@import')->name('bom_config.import');
     Route::post('bom_config/sync', 'BomConfigController@sync')->name('bom_config.sync');
     Route::apiResource('bom_config', 'BomConfigController');
+
+    Route::get('proc_dtl/export', 'ProcDtlController@export')->name('proc_dtl.export');
+    Route::post('proc_dtl/import', 'ProcDtlController@import')->name('proc_dtl.import');
+    Route::post('proc_dtl/sync', 'ProcDtlController@sync')->name('proc_dtl.sync');
+    Route::apiResource('proc_dtl', 'ProcDtlController');
+
+    Route::get('proc_src/export', 'ProcSrcController@export')->name('proc_src.export');
+    Route::post('proc_src/import', 'ProcSrcController@import')->name('proc_src.import');
+    Route::post('proc_src/sync', 'ProcSrcController@sync')->name('proc_src.sync');
+    Route::apiResource('proc_src', 'ProcSrcController');
+
+    Route::apiResource('proc_dtl_sub', 'ProcDtlSubController');
+
+    Route::post('proc_unified/import', 'ProcUnifiedController@import')->name('proc_unified.import');
 });
