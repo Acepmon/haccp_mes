@@ -8,7 +8,7 @@ use App\Http\Resources\ProcDtlResource;
 use App\Http\Resources\ProcDtlSubResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class ProcDtlController extends Controller
 {
@@ -19,27 +19,21 @@ class ProcDtlController extends Controller
      */
     public function index(Request $request)
     {
-        $items = ProcDtl::query();
-
+        // SELECT SEQ_NO SEQ1, 0 SEQ2, PROC_NM, PROC_TIME, SEQ_NM, PROC_DTL FROM PROC_DTL WHERE ITEM_ID = '' UNION SELECT SEQ_NO, SUB_SEQ_NO, " ", PROC_NM, SEQ_NM, PROC_DTL FROM PROC_DTL_SUB B WHERE ITEM_ID = '' ORDER BY 1, 2;
         $itemId = $request->input('item_id');
-
-        $items = $items->with(['proc_dtl_sub'])->where('ITEM_ID', $itemId)->get();
-
-        return ProcDtlResource::collection($items);
-
-        // $items = DB::table('PROC_DTL')
-        //     ->join('PROC_DTL_SUB', 'PROC_DTL_SUB.ITEM_ID', '=', 'PROC_DTL.ITEM_ID')
-        //     ->select(
-        //         'PROC_DTL.PROC_NM as proc_dtl:proc_nm',
-        //         'PROC_DTL.PROC_TIME as proc_dtl:proc_time',
-        //         'PROC_DTL.SEQ_NM as proc_dtl:seq_nm',
-        //         'PROC_DTL.PROC_DTL as proc_dtl:proc_dtl',
-        //         'PROC_DTL_SUB.PROC_NM as proc_dtl_sub:proc_nm',
-        //         'PROC_DTL_SUB.SEQ_NM as proc_dtl_sub:seq_nm',
-        //         'PROC_DTL_SUB.PROC_DTL as proc_dtl_sub:proc_dtl'
-        //     )
-        //     ->where('PROC_DTL.ITEM_ID', $itemId)
-        //     ->get();
+        $items = DB::table('PROC_DTL')
+            ->join('PROC_DTL_SUB', 'PROC_DTL_SUB.ITEM_ID', '=', 'PROC_DTL.ITEM_ID')
+            ->select(
+                'PROC_DTL.PROC_NM as proc_dtl:proc_nm',
+                'PROC_DTL.PROC_TIME as proc_dtl:proc_time',
+                'PROC_DTL.SEQ_NM as proc_dtl:seq_nm',
+                'PROC_DTL.PROC_DTL as proc_dtl:proc_dtl',
+                'PROC_DTL_SUB.PROC_NM as proc_dtl_sub:proc_nm',
+                'PROC_DTL_SUB.SEQ_NM as proc_dtl_sub:seq_nm',
+                'PROC_DTL_SUB.PROC_DTL as proc_dtl_sub:proc_dtl'
+            )
+            ->where('PROC_DTL.ITEM_ID', $itemId)
+            ->get();
 
         // $with = array_filter(explode(',', $request->input('with')));
         // $limit = $request->input('limit', 15);
