@@ -308,7 +308,7 @@ export default {
           field: 'no',
           filter: false,
           editable: false,
-          width: 50,
+          width: 100,
         },
         {
           headerName: '코드',

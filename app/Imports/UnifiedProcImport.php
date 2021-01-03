@@ -6,6 +6,7 @@ use App\ItemMst;
 use App\ProcSrc;
 use App\ProcDtl;
 use App\ProcDtlSub;
+use App\CommCd;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Facades\Auth;
