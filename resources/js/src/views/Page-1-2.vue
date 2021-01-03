@@ -633,6 +633,7 @@ export default {
         .fetch({
           ...this.paginationParam,
           ...this.sortParam,
+          with: 'role,appr,job'
         })
         .then((res) => {
           this.spinner(false);

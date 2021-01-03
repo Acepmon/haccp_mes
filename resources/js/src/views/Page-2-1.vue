@@ -62,20 +62,7 @@
         :rowData="itemsComp2">
       </ag-grid-vue>
 
-      <vs-divider />
-
-      <app-control>
-        <template v-slot:action>
-          <vs-button
-            @click="exportExcel()"
-            class="mx-1"
-            color="primary"
-            type="border"
-            :disabled="items.length <= 0"
-            >{{ $t("ToExcel") }}</vs-button
-          >
-        </template>
-      </app-control>
+      <vs-divider class="mb-0" />
 
       <!-- grid2 - item-mst -->
 
@@ -447,7 +434,7 @@ export default {
         })
     },
 
-    query () {
+    query (callback = Function) {
       this.spinner();
 
       let search_params = {};
@@ -466,6 +453,7 @@ export default {
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
+          callback(this.items)
         })
         .catch(() => {
           this.displayErrors(
@@ -530,7 +518,13 @@ export default {
   },
 
   created() {
-    // 
+    setTimeout(() => {
+      this.query((items) => {
+        if (items.length > 0) {
+          this.query2(items[0]['item_mst:item_id'])
+        }
+      })
+    }, 500)
   },
 };
 </script> 

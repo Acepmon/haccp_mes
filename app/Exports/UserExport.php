@@ -23,7 +23,7 @@ class UserExport implements FromCollection, WithHeadings, WithStyles, WithMappin
     public function map($user): array
     {
         $roles = CommCd::where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$'])->whereIn('COMM2_CD', explode(',', $user->ROLE_CD))->get();
-        $approvals = CommCd::where('COMM1_CD', 'B10')->whereNotIn('COMM2_CD', ['$$'])->whereIn('COMM2_CD', explode(',', $user->APPR_CD))->get();
+        $approvals = CommCd::where('COMM1_CD', 'A20')->whereNotIn('COMM2_CD', ['$$'])->whereIn('COMM2_CD', explode(',', $user->APPR_CD))->get();
 
         return [
             $user->USER_ID,
