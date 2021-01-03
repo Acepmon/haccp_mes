@@ -19,13 +19,14 @@ class DatabaseSeeder extends Seeder
         // Mandatory Seeds
         $this->call(CommCdSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(CompInfoSeeder::class);
         $this->call(EdocFileSeeder::class);
 
         // Test Data (will not run on production environment)
         if (env('APP_ENV') != 'production') {
             $this->call(TestUserSeeder::class);
             $this->call(TestLoginHistSeeder::class);
-            $this->call(TestCompInfoSeeder::class);
+            // $this->call(TestCompInfoSeeder::class);
             $this->call(TestWorkerSeeder::class);
             // $this->call(TestHaccpMstFileSeeder::class);
             // $this->call(TestDocMgmtSeeder::class);

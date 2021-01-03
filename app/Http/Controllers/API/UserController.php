@@ -32,6 +32,10 @@ class UserController extends Controller
             $items = $items->where('APPR_CD', $request->input('appr_cd'));
         }
 
+        if ($request->has('job_cd')) {
+            $items = $items->where('JOB_CD', $request->input('job_cd'));
+        }
+
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();
         } else {

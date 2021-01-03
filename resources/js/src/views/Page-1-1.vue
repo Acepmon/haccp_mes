@@ -557,6 +557,7 @@ export default {
       user
         .fetch({
           limit: -1,
+          job_cd: '10'
         })
         .then((res) => {
           this.users = res.data.data;
