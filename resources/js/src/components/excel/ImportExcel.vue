@@ -23,6 +23,18 @@ export default {
     onSuccess: {
       type: Function,
       required: true
+    },
+    skips: {
+      type: Number,
+      default: 0
+    },
+    showHeaderRow: {
+      type: Boolean,
+      default: true
+    },
+    header: {
+      type: Number,
+      default: 1
     }
   },
   data () {
@@ -45,7 +57,7 @@ export default {
       const headers = []
       const range = XLSX.utils.decode_range(sheet['!ref'])
       let C = undefined
-      const R = range.s.r
+      const R = range.s.r + this.skips
       /* start in the first row */
       for (C = range.s.c; C <= range.e.c; ++C) { /* walk every column in the range */
         const cell = sheet[XLSX.utils.encode_cell({ c: C, r: R })]
@@ -97,7 +109,8 @@ export default {
           const firstSheetName = workbook.SheetNames[0]
           const worksheet = workbook.Sheets[firstSheetName]
           const header = this.getHeaderRow(worksheet)
-          const results = XLSX.utils.sheet_to_json(worksheet)
+          console.log(this.header)
+          const results = XLSX.utils.sheet_to_json(worksheet, {header: this.header})
           const meta = { sheetName: firstSheetName }
           this.generateData({ header, results, meta })
           resolve()

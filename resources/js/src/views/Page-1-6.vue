@@ -55,7 +55,7 @@
               >{{ $t("Save") }}</vs-button> -->
             
           </div>
-          <import-excel :onSuccess="loadDataInTable" v-model="importFile"></import-excel>
+          <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="0" :skips="1"></import-excel>
           <div>
             <vs-button
               @click="closeDialog()"

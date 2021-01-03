@@ -31,10 +31,14 @@ class ProcSrcController extends Controller
             });
         }
 
+        $items = $items->whereIn('ITEM_ID', function ($query) {
+            $query->select('ITEM_ID')->from('ITEM_MST')->groupBy('ITEM_ID');
+        });
+
         if ($limit == -1) {
-            $items = $items->with($with)->orderBy($sort, $order)->get();
+            $items = $items->with($with)->get();
         } else {
-            $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
+            $items = $items->with($with)->paginate($limit);
         }
 
         return ProcSrcResource::collection($items);

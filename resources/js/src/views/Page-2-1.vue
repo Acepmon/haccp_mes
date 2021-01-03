@@ -39,7 +39,7 @@
             style="visibility: hidden;"
             >{{ $t("Delete") }}</vs-button
           >
-          <import-excel :onSuccess="loadDataInTable" v-model="importFile"></import-excel>
+          <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="1"></import-excel>
           <vs-button
             @click="closeDialog()"
             class="mx-1"
@@ -50,13 +50,13 @@
         </template>
       </app-control>
 
-      <vs-divider />
+      <vs-divider class="mb-0" />
 
       <ag-grid-vue
         ref="agGridTable"
         :gridOptions="gridOptions2"
-        class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 500px;"
+        class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
+        style="max-height: 200px;"
         :columnDefs="columnDefs2"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp2">
@@ -84,8 +84,8 @@
         rowSelection="single"
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
-        class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 500px;"
+        class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
+        style="max-height: 200px;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
@@ -122,18 +122,14 @@
         </div>
       </div>
 
-      <vs-table stripe pagination :max-items="30" search :data="tableData">
+      <vs-table stripe pagination :max-items="30" :data="tableData">
         <template slot="header">
           <h4>{{ sheetName }}</h4>
         </template>
 
-        <template slot="thead">
-          <vs-th :sort-key="heading" v-for="heading in header" :key="heading">{{ heading }}</vs-th>
-        </template>
-
         <template slot-scope="{data}">
           <!-- eslint-disable-next-line -->
-          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" v-if="indextr != 0">
+          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
             <vs-td :data="col" v-for="(col, indexcol) in data[indextr]" :key="indexcol + col">
               {{ col }}
             </vs-td>
@@ -186,7 +182,8 @@ export default {
 
       maxPageNumbers: 7,
       gridOptions: {
-        rowHeight: 40
+        rowHeight: 40,
+        headerHeight: 40
       },
       gridApi: null,
       defaultColDef: {
@@ -197,7 +194,8 @@ export default {
       },
 
       gridOptions2: {
-        rowHeight: 40
+        rowHeight: 40,
+        headerHeight: 40
       },
       gridApi2: null,
       defaultColDef2: {
@@ -255,30 +253,28 @@ export default {
         },
         {
           headerName: '공정명',
-          field: 'proc_nm',
+          field: 'PROC_NM',
           filter: false,
           editable: false,
-          width: 200,
-          rowGroup: true,
-          hide: true
+          width: 200
         },
         {
           headerName: '소요시간 (SUB 공정)',
-          field: 'proc_time',
+          field: 'PROC_TIME',
           filter: false,
           editable: false,
           width: 200
         },
         {
           headerName: '순번',
-          field: 'seq_nm',
+          field: 'SEQ_NM',
           filter: false,
           editable: false,
           width: 200,
         },
         {
           headerName: '공정내용',
-          field: 'proc_dtl',
+          field: 'PROC_DTL',
           filter: false,
           editable: false,
           width: 300,
@@ -463,7 +459,6 @@ export default {
       proc_src
         .fetch({
           ...this.paginationParam,
-          ...this.sortParam,
           limit: -1,
           ...search_params,
           with: 'item_mst'
@@ -493,11 +488,11 @@ export default {
     query2 (itemId) {
       this.spinner();
 
-      proc_dtl_sub
+      proc_dtl
         .fetch({
           limit: -1,
           item_id: itemId,
-          with: 'item_mst'
+          with: ''
         })
         .then((res) => {
           this.spinner(false);
@@ -538,4 +533,4 @@ export default {
     // 
   },
 };
-</script>
+</script> 
