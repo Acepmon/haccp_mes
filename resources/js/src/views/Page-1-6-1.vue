@@ -85,6 +85,7 @@
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
+        :frameworkComponents="frameworkComponents"
         :pagination="true"
         :paginationPageSize="paginationPageSize"
         :suppressPaginationPanel="true">
@@ -259,6 +260,8 @@ import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 
+import NumericEditor from '@/views/ui-elements/ag-grid-table/numericEditorVue';
+
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
@@ -305,6 +308,9 @@ export default {
         editable: true,
         resizable: true,
         suppressMenu: false
+      },
+      frameworkComponents: {
+        numericEditor: NumericEditor
       },
 
       columnDefs: [
@@ -382,7 +388,7 @@ export default {
           headerName: '단위(대)',
           field: 'item_mst:unit1_nm',
           width: 100,
-          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
+          cellStyle: { 'background-color': 'rgba(250, 250, 250, .8)' }
         },
         {
           headerName: '수량(대)',
@@ -390,13 +396,14 @@ export default {
           type: 'numericColumn',
           editable: true,
           width: 100,
-          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
+          cellEditor: 'numericEditor',
+          cellStyle: { 'background-color': 'rgba(250, 250, 250, .8)' }
         },
         {
           headerName: '단위(중)',
           field: 'item_mst:unit2_nm',
           width: 100,
-          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
+          cellStyle: { 'background-color': 'rgba(250, 250, 250, .8)' }
         },
         {
           headerName: '수량(중)',
@@ -404,13 +411,14 @@ export default {
           type: 'numericColumn',
           editable: true,
           width: 100,
-          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
+          cellEditor: 'numericEditor',
+          cellStyle: { 'background-color': 'rgba(250, 250, 250, .8)' }
         },
         {
           headerName: '단위(소)',
           field: 'item_mst:unit3_nm',
           width: 100,
-          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
+          cellStyle: { 'background-color': 'rgba(250, 250, 250, .8)' }
         },
         {
           headerName: '수량(소)',
@@ -418,7 +426,8 @@ export default {
           type: 'numericColumn',
           editable: true,
           width: 100,
-          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
+          cellEditor: 'numericEditor',
+          cellStyle: { 'background-color': 'rgba(250, 250, 250, .8)' }
         }
       ],
     }

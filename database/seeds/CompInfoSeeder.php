@@ -22,7 +22,7 @@ class CompInfoSeeder extends Seeder
             'ZIP_CD' => '52322',
             'ADDR1' => '경상남도 하동군 하동읍',
             'ADDR2' => '섬진강대로 2498-11',
-            'HACCP_ID' => '1f1d3c55-5b55-4',
+            'HACCP_ID' => null,
             'HACCP_ITEM' => '김밥, 타르트, 치즈 가공식품',
             'REG_ID' => 'admin',
             'REG_DTM' => now()->format('Ymdhis'),

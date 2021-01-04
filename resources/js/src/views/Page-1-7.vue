@@ -38,7 +38,7 @@
             type="border"
             >{{ $t("Save") }}</vs-button
           >
-          <import-excel :onSuccess="loadDataInTable" v-model="importFile"></import-excel>
+          <import-excel :onSuccess="loadDataInTable" v-model="importFile" :skips="1"></import-excel>
           <vs-button
             @click="closeDialog()"
             class="mx-1"
@@ -58,7 +58,8 @@
         style="max-height: 200px;"
         :columnDefs="columnDefs2"
         :defaultColDef="defaultColDef"
-        :rowData="items2Comp">
+        :rowData="items2Comp"
+        :frameworkComponents="frameworkComponents">
       </ag-grid-vue>
 
       <vs-divider />
@@ -86,6 +87,7 @@
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
+        :frameworkComponents="frameworkComponents"
         :pagination="true"
         :paginationPageSize="paginationPageSize"
         :suppressPaginationPanel="true">
@@ -153,6 +155,8 @@ import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 
+import NumericEditor from '@/views/ui-elements/ag-grid-table/numericEditorVue';
+
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
@@ -199,13 +203,17 @@ export default {
       },
       gridOptions2: {
         rowHeight: 40,
-        headerHeight: 40
+        headerHeight: 40,
+        singleClickEdit: true
       },
       defaultColDef: {
         sortable: true,
         editable: true,
         resizable: true,
         suppressMenu: false
+      },
+      frameworkComponents: {
+        numericEditor: NumericEditor
       },
 
       columnDefs2: [
@@ -256,12 +264,14 @@ export default {
           headerName: '생산수량',
           field: 'bom_config:prod_qty',
           type: 'numericColumn',
+          cellEditor: 'numericEditor',
           width: 100,
         },
         {
           headerName: '소요량',
           field: 'bom_config:use_qty',
           type: 'numericColumn',
+          cellEditor: 'numericEditor',
           width: 100,
         },
         {
