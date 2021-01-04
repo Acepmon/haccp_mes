@@ -85,7 +85,7 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-2">
               <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">업무구분</span>
+                <span class="pt-2">정/부구분</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <v-select 
@@ -154,7 +154,7 @@
           <div class="w-full sm:w-1/2 px-1">
             <div class="vx-row mb-2">
               <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">정/부 구분</span>
+                <span class="pt-2">업무 구분</span>
               </div>
               <div class="vx-col sm:w-2/3 w-full">
                 <v-select 
@@ -210,10 +210,10 @@
             <vs-th>No</vs-th>
             <vs-th sort-key="worker_nm">이름</vs-th>
             <vs-th sort-key="tel_no">휴대폰번호</vs-th>
-            <vs-th sort-key="work_cd">업무구분</vs-th>
+            <vs-th sort-key="work_cd">정/부구분</vs-th>
             <vs-th sort-key="remark">업무내용</vs-th>
             <vs-th sort-key="health_chk_dt">보건증갱신일자</vs-th>
-            <vs-th sort-key="role_cd">정/부</vs-th>
+            <vs-th sort-key="role_cd">업무구분</vs-th>
             <vs-th sort-key="reg_dtm">등록일시</vs-th>
           </template>
 

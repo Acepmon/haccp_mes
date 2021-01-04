@@ -39,10 +39,10 @@ class WorkerExport implements FromCollection, WithHeadings, WithStyles, WithMapp
             'No',
             '이름',
             '휴대폰번호',
-            '업무구분',
+            '정/부구분',
             '업무내용',
             '보건증갱신일자',
-            '정/부',
+            '업무구분',
             '등록일시',
         ];
     }

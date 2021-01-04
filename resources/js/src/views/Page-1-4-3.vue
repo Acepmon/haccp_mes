@@ -323,8 +323,8 @@
           <template slot="thead">
             <vs-th>No</vs-th>
             <vs-th sort-key="doc_nm">문서이름</vs-th>
-            <vs-th sort-key="type_nm">업무종류</vs-th>
-            <vs-th sort-key="doc_content">문서내용</vs-th>
+            <vs-th sort-key="type_nm">문서종류</vs-th>
+            <vs-th sort-key="doc_content">설명(제품명)</vs-th>
             <vs-th sort-key="period_nm">업무처리주기</vs-th>
             <vs-th sort-key="period_data">주기내용</vs-th>
             <vs-th sort-key="use_yn">사용구분</vs-th>

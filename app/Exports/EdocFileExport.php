@@ -90,8 +90,8 @@ class EdocFileExport implements FromCollection, WithHeadings, WithStyles, WithMa
         return [
             'No',
             '문서이름',
-            '업무종류',
-            '문서내용',
+            '문서종류',
+            '설명(제품명)',
             '업무처리주기',
             '주기내용',
             '사용구분',
