@@ -28,3 +28,7 @@
 [dir] .vs-button:not(.vs-radius):not(.includeIconOnly):not(.small):not(.large).vs-button-border {
   padding: 0.579rem 1.2rem;
 }
+
+[dir] .v-select .vs__dropdown-toggle {
+  padding: 0.29px 0 4px 0;
+}

@@ -18,11 +18,11 @@ export default {
     },
     filterClass: {
       type: String,
-      default: 'sm:w-1/2'
+      default: 'sm:w-8/12'
     },
     actionClass: {
       type: String,
-      default: 'sm:w-1/2'
+      default: 'sm:w-4/12'
     }
   }
 }
@@ -41,5 +41,12 @@ export default {
 }
 .control-field-dtm {
   width: 100px;
+}
+
+.control-field-sm {
+  width: 100px;
+}
+.control-field-dtm-sm {
+  width: 80px;
 }
 </style>

@@ -1,48 +1,30 @@
 <template>
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container">
-      <div class="flex flex-wrap mb-2">
-        <div class="w-full sm:w-1/2 px-1 flex justify-start">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">기간</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full flex">
-                <flat-pickr
-                  style="width: 120px"
-                  class="text-center flex-shrink-0"
-                  :config="configdateTimePicker"
-                  v-model="searchFrom"
-                ></flat-pickr>
+      <app-control>
+        <template v-slot:filter>
+          <span class="pt-2 px-4">기간</span>
+          <flat-pickr
+            class="control-field-dtm text-center flex-shrink-0"
+            :config="configdateTimePicker"
+            v-model="searchFrom"
+          ></flat-pickr>
+          <span class="pt-2 px-2">~</span>
+          <flat-pickr
+            class="control-field-dtm text-center flex-shrink-0"
+            :config="configdateTimePicker"
+            v-model="searchTo"
+          ></flat-pickr>
+        </template>
 
-                <span
-                  class="mx-5 flex justify-center content-center flex-shrink-0"
-                  >~</span
-                >
-
-                <flat-pickr
-                  style="width: 120px"
-                  class="text-center flex-shrink-0"
-                  :config="configdateTimePicker"
-                  v-model="searchTo"
-                ></flat-pickr>
-
-                <vs-button
-                  @click="query()"
-                  class="ml-5 flex-shrink-0"
-                  color="primary"
-                  type="border"
-                  >{{ $t("Query") }}</vs-button
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="w-full sm:w-1/2 px-1 flex justify-end"
-          style="position: relative"
-        >
+        <template v-slot:action>
+          <vs-button
+            @click="query()"
+            class="mx-1 mr-16"
+            color="primary"
+            type="border"
+            >{{ $t("Query") }}</vs-button
+          >
           <vs-button
             @click="addDialog()"
             class="mx-1"
@@ -71,167 +53,137 @@
             type="border"
             >{{ $t("Close") }}</vs-button
           >
-        </div>
-      </div>
+        </template>
+      </app-control>
 
       <vs-divider />
 
-      <form action="#">
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 문서이름</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="100"
-                  v-model="item['secu_doc_mgmt:doc_nm']"
-                  :danger="errors['secu_doc_mgmt:doc_nm'] != null"
-                  :danger-text="errors['secu_doc_mgmt:doc_nm']"
-                />
-              </div>
-            </div>
+      <app-form>
+        <app-form-group required>
+          <template v-slot:label>문서이름</template>
+
+          <vs-input
+            maxlength="100"
+            v-model="item['secu_doc_mgmt:doc_nm']"
+            :danger="errors['secu_doc_mgmt:doc_nm'] != null"
+            :danger-text="errors['secu_doc_mgmt:doc_nm']"
+          />
+        </app-form-group>
+
+        <app-form-group required>
+          <template v-slot:label>보고서작성일</template>
+
+          <flat-pickr
+            style="width: 120px"
+            class="text-center"
+            :config="configdateTimePicker"
+            v-model="item['secu_doc_mgmt:doc_dt']"
+          ></flat-pickr>
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['secu_doc_mgmt:doc_dt'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['secu_doc_mgmt:doc_dt']"
+            ></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group required>
+          <template v-slot:label>기간</template>
+
+          <flat-pickr
+            style="width: 120px"
+            class="text-center"
+            :config="configdateTimePicker"
+            v-model="item['secu_doc_mgmt:from_dt']"
+          ></flat-pickr>
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['secu_doc_mgmt:from_dt'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['secu_doc_mgmt:from_dt']"
+            ></span>
           </div>
 
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 보고서작성일</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <flat-pickr
-                  style="width: 120px"
-                  class="text-center"
-                  :config="configdateTimePicker"
-                  v-model="item['secu_doc_mgmt:doc_dt']"
-                ></flat-pickr>
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['secu_doc_mgmt:doc_dt'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['secu_doc_mgmt:doc_dt']"
-                  ></span>
-                </div>
-              </div>
-            </div>
+          <span class="pt-2 px-2">~</span>
+
+          <flat-pickr
+            style="width: 120px"
+            class="text-center"
+            :config="configdateTimePicker"
+            v-model="item['secu_doc_mgmt:to_dt']"
+          ></flat-pickr>
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['secu_doc_mgmt:to_dt'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['secu_doc_mgmt:to_dt']"
+            ></span>
           </div>
-        </div>
+        </app-form-group>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 기간</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full flex">
-                <flat-pickr
-                  style="width: 120px"
-                  class="text-center"
-                  :config="configdateTimePicker"
-                  v-model="item['secu_doc_mgmt:from_dt']"
-                ></flat-pickr>
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['secu_doc_mgmt:from_dt'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['secu_doc_mgmt:from_dt']"
-                  ></span>
-                </div>
+        <app-form-group></app-form-group>
 
-                <span class="mx-5 flex justify-center content-center">~</span>
+        <app-form-group required>
+          <template v-slot:label>첨부화일</template>
 
-                <flat-pickr
-                  style="width: 120px"
-                  class="text-center"
-                  :config="configdateTimePicker"
-                  v-model="item['secu_doc_mgmt:to_dt']"
-                ></flat-pickr>
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['secu_doc_mgmt:to_dt'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['secu_doc_mgmt:to_dt']"
-                  ></span>
-                </div>
-              </div>
-            </div>
+          <div class="flex flex-row">
+            <file-select
+              v-model="item['secu_doc_mgmt:att']"
+            ></file-select>
+            <!-- <vs-button type="border" color="primary" @click.native="item['secu_doc_mgmt:att'] = null" v-if="item['secu_doc_mgmt:att']" class="ml-1 px-4">
+              <vs-icon icon="close" />
+            </vs-button> -->
+            <vs-button
+              class="ml-1"
+              v-if="
+                item['secu_doc_mgmt:att_file'].length > 0 &&
+                item['secu_doc_mgmt:att']
+              "
+              color="primary"
+              :href="
+                '/api/doc_mgmt/' +
+                item['secu_doc_mgmt:doc_id'] +
+                '/att_file/' +
+                item['secu_doc_mgmt:att_file'][0].att_seq +
+                '/download'
+              "
+            >
+              {{ $t("Download") }}
+            </vs-button>
           </div>
-        </div>
-
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 첨부화일</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <div class="flex flex-row">
-                  <file-select
-                    v-model="item['secu_doc_mgmt:att']"
-                  ></file-select>
-                  <!-- <vs-button type="border" color="primary" @click.native="item['secu_doc_mgmt:att'] = null" v-if="item['secu_doc_mgmt:att']" class="ml-1 px-4">
-										<vs-icon icon="close" />
-									</vs-button> -->
-                  <vs-button
-                    class="ml-1"
-                    v-if="
-                      item['secu_doc_mgmt:att_file'].length > 0 &&
-                      item['secu_doc_mgmt:att']
-                    "
-                    color="primary"
-                    :href="
-                      '/api/doc_mgmt/' +
-                      item['secu_doc_mgmt:doc_id'] +
-                      '/att_file/' +
-                      item['secu_doc_mgmt:att_file'][0].att_seq +
-                      '/download'
-                    "
-                  >
-                    {{ $t("Download") }}
-                  </vs-button>
-                </div>
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['secu_doc_mgmt:att'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['secu_doc_mgmt:att']"
-                  ></span>
-                </div>
-              </div>
-            </div>
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['secu_doc_mgmt:att'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['secu_doc_mgmt:att']"
+            ></span>
           </div>
-        </div>
-      </form>
+        </app-form-group>
+      </app-form>
 
       <vs-divider />
 
-      <div class="flex flex-wrap justify-end mb-2">
-        <vs-button
-          @click="excel()"
-          class="mx-1"
-          color="primary"
-          type="border"
-          :disabled="items.length <= 0"
-          >{{ $t("ToExcel") }}</vs-button
-        >
-      </div>
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="excel()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            :disabled="items.length <= 0"
+            >{{ $t("ToExcel") }}</vs-button
+          >
+        </template>
+      </app-control>
 
       <div class="overflow-y-auto" style="max-height: 300px">
         <vs-table
@@ -321,10 +273,17 @@ import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js";
 import FileSelect from "@/layouts/components/FileSelect.vue";
 import moment from 'moment';
 
+import AppControl from "@/views/ui-elements/AppControl";
+import AppForm from "@/views/ui-elements/AppForm";
+import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+
 export default {
   components: {
     flatPickr,
     FileSelect,
+    AppControl,
+    AppForm,
+    AppFormGroup
   },
 
   data() {

@@ -16,27 +16,10 @@
             >{{ $t("Query") }}</vs-button
           >
           <vs-button
-            @click="add()"
-            class="mx-1"
-            color="primary"
-            type="border"
-            style="visibility: hidden;"
-            >{{ $t("Add") }}</vs-button
-          >
-          <vs-button
-            @click="save()"
-            class="mx-1"
-            color="primary"
-            type="border"
-            style="visibility: hidden;"
-            >{{ $t("Save") }}</vs-button
-          >
-          <vs-button
             @click="remove()"
-            class="mx-1"
+            class="mx-1 invisible"
             color="primary"
             type="border"
-            style="visibility: hidden;"
             >{{ $t("Delete") }}</vs-button
           >
           <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="1"></import-excel>

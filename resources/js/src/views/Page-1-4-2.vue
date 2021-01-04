@@ -1,213 +1,167 @@
 <template>
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container">
-      <div class="flex flex-wrap mb-2">
-        <div class="w-full sm:w-2/3 px-1 flex justify-end">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <v-select 
-                  style="width: 150px;"
-                  :placeholder="'검색항목'" 
-                  :options="[{label: '문서이름', value: 'doc_nm'}, {label: '설명(제품명)', value: 'doc_desc'}]" 
-                  :reduce="item => item.value" 
-                  label="label" 
-                  v-model="searchBy" 
-                  :searchable="false" />
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input v-model="searchKeyword" />
-              </div>
-            </div>
-          </div>
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">문서종류</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                <v-select 
-                  style="width: 150px;"
-                  :options="types" 
-                  :reduce="item => item.comm2_cd" 
-                  label="comm2_nm" 
-                  v-model="searchType" 
-                  :searchable="false" />
-                <vs-button
-                  @click="query()"
-                  class="mx-1 px-4 flex-shrink-0"
-                  color="primary"
-                  type="border"
-                  >{{ $t("Query") }}</vs-button
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="w-full sm:w-1/3 px-1 flex justify-end"
-          style="position: relative"
-        >
+      <app-control>
+        <template v-slot:filter>
+          <v-select 
+            class="control-field"
+            :placeholder="'검색항목'" 
+            :options="[{label: '문서이름', value: 'doc_nm'}, {label: '설명(제품명)', value: 'doc_desc'}]" 
+            :reduce="item => item.value" 
+            label="label" 
+            v-model="searchBy" 
+            :searchable="false" />
+          <vs-input v-model="searchKeyword" class="control-field ml-2" />
+
+          <span class="pt-2 px-4">문서종류</span>
+          <v-select 
+            class="control-field"
+            :options="types" 
+            :reduce="item => item.comm2_cd" 
+            label="comm2_nm" 
+            v-model="searchType" 
+            :searchable="false" />
+        </template>
+        <template v-slot:action>
+          <vs-button
+            @click="query()"
+            class="mx-1 mr-16"
+            color="primary"
+            type="border"
+            >{{ $t("Query") }}</vs-button
+          >
           <vs-button
             @click="addDialog()"
-            class="mx-1 px-4 flex-shrink-0"
+            class="mx-1"
             color="primary"
             type="border"
             >{{ $t("Add") }}</vs-button
           >
           <vs-button
             @click="saveDialog()"
-            class="mx-1 px-4 flex-shrink-0"
+            class="mx-1"
             color="primary"
             type="border"
             >{{ $t("Save") }}</vs-button
           >
           <vs-button
             @click="removeDialog()"
-            class="mx-1 px-4 flex-shrink-0"
+            class="mx-1"
             color="primary"
             type="border"
             >{{ $t("Delete") }}</vs-button
           >
           <vs-button
             @click="closeDialog()"
-            class="mx-1 px-4 flex-shrink-0"
+            class="mx-1"
             color="primary"
             type="border"
             >{{ $t("Close") }}</vs-button
           >
-        </div>
-      </div>
+        </template>
+      </app-control>
 
       <vs-divider />
 
-      <form action="#">
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 문서이름</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="100"
-                  v-model="item['doc_mgmt:doc_nm']"
-                  :danger="errors['doc_mgmt:doc_nm'] != null"
-                  :danger-text="errors['doc_mgmt:doc_nm']"
-                />
-              </div>
-            </div>
-          </div>
+      <app-form>
+        <app-form-group required>
+          <template v-slot:label>문서이름</template>
 
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 문서종류</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <v-select 
-                  style="width: 200px;"
-                  :options="types" 
-                  :reduce="item => item.comm2_cd" 
-                  label="comm2_nm" 
-                  v-model="item['doc_mgmt:type_cd']" 
-                  :searchable="false" />
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['doc_mgmt:type_cd'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['doc_mgmt:type_cd']"
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          <vs-input
+            maxlength="100"
+            v-model="item['doc_mgmt:doc_nm']"
+            :danger="errors['doc_mgmt:doc_nm'] != null"
+            :danger-text="errors['doc_mgmt:doc_nm']"
+          />
+        </app-form-group>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">설명(제품명)</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  class="w-full"
-                  maxlength="150"
-                  v-model="item['doc_mgmt:doc_desc']"
-                  :danger="errors['doc_mgmt:doc_desc'] != null"
-                  :danger-text="errors['doc_mgmt:doc_desc']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <app-form-group required>
+          <template v-slot:label>문서종류</template>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 첨부화일</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <div class="flex flex-row">
-                  <file-select v-model="item['doc_mgmt:att']"></file-select>
-                  <!-- <vs-button type="border" color="primary" @click.native="item['doc_mgmt:att'] = null" v-if="item['doc_mgmt:att']" class="ml-1 px-4">
-										<vs-icon icon="close" />
-									</vs-button> -->
-                  <vs-button
-                    class="ml-1"
-                    v-if="
-                      item['doc_mgmt:att_file'].length > 0 &&
-                      item['doc_mgmt:att']
-                    "
-                    color="primary"
-                    :href="
-                      '/api/doc_mgmt/' +
-                      item['doc_mgmt:doc_id'] +
-                      '/att_file/' +
-                      item['doc_mgmt:att_file'][0].att_seq +
-                      '/download'
-                    "
-                  >
-                    {{ $t("Download") }}
-                  </vs-button>
-                </div>
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['doc_mgmt:att'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['doc_mgmt:att']"
-                  ></span>
-                </div>
-              </div>
-            </div>
+          <v-select 
+            style="width: 200px;"
+            :options="types" 
+            :reduce="item => item.comm2_cd" 
+            label="comm2_nm" 
+            v-model="item['doc_mgmt:type_cd']" 
+            :searchable="false" />
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['doc_mgmt:type_cd'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['doc_mgmt:type_cd']"
+            ></span>
           </div>
-        </div>
-      </form>
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>설명(제품명)</template>
+
+          <vs-input
+            class="w-full"
+            maxlength="150"
+            v-model="item['doc_mgmt:doc_desc']"
+            :danger="errors['doc_mgmt:doc_desc'] != null"
+            :danger-text="errors['doc_mgmt:doc_desc']"
+          />
+        </app-form-group>
+
+        <app-form-group></app-form-group>
+
+        <app-form-group required>
+          <template v-slot:label>첨부화일</template>
+
+          <div class="flex flex-row">
+            <file-select v-model="item['doc_mgmt:att']"></file-select>
+            <!-- <vs-button type="border" color="primary" @click.native="item['doc_mgmt:att'] = null" v-if="item['doc_mgmt:att']" class="ml-1 px-4">
+              <vs-icon icon="close" />
+            </vs-button> -->
+            <vs-button
+              class="ml-1"
+              v-if="
+                item['doc_mgmt:att_file'].length > 0 &&
+                item['doc_mgmt:att']
+              "
+              color="primary"
+              :href="
+                '/api/doc_mgmt/' +
+                item['doc_mgmt:doc_id'] +
+                '/att_file/' +
+                item['doc_mgmt:att_file'][0].att_seq +
+                '/download'
+              "
+            >
+              {{ $t("Download") }}
+            </vs-button>
+          </div>
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['doc_mgmt:att'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['doc_mgmt:att']"
+            ></span>
+          </div>
+        </app-form-group>
+      </app-form>
 
       <vs-divider />
 
-      <div class="flex flex-wrap justify-end mb-2">
-        <vs-button
-          @click="excel()"
-          class="mx-1"
-          color="primary"
-          type="border"
-          :disabled="items.length <= 0"
-          >{{ $t("ToExcel") }}</vs-button
-        >
-      </div>
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="excel()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            :disabled="items.length <= 0"
+            >{{ $t("ToExcel") }}</vs-button
+          >
+        </template>
+      </app-control>
 
       <div class="overflow-y-auto" style="max-height: 300px">
         <vs-table
@@ -293,9 +247,16 @@ import api from "@/services/doc_mgmt";
 import { mapActions } from "vuex";
 import FileSelect from "@/layouts/components/FileSelect.vue";
 
+import AppControl from "@/views/ui-elements/AppControl";
+import AppForm from "@/views/ui-elements/AppForm";
+import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+
 export default {
   components: {
     FileSelect,
+    AppControl,
+    AppForm,
+    AppFormGroup
   },
 
   data() {

@@ -11,6 +11,13 @@
             >{{ $t("Query") }}</vs-button
           >
           <vs-button
+            @click="add()"
+            class="mx-1 invisible"
+            color="primary"
+            type="border"
+            >{{ $t("Add") }}</vs-button
+          >
+          <vs-button
             @click="saveDialog()"
             class="mx-1"
             color="primary"

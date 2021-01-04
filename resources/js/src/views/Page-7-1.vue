@@ -1,73 +1,63 @@
 <template>
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container">
-      <div class="flex flex-wrap mb-2">
-        <div class="w-full sm:w-2/3 flex">
-          <div class="w-full sm:w-2/3">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">공통코드명</span>
-              </div>
-              <div class="vx-col sm:w-1/3 w-full">
-                <vs-input v-model="searchNm" style="width: 150px" />
-              </div>
-              <div class="vx-col sm:w-1/3 w-full">
-                <vs-button
-                  @click="query()"
-                  class="mx-1 flex-shrink-0"
-                  color="primary"
-                  type="border"
-                  >{{ $t("Query") }}</vs-button
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="w-full sm:w-1/3 px-1 flex justify-end"
-          style="position: relative"
-        >
+      <app-control>
+        <template v-slot:filter>
+          <span class="pt-2 px-4">공통코드명</span>
+
+          <vs-input v-model="searchNm" class="control-field" />
+        </template>
+        <template v-slot:action>
+          <vs-button
+            @click="query()"
+            class="mx-1 mr-16"
+            color="primary"
+            type="border"
+            >{{ $t("Query") }}</vs-button
+          >
           <vs-button
             @click="addRow()"
-            class="mx-1 flex-shrink-0"
+            class="mx-1"
             color="primary"
             type="border"
             >{{ $t("Add") }}</vs-button
           >
           <vs-button
             @click="saveDialog()"
-            class="mx-1 flex-shrink-0"
+            class="mx-1"
             color="primary"
             type="border"
             >{{ $t("Save") }}</vs-button
           >
           <vs-button
             @click="removeDialog()"
-            class="mx-1 flex-shrink-0"
+            class="mx-1 invisible"
             color="primary"
             type="border"
             >{{ $t("Delete") }}</vs-button
           >
           <vs-button
             @click="closeDialog()"
-            class="mx-1 flex-shrink-0"
+            class="mx-1"
             color="primary"
             type="border"
             >{{ $t("Close") }}</vs-button
           >
-        </div>
-      </div>
+        </template>
+      </app-control>
 
       <vs-divider />
 
-      <div class="w-full flex flex-row mb-5">
-        <span class="pt-2 mr-5">그룹코드명</span>
-        <vs-input
-          v-model="item2['comm_cd:comm2_nm']"
-          style="width: 150px"
-          readonly
-        />
-      </div>
+      <app-control>
+        <template v-slot:filter>
+          <span class="pt-2 px-4">그룹코드명</span>
+          <vs-input
+            v-model="item2['comm_cd:comm2_nm']"
+            class="control-field"
+            readonly
+          />
+        </template>
+      </app-control>
 
       <ag-grid-vue
         ref="agGridTable"
@@ -82,16 +72,18 @@
 
       <vs-divider />
 
-      <div class="flex flex-wrap justify-end mb-2">
-        <vs-button
-          @click="excel()"
-          class="mx-1"
-          color="primary"
-          type="border"
-          :disabled="items2.length <= 0"
-          >{{ $t("ToExcel") }}</vs-button
-        >
-      </div>
+      <app-control>
+        <template v-slot:action>
+           <vs-button
+            @click="excel()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            :disabled="items2.length <= 0"
+            >{{ $t("ToExcel") }}</vs-button
+          >
+        </template>
+      </app-control>
 
       <div class="overflow-y-auto" style="max-height: 300px">
         <vs-table
@@ -143,11 +135,18 @@ import api from "@/services/comm_cd";
 import { mapActions } from "vuex";
 import { AgGridVue } from 'ag-grid-vue'
 
+import AppControl from "@/views/ui-elements/AppControl";
+import AppForm from "@/views/ui-elements/AppForm";
+import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
   components: {
-    AgGridVue
+    AgGridVue,
+    AppControl,
+    AppForm,
+    AppFormGroup
   },
   data() {
     return {
@@ -172,7 +171,8 @@ export default {
       items2: [],
 
       gridOptions: {
-        rowHeight: 40
+        rowHeight: 40,
+        headerHeight: 40
       },
       defaultColDef: {
         sortable: true,

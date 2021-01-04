@@ -1,7 +1,7 @@
 <template>
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container pt-0">
-      <app-control flush>
+      <app-control>
         <template v-slot:filter> </template>
 
         <template v-slot:action>
@@ -42,6 +42,8 @@
           >
         </template>
       </app-control>
+
+      <vs-divider />
 
       <app-form>
         <app-form-group required>

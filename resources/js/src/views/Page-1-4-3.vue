@@ -1,62 +1,44 @@
 <template>
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container">
-      <div class="flex flex-wrap mb-2">
-        <div class="w-full sm:w-2/3 flex">
-          <div class="w-full sm:w-1/3">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">문서이름</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input v-model="searchNm" style="width: 150px" />
-              </div>
-            </div>
-          </div>
-          <div class="w-full sm:w-1/3">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">업무종류</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <v-select 
-                  style="width: 150px;"
-                  :options="types" 
-                  :reduce="item => item.comm2_cd" 
-                  label="comm2_nm" 
-                  v-model="searchType" 
-                  :searchable="false" />
-              </div>
-            </div>
-          </div>
-          <div class="w-full sm:w-1/3">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">사용구분</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                <v-select
-                  style="width: 150px;"
-                  :options="[{l: 'YES', v: 'Y'},{l: 'NO', v: 'N'}]" 
-                  :reduce="item => item.v" 
-                  label="l" 
-                  v-model="searchUseYn" 
-                  :searchable="false" />
-                <vs-button
-                  @click="query()"
-                  class="mx-1 flex-shrink-0"
-                  color="primary"
-                  type="border"
-                  >{{ $t("Query") }}</vs-button
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="w-full sm:w-1/3 px-1 flex justify-end"
-          style="position: relative"
-        >
+      <app-control>
+        <template v-slot:filter>
+          <span class="pt-2 px-4">문서이름</span>
+          <vs-input v-model="searchNm" class="control-field-sm" />
+
+          <span class="pt-2 px-4">업무종류</span>
+          <v-select 
+            class="control-field"
+            :options="types" 
+            :reduce="item => item.comm2_cd" 
+            label="comm2_nm" 
+            v-model="searchType" 
+            :searchable="false" />
+
+          <span class="pt-2 px-4">사용구분</span>
+          <v-select
+            class="control-field"
+            :options="[{l: 'YES', v: 'Y'},{l: 'NO', v: 'N'}]" 
+            :reduce="item => item.v" 
+            label="l" 
+            v-model="searchUseYn" 
+            :searchable="false" />
+        </template>
+        <template v-slot:action>
+          <vs-button
+            @click="query()"
+            class="mx-1 mr-16"
+            color="primary"
+            type="border"
+            >{{ $t("Query") }}</vs-button
+          >
+          <vs-button
+            @click="addDialog()"
+            class="mx-1 invisible"
+            color="primary"
+            type="border"
+            >{{ $t("Add") }}</vs-button
+          >
           <vs-button
             @click="saveDialog()"
             class="mx-1"
@@ -66,14 +48,21 @@
             >{{ $t("Save") }}</vs-button
           >
           <vs-button
+            @click="removeDialog()"
+            class="mx-1 invisible"
+            color="primary"
+            type="border"
+            >{{ $t("Delete") }}</vs-button
+          >
+          <vs-button
             @click="closeDialog()"
             class="mx-1"
             color="primary"
             type="border"
             >{{ $t("Close") }}</vs-button
           >
-        </div>
-      </div>
+        </template>
+      </app-control>
 
       <vs-divider />
 
@@ -385,9 +374,16 @@ import api from "@/services/edoc_file";
 import { mapActions } from "vuex";
 import FileSelect from "@/layouts/components/FileSelect.vue";
 
+import AppControl from "@/views/ui-elements/AppControl";
+import AppForm from "@/views/ui-elements/AppForm";
+import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+
 export default {
   components: {
     FileSelect,
+    AppControl,
+    AppForm,
+    AppFormGroup
   },
 
   data() {

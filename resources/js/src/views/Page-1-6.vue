@@ -1,85 +1,67 @@
 <template>
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container">
-      <div class="flex flex-wrap mb-2">
-        <div class="w-full sm:w-2/3 px-1 flex justify-end">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <v-select
-                  style="width: 150px;"
-                  placeholder="검색항목"
-                  :options="[{l: '품목명', v: 'item_nm'},{l: '품목 ID', v: 'item_id'}]" 
-                  :reduce="item => item.v" 
-                  label="l" 
-                  v-model="searchBy" 
-                  :searchable="false" />
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input v-model="searchKeyword" />
-              </div>
-            </div>
-          </div>
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">품목</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full flex flex-row">
-                <v-select
-                  style="width: 150px;"
-                  :options="types" 
-                  :reduce="item => item.comm2_cd" 
-                  label="comm2_nm" 
-                  v-model="searchType" 
-                  :searchable="false" />
-                <vs-button
-                  @click="query()"
-                  class="mx-1 px-4 flex-shrink-0"
-                  color="primary"
-                  type="border"
-                  >{{ $t("Query") }}</vs-button
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="w-full sm:w-1/3 px-1 flex justify-end">
-          <div>
-            <!-- <vs-button
-              :disabled="items.length <= 0"
-              @click="saveDialog()"
-              class="mx-1 flex-shrink-0"
-              color="primary"
-              type="border"
-              >{{ $t("Save") }}</vs-button> -->
-            
-          </div>
+      <app-control>
+        <template v-slot:filter>
+          <v-select
+            class="control-field"
+            placeholder="검색항목"
+            :options="[{l: '품목명', v: 'item_nm'},{l: '품목 ID', v: 'item_id'}]" 
+            :reduce="item => item.v" 
+            label="l" 
+            v-model="searchBy" 
+            :searchable="false" />
+          <vs-input v-model="searchKeyword" class="control-field ml-2" />
+
+          <span class="pt-2 px-4">품목</span>
+          <v-select
+            class="control-field"
+            :options="types" 
+            :reduce="item => item.comm2_cd" 
+            label="comm2_nm" 
+            v-model="searchType" 
+            :searchable="false" />
+        </template>
+        <template v-slot:action>
+          <vs-button
+            @click="query()"
+            class="mx-1 mr-16"
+            color="primary"
+            type="border"
+            >{{ $t("Query") }}</vs-button
+          >
+          <vs-button
+            @click="addDialog()"
+            class="mx-1 invisible"
+            color="primary"
+            type="border"
+            >{{ $t("Add") }}</vs-button
+          >
           <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="0" :skips="1"></import-excel>
-          <div>
-            <vs-button
-              @click="closeDialog()"
-              class="mx-1 flex-shrink-0 py-3"
-              color="primary"
-              type="border"
-              >{{ $t("Close") }}</vs-button
-            >
-          </div>
-        </div>
-      </div>
+          <vs-button
+            @click="closeDialog()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >{{ $t("Close") }}</vs-button
+          >
+        </template>
+      </app-control>
 
       <vs-divider />
 
-      <div class="flex flex-wrap justify-end mb-2">
-        <vs-button
-          @click="exportExcel()"
-          class="mx-1"
-          color="primary"
-          type="border"
-          :disabled="items.length <= 0"
-          >{{ $t("ToExcel") }}</vs-button
-        >
-      </div>
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="exportExcel()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            :disabled="items.length <= 0"
+            >{{ $t("ToExcel") }}</vs-button
+          >
+        </template>
+      </app-control>
 
       <ag-grid-vue
         ref="agGridTable"
@@ -258,13 +240,19 @@ import api from "@/services/item_mst";
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
 import { AgGridVue } from 'ag-grid-vue'
+import AppControl from "@/views/ui-elements/AppControl";
+import AppForm from "@/views/ui-elements/AppForm";
+import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
   components: {
     ImportExcel,
-    AgGridVue
+    AgGridVue,
+    AppControl,
+    AppForm,
+    AppFormGroup
   },
 
   data () {
@@ -292,7 +280,8 @@ export default {
 
       maxPageNumbers: 7,
       gridOptions: {
-        rowHeight: 40
+        rowHeight: 40,
+        headerHeight: 40
       },
       gridApi: null,
       defaultColDef: {

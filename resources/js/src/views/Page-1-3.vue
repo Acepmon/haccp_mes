@@ -1,9 +1,9 @@
 <template>
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container">
-      <div class="flex flex-wrap mb-2">
-        <div class="w-full sm:w-1/2 px-1 flex justify-end"></div>
-        <div class="w-full sm:w-1/2 px-1 flex justify-end">
+      <app-control>
+        <template v-slot:filter></template>
+        <template v-slot:action>
           <vs-button
             @click="query()"
             class="mx-1 mr-16"
@@ -39,158 +39,122 @@
             type="border"
             >{{ $t("Close") }}</vs-button
           >
-        </div>
-      </div>
-
-      <form action="#">
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 이름</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="60"
-                  v-model="worker['worker:worker_nm']"
-                  :danger="errors['worker:worker_nm'] != null"
-                  :danger-text="errors['worker:worker_nm']"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 휴대폰번호</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="20"
-                  v-model="worker['worker:tel_no']"
-                  :danger="errors['worker:tel_no'] != null"
-                  :danger-text="errors['worker:tel_no']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">정/부구분</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <v-select 
-                  style="width: 200px;"
-                  :options="works" 
-                  :reduce="item => item.comm2_cd" 
-                  label="comm2_nm" 
-                  v-model="worker['worker:work_cd']" 
-                  :searchable="false" />
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['worker:work_cd'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['worker:work_cd']"
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">업무내용</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="100"
-                  v-model="worker['worker:remark']"
-                  :danger="errors['worker:remark'] != null"
-                  :danger-text="errors['worker:remark']"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">보건증갱신일자</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <flat-pickr
-                  style="width: 120px"
-                  class="text-center"
-                  :config="configdateTimePicker"
-                  v-model="worker['worker:health_chk_dt']"
-                ></flat-pickr>
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['worker:health_chk_dt'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['worker:health_chk_dt']"
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">업무 구분</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <v-select 
-                  style="width: 200px;"
-                  :options="roles" 
-                  :reduce="item => item.comm2_cd" 
-                  label="comm2_nm" 
-                  v-model="worker['worker:role_cd']" 
-                  :searchable="false" />
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['worker:role_cd'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['worker:role_cd']"
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+        </template>
+      </app-control>
 
       <vs-divider />
 
-      <div class="flex flex-wrap justify-end mb-2">
-        <vs-button
-          @click="excel()"
-          class="mx-1"
-          color="primary"
-          type="border"
-          :disabled="workers.length <= 0"
-          >{{ $t("ToExcel") }}</vs-button
-        >
-      </div>
+      <app-form>
+        <app-form-group required>
+          <template v-slot:label>이름</template>
+
+          <vs-input
+            maxlength="60"
+            v-model="worker['worker:worker_nm']"
+            :danger="errors['worker:worker_nm'] != null"
+            :danger-text="errors['worker:worker_nm']"
+          />
+        </app-form-group>
+
+        <app-form-group required>
+          <template v-slot:label>휴대폰번호</template>
+
+          <vs-input
+            maxlength="20"
+            v-model="worker['worker:tel_no']"
+            :danger="errors['worker:tel_no'] != null"
+            :danger-text="errors['worker:tel_no']"
+          />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>정/부구분</template>
+
+          <v-select 
+            style="width: 200px;"
+            :options="works" 
+            :reduce="item => item.comm2_cd" 
+            label="comm2_nm" 
+            v-model="worker['worker:work_cd']" 
+            :searchable="false" />
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['worker:work_cd'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['worker:work_cd']"
+            ></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>업무내용</template>
+
+          <vs-input
+            maxlength="100"
+            v-model="worker['worker:remark']"
+            :danger="errors['worker:remark'] != null"
+            :danger-text="errors['worker:remark']"
+          />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>보건증갱신일자</template>
+
+          <flat-pickr
+            style="width: 120px"
+            class="text-center"
+            :config="configdateTimePicker"
+            v-model="worker['worker:health_chk_dt']"
+          ></flat-pickr>
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['worker:health_chk_dt'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['worker:health_chk_dt']"
+            ></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>업무 구분</template>
+
+          <v-select 
+            style="width: 200px;"
+            :options="roles" 
+            :reduce="item => item.comm2_cd" 
+            label="comm2_nm" 
+            v-model="worker['worker:role_cd']" 
+            :searchable="false" />
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['worker:role_cd'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['worker:role_cd']"
+            ></span>
+          </div>
+        </app-form-group>
+      </app-form>
+
+      <vs-divider />
+
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="excel()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            :disabled="workers.length <= 0"
+            >{{ $t("ToExcel") }}</vs-button
+          >
+        </template>
+      </app-control>
 
       <div class="overflow-y-auto" style="max-height: 300px">
         <vs-table
@@ -267,9 +231,16 @@ import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js";
 
+import AppControl from "@/views/ui-elements/AppControl";
+import AppForm from "@/views/ui-elements/AppForm";
+import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+
 export default {
   components: {
     flatPickr,
+    AppControl,
+    AppForm,
+    AppFormGroup
   },
 
   data() {
