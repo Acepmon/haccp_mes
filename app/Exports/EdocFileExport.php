@@ -76,7 +76,7 @@ class EdocFileExport implements FromCollection, WithHeadings, WithStyles, WithMa
             $edocFile->DOC_ID,
             $edocFile->DOC_NM,
             ($edocFile->type ? $edocFile->type->COMM2_NM : null),
-            $edocFile->DOC_CONTENT,
+            $edocFile->DOC_DESC,
             ($edocFile->period ? $edocFile->period->COMM2_NM : null),
             implode(',', $period_data_parsed),
             $edocFile->USE_YN,

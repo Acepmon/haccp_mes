@@ -707,6 +707,10 @@ export default {
     comm_cd.fetch({ cd1: "A35" }).then((res) => {
       this.types = res.data;
     });
+
+    setTimeout(() => {
+      this.query()
+    }, 500)
   },
 };
 </script>

@@ -49,9 +49,9 @@ class ItemMstController extends Controller
         }
 
         if ($limit == -1) {
-            $items = $items->with($with)->orderBy($sort, $order)->get();
+            $items = $items->with($with)->get();
         } else {
-            $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
+            $items = $items->with($with)->paginate($limit);
         }
 
         return ItemMstResource::collection($items);

@@ -262,7 +262,10 @@ export default {
     handleSelected(tr) {
       this.clearErrors();
       this.$set(this, "items1", []);
+      this.fetch()
+    },
 
+    fetch () {
       api
         .get({
           limit: -1,
@@ -290,7 +293,7 @@ export default {
         });
     },
 
-    query() {
+    query(callback = Function) {
       this.spinner();
 
       let search_params = {};
@@ -307,6 +310,7 @@ export default {
         .then((res) => {
           this.spinner(false);
           this.items2 = res.data.data;
+          callback(this.items2)
         })
         .catch(() => {
           this.displayErrors(
@@ -498,7 +502,12 @@ export default {
 
   created () {
     setTimeout(() => {
-      this.query()
+      this.query((items) => {
+        if (items.length > 0) {
+          this.item2 = items[0]
+          this.fetch()
+        }
+      })
     }, 500)
   }
 }

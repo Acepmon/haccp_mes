@@ -66,234 +66,175 @@
 
       <vs-divider />
 
-      <form action="#">
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 문서이름</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  maxlength="100"
-                  v-model="item['edoc_file:doc_nm']"
-                  :danger="errors['edoc_file:doc_nm'] != null"
-                  :danger-text="errors['edoc_file:doc_nm']"
+      <app-form>
+        <app-form-group required>
+          <template v-slot:label>문서이름</template>
+
+          <vs-input
+            maxlength="100"
+            v-model="item['edoc_file:doc_nm']"
+            :danger="errors['edoc_file:doc_nm'] != null"
+            :danger-text="errors['edoc_file:doc_nm']"
+          />
+        </app-form-group>
+
+        <app-form-group required>
+          <template v-slot:label>문서종류</template>
+
+          <v-select 
+            style="width: 200px;"
+            :options="types" 
+            :reduce="item => item.comm2_cd" 
+            label="comm2_nm" 
+            v-model="item['edoc_file:type_cd']"
+            :searchable="false" />
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['edoc_file:type_cd'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['edoc_file:type_cd']"
+            ></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>설명(제품명)</template>
+
+          <vs-input
+            class="w-full"
+            maxlength="150"
+            v-model="item['edoc_file:doc_desc']"
+            :danger="errors['edoc_file:doc_desc'] != null"
+            :danger-text="errors['edoc_file:doc_desc']"
+          />
+        </app-form-group>
+
+        <app-form-group></app-form-group>
+
+        <app-form-group required>
+          <template v-slot:label>업무처리주기</template>
+
+          <div class="flex flex-row">
+            <v-select 
+              style="width: 200px;"
+              :options="periods" 
+              :reduce="item => item.comm2_cd" 
+              label="comm2_nm" 
+              v-model="item['edoc_file:period_cd']"
+              :searchable="false" />
+
+            <div
+              class="flex flex-row"
+              v-if="item['edoc_file:period_cd'] == 'ED'"
+            >
+              <vs-button
+                v-for="(item, index) in periodEdDays"
+                :key="index"
+                @click="toggleEd(item.value)"
+                :color="selectedEdHas(item.value) ? 'primary' : 'dark'"
+                class="px-2 flex-shrink-0 ml-1 py-0"
+                type="border"
+              >
+                <vs-icon
+                  v-if="selectedEdHas(item.value)"
+                  icon-pack="feather"
+                  icon="icon-check"
                 />
-              </div>
+                <span v-text="item.text"></span>
+              </vs-button>
             </div>
           </div>
-
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 문서종류</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <v-select 
-                  style="width: 200px;"
-                  :options="types" 
-                  :reduce="item => item.comm2_cd" 
-                  label="comm2_nm" 
-                  v-model="item['edoc_file:type_cd']"
-                  :searchable="false" />
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['edoc_file:type_cd'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['edoc_file:type_cd']"
-                  ></span>
-                </div>
-              </div>
-            </div>
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['edoc_file:period_cd'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['edoc_file:period_cd']"
+            ></span>
           </div>
-        </div>
+        </app-form-group>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2">설명(제품명)</span>
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <vs-input
-                  class="w-full"
-                  maxlength="150"
-                  v-model="item['edoc_file:doc_desc']"
-                  :danger="errors['edoc_file:doc_desc'] != null"
-                  :danger-text="errors['edoc_file:doc_desc']"
-                />
-              </div>
-            </div>
+        <app-form-group required>
+          <template v-slot:label>사용구분</template>
+
+          <v-select 
+            style="width: 200px;"
+            :options="[{l: 'YES', v: 'Y'},{l: 'NO', v: 'N'}]" 
+            :reduce="item => item.v" 
+            label="l" 
+            v-model="item['edoc_file:use_yn']"
+            :searchable="false" />
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['edoc_file:use_yn'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['edoc_file:use_yn']"
+            ></span>
           </div>
-        </div>
+        </app-form-group>
 
-        <!--  -->
+        <app-form-group required>
+          <template v-slot:label>작업자</template>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 업무처리주기</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full flex" style="flex-direction: column;">
-                <div class="flex flex-row">
-                  <v-select 
-                    style="width: 200px;"
-                    :options="periods" 
-                    :reduce="item => item.comm2_cd" 
-                    label="comm2_nm" 
-                    v-model="item['edoc_file:period_cd']"
-                    :searchable="false" />
-
-                  <div
-                    class="flex flex-row"
-                    v-if="item['edoc_file:period_cd'] == 'ED'"
-                  >
-                    <vs-button
-                      v-for="(item, index) in periodEdDays"
-                      :key="index"
-                      @click="toggleEd(item.value)"
-                      :color="selectedEdHas(item.value) ? 'primary' : 'dark'"
-                      class="px-3 flex-shrink-0 ml-1"
-                      type="border"
-                    >
-                      <vs-icon
-                        v-if="selectedEdHas(item.value)"
-                        icon-pack="feather"
-                        icon="icon-check"
-                      />
-                      <span v-text="item.text"></span>
-                    </vs-button>
-                  </div>
-                </div>
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['edoc_file:period_cd'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['edoc_file:period_cd']"
-                  ></span>
-                </div>
-              </div>
-            </div>
+          <v-select 
+            style="width: 200px;"
+            :options="work_users" 
+            :reduce="item => item['user:user_id']" 
+            label="user:user_id" 
+            v-model="item['edoc_file:work_id']"
+            :searchable="false" />
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['edoc_file:work_id'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['edoc_file:work_id']"
+            ></span>
           </div>
+        </app-form-group>
 
-          <div class="w-full sm:w-1/2 px-1"></div>
-        </div>
+        <app-form-group required>
+          <template v-slot:label>승인자</template>
 
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 사용구분</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <v-select 
-                  style="width: 200px;"
-                  :options="[{l: 'YES', v: 'Y'},{l: 'NO', v: 'N'}]" 
-                  :reduce="item => item.v" 
-                  label="l" 
-                  v-model="item['edoc_file:use_yn']"
-                  :searchable="false" />
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['edoc_file:use_yn'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['edoc_file:use_yn']"
-                  ></span>
-                </div>
-              </div>
-            </div>
+          <v-select 
+            style="width: 200px;"
+            :options="app_users" 
+            :reduce="item => item['user:user_id']" 
+            label="user:user_id" 
+            v-model="item['edoc_file:app_id']"
+            :searchable="false" />
+          <div
+            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
+            v-if="errors['edoc_file:app_id'] != null"
+          >
+            <span
+              class="span-text-validation"
+              v-text="errors['edoc_file:app_id']"
+            ></span>
           </div>
-        </div>
-
-        <div class="flex flex-wrap">
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 작업자</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <!-- <vs-input v-model="item['edoc_file:work_id']" :danger="errors['edoc_file:work_id'] != null" :danger-text="errors['edoc_file:work_id']" /> -->
-                <v-select 
-                  style="width: 200px;"
-                  :options="work_users" 
-                  :reduce="item => item['user:user_id']" 
-                  label="user:user_id" 
-                  v-model="item['edoc_file:work_id']"
-                  :searchable="false" />
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['edoc_file:work_id'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['edoc_file:work_id']"
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full sm:w-1/2 px-1">
-            <div class="vx-row mb-2">
-              <div class="vx-col sm:w-1/3 w-full flex justify-end">
-                <span class="pt-2"
-                  ><span class="text-danger">*</span> 승인자</span
-                >
-              </div>
-              <div class="vx-col sm:w-2/3 w-full">
-                <!-- <vs-input v-model="item['edoc_file:app_id']" :danger="errors['edoc_file:app_id'] != null" :danger-text="errors['edoc_file:app_id']" /> -->
-                <v-select 
-                  style="width: 200px;"
-                  :options="app_users" 
-                  :reduce="item => item['user:user_id']" 
-                  label="user:user_id" 
-                  v-model="item['edoc_file:app_id']"
-                  :searchable="false" />
-                <div
-                  class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-                  v-if="errors['edoc_file:app_id'] != null"
-                >
-                  <span
-                    class="span-text-validation"
-                    v-text="errors['edoc_file:app_id']"
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+        </app-form-group>
+      </app-form>
 
       <vs-divider />
 
-      <div class="flex flex-wrap justify-end mb-2">
-        <vs-button
-          @click="excel()"
-          class="mx-1"
-          color="primary"
-          type="border"
-          :disabled="items.length <= 0"
-          >{{ $t("ToExcel") }}</vs-button
-        >
-      </div>
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="excel()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            :disabled="items.length <= 0"
+            >{{ $t("ToExcel") }}</vs-button
+          >
+        </template>
+      </app-control>
 
       <div class="overflow-y-auto" style="max-height: 300px">
         <vs-table
@@ -313,7 +254,7 @@
             <vs-th>No</vs-th>
             <vs-th sort-key="doc_nm">문서이름</vs-th>
             <vs-th sort-key="type_nm">문서종류</vs-th>
-            <vs-th sort-key="doc_content">설명(제품명)</vs-th>
+            <vs-th sort-key="doc_desc">설명(제품명)</vs-th>
             <vs-th sort-key="period_nm">업무처리주기</vs-th>
             <vs-th sort-key="period_data">주기내용</vs-th>
             <vs-th sort-key="use_yn">사용구분</vs-th>
@@ -335,8 +276,8 @@
                 {{ data[index]["edoc_file:type_nm"] }}
               </vs-td>
 
-              <vs-td :data="data[index]['edoc_file:doc_content']">
-                {{ data[index]["edoc_file:doc_content"] }}
+              <vs-td :data="data[index]['edoc_file:doc_desc']">
+                {{ data[index]["edoc_file:doc_desc"] }}
               </vs-td>
 
               <vs-td :data="data[index]['edoc_file:period_nm']">
@@ -750,6 +691,10 @@ export default {
     user.fetch({ appr_cd: "20", limit: -1 }).then((res) => {
       this.app_users = res.data.data;
     });
+
+    setTimeout(() => {
+      this.query()
+    }, 500)
   }
 };
 </script>

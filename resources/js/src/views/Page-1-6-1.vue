@@ -81,7 +81,7 @@
         ref="agGridTable"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 500px;"
+        style="max-height: 400px;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
@@ -295,7 +295,9 @@ export default {
 
       maxPageNumbers: 7,
       gridOptions: {
-        rowHeight: 40
+        rowHeight: 40,
+        headerHeight: 40,
+        singleClickEdit: true
       },
       gridApi: null,
       defaultColDef: {
@@ -311,7 +313,7 @@ export default {
           field: 'no',
           filter: false,
           editable: false,
-          width: 100,
+          width: 80,
         },
         {
           headerName: '코드',
@@ -323,7 +325,7 @@ export default {
           headerName: '품목명',
           field: 'item_mst:item_nm',
           editable: false,
-          width: 200,
+          width: 150,
         },
         {
           headerName: '규격명',
@@ -380,34 +382,43 @@ export default {
           headerName: '단위(대)',
           field: 'item_mst:unit1_nm',
           width: 100,
+          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
         },
         {
           headerName: '수량(대)',
           field: 'item_mst:unit1_qty',
           type: 'numericColumn',
+          editable: true,
           width: 100,
+          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
         },
         {
           headerName: '단위(중)',
           field: 'item_mst:unit2_nm',
           width: 100,
+          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
         },
         {
           headerName: '수량(중)',
           field: 'item_mst:unit2_qty',
           type: 'numericColumn',
+          editable: true,
           width: 100,
+          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
         },
         {
           headerName: '단위(소)',
           field: 'item_mst:unit3_nm',
           width: 100,
+          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
         },
         {
           headerName: '수량(소)',
           field: 'item_mst:unit3_qty',
           type: 'numericColumn',
+          editable: true,
           width: 100,
+          cellStyle: { 'background-color': 'rgb(250, 250, 250)' }
         }
       ],
     }
@@ -532,8 +543,8 @@ export default {
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
-          this.pagination.total = res.data.meta.total;
-          this.pagination.page = res.data.meta.current_page;
+          // this.pagination.total = res.data.meta.total;
+          // this.pagination.page = res.data.meta.current_page;
         })
         .catch(() => {
           this.displayErrors(
@@ -569,7 +580,7 @@ export default {
               position: "top-right",
               color: "success",
             });
-            this.query();
+            // this.query();
           } else {
             this.$vs.notify({
               title: this.$t("Error"),
@@ -694,12 +705,21 @@ export default {
         accept: () => this.removeTab("page-1-6"),
       });
     },
+
+    numberCellRenderer (params) {
+      console.log(params)
+      return params.value.replace(/[^0-9.]+/g, '')
+    }
   },
 
   created() {
     comm_cd.fetch({ cd1: "B10" }).then((res) => {
       this.types = res.data;
     });
+
+    setTimeout(() => {
+      this.query()
+    }, 500)
   },
 };
 </script>

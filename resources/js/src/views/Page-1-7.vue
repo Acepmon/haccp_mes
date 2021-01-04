@@ -49,12 +49,12 @@
         </template>
       </app-control>
 
-      <vs-divider />
+      <vs-divider class="mb-0" />
 
       <ag-grid-vue
         ref="agGridTable"
         :gridOptions="gridOptions2"
-        class="ag-theme-material w-100 my-4 ag-grid-table"
+        class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
         style="max-height: 200px;"
         :columnDefs="columnDefs2"
         :defaultColDef="defaultColDef"
@@ -194,10 +194,12 @@ export default {
       gridApi: null,
       gridApi2: null,
       gridOptions: {
-        rowHeight: 40
+        rowHeight: 40,
+        headerHeight: 40
       },
       gridOptions2: {
-        rowHeight: 40
+        rowHeight: 40,
+        headerHeight: 40
       },
       defaultColDef: {
         sortable: true,
@@ -560,7 +562,7 @@ export default {
         });
     },
 
-    query() {
+    query(callback = Function) {
       this.spinner();
 
       let search_params = {};
@@ -584,6 +586,7 @@ export default {
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
+          callback(this.items)
           // this.pagination.total = res.data.meta.total;
           // this.pagination.page = res.data.meta.current_page;
         })
@@ -754,6 +757,14 @@ export default {
     comm_cd.fetch({ cd1: "B10" }).then((res) => {
       this.types = res.data;
     });
+
+    setTimeout(() => {
+      this.query((items) => {
+        if (items.length > 0) {
+          this.query2(items[0]['item_mst:item_id'])
+        }
+      })
+    }, 500)
   },
 };
 </script>

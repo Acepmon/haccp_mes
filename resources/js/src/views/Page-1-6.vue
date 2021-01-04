@@ -67,7 +67,7 @@
         ref="agGridTable"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 500px;"
+        style="max-height: 400px;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
@@ -693,6 +693,10 @@ export default {
     comm_cd.fetch({ cd1: "B10" }).then((res) => {
       this.types = res.data;
     });
+
+    setTimeout(() => {
+      this.query()
+    }, 500)
   },
 };
 </script>
