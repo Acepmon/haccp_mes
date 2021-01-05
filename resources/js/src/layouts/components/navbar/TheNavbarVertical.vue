@@ -38,7 +38,7 @@
         <notification-drop-down /> -->
 
         <vs-navbar-item>
-          <router-link to="/profile">Hi Administrator</router-link>
+          <router-link to="/profile">Hi {{ loggedIn.USER_NM }}</router-link>
         </vs-navbar-item>
 
         <profile-drop-down />
@@ -77,6 +77,9 @@ export default {
     ProfileDropDown
   },
   computed: {
+    loggedIn () {
+      return JSON.parse(localStorage.getItem('loggedIn'))
+    },
     navbarColorLocal () {
       return this.$store.state.theme === 'dark' && this.navbarColor === '#fff' ? '#10163a' : this.navbarColor
     },
