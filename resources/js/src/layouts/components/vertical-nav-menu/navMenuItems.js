@@ -168,14 +168,14 @@ export default [
       },
       {
         url: "/2/2",
-        name: "부자재재고관리",
-        slug: "부자재재고관리",
+        name: "생산지시 등록",
+        slug: "생산지시 등록",
         showSubmenuOn: '/2',
       },
       {
         url: "/2/3",
-        name: "구매관리",
-        slug: "구매관리",
+        name: "생산지시 조회",
+        slug: "생산지시 조회",
         showSubmenuOn: '/2',
       },
       {

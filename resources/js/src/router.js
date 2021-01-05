@@ -138,6 +138,16 @@ const router = new Router({
                 name: '제품별 표준공정등록',
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/2/1', value: 'page-2-1', label: '제품별 표준공정등록', component: 'page-2-1'}) } }
               },
+              {
+                path: '/2/2',
+                name: '생산지시 등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/2/2', value: 'page-2-2', label: '생산지시 등록', component: 'page-2-2'}) } }
+              },
+              {
+                path: '/2/3',
+                name: '생산지시 조회',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/2/3', value: 'page-2-3', label: '생산지시 조회', component: 'page-2-3'}) } }
+              },
 
               {
                 path: '/3',
