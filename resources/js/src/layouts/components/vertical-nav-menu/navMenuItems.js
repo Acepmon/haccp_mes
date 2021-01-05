@@ -214,14 +214,14 @@ export default [
     submenu: [
       {
         url: "/3/1",
-        name: "B2B 주문처리",
-        slug: "B2B 주문처리",
+        name: "거래처 등록",
+        slug: "거래처 등록",
         showSubmenuOn: '/3',
       },
       {
         url: "/3/2",
-        name: "B2C 주문처리",
-        slug: "B2C 주문처리",
+        name: "거래처 조회",
+        slug: "거래처 조회",
         showSubmenuOn: '/3',
       }
     ]

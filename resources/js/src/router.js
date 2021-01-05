@@ -141,9 +141,15 @@ const router = new Router({
 
               {
                 path: '/3',
-                name: '주문처리',
+                name: '거래처관리',
                 component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
               },
+              {
+                path: '/3/1',
+                name: '거래처 등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/3/1', value: 'page-3-1', label: '거래처 등록', component: 'page-3-1'}) } }
+              },
+              
               {
                 path: '/4',
                 name: '생산관리',
