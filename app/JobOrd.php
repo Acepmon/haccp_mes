@@ -31,4 +31,9 @@ class JobOrd extends Model
         'updated' => JobOrdUpdated::class,
         'deleted' => JobOrdDeleted::class,
     ];
+
+    // public function job_ord_dtl ()
+    // {
+    //     return $this->hasMany('App\JobOrdDtl', '');
+    // }
 }

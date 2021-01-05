@@ -77,6 +77,7 @@ import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js"
 import { AgGridVue } from "ag-grid-vue";
 
 import "@sass/vuexy/extraComponents/agGridStyleOverride.scss";
+import moment from 'moment';
 
 export default {
   components: {
@@ -91,8 +92,8 @@ export default {
   data () {
     return {
       format: "yyyy-MM-dd",
-      from: null,
-      to: null,
+      from: moment().startOf('month').format('YYYY-MM-DD'),
+      to: moment().format('YYYY-MM-DD'),
       configFromdateTimePicker: {
         maxDate: null,
         locale: KoreanLocale,

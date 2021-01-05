@@ -61,6 +61,25 @@
           >
         </template>
       </app-control>
+
+      <ag-grid-vue
+        ref="agGridTable"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 400px;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp"
+        :frameworkComponents="frameworkComponents"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize"
+        :suppressPaginationPanel="true">
+      </ag-grid-vue>
+
+      <vs-pagination
+        :total="totalPages"
+        :max="maxPageNumbers"
+        v-model="currentPage" />
     </vx-card>
 
     <vs-popup fullscreen :title="$t('UploadExcel')" :active.sync="importDialog" button-close-hidden>
@@ -124,6 +143,7 @@ import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js"
 import { AgGridVue } from "ag-grid-vue";
 
 import "@sass/vuexy/extraComponents/agGridStyleOverride.scss";
+import moment from 'moment';
 
 export default {
   components: {
@@ -138,8 +158,8 @@ export default {
   data () {
     return {
       format: "yyyy-MM-dd",
-      from: null,
-      to: null,
+      from: moment().startOf('month').format('YYYY-MM-DD'),
+      to: moment().format('YYYY-MM-DD'),
       configFromdateTimePicker: {
         maxDate: null,
         locale: KoreanLocale,
@@ -168,6 +188,64 @@ export default {
         resizable: true,
         suppressMenu: false
       },
+      columnDefs: [
+        {
+          headerName: 'No',
+          field: 'no',
+          filter: false,
+          editable: false,
+          width: 80,
+        },
+        {
+          headerName: '작업번호',
+          field: 'job_dt',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+        {
+          headerName: '품목ID',
+          field: 'item_id',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+        {
+          headerName: '품목명',
+          field: 'item_nm',
+          filter: false,
+          editable: false,
+          width: 150,
+        },
+        {
+          headerName: '지시수량',
+          field: 'job_qty',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+        {
+          headerName: '생산수량',
+          field: 'prod_qty',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+        {
+          headerName: '담당자',
+          field: 'job_nm',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+        {
+          headerName: '생산공장',
+          field: 'fact_cd',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+      ]
     }
   },
 
@@ -179,6 +257,23 @@ export default {
           ...item
         } 
       })
+    },
+    totalPages () {
+      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      else return 0
+    },
+    paginationPageSize () {
+      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      else return 50
+    },
+    currentPage: {
+      get () {
+        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        else return 1
+      },
+      set (val) {
+        this.gridApi.paginationGoToPage(val - 1)
+      }
     }
   },
 
@@ -206,11 +301,43 @@ export default {
     },
 
     query () {
-      // 
-    },
+      this.spinner();
 
-    addDialog () {
-      // 
+      let search_params = {};
+
+      if (this.from != null) {
+        search_params['from'] = this.from;
+      }
+
+      if (this.to != null) {
+        search_params['to'] = this.to;
+      }
+
+      job_dtl
+        .fetch({
+          limit: -1,
+          ...search_params,
+        })
+        .then((res) => {
+          this.spinner(false);
+          this.items = res.data.data;
+        })
+        .catch(() => {
+          this.displayErrors(
+            err.response.data.hasOwnProperty("errors")
+              ? err.response.data.errors
+              : null
+          );
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
     },
 
     importExcelDialog () {
@@ -303,7 +430,9 @@ export default {
   },
 
   created () {
-    // 
+    // setTimeout(() => {
+    //   this.query()
+    // }, 500)
   }
 };
 </script>

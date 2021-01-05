@@ -188,7 +188,7 @@ export default {
           field: 'item_mst:item_id',
           filter: false,
           editable: false,
-          width: 150,
+          width: 200,
         },
         {
           headerName: '품목명',
@@ -202,7 +202,7 @@ export default {
           field: 'proc_src:seq_no',
           filter: false,
           editable: false,
-          width: 150,
+          width: 200,
         },
         {
           headerName: '재료명',
