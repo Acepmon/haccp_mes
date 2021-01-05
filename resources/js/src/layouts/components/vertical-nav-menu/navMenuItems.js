@@ -103,7 +103,7 @@ export default [
         showSubmenuOn: '/1',
       },
       {
-        url: "/1/6-1",
+        url: "/1/6/1",
         name: "원/부자재 단위관리",
         slug: "원/부자재 단위관리",
         showSubmenuOn: '/1',
