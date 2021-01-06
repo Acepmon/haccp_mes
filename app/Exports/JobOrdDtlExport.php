@@ -1,41 +1,41 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Exports;
 
-use App\Exports\JobOrdDtlExport;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ItemMstResource;
 use App\JobOrd;
-use App\JobOrdDtl;
-use Illuminate\Http\Request;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class JobOrdDtlController extends Controller
+class JobOrdDtlExport implements FromView
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $jobDt = $request->input('job_dt');
-        $seqNo = $request->input('seq_no');
+    public $jobDt, $seqNo;
 
+    public function __construct($jobDt, $seqNo)
+    {
+        $this->jobDt = $jobDt;
+        $this->seqNo = $seqNo;
+    }
+
+    public function view(): View
+    {
         $items = JobOrd::query()
-            ->where('JOB_DT', $jobDt)
-            ->where('SEQ_NO', intval($seqNo))
+            ->where('JOB_DT', $this->jobDt)
+            ->where('SEQ_NO', intval($this->seqNo))
             ->get();
 
         $item = $items->first();
-
-        return response()->json([
-            'job_ord' => $jobDt . '-' . $seqNo,
+        $details = [
+            'job_ord' => $this->jobDt . '-' . $this->seqNo,
             'summary_dt' => now()->parse($item->REG_DTM)->format('Y/m/d') . ' 오후 ' . now()->parse($item->REG_DTM)->format('H:i:s'),
             'summary' => $this->summary($items),
             'details' => $this->details($items),
             'details_dt' => now()->parse($item->REG_DTM)->format('Y/m/d') . ' 오후 ' . now()->parse($item->REG_DTM)->format('H:i:s'),
+        ];
+
+        return view('exports.job-ord-dtl', [
+            'details' => $details
         ]);
     }
 
@@ -88,58 +88,5 @@ class JobOrdDtlController extends Controller
         }
 
         return $details;
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function export(Request $request)
-    {
-        $jobDt = $request->input('job_dt');
-        $seqNo = $request->input('seq_no');
-
-        return Excel::download(new JobOrdDtlExport($jobDt, $seqNo), 'JOB-ORD-DTL-' . now()->format('Y-m-d') . '.xlsx');
     }
 }

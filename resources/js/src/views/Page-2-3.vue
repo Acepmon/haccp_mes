@@ -80,7 +80,7 @@
       <app-control>
         <template v-slot:action>
           <vs-button
-            @click="importExcelDialog()"
+            @click="exportExcelDetail()"
             class="mx-1"
             color="primary"
             type="border"
@@ -99,23 +99,23 @@
         <vs-table stripe hoverFlat>
           <vs-tr>
             <vs-th colspan="5">
-              <span class="h4 py-2">작업지시서전표</span>
+              <span class="h4 py-2 font-bold">작업지시서전표</span>
             </vs-th>
           </vs-tr>
 
           <vs-tr>
             <vs-th colspan="5">
-              <span class="h5 py-2">전표번호</span>
+              <span class="h5 py-2 font-bold">전표번호</span>
               <span class="h5 py-2 font-bold"> : {{ detailData.job_ord }}</span>
             </vs-th>
           </vs-tr>
 
           <vs-tr>
-            <vs-th class="h5 py-2 font-bold">품목코드</vs-th>
-            <vs-th class="h5 py-2 font-bold">품명 및 규격</vs-th>
-            <vs-th class="h5 py-2 font-bold">생산공장명</vs-th>
-            <vs-th class="h5 py-2 font-bold">수량</vs-th>
-            <vs-th class="h5 py-2 font-bold">안전재고</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">품목코드</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">품명 및 규격</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">생산공장명</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">수량</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">안전재고</vs-th>
           </vs-tr>
 
           <vs-tr :key="indextr" v-for="(tr, indextr) in detailData.summary">
@@ -134,49 +134,45 @@
         </vs-table>
 
         <vs-table stripe hoverFlat class="mt-5" >
-          <template slot:thead>
+          <vs-tr>
+            <vs-th colspan="6">
+              <span class="h4 py-2 font-bold">작업지시서전표</span>
+            </vs-th>
+          </vs-tr>
+          <vs-tr>
+            <vs-th class="h5 py-2 font-bold text-center">품목코드</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">품명 및 규격</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">소요량</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">안전재고수량</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">함량비(%)</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">원산지</vs-th>
+          </vs-tr>
+
+          <template v-for="(detail) in detailData.details">
+            <!-- eslint-disable-next-line -->
+            <vs-tr v-for="(tr) in detail.subdetails">
+              <vs-td>{{ tr['item_id'] }}</vs-td>
+              <vs-td>{{ tr['item_nm'] }}</vs-td>
+              <vs-td class="text-right">{{ tr['req'] }}</vs-td>
+              <vs-td></vs-td>
+              <vs-td class="text-center">{{ parseFloat(tr['ratio'], 2) }}</vs-td>
+              <vs-td class="text-center">{{ tr['origin'] }}</vs-td>
+            </vs-tr>
+            <!-- eslint-disable-next-line -->
             <vs-tr>
-              <vs-th colspan="6">
-                <span class="h4 py-2">작업지시서전표</span>
-              </vs-th>
+              <td colspan="2" class="text-center">합계</td>
+              <td class="text-right">{{ detail.reqSum }}</td>
+              <td></td>
+              <td class="text-center">{{ parseFloat(detail.ratio, 2) }}</td>
+              <td class="text-center">{{ detail.origin }}</td>
             </vs-tr>
           </template>
-          <template slot-scope="{data}">
-            <vs-tr>
-              <vs-th class="h5 py-2 font-bold">품목코드</vs-th>
-              <vs-th class="h5 py-2 font-bold">품명 및 규격</vs-th>
-              <vs-th class="h5 py-2 font-bold">소요량</vs-th>
-              <vs-th class="h5 py-2 font-bold">안전재고수량</vs-th>
-              <vs-th class="h5 py-2 font-bold">함량비(%)</vs-th>
-              <vs-th class="h5 py-2 font-bold">원산지</vs-th>
-            </vs-tr>
 
-            <template v-for="(detail) in detailData.details">
-              <!-- eslint-disable-next-line -->
-              <vs-tr v-for="(tr) in detail.subdetails">
-                <vs-td>{{ tr['item_id'] }}</vs-td>
-                <vs-td>{{ tr['item_nm'] }}</vs-td>
-                <vs-td class="text-right">{{ tr['req'] }}</vs-td>
-                <vs-td></vs-td>
-                <vs-td class="text-center">{{ parseFloat(tr['ratio'], 2) }}</vs-td>
-                <vs-td class="text-center">{{ tr['origin'] }}</vs-td>
-              </vs-tr>
-              <!-- eslint-disable-next-line -->
-              <vs-tr>
-                <td colspan="2" class="text-center">합계</td>
-                <td class="text-right">{{ detail.reqSum }}</td>
-                <td></td>
-                <td class="text-center">{{ parseFloat(detail.ratio, 2) }}</td>
-                <td class="text-center">{{ detail.origin }}</td>
-              </vs-tr>
-            </template>
-
-            <vs-tr>
-              <vs-th colspan="6" class="h5 py-2">
-                {{ detailData.details_dt }}
-              </vs-th>
-            </vs-tr>
-          </template>
+          <vs-tr>
+            <vs-th colspan="6" class="h5 py-2">
+              {{ detailData.details_dt }}
+            </vs-th>
+          </vs-tr>
         </vs-table>
       </div>
     </vs-popup>
@@ -391,13 +387,20 @@ export default {
       }
     },
 
+    exportExcelDetail () {
+      window.location.href = job_ord_dtl.export({
+        job_dt: this.item['job_ord:job_dt'],
+        seq_no: this.item['job_ord:seq_no'],
+      });
+    },
+
     fetch (args = {}) {
       this.spinner();
 
       job_ord_dtl
         .fetch({
-          job_dt: this.item.job_dt,
-          seq_no: this.item.seq_no,
+          job_dt: this.item['job_ord:job_dt'],
+          seq_no: this.item['job_ord:seq_no'],
           ...args
         })
         .then((res) => {
@@ -485,5 +488,8 @@ export default {
 <style lang="css">
 .vs-table--not-data {
   display: none !important;
+}
+th.text-center .vs-table-text {
+  justify-content: center;
 }
 </style>
