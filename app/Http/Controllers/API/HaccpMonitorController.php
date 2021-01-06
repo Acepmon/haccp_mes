@@ -19,6 +19,7 @@ class HaccpMonitorController extends Controller
         $order = $request->input('order', 'DESC');
         $device_id = $request->input('device_id');
         $reg_dtm = $request->input('reg_dtm');
+        $from = $request->input('from');
 
         if ($request->has('device_id')) {
             $items = $items->where('DEVICE_ID', $device_id);
@@ -26,6 +27,10 @@ class HaccpMonitorController extends Controller
 
         if ($request->has('reg_dtm')) {
             $items = $items->where('REG_DTM', 'LIKE', $reg_dtm . '%');
+        }
+
+        if ($request->has('from')) {
+            $items = $items->whereDate('REG_DTM', '>=', now()->parse($from)->format('YmdHis'));
         }
 
         if ($limit == -1) {

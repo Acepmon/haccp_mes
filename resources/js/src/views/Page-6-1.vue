@@ -5,7 +5,7 @@
         <template v-slot:action>
           <vs-button
             @click="refresh()"
-            class="mx-1 mr-16"
+            class="mx-1"
             color="primary"
             type="border"
             >{{ $t("Refresh") }}</vs-button
@@ -24,7 +24,7 @@
 
       <div class="flex flex-wrap">
         <div class="w-full sm:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
-          <ccp-data-widget :data="item"></ccp-data-widget>
+          <ccp-data-widget :data="item" :onRefresh="widgetRefresh"></ccp-data-widget>
         </div>
       </div>
     </vx-card>
@@ -105,7 +105,6 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err)
             this.spinner(false);
             this.$vs.notify({
               title: this.$t("Error"),
@@ -117,6 +116,63 @@ export default {
             });
           })
       });
+    },
+
+    widgetRefresh (data) {
+      let reg_dtm = moment().format('YYYYMMDD');
+
+      haccp_monitor
+        .ccp_data({
+          device_id: data.device_id,
+          reg_dtm: reg_dtm,
+          sort: 'REG_DTM',
+          order: 'DESC',
+          stats: true,
+          limit: 1
+        })
+        .then((res) => {
+          if (res.data.data.length > 0) {
+            this.$set(this.items, data.device_id, {
+              ...res.data.data[0],
+              device_nm: data.device_nm
+            })
+          }
+        })
+        .catch((err) => {
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        })
+
+      let from = moment().subtract(30, 'minutes').format('YYYYMMDDHHmm');
+
+      haccp_monitor
+        .ccp_data({
+          device_id: data.device_id,
+          from: from,
+          sort: 'REG_DTM',
+          order: 'ASC',
+          graph: true,
+          limit: -1
+        })
+        .then((res) => {
+          console.log(res.data)
+        })
+        .catch((err) => {
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        })
     },
 
     closeDialog() {

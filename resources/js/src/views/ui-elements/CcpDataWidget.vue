@@ -34,7 +34,7 @@
 
         <template v-slot:action>
           <vs-button
-            @click="refresh()"
+            @click="onRefresh(data)"
             class="mx-1 flex-shrink-0"
             color="primary"
             type="border"
@@ -84,41 +84,10 @@ export default {
         reg_dtm: null,
         reg_dtm_parsed: null
       }
-    }
-  },
-  methods: {
-    refresh () {
-      let reg_dtm = moment().format('YYYYMMDD');
-
-      haccp_monitor
-        .ccp_data({
-          device_id: this.data.device_id,
-          reg_dtm: reg_dtm,
-          sort: 'REG_DTM',
-          order: 'DESC',
-          stats: true,
-          limit: 1
-        })
-        .then((res) => {
-          this.spinner(false)
-          if (res.data.data.length > 0) {
-            this.$set(this, 'data', {
-              ...res.data.data[0],
-            })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-          this.spinner(false);
-          this.$vs.notify({
-            title: this.$t("Error"),
-            position: "top-right",
-            color: "warning",
-            iconPack: "feather",
-            icon: "icon-alert-circle",
-            text: err.response.data.message,
-          });
-        })
+    },
+    onRefresh: {
+      type: Function,
+      default: () => {}
     }
   }
 }
