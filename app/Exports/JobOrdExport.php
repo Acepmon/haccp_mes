@@ -43,7 +43,7 @@ class JobOrdExport implements FromCollection, WithHeadings, WithStyles, WithMapp
     public function map($jobOrd): array
     {
         return [
-            now()->parse($jobOrd->JOB_DT)->format('Y-m-d'),
+            $jobOrd->JOB_DT . '-' . $jobOrd->SEQ_NO,
             $jobOrd->ITEM_ID,
             $jobOrd->item->ITEM_NM,
             $jobOrd->ORD_QTY,

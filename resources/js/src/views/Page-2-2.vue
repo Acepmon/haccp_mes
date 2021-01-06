@@ -204,7 +204,7 @@ export default {
         },
         {
           headerName: '작업번호',
-          field: 'job_ord:job_dt',
+          field: 'job_ord:job_ord',
           filter: false,
           editable: false,
           width: 120,
@@ -297,6 +297,14 @@ export default {
       } else {
         this.$vs.loading.close("#div-with-loading > .con-vs-loading");
       }
+    },
+
+    onFromChange(selectedDates, dateStr, instance) {
+      this.$set(this.configTodateTimePicker, "minDate", dateStr);
+    },
+
+    onToChange(selectedDates, dateStr, instance) {
+      this.$set(this.configFromdateTimePicker, "maxDate", dateStr);
     },
 
     loadDataInTable ({ results, header, meta }) {

@@ -28,30 +28,42 @@ class JobOrdImport implements ToCollection
         DB::transaction(function () use ($rows) {
             $groups = $this->groupBySeqNo($rows);
             foreach ($groups as $key => $group) {
-                $jobDt = $group[0][0];
-                $seqNo = $group[0][1];
-                $ordNm = $group[0][5];
                 $itemId = $group[0][10];
                 $item2Id = $group[1][10];
-                $bomVer = BomConfig::where('ITEM1_ID', $itemId)->where('ITEM2_ID', $item2Id)->first();
-                $bomVer = $bomVer != null ? $bomVer->BOM_VER : null;
+                
                 $ordQty = $group[0][14];
                 $prodQty = $group[1][14];
-                $factCd = $group[0][15];
-                $remark = $group[0][18];
 
-                $this->insertJobOrd([
-                    'ITEM_ID' => $itemId,
-                    'SEQ_NO' => $seqNo,
-                ], [
-                    'JOB_DT' => $jobDt,
-                    'ORD_QTY' => $ordQty,
-                    'PROD_QTY' => $prodQty,
-                    'ORD_NM' => $ordNm,
-                    'BOM_VER' => $bomVer,
-                    'FACT_CD' => $factCd,
-                    'REMARK' => $remark
-                ]);
+                foreach ($group as $index => $row) {
+                    $bomVer = BomConfig::where('ITEM1_ID', $itemId)->where('ITEM2_ID', $item2Id)->first();
+                    $bomVer = $bomVer != null ? $bomVer->BOM_VER : null;
+
+                    $this->insertJobOrd([
+                        'JOB_DT' => $row[0],
+                        'SEQ_NO' => $row[1],
+                        'ITEM_ID' => $row[10],
+                    ], [
+                        'ORD_QTY' => $ordQty,
+                        'PROD_QTY' => $prodQty,
+                        'ORD_NM' => $row[5],
+                        'BOM_VER' => $bomVer,
+                        'FACT_CD' => $row[15],
+                        'REMARK' => $row[18]
+                    ]);
+
+                    $this->insertJobOrdDtl([
+                        'JOB_DT' => $row[0],
+                        'SEQ_NO' => $row[1],
+                        'ITEM_ID' => $row[10],
+                        'PROC_SEQ_NO' => ($index + 1)
+                    ], [
+                        'SRT_DTM' => null,
+                        'END_DTM' => null,
+                        'HACCP_CD' => null,
+                        'HACCP_YN' => 'Y',
+                        'REMARK' => $row[18],
+                    ]);
+                }
             }
         });
     }
@@ -79,6 +91,14 @@ class JobOrdImport implements ToCollection
     private function insertJobOrd($keys = [], $attributes = [])
     {
         DB::table('JOB_ORD')->updateOrInsert($keys, array_merge([
+            'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+            'REG_DTM' => now()->format('Ymdhis'),
+        ], $attributes));
+    }
+
+    private function insertJobOrdDtl($keys = [], $attributes = [])
+    {
+        DB::table('JOB_ORD_DTL')->updateOrInsert($keys, array_merge([
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
             'REG_DTM' => now()->format('Ymdhis'),
         ], $attributes));
