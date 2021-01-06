@@ -189,18 +189,18 @@ export default {
           field: 'item_mst:item_nm',
           filter: false,
           editable: false,
-          width: 200,
+          width: 300,
         },
         {
-          headerName: '순번',
-          field: 'proc_src:seq_no',
+          headerName: '규격',
+          field: 'item_mst:spec',
           filter: false,
           editable: false,
-          width: 200,
+          width: 300,
         },
         {
-          headerName: '재료명',
-          field: 'proc_src:src_nm',
+          headerName: '단위',
+          field: 'item_mst:unit',
           filter: false,
           editable: false,
           width: 300,
@@ -241,7 +241,28 @@ export default {
           field: 'PROC_DTL',
           filter: false,
           editable: false,
-          width: 300,
+          width: 200,
+        },
+        {
+          headerName: 'BOM 재료',
+          field: 'ITEM_NM',
+          filter: false,
+          editable: false,
+          width: 200,
+        },
+        {
+          headerName: '생산수량',
+          field: 'PROD_QTY',
+          filter: false,
+          editable: false,
+          width: 200,
+        },
+        {
+          headerName: '소요수량',
+          field: 'USE_QTY',
+          filter: false,
+          editable: false,
+          width: 200,
         },
       ]
     }
@@ -420,19 +441,20 @@ export default {
         search_params['item_nm'] = this.searchNm;
       }
 
-      proc_src
+      proc_dtl
         .fetch({
           ...this.paginationParam,
           limit: -1,
           ...search_params,
-          with: 'item_mst'
+          grid1: true,
+          with: ''
         })
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
           callback(this.items)
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors
