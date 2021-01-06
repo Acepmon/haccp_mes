@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Imports\UnifiedProcImport;
 use Maatwebsite\Excel\Facades\Excel;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class ProcUnifiedController extends Controller
 {

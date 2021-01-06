@@ -62,10 +62,12 @@
         </template>
       </app-control>
 
+      <vs-divider class="mb-0" />
+
       <ag-grid-vue
         ref="agGridTable"
         :gridOptions="gridOptions"
-        class="ag-theme-material w-100 my-4 ag-grid-table"
+        class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
         style="max-height: 400px;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
@@ -141,6 +143,8 @@ import "flatpickr/dist/flatpickr.css";
 import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js"
 
 import { AgGridVue } from "ag-grid-vue";
+import NumericEditor from '@/views/ui-elements/ag-grid-table/numericEditorVue';
+import TextEditor from '@/views/ui-elements/ag-grid-table/textEditorVue';
 
 import "@sass/vuexy/extraComponents/agGridStyleOverride.scss";
 import moment from 'moment';
@@ -188,6 +192,10 @@ export default {
         resizable: true,
         suppressMenu: false
       },
+      frameworkComponents: {
+        numericEditor: NumericEditor,
+        textEditor: TextEditor
+      },
       columnDefs: [
         {
           headerName: 'No',
@@ -198,49 +206,49 @@ export default {
         },
         {
           headerName: '작업번호',
-          field: 'job_dt',
+          field: 'job_ord:job_dt',
           filter: false,
           editable: false,
           width: 120,
         },
         {
           headerName: '품목ID',
-          field: 'item_id',
+          field: 'job_ord:item_id',
           filter: false,
           editable: false,
           width: 120,
         },
         {
           headerName: '품목명',
-          field: 'item_nm',
+          field: 'job_ord:item_nm',
           filter: false,
           editable: false,
           width: 150,
         },
         {
           headerName: '지시수량',
-          field: 'job_qty',
+          field: 'job_ord:ord_qty',
           filter: false,
           editable: false,
           width: 120,
         },
         {
           headerName: '생산수량',
-          field: 'prod_qty',
+          field: 'job_ord:prod_qty',
           filter: false,
           editable: false,
           width: 120,
         },
         {
           headerName: '담당자',
-          field: 'job_nm',
+          field: 'job_ord:ord_nm',
           filter: false,
           editable: false,
           width: 120,
         },
         {
           headerName: '생산공장',
-          field: 'fact_cd',
+          field: 'job_ord:fact_cd',
           filter: false,
           editable: false,
           width: 120,
@@ -313,7 +321,7 @@ export default {
         search_params['to'] = this.to;
       }
 
-      job_dtl
+      job_ord
         .fetch({
           limit: -1,
           ...search_params,
@@ -430,9 +438,9 @@ export default {
   },
 
   created () {
-    // setTimeout(() => {
-    //   this.query()
-    // }, 500)
+    setTimeout(() => {
+      this.query()
+    }, 500)
   }
 };
 </script>

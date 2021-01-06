@@ -28,12 +28,12 @@ class JobOrdController extends Controller
 
         if ($request->has('from') && !empty($request->input('from'))) {
             $from = $request->input('from');
-            $items = $items->whereDate('LOGIN_DTM', '>=', now()->parse($from)->format('YmdHis'));
+            $items = $items->whereDate('JOB_DT', '>=', now()->parse($from)->format('YmdHis'));
         }
 
         if ($request->has('to') && !empty($request->input('to'))) {
             $to = $request->input('to');
-            $items = $items->whereDate('LOGIN_DTM', '<=', now()->parse($to)->format('YmdHis'));
+            $items = $items->whereDate('JOB_DT', '<=', now()->parse($to)->format('YmdHis'));
         }
 
         if ($request->has('groupBy')) {
@@ -111,18 +111,11 @@ class JobOrdController extends Controller
             'file' => 'required|file'
         ]);
 
-        $result = Excel::import(new JobOrdImport(), $request->file('file'));
-        $upCnt = session()->get('update_count');
-        $inCnt = session()->get('insert_count');
+        Excel::import(new JobOrdImport(), $request->file('file'));
 
         return response()->json([
             'success' => true,
-            'result' => [
-                'import' => $result,
-                'update_count' => $upCnt,
-                'insert_count' => $inCnt,
-            ],
-            'message' => 'Updated ' . $upCnt . ' records and inserted ' . $inCnt . ' records',
+            'message' => __('Successfully imported')
         ]);
     }
 }

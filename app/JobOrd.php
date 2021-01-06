@@ -36,4 +36,9 @@ class JobOrd extends Model
     // {
     //     return $this->hasMany('App\JobOrdDtl', '');
     // }
+
+    public function item()
+    {
+        return $this->belongsTo('App\ItemMst', 'ITEM_ID', 'ITEM_ID');
+    }
 }
