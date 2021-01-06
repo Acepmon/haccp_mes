@@ -98,11 +98,10 @@ class JobOrdController extends Controller
 
     public function export(Request $request)
     {
-        $itemNm = $request->input('item_nm');
-        $itemId = $request->input('item_id');
-        $itemCd = $request->input('item_cd');
+        $from = $request->input('from');
+        $to = $request->input('to');
 
-        return Excel::download(new JobOrdExport($itemNm, $itemId, $itemCd), 'ITEM-MST-' . now()->format('Y-m-d') . '.xlsx');
+        return Excel::download(new JobOrdExport($from, $to), 'JOB-ORD-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     public function import(Request $request)
