@@ -14,6 +14,7 @@ export default {
     CloseDocument: 'Close document?',
     ImportExcel: 'Import Excel?',
     Download: 'Download',
+    Refresh: 'Refresh',
 
     DeleteData: 'Are you sure to delete data?',
     SuccessDeleteData: 'Successfully deleted data',
@@ -49,6 +50,7 @@ export default {
     CloseDocument: '현재메뉴를 닫겠습니까?',
     ImportExcel: 'Excel 데이터를 DB에 저장하겠습니까?',
     Download: '다운로드',
+    Refresh: 'Refresh',
 
     DeleteData: '삭제하시겠습니까?',
     SuccessDeleteData: '삭제되었습니다.',

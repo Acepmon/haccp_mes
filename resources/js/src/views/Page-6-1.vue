@@ -22,7 +22,11 @@
 
       <vs-divider />
 
-      <div>asdasas</div>
+      <div class="flex flex-wrap">
+        <div class="w-full sm:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
+          <ccp-data-widget :data="item"></ccp-data-widget>
+        </div>
+      </div>
     </vx-card>
   </div>
 </template>
@@ -36,16 +40,28 @@ import { mapActions } from "vuex";
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+import CcpDataWidget from '@/views/ui-elements/CcpDataWidget';
+
+import moment from 'moment';
 
 export default {
   components: {
     AppControl,
     AppForm,
-    AppFormGroup
+    AppFormGroup,
+    CcpDataWidget
   },
   data () {
     return {
-      items: []
+      items: [],
+      devices: []
+    }
+  },
+  computed: {
+    itemsComp () {
+      return Object.entries(this.items).map((item) => {
+        return item[1]
+      })
     }
   },
   methods: {
@@ -67,23 +83,40 @@ export default {
     refresh () {
       this.spinner()
 
-      haccp_monitor
-        .ccp_data()
-        .then((res) => {
-          this.spinner(false)
-          this.items = res.data.data;
-        })
-        .catch((err) => {
-          this.spinner(false);
-          this.$vs.notify({
-            title: this.$t("Error"),
-            position: "top-right",
-            color: "warning",
-            iconPack: "feather",
-            icon: "icon-alert-circle",
-            text: err.response.data.message,
-          });
-        })
+      let reg_dtm = moment().format('YYYYMMDD');
+
+      this.devices.forEach(device => {
+        haccp_monitor
+          .ccp_data({
+            device_id: device.comm2_cd,
+            reg_dtm: reg_dtm,
+            sort: 'REG_DTM',
+            order: 'DESC',
+            stats: true,
+            limit: 1
+          })
+          .then((res) => {
+            this.spinner(false)
+            if (res.data.data.length > 0) {
+              this.$set(this.items, device.comm2_cd, {
+                ...res.data.data[0],
+                device_nm: device.comm2_nm
+              })
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+            this.spinner(false);
+            this.$vs.notify({
+              title: this.$t("Error"),
+              position: "top-right",
+              color: "warning",
+              iconPack: "feather",
+              icon: "icon-alert-circle",
+              text: err.response.data.message,
+            });
+          })
+      });
     },
 
     closeDialog() {
@@ -97,6 +130,13 @@ export default {
         accept: () => this.removeTab("page-6-1"),
       });
     }
+  },
+
+  created () {
+    comm_cd.fetch({cd1: 'C00'}).then((res) => {
+      this.$set(this, 'devices', res.data)
+      this.refresh()
+    })
   }
 }
 </script>

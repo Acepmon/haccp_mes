@@ -148,9 +148,10 @@
             <vs-th class="h5 py-2 font-bold text-center">원산지</vs-th>
           </vs-tr>
 
-          <template v-for="(detail) in detailData.details">
+          <!-- eslint-disable-next-line -->
+          <template v-for="detail in detailData.details">
             <!-- eslint-disable-next-line -->
-            <vs-tr v-for="(tr) in detail.subdetails">
+            <vs-tr v-for="(tr, indextr) in detail.subdetails" :key="indextr">
               <vs-td>{{ tr['item_id'] }}</vs-td>
               <vs-td>{{ tr['item_nm'] }}</vs-td>
               <vs-td class="text-right">{{ tr['req'] }}</vs-td>
