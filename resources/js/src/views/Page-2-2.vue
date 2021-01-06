@@ -48,7 +48,7 @@
       </app-control>
 
       <vs-divider />
-      
+
       <app-control>
         <template v-slot:action>
           <vs-button
@@ -61,8 +61,6 @@
           >
         </template>
       </app-control>
-
-      <vs-divider class="mb-0" />
 
       <ag-grid-vue
         ref="agGridTable"

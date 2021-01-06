@@ -49,8 +49,6 @@
         </template>
       </app-control>
 
-      <vs-divider class="mb-0" />
-
       <ag-grid-vue
         ref="agGridTable"
         :gridOptions="gridOptions2"
@@ -61,8 +59,6 @@
         :rowData="items2Comp"
         :frameworkComponents="frameworkComponents">
       </ag-grid-vue>
-
-      <vs-divider />
 
       <app-control>
         <template v-slot:action>

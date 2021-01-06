@@ -33,8 +33,6 @@
         </template>
       </app-control>
 
-      <vs-divider class="mb-0" />
-
       <ag-grid-vue
         ref="agGridTable"
         :gridOptions="gridOptions2"
@@ -44,10 +42,6 @@
         :defaultColDef="defaultColDef"
         :rowData="itemsComp2">
       </ag-grid-vue>
-
-      <vs-divider class="mb-0" />
-
-      <!-- grid2 - item-mst -->
 
       <ag-grid-vue
         ref="agGridTable"

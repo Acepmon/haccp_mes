@@ -70,8 +70,6 @@
         :rowData="itemsComp">
       </ag-grid-vue>
 
-      <vs-divider />
-
       <app-control>
         <template v-slot:action>
            <vs-button
