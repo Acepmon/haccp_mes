@@ -86,6 +86,7 @@
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
         :frameworkComponents="frameworkComponents"
+        @cellValueChanged="onCellValueChanged($event)"
         :pagination="true"
         :paginationPageSize="paginationPageSize"
         :suppressPaginationPanel="true">
@@ -409,7 +410,10 @@ export default {
         })
         .then((res) => {
           this.spinner(false);
-          this.items = res.data.data;
+          this.items = res.data.data.map((item) => {
+            item['changed'] = false
+            return item
+          });
           // this.pagination.total = res.data.meta.total;
           // this.pagination.page = res.data.meta.current_page;
         })
@@ -434,9 +438,11 @@ export default {
     save () {
       this.spinner();
 
+      let changedData = this.gridOptions.rowData.filter((item) => item.changed)
+
       api
         .sync({
-          'sync': this.gridOptions.rowData
+          'sync': changedData
         })
         .then((res) => {
           this.spinner(false);
@@ -447,7 +453,7 @@ export default {
               position: "top-right",
               color: "success",
             });
-            // this.query();
+            this.query();
           } else {
             this.$vs.notify({
               title: this.$t("Error"),
@@ -576,6 +582,15 @@ export default {
     numberCellRenderer (params) {
       console.log(params)
       return params.value.replace(/[^0-9.]+/g, '')
+    },
+
+    onCellValueChanged (event) {
+      let newData = event.data
+      newData.changed = true
+      if (!("" + newData.no).includes('*')) {
+        newData.no = '* ' + newData.no
+      }
+      event.api.updateRowData(newData)
     }
   },
 
