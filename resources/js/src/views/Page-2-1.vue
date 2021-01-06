@@ -35,21 +35,11 @@
 
       <ag-grid-vue
         ref="agGridTable"
-        :gridOptions="gridOptions2"
-        class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
-        style="max-height: 200px;"
-        :columnDefs="columnDefs2"
-        :defaultColDef="defaultColDef"
-        :rowData="itemsComp2">
-      </ag-grid-vue>
-
-      <ag-grid-vue
-        ref="agGridTable"
         rowSelection="single"
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
-        style="max-height: 200px;"
+        style="max-height: 300px;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
@@ -62,6 +52,16 @@
         :total="totalPages"
         :max="maxPageNumbers"
         v-model="currentPage" />
+
+      <ag-grid-vue
+        ref="agGridTable"
+        :gridOptions="gridOptions2"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 300px;"
+        :columnDefs="columnDefs2"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp2">
+      </ag-grid-vue>
 
     </vx-card>
 
