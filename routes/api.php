@@ -106,4 +106,6 @@ Route::group([
     Route::post('job_ord_dtl/import', 'JobOrdDtlController@import')->name('job_ord_dtl.import');
     Route::post('job_ord_dtl/sync', 'JobOrdDtlController@sync')->name('job_ord_dtl.sync');
     Route::apiResource('job_ord_dtl', 'JobOrdDtlController');
+
+    Route::get('haccp_monitor/ccp_data', 'HaccpMonitorController@ccp_data');
 });
