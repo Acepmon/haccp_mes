@@ -108,4 +108,5 @@ Route::group([
     Route::apiResource('job_ord_dtl', 'JobOrdDtlController');
 
     Route::get('haccp_monitor/ccp_data', 'HaccpMonitorController@ccp_data');
+    Route::get('haccp_monitor/ccp_data/{DEVICE_ID}', 'HaccpMonitorController@ccp_data_details');
 });

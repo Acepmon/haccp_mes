@@ -75,7 +75,7 @@ return [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
             'host' => '49.50.174.133',
-            'port' => env('DB_PORT', '3306'),
+            'port' => '3306',
             'database' => 'haccp_mes',
             'username' => 'haccp',
             'password' => 'H@ccp123@',

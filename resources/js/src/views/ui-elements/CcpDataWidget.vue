@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card class="bg-primary cursor-pointer" @click="chartDialog = true">
+    <vx-card class="bg-primary-gradient cursor-pointer" @click="chartDialog = true">
       <div class="h1 py-2 font-bold text-white text-center">
         {{ data.device_nm }}: <span class="px-8">{{ data.data.toFixed(2) }}℃</span>
       </div>
@@ -49,6 +49,10 @@
           >
         </template>
       </app-control>
+
+      <vs-divider />
+
+      <vue-apex-charts type="area" height="350" :options="lineAreaChartSpline.chartOptions" :series="chartSeries"></vue-apex-charts>
     </vs-popup>
   </div>
 </template>
@@ -59,14 +63,45 @@ import comm_cd from "@/services/comm_cd";
 import haccp_monitor from "@/services/haccp_monitor";
 import AppControl from "@/views/ui-elements/AppControl";
 import moment from 'moment';
+import VueApexCharts from 'vue-apexcharts'
 
 export default {
   components: {
-    AppControl
+    AppControl,
+    VueApexCharts
   },
   data () {
     return {
-      chartDialog: false
+      chartDialog: false,
+      themeColors: ['#7367F0', '#28C76F', '#EA5455', '#FF9F43', '#1E1E1E'],
+      lineAreaChartSpline: {
+        series: [{
+            name: 'series1',
+            data: [31, 40, 28, 51, 42, 109, 100]
+          }
+        ],
+        chartOptions: {
+          dataLabels: {
+            enabled: false
+          },
+          stroke: {
+            curve: 'straight'
+          },
+          colors: this.themeColors,
+          xaxis: {
+            type: 'datetime',
+            categories: ["2018-09-19T00:00:00", "2018-09-19T01:30:00", "2018-09-19T02:30:00",
+              "2018-09-19T03:30:00", "2018-09-19T04:30:00", "2018-09-19T05:30:00",
+              "2018-09-19T06:30:00"
+            ],
+          },
+          tooltip: {
+            x: {
+              format: 'dd/MM/yy HH:mm'
+            },
+          }
+        }
+      }
     }
   },
   props: {
@@ -84,6 +119,10 @@ export default {
         reg_dtm: null,
         reg_dtm_parsed: null
       }
+    },
+    chartSeries: {
+      type: Array,
+      required: true
     },
     onRefresh: {
       type: Function,

@@ -24,7 +24,7 @@
 
       <div class="flex flex-wrap">
         <div class="w-full sm:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
-          <ccp-data-widget :data="item" :onRefresh="widgetRefresh"></ccp-data-widget>
+          <ccp-data-widget :data="item" :onRefresh="widgetRefresh" :chartSeries="item.series"></ccp-data-widget>
         </div>
       </div>
     </vx-card>
@@ -83,39 +83,37 @@ export default {
     refresh () {
       this.spinner()
 
-      let reg_dtm = moment().format('YYYYMMDD');
+      haccp_monitor
+        .ccp_data({
+          device_id: this.devices.map(item => item.comm2_cd).join(','),
+          sort: 'DEVICE',
+          order: 'ASC',
+          reg_dtm: moment().format('YYYYMMDD')
+        })
+        .then((res) => {
+          this.spinner(false)
 
-      this.devices.forEach(device => {
-        haccp_monitor
-          .ccp_data({
-            device_id: device.comm2_cd,
-            reg_dtm: reg_dtm,
-            sort: 'REG_DTM',
-            order: 'DESC',
-            stats: true,
-            limit: 1
-          })
-          .then((res) => {
-            this.spinner(false)
-            if (res.data.data.length > 0) {
-              this.$set(this.items, device.comm2_cd, {
-                ...res.data.data[0],
-                device_nm: device.comm2_nm
+          if (res.data.data.length > 0) {
+            res.data.data.forEach(device => {
+              this.$set(this.items, device.device_id, {
+                ...device,
+                series: [],
+                device_nm: this.devices.filter(d => d.comm2_cd == device.device_id)[0].comm2_nm
               })
-            }
-          })
-          .catch((err) => {
-            this.spinner(false);
-            this.$vs.notify({
-              title: this.$t("Error"),
-              position: "top-right",
-              color: "warning",
-              iconPack: "feather",
-              icon: "icon-alert-circle",
-              text: err.response.data.message,
             });
-          })
-      });
+          }
+        })
+        .catch((err) => {
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        })
     },
 
     widgetRefresh (data) {
@@ -149,19 +147,18 @@ export default {
           });
         })
 
-      let from = moment().subtract(30, 'minutes').format('YYYYMMDDHHmm');
-
       haccp_monitor
-        .ccp_data({
-          device_id: data.device_id,
-          from: from,
+        .ccp_data_details(data.device_id, {
+          from: moment().subtract(24, 'hours').format('YYYYMMDDHHmm'),
           sort: 'REG_DTM',
           order: 'ASC',
-          graph: true,
           limit: -1
         })
         .then((res) => {
-          console.log(res.data)
+          if (res.data.data.length > 0) {
+            let device_id = res.data.data[0].device_id
+            this.$set(this.items[device_id], 'series', this.formatDatasToSeries(res.data.data))
+          }
         })
         .catch((err) => {
           this.$vs.notify({
@@ -173,6 +170,17 @@ export default {
             text: err.response.data.message,
           });
         })
+    },
+
+    formatDatasToSeries(datas) {
+      let device_nm = 'test'
+
+      return [
+        {
+          name: device_nm,
+          data: []
+        }
+      ]
     },
 
     closeDialog() {

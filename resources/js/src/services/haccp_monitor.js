@@ -16,6 +16,17 @@ export default {
         return axios.get(`${config.baseUrl}/${this.api}/ccp_data?${this.prepParams(params)}`)
     },
 
+    ccp_data_details: function (device_id, args = {}) {
+
+        // Default parameters
+        let params = {
+            ...args
+        }
+
+        // Return axios promise
+        return axios.get(`${config.baseUrl}/${this.api}/ccp_data/${device_id}?${this.prepParams(params)}`)
+    },
+
     // Create url query parameters for API request
     prepParams(data) {
         const ret = [];

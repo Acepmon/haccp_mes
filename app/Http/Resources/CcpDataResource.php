@@ -15,12 +15,17 @@ class CcpDataResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'ccp_seq' => $this->CCP_SEQ,
-            'device_id' => $this->DEVICE_ID,
+            'device_id' => $this->DEVICE,
             'data' => floatval($this->DATA),
-            'min' => floatval($this->MIN),
-            'max' => floatval($this->MAX),
-            'avg' => floatval($this->AVG),
+            'min' => $this->when(!empty($this->MIN), function () {
+                return floatval($this->MIN);
+            }),
+            'max' => $this->when(!empty($this->MAX), function () {
+                return floatval($this->MAX);
+            }),
+            'avg' => $this->when(!empty($this->AVG), function () {
+                return floatval($this->AVG);
+            }),
             'reg_dtm' => $this->REG_DTM,
             'reg_dtm_parsed' => now()->parse($this->REG_DTM)->format('Y-m-d H:i:s'),
         ];
