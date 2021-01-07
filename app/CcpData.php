@@ -21,9 +21,4 @@ class CcpData extends Model
 
     protected $casts = [
     ];
-
-    public function device()
-    {
-        return $this->belongsTo('App\CommCd', 'DEVICE_ID', 'COMM2_CD')->where('COMM1_CD', 'C00')->whereNotIn('COMM2_CD', ['$$']);
-    }
 }

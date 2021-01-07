@@ -24,7 +24,7 @@
 
       <div class="flex flex-wrap">
         <div class="w-full sm:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
-          <ccp-data-widget :data="item" :onRefresh="widgetRefresh" :chartSeries="item.series"></ccp-data-widget>
+          <ccp-data-widget :data="item" :onRefresh="widgetRefresh" :chartData="item.chartData" :chartCategories="item.chartCats"></ccp-data-widget>
         </div>
       </div>
     </vx-card>
@@ -95,10 +95,13 @@ export default {
 
           if (res.data.data.length > 0) {
             res.data.data.forEach(device => {
+              let device_nm = this.devices.filter(d => d.comm2_cd == device.device_id)
+              device_nm = device_nm[0].comm2_nm
               this.$set(this.items, device.device_id, {
                 ...device,
-                series: [],
-                device_nm: this.devices.filter(d => d.comm2_cd == device.device_id)[0].comm2_nm
+                chartData: [],
+                chartCats: [],
+                device_nm: device_nm
               })
             });
           }
@@ -117,39 +120,9 @@ export default {
     },
 
     widgetRefresh (data) {
-      let reg_dtm = moment().format('YYYYMMDD');
-
-      haccp_monitor
-        .ccp_data({
-          device_id: data.device_id,
-          reg_dtm: reg_dtm,
-          sort: 'REG_DTM',
-          order: 'DESC',
-          stats: true,
-          limit: 1
-        })
-        .then((res) => {
-          if (res.data.data.length > 0) {
-            this.$set(this.items, data.device_id, {
-              ...res.data.data[0],
-              device_nm: data.device_nm
-            })
-          }
-        })
-        .catch((err) => {
-          this.$vs.notify({
-            title: this.$t("Error"),
-            position: "top-right",
-            color: "warning",
-            iconPack: "feather",
-            icon: "icon-alert-circle",
-            text: err.response.data.message,
-          });
-        })
-
       haccp_monitor
         .ccp_data_details(data.device_id, {
-          from: moment().subtract(24, 'hours').format('YYYYMMDDHHmm'),
+          from: moment().subtract(24, 'hours').format('YYYYMMDDHHmmss'),
           sort: 'REG_DTM',
           order: 'ASC',
           limit: -1
@@ -157,7 +130,10 @@ export default {
         .then((res) => {
           if (res.data.data.length > 0) {
             let device_id = res.data.data[0].device_id
-            this.$set(this.items[device_id], 'series', this.formatDatasToSeries(res.data.data))
+            let chartData = res.data.data.map(i => i.data)
+            let chartCats = res.data.data.map(i => i.reg_dtm_parsed)
+            this.$set(this.items[device_id], 'chartData', chartData)
+            this.$set(this.items[device_id], 'chartCats', chartCats)
           }
         })
         .catch((err) => {
@@ -170,17 +146,6 @@ export default {
             text: err.response.data.message,
           });
         })
-    },
-
-    formatDatasToSeries(datas) {
-      let device_nm = 'test'
-
-      return [
-        {
-          name: device_nm,
-          data: []
-        }
-      ]
     },
 
     closeDialog() {

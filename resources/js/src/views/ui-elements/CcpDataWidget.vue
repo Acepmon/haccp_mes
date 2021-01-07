@@ -52,7 +52,7 @@
 
       <vs-divider />
 
-      <vue-apex-charts type="area" height="350" :options="lineAreaChartSpline.chartOptions" :series="chartSeries"></vue-apex-charts>
+      <vue-apex-charts type="area" height="350" :options="chartOptions" :series="chartSeries" v-if="chartSeries.length > 0"></vue-apex-charts>
     </vs-popup>
   </div>
 </template>
@@ -73,35 +73,7 @@ export default {
   data () {
     return {
       chartDialog: false,
-      themeColors: ['#7367F0', '#28C76F', '#EA5455', '#FF9F43', '#1E1E1E'],
-      lineAreaChartSpline: {
-        series: [{
-            name: 'series1',
-            data: [31, 40, 28, 51, 42, 109, 100]
-          }
-        ],
-        chartOptions: {
-          dataLabels: {
-            enabled: false
-          },
-          stroke: {
-            curve: 'straight'
-          },
-          colors: this.themeColors,
-          xaxis: {
-            type: 'datetime',
-            categories: ["2018-09-19T00:00:00", "2018-09-19T01:30:00", "2018-09-19T02:30:00",
-              "2018-09-19T03:30:00", "2018-09-19T04:30:00", "2018-09-19T05:30:00",
-              "2018-09-19T06:30:00"
-            ],
-          },
-          tooltip: {
-            x: {
-              format: 'dd/MM/yy HH:mm'
-            },
-          }
-        }
-      }
+      themeColors: ['#129CE9', '#46D465', '#E26B6D'],
     }
   },
   props: {
@@ -120,13 +92,47 @@ export default {
         reg_dtm_parsed: null
       }
     },
-    chartSeries: {
+    chartData: {
       type: Array,
-      required: true
+      required: false,
+      default: []
+    },
+    chartCategories: {
+      type: Array,
+      required: false,
+      default: []
     },
     onRefresh: {
       type: Function,
       default: () => {}
+    }
+  },
+  computed: {
+    chartSeries () {
+      return [{
+        name: this.data.device_nm,
+        data: this.chartData
+      }]
+    },
+    chartOptions () {
+      return {
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        colors: this.themeColors,
+        xaxis: {
+          type: 'datetime',
+          categories: this.chartCategories,
+        },
+        tooltip: {
+          x: {
+            format: 'dd/MM/yy HH:mm'
+          },
+        }
+      }
     }
   }
 }

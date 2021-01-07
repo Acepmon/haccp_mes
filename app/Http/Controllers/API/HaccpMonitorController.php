@@ -104,12 +104,18 @@ class HaccpMonitorController extends Controller
         $sort = $request->input('sort', 'REG_DTM');
         $order = $request->input('order', 'ASC');
         $from = $request->input('from');
+        $reg_dtm = $request->input('reg_dtm');
         $limit = $request->input('limit', 15);
 
-        $items = CcpData::where('DEVICE_ID', $deviceId)->select('DEVICE_ID', 'DATA', 'REG_DTM');
+        $items = CcpData::where('DEVICE_ID', $deviceId)->select('DEVICE_ID AS DEVICE', 'DATA', 'REG_DTM');
 
         if ($request->has('from')) {
-            $items = $items->whereDate('REG_DTM', '>=', now()->parse($from)->format('YmdHis'));
+            $from = now()->parse($from)->format('YmdHis');
+            $items = $items->whereRaw('CAST(REG_DTM AS SIGNED) >= ' . intval($from));
+        }
+
+        if ($request->has('reg_dtm')) {
+            $items = $items->where('REG_DTM', 'LIKE', $reg_dtm . '%');
         }
 
         if ($limit == -1) {
