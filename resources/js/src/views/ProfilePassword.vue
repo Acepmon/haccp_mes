@@ -1,8 +1,8 @@
 <template>
   <vx-card id="div-with-loading" class="vs-con-loading__container">
-    <div class="flex flex-wrap mb-2">
-      <div class="w-full sm:w-1/2 px-1 flex justify-end"></div>
-      <div class="w-full sm:w-1/2 px-1 flex justify-end">
+    <app-control>
+      <template v-slot:filter></template>
+      <template v-slot:action>
         <vs-button
           @click="saveDialog()"
           class="mx-1"
@@ -17,68 +17,47 @@
           type="border"
           >{{ $t("Close") }}</vs-button
         >
-      </div>
-    </div>
+      </template>
+    </app-control>
 
-    <form action="#">
-      <!-- Row 1 -->
-      <div class="flex flex-wrap">
-        <div class="w-full sm:w-1/2 px-1">
-          <div class="vx-row mb-2">
-            <div class="vx-col sm:w-1/3 w-full flex justify-end">
-              <span class="pt-2"
-                ><span class="text-danger">*</span> Old Password</span
-              >
-            </div>
-            <div class="vx-col sm:w-2/3 w-full">
-              <vs-input
-                type="password"
-                v-model="password['old_password']"
-                :danger="errors['old_password'] != null"
-                :danger-text="errors['old_password']"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /row 1 -->
+    <vs-divider />
 
-      <!-- Row 2 -->
-      <div class="flex flex-wrap">
-        <div class="w-full sm:w-1/2 px-1">
-          <div class="vx-row mb-2">
-            <div class="vx-col sm:w-1/3 w-full flex justify-end">
-              <span class="pt-2"><span class="text-danger">*</span> New Password</span>
-            </div>
-            <div class="vx-col sm:w-2/3 w-full">
-              <vs-input
-                type="password"
-                v-model="password['new_password']"
-                :danger="errors['new_password'] != null"
-                :danger-text="errors['new_password']"
-              />
-            </div>
-          </div>
-        </div>
+    <app-form>
+      <app-form-group required>
+        <template v-slot:label>Old Password</template>
 
-        <div class="w-full sm:w-1/2 px-1">
-          <div class="vx-row mb-2">
-            <div class="vx-col sm:w-1/3 w-full flex justify-end">
-              <span class="pt-2"><span class="text-danger">*</span> Confirm Password</span>
-            </div>
-            <div class="vx-col sm:w-2/3 w-full">
-              <vs-input
-                type="password"
-                v-model="password['new_password_confirmation']"
-                :danger="errors['new_password_confirmation'] != null"
-                :danger-text="errors['new_password_confirmation']"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /row 2 -->
-    </form>
+        <vs-input
+          type="password"
+          v-model="password['old_password']"
+          :danger="errors['old_password'] != null"
+          :danger-text="errors['old_password']"
+        />
+      </app-form-group>
+
+      <app-form-group></app-form-group>
+
+      <app-form-group required>
+        <template v-slot:label>New Password</template>
+
+        <vs-input
+          type="password"
+          v-model="password['new_password']"
+          :danger="errors['new_password'] != null"
+          :danger-text="errors['new_password']"
+        />
+      </app-form-group>
+
+      <app-form-group required>
+        <template v-slot:label>Confirm Password</template>
+
+        <vs-input
+          type="password"
+          v-model="password['new_password_confirmation']"
+          :danger="errors['new_password_confirmation'] != null"
+          :danger-text="errors['new_password_confirmation']"
+        />
+      </app-form-group>
+    </app-form>
   </vx-card>
 </template>
 
@@ -87,7 +66,16 @@ import axios from "axios";
 import api from "@/services/user";
 import { mapActions } from "vuex";
 
+import AppControl from "@/views/ui-elements/AppControl";
+import AppForm from "@/views/ui-elements/AppForm";
+import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+
 export default {
+  components: {
+    AppControl,
+    AppForm,
+    AppFormGroup
+  },
   data() {
     return {
       password: {

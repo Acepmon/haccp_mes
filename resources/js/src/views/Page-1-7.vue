@@ -49,19 +49,6 @@
         </template>
       </app-control>
 
-      <vs-divider class="mb-0" />
-
-      <ag-grid-vue
-        ref="agGridTable"
-        :gridOptions="gridOptions2"
-        class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
-        style="max-height: 200px;"
-        :columnDefs="columnDefs2"
-        :defaultColDef="defaultColDef"
-        :rowData="items2Comp"
-        :frameworkComponents="frameworkComponents">
-      </ag-grid-vue>
-
       <vs-divider />
 
       <app-control>
@@ -83,7 +70,7 @@
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 400px;"
+        style="max-height: 300px;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
@@ -97,6 +84,17 @@
         :total="totalPages"
         :max="maxPageNumbers"
         v-model="currentPage" />
+
+      <ag-grid-vue
+        ref="agGridTable"
+        :gridOptions="gridOptions2"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 300px;"
+        :columnDefs="columnDefs2"
+        :defaultColDef="defaultColDef"
+        :rowData="items2Comp"
+        :frameworkComponents="frameworkComponents">
+      </ag-grid-vue>
     </vx-card>
 
     <vs-popup fullscreen :title="$t('UploadExcel')" :active.sync="importDialog" button-close-hidden>

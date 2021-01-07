@@ -1,8 +1,8 @@
 <template>
-  <vx-card no-shadow>
-    <div class="flex flex-wrap mb-2">
-      <div class="w-full sm:w-1/2 px-1 flex justify-end"></div>
-      <div class="w-full sm:w-1/2 px-1 flex justify-end">
+  <vx-card id="div-with-loading" class="vs-con-loading__container">
+    <app-control>
+      <template v-slot:filter></template>
+      <template v-slot:action>
         <vs-button
           @click="query()"
           class="mx-1"
@@ -24,66 +24,43 @@
           type="border"
           >{{ $t("Close") }}</vs-button
         >
-      </div>
-    </div>
+      </template>
+    </app-control>
 
-    <form action="#">
-      <!-- Row 1 -->
-      <div class="flex flex-wrap">
-        <div class="w-full sm:w-1/2 px-1">
-          <div class="vx-row mb-2">
-            <div class="vx-col sm:w-1/3 w-full flex justify-end">
-              <span class="pt-2"
-                ><span class="text-danger">*</span> 휴대폰번호(ID)</span
-              >
-            </div>
-            <div class="vx-col sm:w-2/3 w-full">
-              <vs-input
-                v-model="item['user:user_id']"
-                :danger="errors['user:user_id'] != null"
-                :danger-text="errors['user:user_id']"
-                readonly
-              />
-            </div>
-          </div>
-        </div>
+    <vs-divider />
 
-        <div class="w-full sm:w-1/2 px-1">
-          <div class="vx-row mb-2">
-            <div class="vx-col sm:w-1/3 w-full flex justify-end">
-              <span class="pt-2"><span class="text-danger">*</span> 이름</span>
-            </div>
-            <div class="vx-col sm:w-2/3 w-full">
-              <vs-input
-                v-model="item['user:user_nm']"
-                :danger="errors['user:user_nm'] != null"
-                :danger-text="errors['user:user_nm']"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /row 1 -->
+    <app-form>
+      <app-form-group required>
+        <template v-slot:label>휴대폰번호(ID)</template>
 
-      <!-- Row 2 -->
-      <div class="flex flex-wrap">
-        <div class="w-full sm:w-1/2 px-1">
-          <div class="vx-row mb-2">
-            <div class="vx-col sm:w-1/3 w-full flex justify-end">
-              <span class="pt-2">이메일</span>
-            </div>
-            <div class="vx-col sm:w-2/3 w-full">
-              <vs-input
-                v-model="item['user:email']"
-                :danger="errors['user:email'] != null"
-                :danger-text="errors['user:email']"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /row 2 -->
-    </form>
+        <vs-input
+          v-model="item['user:user_id']"
+          :danger="errors['user:user_id'] != null"
+          :danger-text="errors['user:user_id']"
+          readonly
+        />
+      </app-form-group>
+
+      <app-form-group required>
+        <template v-slot:label>이름</template>
+
+        <vs-input
+          v-model="item['user:user_nm']"
+          :danger="errors['user:user_nm'] != null"
+          :danger-text="errors['user:user_nm']"
+        />
+      </app-form-group>
+
+      <app-form-group>
+        <template v-slot:label>이메일</template>
+
+        <vs-input
+          v-model="item['user:email']"
+          :danger="errors['user:email'] != null"
+          :danger-text="errors['user:email']"
+        />
+      </app-form-group>
+    </app-form>
 
   </vx-card>
 </template>
@@ -93,7 +70,16 @@ import axios from "axios";
 import api from "@/services/user";
 import { mapActions } from "vuex";
 
+import AppControl from "@/views/ui-elements/AppControl";
+import AppForm from "@/views/ui-elements/AppForm";
+import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+
 export default {
+  components: {
+    AppControl,
+    AppForm,
+    AppFormGroup
+  },
   data() {
     return {
       item: {

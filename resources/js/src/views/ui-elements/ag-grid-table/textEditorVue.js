@@ -7,7 +7,7 @@ const KEY_ENTER = 13;
 const KEY_TAB = 9;
 
 export default Vue.extend({
-  template: `<div class="ag-input-wrapper" role="presentation"><input :ref="'input'" @keydown="onKeyDown($event)" class="ag-cell-edit-input" v-model="value" maxlength="10"/></div>`,
+  template: `<div class="ag-input-wrapper" role="presentation"><input :ref="'input'" @keydown="onKeyDown($event)" class="ag-cell-edit-input" v-model="value" maxlength="30"/></div>`,
   data() {
     return {
       value: '',
@@ -73,7 +73,8 @@ export default Vue.extend({
     },
 
     isCharNumeric(charStr) {
-      return /\d/.test(charStr);
+    //   return /\d/.test(charStr);
+      return true
     },
 
     isKeyPressedNumeric(event) {
@@ -103,8 +104,8 @@ export default Vue.extend({
     this.setInitialState(this.params);
 
     // only start edit if key pressed is a number, not a letter
-    this.cancelBeforeStart =
-      this.params.charPress && '1234567890'.indexOf(this.params.charPress) < 0;
+    this.cancelBeforeStart = false
+    //   this.params.charPress && '1234567890'.indexOf(this.params.charPress) < 0;
   },
   mounted() {
     Vue.nextTick(() => {

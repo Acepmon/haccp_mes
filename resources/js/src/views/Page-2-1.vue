@@ -33,29 +33,13 @@
         </template>
       </app-control>
 
-      <vs-divider class="mb-0" />
-
-      <ag-grid-vue
-        ref="agGridTable"
-        :gridOptions="gridOptions2"
-        class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
-        style="max-height: 200px;"
-        :columnDefs="columnDefs2"
-        :defaultColDef="defaultColDef"
-        :rowData="itemsComp2">
-      </ag-grid-vue>
-
-      <vs-divider class="mb-0" />
-
-      <!-- grid2 - item-mst -->
-
       <ag-grid-vue
         ref="agGridTable"
         rowSelection="single"
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
-        style="max-height: 200px;"
+        style="max-height: 300px;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
@@ -68,6 +52,16 @@
         :total="totalPages"
         :max="maxPageNumbers"
         v-model="currentPage" />
+
+      <ag-grid-vue
+        ref="agGridTable"
+        :gridOptions="gridOptions2"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 300px;"
+        :columnDefs="columnDefs2"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp2">
+      </ag-grid-vue>
 
     </vx-card>
 
@@ -188,25 +182,25 @@ export default {
           field: 'item_mst:item_id',
           filter: false,
           editable: false,
-          width: 150,
+          width: 200,
         },
         {
           headerName: '품목명',
           field: 'item_mst:item_nm',
           filter: false,
           editable: false,
-          width: 200,
+          width: 300,
         },
         {
-          headerName: '순번',
-          field: 'proc_src:seq_no',
+          headerName: '규격',
+          field: 'item_mst:spec',
           filter: false,
           editable: false,
-          width: 150,
+          width: 300,
         },
         {
-          headerName: '재료명',
-          field: 'proc_src:src_nm',
+          headerName: '단위',
+          field: 'item_mst:unit',
           filter: false,
           editable: false,
           width: 300,
@@ -247,7 +241,28 @@ export default {
           field: 'PROC_DTL',
           filter: false,
           editable: false,
-          width: 300,
+          width: 200,
+        },
+        {
+          headerName: 'BOM 재료',
+          field: 'ITEM_NM',
+          filter: false,
+          editable: false,
+          width: 200,
+        },
+        {
+          headerName: '생산수량',
+          field: 'PROD_QTY',
+          filter: false,
+          editable: false,
+          width: 200,
+        },
+        {
+          headerName: '소요수량',
+          field: 'USE_QTY',
+          filter: false,
+          editable: false,
+          width: 200,
         },
       ]
     }
@@ -426,19 +441,20 @@ export default {
         search_params['item_nm'] = this.searchNm;
       }
 
-      proc_src
+      proc_dtl
         .fetch({
           ...this.paginationParam,
           limit: -1,
           ...search_params,
-          with: 'item_mst'
+          grid1: true,
+          with: ''
         })
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
           callback(this.items)
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors

@@ -53,9 +53,130 @@
         </template>
       </app-control>
 
-      <vs-divider />
+      <ag-grid-vue
+        ref="agGridTable"
+        :gridOptions="gridOptions"
+        rowSelection="single"
+        @selection-changed="handleSelected"
+        class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
+        style="max-height: 400px;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp"
+        :frameworkComponents="frameworkComponents"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize"
+        :suppressPaginationPanel="true">
+      </ag-grid-vue>
+
+      <vs-pagination
+        :total="totalPages"
+        :max="maxPageNumbers"
+        v-model="currentPage" />
 
     </vx-card>
+
+    <vs-popup fullscreen title="" :active.sync="detailDialog" button-close-hidden>
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="exportExcelDetail()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >{{ $t("ToExcel") }}</vs-button
+          >
+          <vs-button
+            @click="detailDialog = false"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >{{ $t("Close") }}</vs-button
+          >
+        </template>
+      </app-control>
+      <div class="container">
+        <vs-table stripe hoverFlat>
+          <vs-tr>
+            <vs-th colspan="5">
+              <span class="h4 py-2 font-bold">작업지시서전표</span>
+            </vs-th>
+          </vs-tr>
+
+          <vs-tr>
+            <vs-th colspan="5">
+              <span class="h5 py-2 font-bold">전표번호</span>
+              <span class="h5 py-2 font-bold"> : {{ detailData.job_ord }}</span>
+            </vs-th>
+          </vs-tr>
+
+          <vs-tr>
+            <vs-th class="h5 py-2 font-bold text-center">품목코드</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">품명 및 규격</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">생산공장명</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">수량</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">안전재고</vs-th>
+          </vs-tr>
+
+          <vs-tr :key="indextr" v-for="(tr, indextr) in detailData.summary">
+            <vs-td>{{ tr['item_id'] }}</vs-td>
+            <vs-td>{{ tr['item_nm'] }}</vs-td>
+            <vs-td>{{ tr['fact_nm'] }}</vs-td>
+            <vs-td class="text-right">{{ tr['prod_qty'] }}</vs-td>
+            <vs-td></vs-td>
+          </vs-tr>
+
+          <vs-tr>
+            <vs-th colspan="5" class="h5 py-2">
+              {{ detailData.summary_dt }}
+            </vs-th>
+          </vs-tr>
+        </vs-table>
+
+        <vs-table stripe hoverFlat class="mt-5" >
+          <vs-tr>
+            <vs-th colspan="6">
+              <span class="h4 py-2 font-bold">작업지시서전표</span>
+            </vs-th>
+          </vs-tr>
+          <vs-tr>
+            <vs-th class="h5 py-2 font-bold text-center">품목코드</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">품명 및 규격</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">소요량</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">안전재고수량</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">함량비(%)</vs-th>
+            <vs-th class="h5 py-2 font-bold text-center">원산지</vs-th>
+          </vs-tr>
+
+          <!-- eslint-disable-next-line -->
+          <template v-for="detail in detailData.details">
+            <!-- eslint-disable-next-line -->
+            <vs-tr v-for="(tr, indextr) in detail.subdetails" :key="indextr">
+              <vs-td>{{ tr['item_id'] }}</vs-td>
+              <vs-td>{{ tr['item_nm'] }}</vs-td>
+              <vs-td class="text-right">{{ tr['req'] }}</vs-td>
+              <vs-td></vs-td>
+              <vs-td class="text-center">{{ parseFloat(tr['ratio'], 2) }}</vs-td>
+              <vs-td class="text-center">{{ tr['origin'] }}</vs-td>
+            </vs-tr>
+            <!-- eslint-disable-next-line -->
+            <vs-tr>
+              <td colspan="2" class="text-center">합계</td>
+              <td class="text-right">{{ detail.reqSum }}</td>
+              <td></td>
+              <td class="text-center">{{ parseFloat(detail.ratio, 2) }}</td>
+              <td class="text-center">{{ detail.origin }}</td>
+            </vs-tr>
+          </template>
+
+          <vs-tr>
+            <vs-th colspan="6" class="h5 py-2">
+              {{ detailData.details_dt }}
+            </vs-th>
+          </vs-tr>
+        </vs-table>
+      </div>
+    </vs-popup>
   </div>
 </template>
 
@@ -63,6 +184,7 @@
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
 import job_ord from "@/services/job_ord";
+import job_ord_dtl from "@/services/job_ord_dtl";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -75,8 +197,11 @@ import "flatpickr/dist/flatpickr.css";
 import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js"
 
 import { AgGridVue } from "ag-grid-vue";
+import NumericEditor from '@/views/ui-elements/ag-grid-table/numericEditorVue';
+import TextEditor from '@/views/ui-elements/ag-grid-table/textEditorVue';
 
 import "@sass/vuexy/extraComponents/agGridStyleOverride.scss";
+import moment from 'moment';
 
 export default {
   components: {
@@ -91,8 +216,8 @@ export default {
   data () {
     return {
       format: "yyyy-MM-dd",
-      from: null,
-      to: null,
+      from: moment().startOf('month').format('YYYY-MM-DD'),
+      to: moment().format('YYYY-MM-DD'),
       configFromdateTimePicker: {
         maxDate: null,
         locale: KoreanLocale,
@@ -102,7 +227,92 @@ export default {
         locale: KoreanLocale,
       },
       importFile: null,
-      items: []
+      item: null,
+      items: [],
+
+      detailDialog: false,
+      detailData: {
+        job_ord: null,
+        summary_dt: null,
+        summary: [],
+        details: [],
+        details_dt: null
+      },
+
+      maxPageNumbers: 7,
+      gridOptions: {
+        rowHeight: 40,
+        headerHeight: 40
+      },
+      gridApi: null,
+      defaultColDef: {
+        sortable: true,
+        editable: false,
+        resizable: true,
+        suppressMenu: false
+      },
+      frameworkComponents: {
+        numericEditor: NumericEditor,
+        textEditor: TextEditor
+      },
+      columnDefs: [
+        {
+          headerName: 'No',
+          field: 'no',
+          filter: false,
+          editable: false,
+          width: 80,
+        },
+        {
+          headerName: '작업번호',
+          field: 'job_ord:job_ord',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+        {
+          headerName: '품목ID',
+          field: 'job_ord:item_id',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+        {
+          headerName: '품목명',
+          field: 'job_ord:item_nm',
+          filter: false,
+          editable: false,
+          width: 150,
+        },
+        {
+          headerName: '지시수량',
+          field: 'job_ord:ord_qty',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+        {
+          headerName: '생산수량',
+          field: 'job_ord:prod_qty',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+        {
+          headerName: '담당자',
+          field: 'job_ord:ord_nm',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+        {
+          headerName: '생산공장',
+          field: 'job_ord:fact_cd',
+          filter: false,
+          editable: false,
+          width: 120,
+        },
+      ]
     }
   },
 
@@ -114,6 +324,23 @@ export default {
           ...item
         } 
       })
+    },
+    totalPages () {
+      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      else return 0
+    },
+    paginationPageSize () {
+      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      else return 50
+    },
+    currentPage: {
+      get () {
+        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        else return 1
+      },
+      set (val) {
+        this.gridApi.paginationGoToPage(val - 1)
+      }
     }
   },
 
@@ -133,16 +360,105 @@ export default {
       }
     },
 
+    onFromChange(selectedDates, dateStr, instance) {
+      this.$set(this.configTodateTimePicker, "minDate", dateStr);
+    },
+
+    onToChange(selectedDates, dateStr, instance) {
+      this.$set(this.configFromdateTimePicker, "maxDate", dateStr);
+    },
+
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
+      this.$set(this, 'item', {
+        job_ord: null,
+        summary_dt: null,
+        summary: [],
+        details: [],
+        details_dt: null
+      })
+
+      if (rows.length > 0) {
+        this.$set(this, 'item', rows[0])
+        this.$set(this, 'detailDialog', true)
+        this.fetch({
+          job_dt: rows[0]['job_ord:job_dt'],
+          seq_no: rows[0]['job_ord:seq_no'],
+        })
+      }
+    },
+
+    exportExcelDetail () {
+      window.location.href = job_ord_dtl.export({
+        job_dt: this.item['job_ord:job_dt'],
+        seq_no: this.item['job_ord:seq_no'],
+      });
+    },
+
+    fetch (args = {}) {
+      this.spinner();
+
+      job_ord_dtl
+        .fetch({
+          job_dt: this.item['job_ord:job_dt'],
+          seq_no: this.item['job_ord:seq_no'],
+          ...args
+        })
+        .then((res) => {
+          this.spinner(false);
+          this.detailData = res.data
+        })
+        .catch(() => {
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
+
     query () {
-      // 
-    },
+      this.spinner();
 
-    addDialog () {
-      // 
-    },
+      let search_params = {};
 
-    exportExcel () {
-      // 
+      if (this.from != null) {
+        search_params['from'] = this.from;
+      }
+
+      if (this.to != null) {
+        search_params['to'] = this.to;
+      }
+
+      job_ord
+        .fetch({
+          limit: -1,
+          ...search_params,
+        })
+        .then((res) => {
+          this.spinner(false);
+          this.items = res.data.data;
+        })
+        .catch(() => {
+          this.displayErrors(
+            err.response.data.hasOwnProperty("errors")
+              ? err.response.data.errors
+              : null
+          );
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
     },
 
     closeDialog() {
@@ -153,12 +469,28 @@ export default {
         text: this.$t("CloseDocument"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => this.removeTab("page-1-6"),
+        accept: () => this.removeTab("page-2-3"),
       });
     },
+  },
+
+  mounted () {
+    this.gridApi = this.gridOptions.api
+  },
+
+  created () {
+    setTimeout(() => {
+      this.query()
+    }, 500)
   }
 };
 </script>
 
-<style>
+<style lang="css">
+.vs-table--not-data {
+  display: none !important;
+}
+th.text-center .vs-table-text {
+  justify-content: center;
+}
 </style>

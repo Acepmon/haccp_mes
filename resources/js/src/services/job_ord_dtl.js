@@ -13,7 +13,7 @@ export default {
             limit: 15,
             sort: 'REG_DTM',
             order: 'DESC',
-            with: '',
+            with: 'item',
             ...args
         }
 

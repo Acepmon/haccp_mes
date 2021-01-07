@@ -29,6 +29,8 @@ $primary-color: #7367F0;
 
 @import "../_variables.scss";
 
+$gridBorderColor: #e2e2e2;
+
 .ag-grid-table {
 
   color: inherit !important;
@@ -37,6 +39,11 @@ $primary-color: #7367F0;
   @media screen and (max-height: 800px) {
     height: 620px;
   }
+
+  border-top: 1px solid $gridBorderColor;
+  border-left: 1px solid $gridBorderColor;
+  border-right: 1px solid $gridBorderColor;
+  border-bottom: 1px solid $gridBorderColor;
 
   .ag-header-cell {
     .ag-cell-label-container {
@@ -133,7 +140,19 @@ $primary-color: #7367F0;
     }
 }
 
+.ag-theme-material {
+  .ag-ltr {
+    .ag-cell {
+      border-right-color: $gridBorderColor;
+    }
+  }
+}
+
 .ag-grid-table {
+  .ag-header-cell {
+    border-right: 1px solid $gridBorderColor;
+  }
+
   .ag-cell {
     line-height: 36px;
   }
@@ -150,7 +169,7 @@ $primary-color: #7367F0;
       .ag-header {
         background: transparent;
         color: $white;
-        border-bottom-color: $theme-dark-border-color;
+        border-color: $theme-dark-border-color;
       }
 
       .ag-cell-last-left-pinned {
@@ -159,7 +178,7 @@ $primary-color: #7367F0;
 
       .ag-floating-filter-input {
         color: $theme-dark-text-color;
-        border-bottom-color: $theme-dark-border-color;
+        border-color: $theme-dark-border-color;
       }
 
       .ag-row-hover,

@@ -49,30 +49,6 @@
       <vs-divider />
 
       <app-control>
-        <template v-slot:filter>
-          <span class="pt-2 px-4">그룹코드명</span>
-          <vs-input
-            v-model="item2['comm_cd:comm2_nm']"
-            class="control-field"
-            readonly
-          />
-        </template>
-      </app-control>
-
-      <ag-grid-vue
-        ref="agGridTable"
-        :gridOptions="gridOptions"
-        class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 300px;"
-        :columnDefs="columnDefs"
-        :defaultColDef="defaultColDef"
-        :onGridReady="fillAllCellsWithWidthMeasurement"
-        :rowData="itemsComp">
-      </ag-grid-vue>
-
-      <vs-divider />
-
-      <app-control>
         <template v-slot:action>
            <vs-button
             @click="excel()"
@@ -125,6 +101,28 @@
           </template>
         </vs-table>
       </div>
+
+      <app-control class="mt-5">
+        <template v-slot:filter>
+          <span class="pt-2 px-4">그룹코드명</span>
+          <vs-input
+            v-model="item2['comm_cd:comm2_nm']"
+            class="control-field"
+            readonly
+          />
+        </template>
+      </app-control>
+
+      <ag-grid-vue
+        ref="agGridTable"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 300px;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :onGridReady="fillAllCellsWithWidthMeasurement"
+        :rowData="itemsComp">
+      </ag-grid-vue>
     </vx-card>
   </div>
 </template>

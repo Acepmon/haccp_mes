@@ -103,7 +103,7 @@ export default [
         showSubmenuOn: '/1',
       },
       {
-        url: "/1/6-1",
+        url: "/1/6/1",
         name: "원/부자재 단위관리",
         slug: "원/부자재 단위관리",
         showSubmenuOn: '/1',
@@ -286,50 +286,32 @@ export default [
     submenu: [
       {
         url: "/6/1",
-        name: "HACCP이행점검표",
-        slug: "HACCP이행점검표",
-        showSubmenuOn: '/6',
-      },
-      {
-        url: "/6/2",
         name: "CCP 모니터링",
         slug: "CCP 모니터링",
         showSubmenuOn: '/6',
       },
       {
+        url: "/6/2",
+        name: "CCP 이탈관리",
+        slug: "CCP 이탈관리",
+        showSubmenuOn: '/6',
+      },
+      {
         url: "/6/3",
-        name: "CCP이탈관리",
-        slug: "CCP이탈관리",
+        name: "CCP 종합정보",
+        slug: "CCP 종합정보",
         showSubmenuOn: '/6',
       },
       {
         url: "/6/4",
-        name: "CCP모니터링정보",
-        slug: "CCP모니터링정보",
+        name: "HACCP 이행점검",
+        slug: "HACCP 이행점검",
         showSubmenuOn: '/6',
       },
       {
         url: "/6/5",
-        name: "선행기준이탈관리",
-        slug: "선행기준이탈관리",
-        showSubmenuOn: '/6',
-      },
-      {
-        url: "/6/6",
-        name: "제품이력관리",
-        slug: "제품이력관리",
-        showSubmenuOn: '/6',
-      },
-      {
-        url: "/6/7",
         name: "시험검사관리",
         slug: "시험검사관리",
-        showSubmenuOn: '/6',
-      },
-      {
-        url: "/6/8",
-        name: "KPI관리",
-        slug: "KPI관리",
         showSubmenuOn: '/6',
       }
     ]

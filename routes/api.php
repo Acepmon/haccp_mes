@@ -96,4 +96,16 @@ Route::group([
     Route::apiResource('proc_dtl_sub', 'ProcDtlSubController');
 
     Route::post('proc_unified/import', 'ProcUnifiedController@import')->name('proc_unified.import');
+
+    Route::get('job_ord/export', 'JobOrdController@export')->name('job_ord.export');
+    Route::post('job_ord/import', 'JobOrdController@import')->name('job_ord.import');
+    Route::post('job_ord/sync', 'JobOrdController@sync')->name('job_ord.sync');
+    Route::apiResource('job_ord', 'JobOrdController');
+
+    Route::get('job_ord_dtl/export', 'JobOrdDtlController@export')->name('job_ord_dtl.export');
+    Route::post('job_ord_dtl/import', 'JobOrdDtlController@import')->name('job_ord_dtl.import');
+    Route::post('job_ord_dtl/sync', 'JobOrdDtlController@sync')->name('job_ord_dtl.sync');
+    Route::apiResource('job_ord_dtl', 'JobOrdDtlController');
+
+    Route::get('haccp_monitor/ccp_data', 'HaccpMonitorController@ccp_data');
 });

@@ -93,9 +93,9 @@ const router = new Router({
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/6', value: 'page-1-6', label: '원/부자재 관리', component: 'page-1-6'}) } }
               },
               {
-                path: '/1/6-1',
-                name: '원/부자재 관리',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/6-1', value: 'page-1-6-1', label: '원/부자재 단위관리', component: 'page-1-6-1'}) } }
+                path: '/1/6/1',
+                name: '원/부자재 단위관리',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/6/1', value: 'page-1-6-1', label: '원/부자재 단위관리', component: 'page-1-6-1'}) } }
               },
               {
                 path: '/1/7',
@@ -174,6 +174,11 @@ const router = new Router({
                 path: '/6',
                 name: 'HACCP모니터링',
                 component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
+              },
+              {
+                path: '/6/1',
+                name: 'CCP 모니터링',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/1', value: 'page-6-1', label: 'CCP 모니터링', component: 'page-6-1'}) } }
               },
               {
                 path: '/7',

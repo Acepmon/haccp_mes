@@ -14,9 +14,9 @@ class CreateMyhhTable extends Migration
      */
     public function up()
     {
-        $path = database_path("migrations/myhh.sql");
-        $sql = file_get_contents($path);
-        DB::unprepared($sql);
+        // $path = database_path("migrations/myhh.sql");
+        // $sql = file_get_contents($path);
+        // DB::unprepared($sql);
     }
 
     /**
