@@ -44,13 +44,16 @@ class BomConfigImport implements ToCollection
                     ]);
 
                     if (!DB::table('ITEM_MST')->where('ITEM_ID', $row[4])->exists()) {
-                        DB::table('ITEM_MST')->insert([
-                            'ITEM_ID' => $row[4],
-                            'ITEM_NM' => $row[5],
-                            'USE_YN' => 'Y',
-                            'PROCESS_CD' => $this->getCodeByName('B14', $row[2]),
-                        ]);
-                        $this->insertCount++;
+                        $row[4] = trim($row[4]);
+                        if ($row[0] != null && $row[0] != '' && !empty($row[0])) {
+                            DB::table('ITEM_MST')->insert([
+                                'ITEM_ID' => $row[4],
+                                'ITEM_NM' => $row[5],
+                                'USE_YN' => 'Y',
+                                'PROCESS_CD' => $this->getCodeByName('B14', $row[2]),
+                            ]);
+                            $this->insertCount++;
+                        }
                     }
 
                     $this->updateCount++;
@@ -68,13 +71,16 @@ class BomConfigImport implements ToCollection
                     ]);
 
                     if (!DB::table('ITEM_MST')->where('ITEM_ID', $row[4])->exists()) {
-                        DB::table('ITEM_MST')->insert([
-                            'ITEM_ID' => $row[4],
-                            'ITEM_NM' => $row[5],
-                            'USE_YN' => 'Y',
-                            'PROCESS_CD' => $this->getCodeByName('B14', $row[2]),
-                        ]);
-                        $this->insertCount++;
+                        $row[4] = trim($row[4]);
+                        if ($row[0] != null && $row[0] != '' && !empty($row[0])) {
+                            DB::table('ITEM_MST')->insert([
+                                'ITEM_ID' => $row[4],
+                                'ITEM_NM' => $row[5],
+                                'USE_YN' => 'Y',
+                                'PROCESS_CD' => $this->getCodeByName('B14', $row[2]),
+                            ]);
+                            $this->insertCount++;
+                        }
                     }
 
                     $this->insertCount++;

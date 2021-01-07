@@ -236,7 +236,7 @@
 <script>
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
-import api from "@/services/item_mst";
+import item_mst from "@/services/item_mst";
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
 import { AgGridVue } from 'ag-grid-vue'
@@ -281,7 +281,8 @@ export default {
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
-        headerHeight: 40
+        headerHeight: 40,
+        // rowModelType: 'infinite'
       },
       gridApi: null,
       defaultColDef: {
@@ -514,7 +515,7 @@ export default {
         search_params["item_cd"] = this.searchType;
       }
 
-      api
+      item_mst
         .fetch({
           ...this.paginationParam,
           ...this.sortParam,
@@ -548,7 +549,7 @@ export default {
     save () {
       this.spinner();
 
-      api
+      item_mst
         .sync({
           'sync': this.gridOptions.rowData
         })
@@ -624,7 +625,7 @@ export default {
         formData.append("file", this.importFile);
       }
 
-      api
+      item_mst
         .import(formData)
         .then((res) => {
           this.spinner(false)
@@ -673,7 +674,7 @@ export default {
         search_params["item_cd"] = this.searchType;
       }
 
-      window.location.href = api.export(search_params);
+      window.location.href = item_mst.export(search_params);
     },
 
     closeDialog() {

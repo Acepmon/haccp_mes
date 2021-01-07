@@ -57,7 +57,8 @@ class ItemMstImport implements ToCollection
                     $this->updateCount++;
                 } else {
                     // Insert
-                    if ($row[0] != null && $row[0] != '') {
+                    $row[0] = trim($row[0]);
+                    if ($row[0] != null && $row[0] != '' && !empty($row[0])) {
                         DB::table('ITEM_MST')->insert([
                             'ITEM_ID' => $row[0],
                             'ITEM_NM' => $row[1],
