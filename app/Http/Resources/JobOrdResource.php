@@ -23,7 +23,7 @@ class JobOrdResource extends JsonResource
             'job_ord:item_nm' => $this->whenLoaded('item', function () {
                 return $this->item->ITEM_NM;
             }),
-            'job_ord:ord_qty' => $this->ORD_QTY,
+            'job_ord:ord_qty' => number_format($this->ORD_QTY),
             'job_ord:prod_qty' => $this->PROD_QTY,
             'job_ord:ord_nm' => $this->ORD_NM,
             'job_ord:bom_ver' => $this->BOM_VER,

@@ -28,7 +28,8 @@
             type="border"
             >{{ $t("Add") }}</vs-button
           >
-          <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="0" :skips="1">
+          <!-- <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="0" :skips="1"> -->
+          <import-excel :onSuccess="loadDataInTable" v-model="importFile" >
           </import-excel>
           <vs-button
             @click="closeDialog()"

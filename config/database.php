@@ -76,7 +76,7 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => '49.50.174.133',
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'haccp_mes'),
+            'database' => 'haccp_mes',
             'username' => 'haccp',
             'password' => 'H@ccp123@',
             'unix_socket' => env('DB_SOCKET', ''),

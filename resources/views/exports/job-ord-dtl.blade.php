@@ -25,7 +25,7 @@
       <td>{{ $tr['item_id'] }}</td>
       <td>{{ $tr['item_nm'] }}</td>
       <td>{{ $tr['fact_nm'] }}</td>
-      <td>{{ $tr['prod_qty'] }}</td>
+      <td>{{ $tr['ord_qty'] }}</td>
       <td></td>
     </tr>
   @endforeach

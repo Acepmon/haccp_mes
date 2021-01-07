@@ -30,7 +30,7 @@ class JobOrdImport implements ToCollection
             foreach ($groups as $key => $group) {
                 $itemId = $group[0][10];
                 $item2Id = $group[1][10];
-                
+
                 $ordQty = $group[0][14];
                 $prodQty = $group[1][14];
 
@@ -43,26 +43,26 @@ class JobOrdImport implements ToCollection
                         'SEQ_NO' => $row[1],
                         'ITEM_ID' => $row[10],
                     ], [
-                        'ORD_QTY' => $ordQty,
-                        'PROD_QTY' => $prodQty,
+                        'ORD_QTY' => $row[14],
+                        'PROD_QTY' => 0,
                         'ORD_NM' => $row[5],
                         'BOM_VER' => $bomVer,
                         'FACT_CD' => $row[15],
                         'REMARK' => $row[18]
                     ]);
 
-                    $this->insertJobOrdDtl([
-                        'JOB_DT' => $row[0],
-                        'SEQ_NO' => $row[1],
-                        'ITEM_ID' => $row[10],
-                        'PROC_SEQ_NO' => ($index + 1)
-                    ], [
-                        'SRT_DTM' => null,
-                        'END_DTM' => null,
-                        'HACCP_CD' => null,
-                        'HACCP_YN' => 'Y',
-                        'REMARK' => $row[18],
-                    ]);
+                    // $this->insertJobOrdDtl([
+                    //     'JOB_DT' => $row[0],
+                    //     'SEQ_NO' => $row[1],
+                    //     'ITEM_ID' => $row[10],
+                    //     'PROC_SEQ_NO' => ($index + 1)
+                    // ], [
+                    //     'SRT_DTM' => null,
+                    //     'END_DTM' => null,
+                    //     'HACCP_CD' => null,
+                    //     'HACCP_YN' => 'Y',
+                    //     'REMARK' => $row[18],
+                    // ]);
                 }
             }
         });

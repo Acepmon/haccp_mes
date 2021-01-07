@@ -48,7 +48,8 @@ class JobOrdDtlController extends Controller
                 'item_id' => $jobOrd->item->ITEM_ID,
                 'item_nm' => $jobOrd->item->ITEM_NM,
                 'fact_nm' => $jobOrd->FACT_CD,
-                'prod_qty' => number_format($jobOrd->PROD_QTY)
+                'prod_qty' => number_format($jobOrd->PROD_QTY),
+                'ord_qty' => number_format($jobOrd->ORD_QTY)
             ]);
         }
 

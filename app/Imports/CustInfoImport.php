@@ -69,7 +69,7 @@ class CustInfoImport implements ToCollection
                             'GRP_NM' => $row[10],
                             'ADDR' => $row[11],
                             'REMARK' => $row[12],
-                            'USE_YN' => $row[13],
+                            'USE_YN' => $this->parseUseYn($row[13]),
                         ]);
                         $this->insertCount++;
                     }

@@ -226,6 +226,7 @@ export default {
         {
           headerName: '지시수량',
           field: 'job_ord:ord_qty',
+          type: 'numericColumn',
           filter: false,
           editable: false,
           width: 120,
@@ -233,6 +234,7 @@ export default {
         {
           headerName: '생산수량',
           field: 'job_ord:prod_qty',
+          type: 'numericColumn',
           filter: false,
           editable: false,
           width: 120,

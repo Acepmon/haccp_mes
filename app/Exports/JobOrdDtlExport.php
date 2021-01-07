@@ -48,6 +48,7 @@ class JobOrdDtlExport implements FromView
                 'item_id' => $jobOrd->item->ITEM_ID,
                 'item_nm' => $jobOrd->item->ITEM_NM,
                 'fact_nm' => $jobOrd->FACT_CD,
+                'ord_qty' => number_format($jobOrd->ORD_QTY),
                 'prod_qty' => number_format($jobOrd->PROD_QTY)
             ]);
         }
