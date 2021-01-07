@@ -11,14 +11,30 @@ export default {
         let params = {
             page: 1,
             limit: 15,
-            sort: 'REG_DTM',
-            order: 'DESC',
+            sort: 'JOB_DT',
+            order: 'ASC',
             with: 'item',
             ...args
         }
 
         // Return axios promise
         return axios.get(`${config.baseUrl}/${this.api}?${this.prepParams(params)}`)
+    },
+
+    summary_details: function (args = {}) {
+
+        // Default parameters
+        let params = {
+            page: 1,
+            limit: 15,
+            sort: 'JOB_DT',
+            order: 'ASC',
+            with: 'item',
+            ...args
+        }
+
+        // Return axios promise
+        return axios.get(`${config.baseUrl}/${this.api}/summary_details?${this.prepParams(params)}`)
     },
 
     post: function (formData) {
@@ -64,6 +80,10 @@ export default {
 
     export: function (params) {
         return `${config.baseUrl}/${this.api}/export?${this.prepParams(params)}`
+    },
+
+    summary_export: function (params) {
+        return `${config.baseUrl}/${this.api}/summary_export?${this.prepParams(params)}`
     },
 
     import: function (formData) {

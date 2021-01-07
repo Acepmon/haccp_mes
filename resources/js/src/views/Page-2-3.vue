@@ -96,55 +96,57 @@
         </template>
       </app-control>
       <div class="container">
-        <vs-table stripe hoverFlat>
+        <vs-table stripe>
           <vs-tr>
-            <vs-th colspan="5">
+            <vs-th style="pointer-events: none;" colspan="5">
               <span class="h4 py-2 font-bold">작업지시서전표</span>
             </vs-th>
           </vs-tr>
 
           <vs-tr>
-            <vs-th colspan="5">
+            <vs-th style="pointer-events: none;" colspan="5">
               <span class="h5 py-2 font-bold">전표번호</span>
               <span class="h5 py-2 font-bold"> : {{ detailData.job_ord }}</span>
             </vs-th>
           </vs-tr>
 
           <vs-tr>
-            <vs-th class="h5 py-2 font-bold text-center">품목코드</vs-th>
-            <vs-th class="h5 py-2 font-bold text-center">품명 및 규격</vs-th>
-            <vs-th class="h5 py-2 font-bold text-center">생산공장명</vs-th>
-            <vs-th class="h5 py-2 font-bold text-center">수량</vs-th>
-            <vs-th class="h5 py-2 font-bold text-center">안전재고</vs-th>
+            <vs-th style="width: 18%; pointer-events: none;" class="h5 py-2 font-bold text-center">품목코드</vs-th>
+            <vs-th style="width: 18%; pointer-events: none;" class="h5 py-2 font-bold text-center">품명 및 규격</vs-th>
+            <vs-th style="width: 18%; pointer-events: none;" class="h5 py-2 font-bold text-center">생산공장명</vs-th>
+            <vs-th style="width: 18%; pointer-events: none;" class="h5 py-2 font-bold text-center">수량</vs-th>
+            <vs-th style="width: 18%; pointer-events: none;" class="h5 py-2 font-bold text-center">안전재고</vs-th>
+            <vs-th style="pointer-events: none;" class="h5 py-2 font-bold text-center"></vs-th>
           </vs-tr>
 
           <vs-tr :key="indextr" v-for="(tr, indextr) in detailData.summary">
             <vs-td>{{ tr['item_id'] }}</vs-td>
             <vs-td>{{ tr['item_nm'] }}</vs-td>
-            <vs-td>{{ tr['fact_nm'] }}</vs-td>
+            <vs-td class="text-right">{{ tr['fact_nm'] }}</vs-td>
             <vs-td class="text-right">{{ tr['ord_qty'] }}</vs-td>
+            <vs-td></vs-td>
             <vs-td></vs-td>
           </vs-tr>
 
           <vs-tr>
-            <vs-th colspan="5" class="h5 py-2">
+            <vs-th style="pointer-events: none;" colspan="5" class="h5 py-2">
               {{ detailData.summary_dt }}
             </vs-th>
           </vs-tr>
         </vs-table>
 
-        <vs-table stripe hoverFlat class="mt-5" >
+        <vs-table stripe class="mt-5" >
           <vs-tr>
-            <vs-th colspan="6">
+            <vs-th style="pointer-events: none;" colspan="6">
               <span class="h4 py-2 font-bold">작업지시서전표</span>
             </vs-th>
           </vs-tr>
           <vs-tr>
-            <vs-th class="h5 py-2 font-bold text-center">품목코드</vs-th>
-            <vs-th class="h5 py-2 font-bold text-center">품명 및 규격</vs-th>
-            <vs-th class="h5 py-2 font-bold text-center">소요량</vs-th>
-            <vs-th class="h5 py-2 font-bold text-center">안전재고수량</vs-th>
-            <vs-th class="h5 py-2 font-bold text-center">함량비(%)</vs-th>
+            <vs-th style="width: 18%; pointer-events: none;" class="h5 py-2 font-bold text-center">품목코드</vs-th>
+            <vs-th style="width: 18%; pointer-events: none;" class="h5 py-2 font-bold text-center">품명 및 규격</vs-th>
+            <vs-th style="width: 18%; pointer-events: none;" class="h5 py-2 font-bold text-center">소요량</vs-th>
+            <vs-th style="width: 18%; pointer-events: none;" class="h5 py-2 font-bold text-center">안전재고수량</vs-th>
+            <vs-th style="width: 18%; pointer-events: none;" class="h5 py-2 font-bold text-center">함량비(%)</vs-th>
             <vs-th class="h5 py-2 font-bold text-center">원산지</vs-th>
           </vs-tr>
 
@@ -170,7 +172,7 @@
           </template>
 
           <vs-tr>
-            <vs-th colspan="6" class="h5 py-2">
+            <vs-th style="pointer-events: none;" colspan="6" class="h5 py-2">
               {{ detailData.details_dt }}
             </vs-th>
           </vs-tr>
@@ -184,7 +186,6 @@
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
 import job_ord from "@/services/job_ord";
-import job_ord_dtl from "@/services/job_ord_dtl";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -269,6 +270,7 @@ export default {
           filter: false,
           editable: false,
           width: 120,
+          cellStyle: {'text-decoration': 'underline', 'cursor': 'pointer'}
         },
         {
           headerName: '품목ID',
@@ -276,6 +278,7 @@ export default {
           filter: false,
           editable: false,
           width: 120,
+          cellStyle: {'text-decoration': 'underline', 'cursor': 'pointer'}
         },
         {
           headerName: '품목명',
@@ -391,7 +394,7 @@ export default {
     },
 
     exportExcelDetail () {
-      window.location.href = job_ord_dtl.export({
+      window.location.href = job_ord.summary_export({
         job_dt: this.item['job_ord:job_dt'],
         seq_no: this.item['job_ord:seq_no'],
       });
@@ -400,8 +403,8 @@ export default {
     fetch (args = {}) {
       this.spinner();
 
-      job_ord_dtl
-        .fetch({
+      job_ord
+        .summary_details({
           job_dt: this.item['job_ord:job_dt'],
           seq_no: this.item['job_ord:seq_no'],
           ...args

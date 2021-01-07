@@ -98,6 +98,8 @@ Route::group([
     Route::post('proc_unified/import', 'ProcUnifiedController@import')->name('proc_unified.import');
 
     Route::get('job_ord/export', 'JobOrdController@export')->name('job_ord.export');
+    Route::get('job_ord/summary_export', 'JobOrdController@summaryExport')->name('job_ord.summary_export');
+    Route::get('job_ord/summary_details', 'JobOrdController@summaryDetails')->name('job_ord.summary_details');
     Route::post('job_ord/import', 'JobOrdController@import')->name('job_ord.import');
     Route::post('job_ord/sync', 'JobOrdController@sync')->name('job_ord.sync');
     Route::apiResource('job_ord', 'JobOrdController');

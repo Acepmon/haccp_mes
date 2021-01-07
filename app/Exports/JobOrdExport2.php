@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class JobOrdDtlExport implements FromView
+class JobOrdExport2 implements FromView
 {
     public $jobDt, $seqNo;
 
@@ -34,7 +34,7 @@ class JobOrdDtlExport implements FromView
             'details_dt' => now()->parse($item->REG_DTM)->format('Y/m/d') . ' 오후 ' . now()->parse($item->REG_DTM)->format('H:i:s'),
         ];
 
-        return view('exports.job-ord-dtl', [
+        return view('exports.job-ord', [
             'details' => $details
         ]);
     }

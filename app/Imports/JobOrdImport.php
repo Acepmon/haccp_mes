@@ -10,9 +10,13 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use PDO;
 
 class JobOrdImport implements ToCollection
 {
+    public $updateCount = 0;
+    public $insertCount = 0;
+
     public $cache;
 
     public function __construct()
@@ -31,9 +35,6 @@ class JobOrdImport implements ToCollection
                 $itemId = $group[0][10];
                 $item2Id = $group[1][10];
 
-                $ordQty = $group[0][14];
-                $prodQty = $group[1][14];
-
                 foreach ($group as $index => $row) {
                     $bomVer = BomConfig::where('ITEM1_ID', $itemId)->where('ITEM2_ID', $item2Id)->first();
                     $bomVer = $bomVer != null ? $bomVer->BOM_VER : null;
@@ -50,22 +51,11 @@ class JobOrdImport implements ToCollection
                         'FACT_CD' => $row[15],
                         'REMARK' => $row[18]
                     ]);
-
-                    // $this->insertJobOrdDtl([
-                    //     'JOB_DT' => $row[0],
-                    //     'SEQ_NO' => $row[1],
-                    //     'ITEM_ID' => $row[10],
-                    //     'PROC_SEQ_NO' => ($index + 1)
-                    // ], [
-                    //     'SRT_DTM' => null,
-                    //     'END_DTM' => null,
-                    //     'HACCP_CD' => null,
-                    //     'HACCP_YN' => 'Y',
-                    //     'REMARK' => $row[18],
-                    // ]);
                 }
             }
         });
+
+        session(['update_count' => $this->updateCount, 'insert_count' => $this->insertCount]);
     }
 
     private function groupBySeqNo(Collection $rows)
@@ -90,18 +80,21 @@ class JobOrdImport implements ToCollection
 
     private function insertJobOrd($keys = [], $attributes = [])
     {
-        DB::table('JOB_ORD')->updateOrInsert($keys, array_merge([
-            'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
-            'REG_DTM' => now()->format('Ymdhis'),
-        ], $attributes));
-    }
+        if (DB::table('JOB_ORD')->where($keys)->exists()) {
+            DB::table('JOB_ORD')->where($keys)->update(array_merge($keys, [
+                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+                'REG_DTM' => now()->format('Ymdhis'),
+            ], $attributes));
 
-    private function insertJobOrdDtl($keys = [], $attributes = [])
-    {
-        DB::table('JOB_ORD_DTL')->updateOrInsert($keys, array_merge([
-            'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
-            'REG_DTM' => now()->format('Ymdhis'),
-        ], $attributes));
+            $this->updateCount++;
+        } else {
+            DB::table('JOB_ORD')->where($keys)->insert(array_merge($keys, [
+                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+                'REG_DTM' => now()->format('Ymdhis'),
+            ], $attributes));
+
+            $this->insertCount++;
+        }
     }
 
     private function getCodeByName($cd1, $cdnm)
