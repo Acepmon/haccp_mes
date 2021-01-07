@@ -2,9 +2,9 @@
 
 namespace App;
 
-use App\Events\EdocFileCreated;
-use App\Events\EdocFileDeleted;
-use App\Events\EdocFileUpdated;
+use App\Events\CustInfoCreated;
+use App\Events\CustInfoDeleted;
+use App\Events\CustInfoUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class CustInfo extends Model

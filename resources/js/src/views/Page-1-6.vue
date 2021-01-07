@@ -95,7 +95,7 @@
         >
           <template slot="thead">
             <vs-th>No</vs-th>
-            <vs-th sort-key="item_id">목ID</vs-th>
+            <vs-th sort-key="item_id">품목ID</vs-th>
             <vs-th sort-key="item_nm">품목명</vs-th>
             <vs-th sort-key="spec">규격명</vs-th>
             <vs-th sort-key="unit">단위</vs-th>

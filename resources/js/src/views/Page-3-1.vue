@@ -85,7 +85,7 @@
           @change-page="handleChangePage"
           @sort="handleSort"
         >
-          <template slot="thead">
+          <!-- <template slot="thead">
             <vs-th>No</vs-th>
             <vs-th sort-key="cust_id">거래처코드</vs-th>
             <vs-th sort-key="cust_nm">거래처명</vs-th>
@@ -101,7 +101,7 @@
             <vs-th sort-key="grp1_cd">주소</vs-th>
             <vs-th sort-key="grp2_cd">적요</vs-th>
             <vs-th sort-key="use_yn">사용구분</vs-th>
-           </template>
+           </template> -->
 
           <template slot-scope="{ data }">
             <vs-tr :data="tr" :key="index" v-for="(tr, index) in items">
@@ -193,14 +193,14 @@
         <template slot="header">
           <h4>{{ sheetName }}</h4>
         </template>
-
+<!-- 
         <template slot="thead">
           <vs-th :sort-key="heading" v-for="heading in header" :key="heading">{{ heading }}</vs-th>
-        </template>
+        </template> -->
 
         <template slot-scope="{data}">
           <!-- eslint-disable-next-line -->
-          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" v-if="indextr != 0">
+          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
             <vs-td :data="col" v-for="(col, indexcol) in data[indextr]" :key="indexcol + col">
               {{ col }}
             </vs-td>
@@ -393,6 +393,7 @@ export default {
         order: this.sorting.order != null ? this.sorting.order : "DESC",
       };
     },
+
 
     totalPages () {
       if (this.gridApi) return this.gridApi.paginationGetTotalPages()
@@ -649,15 +650,15 @@ export default {
         text: this.$t("CloseDocument"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => this.removeTab("page-1-6"),
+        accept: () => this.removeTab("page-3-1"),
       });
     },
   },
 
   created() {
-    comm_cd.fetch({ cd1: "B10" }).then((res) => {
-      this.types = res.data;
-    });
+    // comm_cd.fetch({ cd1: "B10" }).then((res) => {
+    //   this.types = res.data;
+    // });
 
     setTimeout(() => {
       this.query()
