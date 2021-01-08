@@ -242,68 +242,25 @@
         </template>
       </app-control>
 
-      <div class="overflow-y-auto" style="max-height: 300px">
-        <vs-table
-          stripe
-          pagination
-          description
-          sst
-          :max-items="pagination.limit"
-          :data="datas"
-          :total="pagination.total"
-          @change-page="handleChangePage"
-          @sort="handleSort"
-          v-model="selected"
-          @selected="handleSelected"
-        >
-          <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="user_id">사용자 ID</vs-th>
-            <vs-th sort-key="user_nm">이름</vs-th>
-            <!-- <vs-th sort-key="user_pw">비밀번호</vs-th> -->
-            <vs-th sort-key="email">이메일</vs-th>
-            <vs-th sort-key="appr_cd">담당업무</vs-th>
-            <vs-th sort-key="role_cd">메뉴접근권한</vs-th>
-            <vs-th sort-key="reg_dtm">등록일시</vs-th>
-          </template>
+      <ag-grid-vue
+        ref="agGridTable"
+        rowSelection="single"
+        @selection-changed="handleSelected"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 100%;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize"
+        :suppressPaginationPanel="true">
+      </ag-grid-vue>
 
-          <template slot-scope="{ data }">
-            <vs-tr :data="tr" :key="index" v-for="(tr, index) in data">
-              <vs-td :data="rowIndex(index)">
-                {{ rowIndex(index) }}
-              </vs-td>
-
-              <vs-td :data="data[index]['user:user_id']">
-                {{ data[index]["user:user_id"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['user:user_nm']">
-                {{ data[index]["user:user_nm"] }}
-              </vs-td>
-
-              <!-- <vs-td :data="data[index]['user:user_pw']">
-                                {{ data[index]['user:user_pw'] }}
-                            </vs-td> -->
-
-              <vs-td :data="data[index]['user:email']">
-                {{ data[index]["user:email"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['user:appr_nm']">
-                {{ data[index]["user:appr_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['user:role_nm']">
-                {{ data[index]["user:role_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['user:reg_dtm']">
-                {{ data[index]["user:reg_dtm"] }}
-              </vs-td>
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
+      <vs-pagination
+        :total="totalPages"
+        :max="maxPageNumbers"
+        v-model="currentPage" />
     </vx-card>
   </div>
 </template>
@@ -317,12 +274,15 @@ import { mapActions } from "vuex";
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+import { AgGridVue } from 'ag-grid-vue';
 
+import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 export default {
   components: {
     AppControl,
     AppForm,
     AppFormGroup,
+    AgGridVue
   },
   data() {
     return {
@@ -355,14 +315,8 @@ export default {
         "user:job_cd": null,
         "user:user_sts_yn": null,
       },
-      isSelected: false,
       datas: [],
 
-      pagination: {
-        page: 1,
-        limit: 15,
-        total: 0,
-      },
       sorting: {
         sort: "REG_DTM",
         order: "DESC",
@@ -376,22 +330,101 @@ export default {
         "user:job_cd": "업무권한",
         "user:user_sts_yn": "사용여부",
       },
+
+      maxPageNumbers: 7,
+      gridOptions: {
+        rowHeight: 40,
+        headerHeight: 40
+      },
+      gridApi: null,
+      defaultColDef: {
+        sortable: true,
+        editable: false,
+        resizable: true,
+        suppressMenu: false
+      },
+
+      columnDefs: [
+        {
+          headerName: 'No',
+          field: 'no',
+          filter: false,
+          editable: false,
+          width: 80,
+        },
+        {
+          headerName: '사용자 ID',
+          field: 'user:user_id',
+          filter: false,
+          width: 200,
+        },
+        {
+          headerName: '이름',
+          field: 'user:user_nm',
+          filter: false,
+          width: 200,
+        },
+        {
+          headerName: '이메일',
+          field: 'user:email',
+          filter: false,
+          width: 200,
+        },
+        {
+          headerName: '담당업무',
+          field: 'user:appr_nm',
+          filter: false,
+          width: 200,
+        },
+        {
+          headerName: '메뉴접근권한',
+          field: 'user:role_nm',
+          filter: false,
+          width: 200,
+        },
+        {
+          headerName: '등록일시',
+          field: 'user:reg_dtm',
+          filter: false,
+          width: 200,
+        }
+      ],
     };
   },
   computed: {
+    itemsComp: function () {
+      return this.datas.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+
+    totalPages () {
+      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      else return 0
+    },
+    paginationPageSize () {
+      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      else return 50
+    },
+    currentPage: {
+      get () {
+        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        else return 1
+      },
+      set (val) {
+        this.gridApi.paginationGoToPage(val - 1)
+      }
+    },
+
     validEmail() {
       return this.selected["user:email"] != null
         ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
             this.selected["user:email"]
           )
         : false;
-    },
-
-    paginationParam: function () {
-      return {
-        page: this.pagination.page,
-        limit: this.pagination.limit,
-      };
     },
 
     sortParam: function () {
@@ -433,29 +466,13 @@ export default {
       return passed;
     },
 
-    rowIndex: function (index) {
-      return (
-        this.pagination.page * this.pagination.limit -
-        this.pagination.limit +
-        index +
-        1
-      );
-    },
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
 
-    handleSelected: function (tr) {
-      this.isSelected = true;
-      this.clearErrors();
-    },
-
-    handleChangePage(page) {
-      this.pagination.page = page;
-      this.query();
-    },
-
-    handleSort(sort, order) {
-      this.sorting.sort = sort;
-      this.sorting.order = order;
-      this.query();
+      if (rows.length > 0) {
+        this.$set(this, 'selected', rows[0])
+        this.clearErrors();
+      }
     },
 
     selectedRoleHas(comm2_cd) {
@@ -496,7 +513,6 @@ export default {
     },
 
     clear() {
-      this.$set(this, "isSelected", false);
       this.$set(this, "selected", {
         "user:user_id": null,
         "user:user_pw": null,
@@ -633,15 +649,13 @@ export default {
 
       api
         .fetch({
-          ...this.paginationParam,
           ...this.sortParam,
+          limit: -1,
           with: 'role,appr,job'
         })
         .then((res) => {
           this.spinner(false);
           this.datas = res.data.data;
-          this.pagination.total = res.data.meta.total;
-          this.pagination.page = res.data.meta.current_page;
         })
         .catch((err) => {
           this.displayErrors(
@@ -726,6 +740,11 @@ export default {
       window.location.href = api.downloadUrl();
     },
   },
+
+  mounted () {
+    this.gridApi = this.gridOptions.api
+  },
+
   created() {
     comm_cd.fetch({ cd1: "A10" }).then((res) => {
       this.roles = res.data;
