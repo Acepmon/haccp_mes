@@ -50,7 +50,7 @@ export default {
     CloseDocument: '현재메뉴를 닫겠습니까?',
     ImportExcel: 'Excel 데이터를 DB에 저장하겠습니까?',
     Download: '다운로드',
-    Refresh: 'Refresh',
+    Refresh: '최신자료',
 
     DeleteData: '삭제하시겠습니까?',
     SuccessDeleteData: '삭제되었습니다.',

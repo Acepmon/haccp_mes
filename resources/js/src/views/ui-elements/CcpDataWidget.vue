@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card class="bg-primary-gradient cursor-pointer" @click="chartDialog = true">
+    <vx-card class="bg-primary-gradient cursor-pointer" @click="chartDialog = true; onPopupOpen(data);">
       <div class="h1 py-2 font-bold text-white text-center">
         {{ data.device_nm }}: <span class="px-8">{{ data.data.toFixed(2) }}℃</span>
       </div>
@@ -41,7 +41,7 @@
             >{{ $t("Refresh") }}</vs-button
           >
           <vs-button
-            @click="chartDialog = false"
+            @click="chartDialog = false; onPopupClose(data)"
             class="mx-1 flex-shrink-0"
             color="primary"
             type="border"
@@ -105,6 +105,14 @@ export default {
     onRefresh: {
       type: Function,
       default: () => {}
+    },
+    onPopupOpen: {
+      type: Function,
+      default: () => {}
+    },
+    onPopupClose: {
+      type: Function,
+      default: () => {}
     }
   },
   computed: {
@@ -126,10 +134,18 @@ export default {
         xaxis: {
           type: 'datetime',
           categories: this.chartCategories,
+          labels: {
+            format: 'MM-dd HH:MM',
+            formatter: function (val, timestamp) {
+              return moment(timestamp).utcOffset('+0900').format('MM-DD HH:mm')
+            },
+            datetimeUTC: true
+          },
+          tickAmount: 12
         },
         tooltip: {
           x: {
-            format: 'dd/MM/yy HH:mm'
+            format: 'MM-dd HH:MM'
           },
         }
       }

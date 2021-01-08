@@ -89,7 +89,7 @@
         ref="agGridTable"
         :gridOptions="gridOptions2"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 300px;"
+        style="max-height: 600px;"
         :columnDefs="columnDefs2"
         :defaultColDef="defaultColDef"
         :rowData="items2Comp"

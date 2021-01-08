@@ -57,7 +57,7 @@
         ref="agGridTable"
         :gridOptions="gridOptions2"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 300px;"
+        style="max-height: 600px;"
         :columnDefs="columnDefs2"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp2">
@@ -223,7 +223,13 @@ export default {
           width: 200
         },
         {
-          headerName: '소요시간 (SUB 공정)',
+          headerName: '소요시간 (부속 공정)',
+          // headerName: () => {
+          //   return '소요시간 <div>(부속 공정)</div>'
+          // },
+          // headerComponentParams: {
+          //   // 
+          // },
           field: 'PROC_TIME',
           filter: false,
           editable: false,

@@ -24,7 +24,13 @@
 
       <div class="flex flex-wrap">
         <div class="w-full sm:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
-          <ccp-data-widget :data="item" :onRefresh="widgetRefresh" :chartData="item.chartData" :chartCategories="item.chartCats"></ccp-data-widget>
+          <ccp-data-widget 
+            :data="item" 
+            :onRefresh="widgetRefresh" 
+            :onPopupOpen="widgetPopupOpen"
+            :onPopupClose="widgetPopupClose"
+            :chartData="item.chartData" 
+            :chartCategories="item.chartCats"></ccp-data-widget>
         </div>
       </div>
     </vx-card>
@@ -130,7 +136,7 @@ export default {
         .then((res) => {
           if (res.data.data.length > 0) {
             let device_id = res.data.data[0].device_id
-            let chartData = res.data.data.map(i => i.data)
+            let chartData = res.data.data.map(i => i.data.toFixed(2))
             let chartCats = res.data.data.map(i => i.reg_dtm_parsed)
             this.$set(this.items[device_id], 'chartData', chartData)
             this.$set(this.items[device_id], 'chartCats', chartCats)
@@ -146,6 +152,15 @@ export default {
             text: err.response.data.message,
           });
         })
+    },
+
+    widgetPopupOpen (data) {
+      this.widgetRefresh(data)
+    },
+
+    widgetPopupClose (data) {
+      this.$set(this.items[data.device_id], 'chartData', [])
+      this.$set(this.items[data.device_id], 'chartCats', [])
     },
 
     closeDialog() {
