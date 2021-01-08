@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card id="div-with-loading" class="vs-con-loading__container">
+    <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
         <template v-slot:filter>
           <v-select
@@ -67,7 +67,7 @@
         ref="agGridTable"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 400px;"
+        style="max-height: 100%;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
@@ -80,114 +80,6 @@
         :total="totalPages"
         :max="maxPageNumbers"
         v-model="currentPage" />
-
-      <div class="overflow-y-auto" style="max-height: 500px; display: none;">
-        <vs-table
-          stripe
-          pagination
-          description
-          sst
-          :max-items="pagination.limit"
-          :data="items"
-          :total="pagination.total"
-          @change-page="handleChangePage"
-          @sort="handleSort"
-        >
-          <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="item_id">품목ID</vs-th>
-            <vs-th sort-key="item_nm">품목명</vs-th>
-            <vs-th sort-key="spec">규격명</vs-th>
-            <vs-th sort-key="unit">단위</vs-th>
-            <vs-th sort-key="qty1">당수량(분자)</vs-th>
-            <vs-th sort-key="qty2">봉수량</vs-th>
-            <vs-th sort-key="conn_no">대표품목 환산수량</vs-th>
-            <vs-th sort-key="conn_qty">연결품목 환산수량</vs-th>
-            <vs-th sort-key="in_amt">입고가</vs-th>
-            <vs-th sort-key="out_amt">출고가</vs-th>
-            <vs-th sort-key="item_cd">품목</vs-th>
-            <vs-th sort-key="grp1_cd">그룹1</vs-th>
-            <vs-th sort-key="grp2_cd">그룹2</vs-th>
-            <vs-th sort-key="grp3_cd">그룹3</vs-th>
-            <vs-th sort-key="use_yn">사용</vs-th>
-            <vs-th sort-key="process_cd">생산공정</vs-th>
-          </template>
-
-          <template slot-scope="{ data }">
-            <vs-tr :data="tr" :key="index" v-for="(tr, index) in items">
-
-              <vs-td :data="rowIndex(index)">
-                {{ rowIndex(index) }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:item_id']">
-                {{ data[index]["item_mst:item_id"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:item_nm']">
-                {{ data[index]["item_mst:item_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:spec']">
-                {{ data[index]["item_mst:spec"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:unit']">
-                {{ data[index]["item_mst:unit"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:qty1']" class="text-right">
-                {{ data[index]["item_mst:qty1"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:qty2']" class="text-right">
-                {{ data[index]["item_mst:qty2"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:conn_no']" class="text-right">
-                {{ data[index]["item_mst:conn_no"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:conn_qty']" class="text-right">
-                {{ data[index]["item_mst:conn_qty"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:in_amt']" class="text-right">
-                {{ data[index]["item_mst:in_amt"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:out_amt']" class="text-right">
-                {{ data[index]["item_mst:out_amt"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:item_cd']">
-                {{ data[index]["item_mst:item_cd_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:grp1_cd']">
-                {{ data[index]["item_mst:grp1_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:grp2_cd']">
-                {{ data[index]["item_mst:grp2_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:grp3_cd']">
-                {{ data[index]["item_mst:grp3_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:use_yn']">
-                {{ data[index]["item_mst:use_yn"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['item_mst:process_cd']">
-                {{ data[index]["item_mst:process_nm"] }}
-              </vs-td>
-
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
     </vx-card>
 
     <vs-popup fullscreen :title="$t('UploadExcel')" :active.sync="importDialog" button-close-hidden>

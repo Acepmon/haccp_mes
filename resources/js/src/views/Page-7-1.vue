@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card id="div-with-loading" class="vs-con-loading__container">
+    <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
         <template v-slot:filter>
           <span class="pt-2 px-4">공통코드명</span>
@@ -55,58 +55,29 @@
             class="mx-1"
             color="primary"
             type="border"
-            :disabled="items2.length <= 0"
+            :disabled="items1.length <= 0"
             >{{ $t("ToExcel") }}</vs-button
           >
         </template>
       </app-control>
 
-      <div class="overflow-y-auto" style="max-height: 300px">
-        <vs-table
-          stripe
-          :data="items2"
-          v-model="item2"
-          @selected="handleSelected"
-        >
-          <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="comm1_cd">그룹코드</vs-th>
-            <vs-th sort-key="comm2_nm">그룹코드명</vs-th>
-            <vs-th sort-key="reg_id">등록자</vs-th>
-            <vs-th sort-key="reg_dtm">등록일시</vs-th>
-          </template>
-
-          <template slot-scope="{ data }">
-            <vs-tr :data="tr" :key="index" v-for="(tr, index) in items2">
-              <vs-td :data="index + 1">
-                {{ index + 1 }}
-              </vs-td>
-
-              <vs-td :data="data[index]['comm_cd:comm1_cd']">
-                {{ data[index]["comm_cd:comm1_cd"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['comm_cd:comm2_nm']">
-                {{ data[index]["comm_cd:comm2_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['comm_cd:reg_id']">
-                {{ data[index]["comm_cd:reg_id"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['comm_cd:reg_dtm']">
-                {{ data[index]["comm_cd:reg_dtm"] }}
-              </vs-td>
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
+      <ag-grid-vue
+        ref="agGridTable"
+        rowSelection="single"
+        @selection-changed="handleSelected"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 300px;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :rowData="items1Comp">
+      </ag-grid-vue>
 
       <app-control class="mt-5">
         <template v-slot:filter>
           <span class="pt-2 px-4">그룹코드명</span>
           <vs-input
-            v-model="item2['comm_cd:comm2_nm']"
+            v-model="item1['comm_cd:comm2_nm']"
             class="control-field"
             readonly
           />
@@ -115,13 +86,12 @@
 
       <ag-grid-vue
         ref="agGridTable"
-        :gridOptions="gridOptions"
+        :gridOptions="gridOptions2"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 300px;"
-        :columnDefs="columnDefs"
+        style="height: auto;"
+        :columnDefs="columnDefs2"
         :defaultColDef="defaultColDef"
-        :onGridReady="fillAllCellsWithWidthMeasurement"
-        :rowData="itemsComp">
+        :rowData="items2Comp">
       </ag-grid-vue>
     </vx-card>
   </div>
@@ -150,13 +120,6 @@ export default {
     return {
       searchNm: null,
 
-      item2: {
-        "comm_cd:comm1_cd": null,
-        "comm_cd:comm2_cd": null,
-        "comm_cd:comm2_nm": null,
-        "comm_cd:reg_id": null,
-        "comm_cd:reg_dtm": null,
-      },
       item1: {
         "comm_cd:comm1_cd": null,
         "comm_cd:comm2_cd": null,
@@ -168,9 +131,16 @@ export default {
       items1: [],
       items2: [],
 
+      gridApi: null,
+      gridApi2: null,
       gridOptions: {
         rowHeight: 40,
         headerHeight: 40
+      },
+      gridOptions2: {
+        rowHeight: 40,
+        headerHeight: 40,
+        domLayout: 'autoHeight'
       },
       defaultColDef: {
         sortable: true,
@@ -185,28 +155,68 @@ export default {
           field: 'no',
           filter: false,
           editable: false,
-          minWidth: 100,
+          width: 80,
+        },
+        {
+          headerName: '그룹코드',
+          field: 'comm_cd:comm1_cd',
+          editable: false,
+          width: 200,
+        },
+        {
+          headerName: '그룹코드명',
+          field: 'comm_cd:comm2_nm',
+          editable: false,
+          width: 200,
+        },
+        {
+          headerName: '등록자',
+          field: 'comm_cd:reg_id',
+          editable: false,
+          width: 200,
+        },
+        {
+          headerName: '등록일시',
+          field: 'comm_cd:reg_dtm',
+          editable: false,
+          width: 200,
+        }
+      ],
+
+      columnDefs2: [
+        {
+          headerName: 'No',
+          field: 'no',
+          filter: false,
+          editable: false,
+          width: 80,
         },
         {
           headerName: '코드',
           field: 'comm_cd:comm2_cd',
           editable: false,
-          minWidth: 200,
-          width: 500
+          width: 200,
         },
         {
           headerName: '코드명',
           field: 'comm_cd:comm2_nm',
-          minWidth: 200,
-          width: 500
+          width: 200,
         }
       ],
     };
   },
 
   computed: {
-    itemsComp: function () {
+    items1Comp: function () {
       return this.items1.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+    items2Comp: function () {
+      return this.items2.map((item, index) => {
         return {
           'no': (index + 1),
           ...item
@@ -257,21 +267,26 @@ export default {
       }
     },
 
-    handleSelected(tr) {
-      this.clearErrors();
-      this.$set(this, "items1", []);
-      this.fetch()
+    handleSelected() {
+      let rows = this.gridApi.getSelectedRows()
+
+      if (rows.length > 0) {
+        this.clearErrors();
+        this.$set(this, "items2", []);
+        this.$set(this, 'item1', rows[0])
+        this.fetch()
+      }
     },
 
     fetch () {
       api
         .get({
           limit: -1,
-          comm1_cd: this.item2["comm_cd:comm1_cd"],
+          comm1_cd: this.item1["comm_cd:comm1_cd"],
         })
         .then((res) => {
           this.spinner(false);
-          this.items1 = res.data.data;
+          this.items2 = res.data.data;
         })
         .catch(() => {
           this.displayErrors(
@@ -307,8 +322,8 @@ export default {
         })
         .then((res) => {
           this.spinner(false);
-          this.items2 = res.data.data;
-          callback(this.items2)
+          this.items1 = res.data.data;
+          callback(this.items1)
         })
         .catch(() => {
           this.displayErrors(
@@ -335,8 +350,8 @@ export default {
       this.spinner();
 
       api
-        .sync(this.item2["comm_cd:comm1_cd"], {
-          'sync': this.gridOptions.rowData
+        .sync(this.item1["comm_cd:comm1_cd"], {
+          'sync': this.gridOptions2.rowData
         })
         .then((res) => {
           this.spinner(false);
@@ -383,7 +398,7 @@ export default {
       this.spinner();
 
       api
-        .delete(this.item2['comm_cd:comm1_cd'])
+        .delete(this.item1['comm_cd:comm1_cd'])
         .then((res) => {
           this.spinner(false);
 
@@ -474,7 +489,7 @@ export default {
     },
 
     addRow() {
-      this.items1.push({
+      this.items2.push({
         "comm_cd:comm1_cd": null,
         "comm_cd:comm2_cd": null,
         "comm_cd:comm2_nm": null,
@@ -484,25 +499,20 @@ export default {
     },
 
     removeRow(index) {
-      this.items1.splice(index, 1);
-    },
-
-    fillAllCellsWithWidthMeasurement () {
-      Array.prototype.slice
-        .call(document.querySelectorAll('.ag-cell'))
-        .forEach(function (cell) {
-          var width = cell.offsetWidth;
-          var isFullWidthRow = cell.parentElement.childNodes.length === 1;
-          cell.textContent = (isFullWidthRow ? 'Total width: ' : '') + width + 'px';
-        });
+      this.items2.splice(index, 1);
     }
+  },
+
+  mounted () {
+    this.gridApi = this.gridOptions.api
+    this.gridApi2 = this.gridOptions2.api
   },
 
   created () {
     setTimeout(() => {
       this.query((items) => {
         if (items.length > 0) {
-          this.item2 = items[0]
+          this.item1 = items[0]
           this.fetch()
         }
       })

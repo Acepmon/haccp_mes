@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card id="div-with-loading" class="vs-con-loading__container pt-0">
+    <vx-card id="div-with-loading" class="vs-con-loading__container main-card pt-0">
       <app-control>
         <template v-slot:filter>
           <span class="flex items-center px-5">기간</span>
@@ -66,7 +66,7 @@
         ref="agGridTable"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
-        style="max-height: 400px;"
+        style="max-height: 100%;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"

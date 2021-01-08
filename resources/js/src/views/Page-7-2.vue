@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card class="mt-5">
+    <vx-card class="main-card mt-5">
       <app-control filterClass="sm:w-3/4" actionClass="sm:w-1/4">
         <template v-slot:filter>
           <span class="flex items-center px-5">검색일자</span>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card id="div-with-loading" class="vs-con-loading__container">
+    <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
         <template v-slot:action>
           <vs-button

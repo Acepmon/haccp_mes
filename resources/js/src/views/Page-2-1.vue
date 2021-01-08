@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card id="div-with-loading" class="vs-con-loading__container pt-0">
+    <vx-card id="div-with-loading" class="vs-con-loading__container main-card pt-0">
       <app-control>
         <template v-slot:filter>
           <span class="px-5 pt-2">품목명</span>
@@ -57,7 +57,7 @@
         ref="agGridTable"
         :gridOptions="gridOptions2"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 600px;"
+        style="height: auto;"
         :columnDefs="columnDefs2"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp2">
@@ -159,7 +159,8 @@ export default {
 
       gridOptions2: {
         rowHeight: 40,
-        headerHeight: 40
+        headerHeight: 40,
+        domLayout: 'autoHeight'
       },
       gridApi2: null,
       defaultColDef2: {

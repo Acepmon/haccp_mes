@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card id="div-with-loading" class="vs-con-loading__container">
+    <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
         <template v-slot:filter>
           <v-select
@@ -89,7 +89,7 @@
         ref="agGridTable"
         :gridOptions="gridOptions2"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 600px;"
+        style="height: auto;"
         :columnDefs="columnDefs2"
         :defaultColDef="defaultColDef"
         :rowData="items2Comp"
@@ -202,7 +202,8 @@ export default {
       gridOptions2: {
         rowHeight: 40,
         headerHeight: 40,
-        singleClickEdit: true
+        singleClickEdit: true,
+        domLayout: 'autoHeight'
       },
       defaultColDef: {
         sortable: true,

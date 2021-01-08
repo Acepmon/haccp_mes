@@ -69,3 +69,8 @@
   border-radius: 4px;
   color: #fff;
 }
+
+.vx-card.main-card {
+  min-height: 80vh;
+  max-height: max-content;
+}
