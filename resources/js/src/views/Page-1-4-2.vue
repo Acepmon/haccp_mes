@@ -163,79 +163,25 @@
         </template>
       </app-control>
 
-      <div class="overflow-y-auto" style="max-height: 300px">
-        <vs-table
-          stripe
-          pagination
-          description
-          sst
-          :max-items="pagination.limit"
-          :data="items"
-          :total="pagination.total"
-          @change-page="handleChangePage"
-          @sort="handleSort"
-          v-model="item"
-          @selected="handleSelected"
-        >
-          <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="doc_nm">문서이름</vs-th>
-            <vs-th sort-key="type_nm">문서종류</vs-th>
-            <vs-th sort-key="doc_desc">설명(제품명)</vs-th>
-            <vs-th>첨부문서</vs-th>
-            <vs-th sort-key="reg_dtm">등록일자</vs-th>
-          </template>
+      <ag-grid-vue
+        ref="agGridTable"
+        rowSelection="single"
+        @selection-changed="handleSelected"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 100%;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize"
+        :suppressPaginationPanel="true">
+      </ag-grid-vue>
 
-          <template slot-scope="{ data }">
-            <vs-tr :data="tr" :key="index" v-for="(tr, index) in items">
-              <vs-td :data="rowIndex(index)">
-                {{ rowIndex(index) }}
-              </vs-td>
-
-              <vs-td :data="data[index]['doc_mgmt:doc_nm']">
-                {{ data[index]["doc_mgmt:doc_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['doc_mgmt:type_nm']">
-                {{ data[index]["doc_mgmt:type_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['doc_mgmt:doc_desc']">
-                {{ data[index]["doc_mgmt:doc_desc"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['doc_mgmt:att_dtm']">
-                <div class="flex flex-row">
-                  <span
-                    v-if="data[index]['doc_mgmt:att_file'].length > 0"
-                    v-text="data[index]['doc_mgmt:att_file'][0].att_nm"
-                    class="pt-1"
-                  ></span>
-                  <!-- <vs-button
-                    color="primary"
-                    class="ml-2"
-                    :href="
-                      '/api/doc_mgmt/' +
-                      data[index]['doc_mgmt:doc_id'] +
-                      '/att_file/' +
-                      data[index]['doc_mgmt:att_file'][0].att_seq +
-                      '/download'
-                    "
-                    type="flat"
-                    size="small"
-                    icon-pack="feather"
-                    icon="icon-download"
-                  ></vs-button> -->
-                </div>
-              </vs-td>
-
-              <vs-td :data="data[index]['doc_mgmt:reg_dtm']">
-                {{ data[index]["doc_mgmt:reg_dtm"] }}
-              </vs-td>
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
+      <vs-pagination
+        :total="totalPages"
+        :max="maxPageNumbers"
+        v-model="currentPage" />
     </vx-card>
   </div>
 </template>
@@ -250,13 +196,17 @@ import FileSelect from "@/layouts/components/FileSelect.vue";
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+import { AgGridVue } from 'ag-grid-vue';
+
+import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
   components: {
     FileSelect,
     AppControl,
     AppForm,
-    AppFormGroup
+    AppFormGroup,
+    AgGridVue
   },
 
   data() {
@@ -272,6 +222,7 @@ export default {
         "doc_mgmt:reg_dtm": null,
         "doc_mgmt:att": null,
         "doc_mgmt:att_file": [],
+        "doc_mgmt:att_nm": null,
       },
       errors: {
         "doc_mgmt:doc_id": null,
@@ -287,11 +238,7 @@ export default {
       searchKeyword: null,
       searchType: null,
       types: [],
-      pagination: {
-        page: 1,
-        limit: 15,
-        total: 0,
-      },
+
       sorting: {
         sort: "REG_DTM",
         order: "DESC",
@@ -300,16 +247,57 @@ export default {
         'doc_mgmt:type_cd': '문서종류',
         'doc_mgmt:doc_nm': '문서이름',
         'doc_mgmt:att': '첨부화일',
-      }
+      },
+
+      maxPageNumbers: 7,
+      gridOptions: {
+        rowHeight: 40,
+        headerHeight: 40
+      },
+      gridApi: null,
+      defaultColDef: {
+        sortable: true,
+        editable: false,
+        resizable: true,
+        suppressMenu: false
+      },
+      columnDefs: [
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: '문서이름', field: 'doc_mgmt:doc_nm', filter: false, width: 200 },
+        { headerName: '문서종류', field: 'doc_mgmt:type_nm', filter: false, width: 200 },
+        { headerName: '설명(제품명)', field: 'doc_mgmt:doc_desc', filter: false, width: 200 },
+        { headerName: '첨부문서', field: 'doc_mgmt:att_nm', filter: false, width: 200 },
+        { headerName: '등록일자', field: 'doc_mgmt:reg_dtm', filter: false, width: 200 },
+      ]
     };
   },
 
   computed: {
-    paginationParam: function () {
-      return {
-        page: this.pagination.page,
-        limit: this.pagination.limit,
-      };
+    itemsComp: function () {
+      return this.items.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+
+    totalPages () {
+      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      else return 0
+    },
+    paginationPageSize () {
+      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      else return 50
+    },
+    currentPage: {
+      get () {
+        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        else return 1
+      },
+      set (val) {
+        this.gridApi.paginationGoToPage(val - 1)
+      }
     },
 
     sortParam: function () {
@@ -398,29 +386,23 @@ export default {
       );
     },
 
-    handleChangePage(page) {
-      this.pagination.page = page;
-      this.query();
-    },
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
 
-    handleSort(sort, order) {
-      this.sorting.sort = sort;
-      this.sorting.order = order;
-      this.query();
-    },
+      if (rows.length > 0) {
+        this.$set(this, 'item', rows[0])
+        this.clearErrors();
 
-    handleSelected(tr) {
-      this.clearErrors();
-
-      if (tr["doc_mgmt:att_file"].length > 0) {
-        // this.doc_mgmt['doc_mgmt:att'] = new File([""], tr['doc_mgmt:att_file'][0].att_nm)
-        this.$set(
-          this.item,
-          "doc_mgmt:att",
-          new File([""], tr["doc_mgmt:att_file"][0].att_nm)
-        );
-      } else {
-        this.$set(this.item, "doc_mgmt:att", null);
+        if (rows[0]["doc_mgmt:att_file"].length > 0) {
+          // this.doc_mgmt['doc_mgmt:att'] = new File([""], rows[0]['doc_mgmt:att_file'][0].att_nm)
+          this.$set(
+            this.item,
+            "doc_mgmt:att",
+            new File([""], rows[0]["doc_mgmt:att_file"][0].att_nm)
+          );
+        } else {
+          this.$set(this.item, "doc_mgmt:att", null);
+        }
       }
     },
 
@@ -561,15 +543,13 @@ export default {
 
       api
         .fetch({
-          ...this.paginationParam,
           ...this.sortParam,
           ...search_params,
+          limit: -1
         })
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
-          this.pagination.total = res.data.meta.total;
-          this.pagination.page = res.data.meta.current_page;
         })
         .catch(() => {
           this.displayErrors(
@@ -701,6 +681,10 @@ export default {
         accept: () => this.remove(),
       });
     },
+  },
+
+  mounted () {
+    this.gridApi = this.gridOptions.api
   },
 
   created() {

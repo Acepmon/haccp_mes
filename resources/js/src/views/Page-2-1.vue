@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vx-card id="div-with-loading" class="vs-con-loading__container main-card pt-0">
+    <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
         <template v-slot:filter>
           <span class="px-5 pt-2">품목명</span>

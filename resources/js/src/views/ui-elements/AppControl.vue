@@ -18,11 +18,11 @@ export default {
     },
     filterClass: {
       type: String,
-      default: 'sm:w-8/12'
+      default: 'sm:w-7/12'
     },
     actionClass: {
       type: String,
-      default: 'sm:w-4/12'
+      default: 'sm:w-5/12'
     }
   }
 }
