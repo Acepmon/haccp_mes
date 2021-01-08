@@ -377,15 +377,6 @@ export default {
       }
     },
 
-    rowIndex: function (index) {
-      return (
-        this.pagination.page * this.pagination.limit -
-        this.pagination.limit +
-        index +
-        1
-      );
-    },
-
     handleSelected () {
       let rows = this.gridApi.getSelectedRows()
 

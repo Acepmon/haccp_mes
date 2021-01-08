@@ -2,7 +2,6 @@
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
-        <template v-slot:filter></template>
         <template v-slot:action>
           <vs-button
             @click="query()"
@@ -159,89 +158,31 @@
             class="mx-1"
             color="primary"
             type="border"
-            :disabled="haccp_mst_files.length <= 0"
+            :disabled="items.length <= 0"
             >{{ $t("ToExcel") }}</vs-button
           >
         </template>
       </app-control>
 
-      <div class="overflow-y-auto" style="max-height: 300px">
-        <vs-table
-          stripe
-          pagination
-          description
-          sst
-          :max-items="pagination.limit"
-          :data="haccp_mst_files"
-          :total="pagination.total"
-          @change-page="handleChangePage"
-          @sort="handleSort"
-          v-model="haccp_mst_file"
-          @selected="handleSelected"
-        >
-          <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="rev_no">개정번호</vs-th>
-            <vs-th sort-key="rev_dt">등록일자</vs-th>
-            <vs-th sort-key="rev_content">개정내용</vs-th>
-            <vs-th sort-key="rev_reason">개정사유</vs-th>
-            <vs-th>첨부화일</vs-th>
-          </template>
+      <ag-grid-vue
+        ref="agGridTable"
+        rowSelection="single"
+        @selection-changed="handleSelected"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 100%;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize"
+        :suppressPaginationPanel="true">
+      </ag-grid-vue>
 
-          <template slot-scope="{ data }">
-            <vs-tr
-              :data="tr"
-              :key="index"
-              v-for="(tr, index) in haccp_mst_files"
-            >
-              <vs-td :data="rowIndex(index)">
-                {{ rowIndex(index) }}
-              </vs-td>
-
-              <vs-td :data="data[index]['haccp_mst_file:rev_no']">
-                {{ data[index]["haccp_mst_file:rev_no"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['haccp_mst_file:rev_dt']">
-                {{ data[index]["haccp_mst_file:rev_dt"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['haccp_mst_file:rev_content']">
-                {{ data[index]["haccp_mst_file:rev_content"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['haccp_mst_file:rev_reason']">
-                {{ data[index]["haccp_mst_file:rev_reason"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['haccp_mst_file:att_dtm']">
-                <div class="flex flex-row">
-                  <span
-                    v-if="data[index]['haccp_mst_file:att_file'].length > 0"
-                    v-text="data[index]['haccp_mst_file:att_file'][0].att_nm"
-                    class="pt-1"
-                  ></span>
-                  <!-- <vs-button
-                    color="primary"
-                    class="ml-2"
-                    :href="
-                      '/api/haccp_mst_file/' +
-                      data[index]['haccp_mst_file:rev_seq'] +
-                      '/att_file/' +
-                      data[index]['haccp_mst_file:att_file'][0].att_seq +
-                      '/download'
-                    "
-                    type="flat"
-                    size="small"
-                    icon-pack="feather"
-                    icon="icon-download"
-                  ></vs-button> -->
-                </div>
-              </vs-td>
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
+      <vs-pagination
+        :total="totalPages"
+        :max="maxPageNumbers"
+        v-model="currentPage" />
     </vx-card>
   </div>
 </template>
@@ -259,14 +200,17 @@ import FileSelect from "@/layouts/components/FileSelect.vue";
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+import { AgGridVue } from 'ag-grid-vue';
 
+import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 export default {
   components: {
     flatPickr,
     FileSelect,
     AppControl,
     AppForm,
-    AppFormGroup
+    AppFormGroup,
+    AgGridVue
   },
 
   data() {
@@ -294,7 +238,7 @@ export default {
         "haccp_mst_file:rev_reason": null,
         "haccp_mst_file:att": null,
       },
-      haccp_mst_files: [],
+      items: [],
       pagination: {
         page: 1,
         limit: 15,
@@ -308,16 +252,57 @@ export default {
         'haccp_mst_file:rev_no': '개정번호',
         'haccp_mst_file:rev_dt': '개정일자',
         'haccp_mst_file:att': '첨부화일',
-      }
+      },
+
+      maxPageNumbers: 7,
+      gridOptions: {
+        rowHeight: 40,
+        headerHeight: 40
+      },
+      gridApi: null,
+      defaultColDef: {
+        sortable: true,
+        editable: false,
+        resizable: true,
+        suppressMenu: false
+      },
+      columnDefs: [
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: '개정번호', field: 'haccp_mst_file:rev_no', filter: false, width: 200 },
+        { headerName: '등록일자', field: 'haccp_mst_file:rev_dt', filter: false, width: 200 },
+        { headerName: '개정내용', field: 'haccp_mst_file:rev_content', filter: false, width: 200 },
+        { headerName: '개정사유', field: 'haccp_mst_file:rev_reason', filter: false, width: 200 },
+        { headerName: '첨부화일', field: 'haccp_mst_file:att_nm', filter: false, width: 200 },
+      ]
     };
   },
 
   computed: {
-    paginationParam: function () {
-      return {
-        page: this.pagination.page,
-        limit: this.pagination.limit,
-      };
+    itemsComp: function () {
+      return this.items.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+
+    totalPages () {
+      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      else return 0
+    },
+    paginationPageSize () {
+      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      else return 50
+    },
+    currentPage: {
+      get () {
+        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        else return 1
+      },
+      set (val) {
+        this.gridApi.paginationGoToPage(val - 1)
+      }
     },
 
     sortParam: function () {
@@ -396,38 +381,23 @@ export default {
       }
     },
 
-    rowIndex: function (index) {
-      return (
-        this.pagination.page * this.pagination.limit -
-        this.pagination.limit +
-        index +
-        1
-      );
-    },
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
 
-    handleChangePage(page) {
-      this.pagination.page = page;
-      this.query();
-    },
+      if (rows.length > 0) {
+        this.$set(this, 'haccp_mst_file', rows[0])
+        this.clearErrors();
 
-    handleSort(sort, order) {
-      this.sorting.sort = sort;
-      this.sorting.order = order;
-      this.query();
-    },
-
-    handleSelected(tr) {
-      this.clearErrors();
-
-      if (tr["haccp_mst_file:att_file"].length > 0) {
-        // this.haccp_mst_file['haccp_mst_file:att'] = new File([""], tr['haccp_mst_file:att_file'][0].att_nm)
-        this.$set(
-          this.haccp_mst_file,
-          "haccp_mst_file:att",
-          new File([""], tr["haccp_mst_file:att_file"][0].att_nm)
-        );
-      } else {
-        this.$set(this.haccp_mst_file, "haccp_mst_file:att", null);
+        if (rows[0]["haccp_mst_file:att_file"].length > 0) {
+          // this.haccp_mst_file['haccp_mst_file:att'] = new File([""], rows[0]['haccp_mst_file:att_file'][0].att_nm)
+          this.$set(
+            this.haccp_mst_file,
+            "haccp_mst_file:att",
+            new File([""], rows[0]["haccp_mst_file:att_file"][0].att_nm)
+          );
+        } else {
+          this.$set(this.haccp_mst_file, "haccp_mst_file:att", null);
+        }
       }
     },
 
@@ -594,14 +564,12 @@ export default {
 
       api
         .fetch({
-          ...this.paginationParam,
           ...this.sortParam,
+          limit: -1
         })
         .then((res) => {
           this.spinner(false);
-          this.haccp_mst_files = res.data.data;
-          this.pagination.total = res.data.meta.total;
-          this.pagination.page = res.data.meta.current_page;
+          this.items = res.data.data;
         })
         .catch(() => {
           this.displayErrors(
@@ -723,6 +691,10 @@ export default {
         accept: () => this.removeTab("page-1-4-1"),
       });
     },
+  },
+
+  mounted () {
+    this.gridApi = this.gridOptions.api
   },
 
   created() {
