@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\API;
 
+use App\BomConfig;
 use App\Exports\JobOrdExport;
 use App\Exports\JobOrdExport2;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\JobOrdResource;
 use App\Imports\JobOrdImport;
 use App\JobOrd;
+use App\JobOrdBom;
+use App\JobOrdDtl;
+use App\JobOrdDtlSub;
+use App\ProcDtl;
+use App\ProcDtlSub;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -30,12 +36,12 @@ class JobOrdController extends Controller
 
         if ($request->has('from') && !empty($request->input('from'))) {
             $from = $request->input('from');
-            $items = $items->whereDate('JOB_DT', '>=', now()->parse($from)->format('YmdHis'));
+            $items = $items->whereDate('REG_DTM', '>=', now()->parse($from)->format('YmdHis'));
         }
 
         if ($request->has('to') && !empty($request->input('to'))) {
             $to = $request->input('to');
-            $items = $items->whereDate('JOB_DT', '<=', now()->parse($to)->format('YmdHis'));
+            $items = $items->whereDate('REG_DTM', '<=', now()->parse($to)->format('YmdHis'));
         }
 
         if ($request->has('groupBy')) {
@@ -77,18 +83,17 @@ class JobOrdController extends Controller
 
     public function summaryDetails(Request $request)
     {
-        $jobDt = $request->input('job_dt');
-        $seqNo = $request->input('seq_no');
+        $jobNo = $request->input('job_no');
 
         $items = JobOrd::query()
-            ->where('JOB_DT', $jobDt)
-            ->where('SEQ_NO', intval($seqNo))
+            ->where('JOB_NO', $jobNo)
+            ->with('item')
             ->get();
 
         $item = $items->first();
 
         return response()->json([
-            'job_ord' => $jobDt . '-' . $seqNo,
+            'job_no' => $jobNo,
             'summary_dt' => now()->parse($item->REG_DTM)->format('Y/m/d') . ' 오후 ' . now()->parse($item->REG_DTM)->format('H:i:s'),
             'summary' => $this->summary($items),
             'details' => $this->details($items),
@@ -118,11 +123,10 @@ class JobOrdController extends Controller
         $details = [];
 
         foreach ($items as $jobOrd) {
-            $subdetails = DB::table('BOM_CONFIG')
-                ->select('BOM_CONFIG.ITEM2_ID AS ITEM_ID', 'ITEM_MST.ITEM_NM AS ITEM_NM', DB::raw('(JOB_ORD.ORD_QTY * BOM_CONFIG.USE_QTY / BOM_CONFIG.PROD_QTY) AS REQ'))
-                ->join('JOB_ORD', 'BOM_CONFIG.ITEM1_ID', '=', 'JOB_ORD.ITEM_ID')
-                ->join('ITEM_MST', 'BOM_CONFIG.ITEM2_ID', '=', 'ITEM_MST.ITEM_ID')
-                ->where('BOM_CONFIG.ITEM1_ID', $jobOrd->ITEM_ID)
+            $subdetails = DB::table('JOB_ORD_BOM')
+                ->select('JOB_ORD_BOM.ITEM2_ID AS ITEM_ID', 'JOB_ORD_BOM.ITEM2_NM AS ITEM_NM', DB::raw('(JOB_ORD.ORD_QTY * JOB_ORD_BOM.USE_QTY / JOB_ORD_BOM.PROD_QTY) AS REQ'))
+                ->join('JOB_ORD', 'JOB_ORD_BOM.ITEM_ID', '=', 'JOB_ORD.ITEM_ID')
+                ->where('JOB_ORD_BOM.ITEM_ID', $jobOrd->ITEM_ID)
                 ->get();
 
             $sum = $subdetails->sum('REQ');
@@ -181,10 +185,9 @@ class JobOrdController extends Controller
 
     public function summaryExport(Request $request)
     {
-        $jobDt = $request->input('job_dt');
-        $seqNo = $request->input('seq_no');
+        $jobNo = $request->input('job_no');
 
-        return Excel::download(new JobOrdExport2($jobDt, $seqNo), 'JOB-ORD-SUMMARY-' . now()->format('Y-m-d') . '.xlsx');
+        return Excel::download(new JobOrdExport2($jobNo), 'JOB-ORD-SUMMARY-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     public function import(Request $request)
@@ -193,12 +196,42 @@ class JobOrdController extends Controller
             'file' => 'required|file'
         ]);
 
+        if (ProcDtl::count() == 0) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Process detail data not found.')
+            ], 422);
+        }
+
+        if (ProcDtlSub::count() == 0) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Process detail sub data not found.')
+            ], 422);
+        }
+
+        if (BomConfig::count() == 0) {
+            return response()->json([
+                'success' => false,
+                'message' => __('BOM config data not found.')
+            ], 422);
+        }
+
+        // JobOrd::truncate();
+        // JobOrdDtl::truncate();
+        // JobOrdDtlSub::truncate();
+        // JobOrdBom::truncate();
+
         Excel::import(new JobOrdImport(), $request->file('file'));
         $upCnt = session()->get('update_count');
         $inCnt = session()->get('insert_count');
 
         return response()->json([
             'success' => true,
+            'result' => [
+                'update_count' => $upCnt,
+                'insert_count' => $inCnt,
+            ],
             'message' => $upCnt == 0 ? __('Successfully added') : __('Successfully updated')
         ]);
     }

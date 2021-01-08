@@ -10,31 +10,30 @@ use Maatwebsite\Excel\Concerns\FromView;
 
 class JobOrdExport2 implements FromView
 {
-    public $jobDt, $seqNo;
+    public $jobNo;
 
-    public function __construct($jobDt, $seqNo)
+    public function __construct($jobNo)
     {
-        $this->jobDt = $jobDt;
-        $this->seqNo = $seqNo;
+        $this->jobNo = $jobNo;
     }
 
     public function view(): View
     {
         $items = JobOrd::query()
-            ->where('JOB_DT', $this->jobDt)
-            ->where('SEQ_NO', intval($this->seqNo))
+            ->where('JOB_NO', $this->jobNo)
+            ->with('item')
             ->get();
 
         $item = $items->first();
         $details = [
-            'job_ord' => $this->jobDt . '-' . $this->seqNo,
+            'job_no' => $this->jobNo,
             'summary_dt' => now()->parse($item->REG_DTM)->format('Y/m/d') . ' 오후 ' . now()->parse($item->REG_DTM)->format('H:i:s'),
             'summary' => $this->summary($items),
             'details' => $this->details($items),
             'details_dt' => now()->parse($item->REG_DTM)->format('Y/m/d') . ' 오후 ' . now()->parse($item->REG_DTM)->format('H:i:s'),
         ];
 
-        return view('exports.job-ord', [
+        return view('exports.job_ord', [
             'details' => $details
         ]);
     }
@@ -48,8 +47,8 @@ class JobOrdExport2 implements FromView
                 'item_id' => $jobOrd->item->ITEM_ID,
                 'item_nm' => $jobOrd->item->ITEM_NM,
                 'fact_nm' => $jobOrd->FACT_CD,
-                'ord_qty' => number_format($jobOrd->ORD_QTY),
-                'prod_qty' => number_format($jobOrd->PROD_QTY)
+                'prod_qty' => number_format($jobOrd->PROD_QTY),
+                'ord_qty' => number_format($jobOrd->ORD_QTY)
             ]);
         }
 
@@ -61,11 +60,10 @@ class JobOrdExport2 implements FromView
         $details = [];
 
         foreach ($items as $jobOrd) {
-            $subdetails = DB::table('BOM_CONFIG')
-                ->select('BOM_CONFIG.ITEM2_ID AS ITEM_ID', 'ITEM_MST.ITEM_NM AS ITEM_NM', DB::raw('(JOB_ORD.ORD_QTY * BOM_CONFIG.USE_QTY / BOM_CONFIG.PROD_QTY) AS REQ'))
-                ->join('JOB_ORD', 'BOM_CONFIG.ITEM1_ID', '=', 'JOB_ORD.ITEM_ID')
-                ->join('ITEM_MST', 'BOM_CONFIG.ITEM2_ID', '=', 'ITEM_MST.ITEM_ID')
-                ->where('BOM_CONFIG.ITEM1_ID', $jobOrd->ITEM_ID)
+            $subdetails = DB::table('JOB_ORD_BOM')
+                ->select('JOB_ORD_BOM.ITEM2_ID AS ITEM_ID', 'JOB_ORD_BOM.ITEM2_NM AS ITEM_NM', DB::raw('(JOB_ORD.ORD_QTY * JOB_ORD_BOM.USE_QTY / JOB_ORD_BOM.PROD_QTY) AS REQ'))
+                ->join('JOB_ORD', 'JOB_ORD_BOM.ITEM_ID', '=', 'JOB_ORD.ITEM_ID')
+                ->where('JOB_ORD_BOM.ITEM_ID', $jobOrd->ITEM_ID)
                 ->get();
 
             $sum = $subdetails->sum('REQ');

@@ -106,7 +106,7 @@
           <vs-tr>
             <vs-th style="pointer-events: none;" colspan="5">
               <span class="h5 py-2 font-bold">전표번호</span>
-              <span class="h5 py-2 font-bold"> : {{ detailData.job_ord }}</span>
+              <span class="h5 py-2 font-bold"> : {{ detailData.job_no }}</span>
             </vs-th>
           </vs-tr>
 
@@ -266,7 +266,7 @@ export default {
         },
         {
           headerName: '작업번호',
-          field: 'job_ord:job_ord',
+          field: 'job_ord:job_no',
           filter: false,
           editable: false,
           width: 120,
@@ -387,16 +387,14 @@ export default {
         this.$set(this, 'item', rows[0])
         this.$set(this, 'detailDialog', true)
         this.fetch({
-          job_dt: rows[0]['job_ord:job_dt'],
-          seq_no: rows[0]['job_ord:seq_no'],
+          job_no: rows[0]['job_ord:job_no'],
         })
       }
     },
 
     exportExcelDetail () {
       window.location.href = job_ord.summary_export({
-        job_dt: this.item['job_ord:job_dt'],
-        seq_no: this.item['job_ord:seq_no'],
+        job_no: this.item['job_ord:job_no'],
       });
     },
 
@@ -405,8 +403,7 @@ export default {
 
       job_ord
         .summary_details({
-          job_dt: this.item['job_ord:job_dt'],
-          seq_no: this.item['job_ord:seq_no'],
+          job_no: this.item['job_ord:job_no'],
           ...args
         })
         .then((res) => {

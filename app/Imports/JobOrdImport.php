@@ -2,9 +2,7 @@
 
 namespace App\Imports;
 
-use App\BomConfig;
 use App\CommCd;
-use App\JobOrd;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -24,33 +22,100 @@ class JobOrdImport implements ToCollection
         $this->cache = collect();
     }
 
-    /**
-    * @param Collection $collection
-    */
     public function collection(Collection $rows)
     {
         DB::transaction(function () use ($rows) {
-            $groups = $this->groupBySeqNo($rows);
-            foreach ($groups as $key => $group) {
-                $itemId = $group[0][10];
-                $item2Id = $group[1][10];
+            foreach ($this->groupBySeqNo($rows) as $group) {
+                foreach ($group as $row) {
+                    $jobDt = $row[0];
+                    $seqNo = $row[1];
+                    $ordNm = $row[5];
+                    $itemId = $row[10];
+                    $ordQty = $row[14];
+                    $factCd = $row[15];
+                    $remark = $row[18];
+    
+                    $jobNo = $jobDt . '-' . $seqNo;
+                    $bomVer = DB::table('BOM_CONFIG')->where('ITEM1_ID', $itemId)->value('BOM_VER');
 
-                foreach ($group as $index => $row) {
-                    $bomVer = BomConfig::where('ITEM1_ID', $itemId)->where('ITEM2_ID', $item2Id)->first();
-                    $bomVer = $bomVer != null ? $bomVer->BOM_VER : null;
-
+                    // Step 0
                     $this->insertJobOrd([
-                        'JOB_DT' => $row[0],
-                        'SEQ_NO' => $row[1],
-                        'ITEM_ID' => $row[10],
+                        ['JOB_NO', $jobNo],
+                        ['ITEM_ID', $itemId]
                     ], [
-                        'ORD_QTY' => $row[14],
+                        'JOB_NO' => $jobNo,
+                        'ITEM_ID' => $itemId,
+                        'ORD_QTY' => $ordQty,
                         'PROD_QTY' => 0,
-                        'ORD_NM' => $row[5],
+                        'ORD_NM' => $ordNm,
                         'BOM_VER' => $bomVer,
-                        'FACT_CD' => $row[15],
-                        'REMARK' => $row[18]
+                        'FACT_CD' => $factCd,
+                        'REMARK' => $remark
                     ]);
+
+                    // Step 1
+                    foreach (DB::table('PROC_DTL')->where('ITEM_ID', $itemId)->get() as $procDtl) {
+                        $this->insertJobOrdDtl([
+                            ['JOB_NO', $jobNo],
+                            ['ITEM_ID', $itemId],
+                            ['SEQ_NO', $procDtl->SEQ_NO],
+                        ], [
+                            'JOB_NO' => $jobNo,
+                            'ITEM_ID' => $itemId,
+                            'SEQ_NO' => $procDtl->SEQ_NO,
+                            'SEQ_NM' => $procDtl->SEQ_NM,
+                            'PROC_CD' => $procDtl->PROC_CD,
+                            'PROC_NM' => $procDtl->PROC_NM,
+                            'PROC_TIME' => $procDtl->PROC_TIME,
+                            'PROC_DTL' => $procDtl->PROC_DTL,
+                            'HACCP_CD' => null,
+                            'HACCP_YN' => null,
+                            'REMARK' => $remark,
+                        ]);
+
+                        // Step 2
+                        foreach (DB::table('PROC_DTL_SUB')->where('ITEM_ID', $itemId)->where('SEQ_NO', $procDtl->SEQ_NO)->get() as $procDtlSub) {
+                            $this->insertJobOrdDtlSub([
+                                ['JOB_NO', $jobNo],
+                                ['ITEM_ID', $itemId],
+                                ['SEQ_NO', $procDtl->SEQ_NO],
+                                ['SUB_SEQ_NO', $procDtlSub->SUB_SEQ_NO],
+                            ], [
+                                'JOB_NO' => $jobNo,
+                                'ITEM_ID' => $itemId,
+                                'SEQ_NO' => $procDtl->SEQ_NO,
+                                'SUB_SEQ_NO' => $procDtlSub->SUB_SEQ_NO,
+                                'SEQ_NM' => $procDtlSub->SEQ_NM,
+                                'PROC_CD' => $procDtlSub->PROC_CD,
+                                'PROC_NM' => $procDtlSub->PROC_NM,
+                                'PROC_DTL' => $procDtlSub->PROC_DTL,
+                                'REMARK' => $remark,
+                            ]);
+                        }
+                    }
+
+                    // Step 3
+                    $bomConfigs = DB::table('BOM_CONFIG')
+                        ->where('ITEM1_ID', $itemId)
+                        ->where('BOM_VER', $bomVer)
+                        ->join('ITEM_MST', 'ITEM_MST.ITEM_ID', '=', 'BOM_CONFIG.ITEM2_ID')
+                        ->select('BOM_CONFIG.*', 'ITEM_MST.ITEM_NM AS ITEM2_NM')
+                        ->get();
+
+                    foreach ($bomConfigs as $bomConfig) {
+                        $this->insertJobOrdBom([
+                            ['JOB_NO', $jobNo],
+                            ['ITEM_ID', $itemId],
+                            ['ITEM2_ID', $bomConfig->ITEM2_ID],
+                        ], [
+                            'JOB_NO' => $jobNo,
+                            'ITEM_ID' => $itemId,
+                            'ITEM2_ID' => $bomConfig->ITEM2_ID,
+                            'ITEM2_NM' => $bomConfig->ITEM2_NM,
+                            'PROD_QTY' => $bomConfig->PROD_QTY,
+                            'USE_QTY' => $bomConfig->USE_QTY,
+                        ]);
+                    }
                 }
             }
         });
@@ -81,17 +146,68 @@ class JobOrdImport implements ToCollection
     private function insertJobOrd($keys = [], $attributes = [])
     {
         if (DB::table('JOB_ORD')->where($keys)->exists()) {
-            DB::table('JOB_ORD')->where($keys)->update(array_merge($keys, [
+            DB::table('JOB_ORD')->where($keys)->update(array_merge([
                 'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
                 'REG_DTM' => now()->format('Ymdhis'),
             ], $attributes));
 
             $this->updateCount++;
         } else {
-            DB::table('JOB_ORD')->where($keys)->insert(array_merge($keys, [
+            DB::table('JOB_ORD')->insert(array_merge([
                 'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
                 'REG_DTM' => now()->format('Ymdhis'),
             ], $attributes));
+
+            $this->insertCount++;
+        }
+    }
+
+    private function insertJobOrdDtl($keys = [], $attributes = [])
+    {
+        if (DB::table('JOB_ORD_DTL')->where($keys)->exists()) {
+            DB::table('JOB_ORD_DTL')->where($keys)->update(array_merge([
+                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+                'REG_DTM' => now()->format('Ymdhis'),
+            ], $attributes));
+
+            $this->updateCount++;
+        } else {
+            DB::table('JOB_ORD_DTL')->insert(array_merge([
+                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+                'REG_DTM' => now()->format('Ymdhis'),
+            ], $attributes));
+
+            $this->insertCount++;
+        }
+    }
+
+    private function insertJobOrdDtlSub($keys = [], $attributes = [])
+    {
+        if (DB::table('JOB_ORD_DTL_SUB')->where($keys)->exists()) {
+            DB::table('JOB_ORD_DTL_SUB')->where($keys)->update(array_merge([
+                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+                'REG_DTM' => now()->format('Ymdhis'),
+            ], $attributes));
+
+            $this->updateCount++;
+        } else {
+            DB::table('JOB_ORD_DTL_SUB')->insert(array_merge([
+                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
+                'REG_DTM' => now()->format('Ymdhis'),
+            ], $attributes));
+
+            $this->insertCount++;
+        }
+    }
+
+    private function insertJobOrdBom($keys = [], $attributes = [])
+    {
+        if (DB::table('JOB_ORD_BOM')->where($keys)->exists()) {
+            DB::table('JOB_ORD_BOM')->where($keys)->update($attributes);
+
+            $this->updateCount++;
+        } else {
+            DB::table('JOB_ORD_BOM')->insert($attributes);
 
             $this->insertCount++;
         }

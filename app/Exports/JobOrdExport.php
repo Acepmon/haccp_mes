@@ -28,11 +28,11 @@ class JobOrdExport implements FromCollection, WithHeadings, WithStyles, WithMapp
         $items = JobOrd::query();
 
         if (!empty($this->from)) {
-            $items = $items->whereDate('JOB_DT', '>=', now()->parse($this->from)->format('YmdHis'));
+            $items = $items->whereDate('REG_DTM', '>=', now()->parse($this->from)->format('YmdHis'));
         }
 
         if (!empty($this->to)) {
-            $items = $items->whereDate('JOB_DT', '<=', now()->parse($this->to)->format('YmdHis'));
+            $items = $items->whereDate('REG_DTM', '<=', now()->parse($this->to)->format('YmdHis'));
         }
 
         $items = $items->orderBy('REG_DTM', 'DESC');
@@ -43,7 +43,7 @@ class JobOrdExport implements FromCollection, WithHeadings, WithStyles, WithMapp
     public function map($jobOrd): array
     {
         return [
-            $jobOrd->JOB_DT . '-' . $jobOrd->SEQ_NO,
+            $jobOrd->JOB_NO,
             $jobOrd->ITEM_ID,
             $jobOrd->item->ITEM_NM,
             $jobOrd->ORD_QTY,

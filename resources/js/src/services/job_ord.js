@@ -11,7 +11,7 @@ export default {
         let params = {
             page: 1,
             limit: 15,
-            sort: 'JOB_DT',
+            sort: 'JOB_NO',
             order: 'ASC',
             with: 'item',
             ...args
@@ -27,7 +27,7 @@ export default {
         let params = {
             page: 1,
             limit: 15,
-            sort: 'JOB_DT',
+            sort: 'JOB_NO',
             order: 'ASC',
             with: 'item',
             ...args

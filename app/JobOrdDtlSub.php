@@ -2,18 +2,15 @@
 
 namespace App;
 
-use App\Events\JobOrdDtlCreated;
-use App\Events\JobOrdDtlDeleted;
-use App\Events\JobOrdDtlUpdated;
 use App\Traits\HasCompositePrimaryKey;
 use Illuminate\Database\Eloquent\Model;
 
-class JobOrdDtl extends Model
+class JobOrdDtlSub extends Model
 {
     use HasCompositePrimaryKey;
 
-    protected $table = 'JOB_ORD_DTL';
-    protected $primaryKey = ['JOB_NO', 'ITEM_ID', 'SEQ_NO'];
+    protected $table = 'JOB_ORD_DTL_SUB';
+    protected $primaryKey = ['JOB_NO', 'ITEM_ID', 'SEQ_NO', 'SUB_SEQ_NO'];
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
@@ -27,8 +24,8 @@ class JobOrdDtl extends Model
     ];
 
     protected $dispatchesEvents = [
-        'created' => JobOrdDtlCreated::class,
-        'updated' => JobOrdDtlUpdated::class,
-        'deleted' => JobOrdDtlDeleted::class,
+        'created' => JobOrdDtlSubCreated::class,
+        'updated' => JobOrdDtlSubUpdated::class,
+        'deleted' => JobOrdDtlSubDeleted::class,
     ];
 }

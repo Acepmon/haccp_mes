@@ -13,7 +13,7 @@ class JobOrd extends Model
     use HasCompositePrimaryKey;
 
     protected $table = 'JOB_ORD';
-    protected $primaryKey = ['JOB_DT', 'SEQ_NO', 'ITEM_ID'];
+    protected $primaryKey = ['JOB_NO', 'ITEM_ID'];
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
@@ -31,11 +31,6 @@ class JobOrd extends Model
         'updated' => JobOrdUpdated::class,
         'deleted' => JobOrdDeleted::class,
     ];
-
-    // public function job_ord_dtl ()
-    // {
-    //     return $this->hasMany('App\JobOrdDtl', '');
-    // }
 
     public function item()
     {

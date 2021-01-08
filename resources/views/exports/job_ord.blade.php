@@ -8,7 +8,7 @@
   <tr>
     <th colspan="5" style="font-weight: bold;">
       <span>전표번호</span>
-      <span> : {{ $details['job_ord'] }}</span>
+      <span> : {{ $details['job_no'] }}</span>
     </th>
   </tr>
 

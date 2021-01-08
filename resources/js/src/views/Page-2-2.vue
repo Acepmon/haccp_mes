@@ -204,7 +204,7 @@ export default {
         },
         {
           headerName: '작업번호',
-          field: 'job_ord:job_ord',
+          field: 'job_ord:job_no',
           filter: false,
           editable: false,
           width: 120,
