@@ -56,6 +56,7 @@ class EdocFileResource extends JsonResource
             }),
             'edoc_file:period_data' => explode(',', $this->PERIOD_DATA),
             'edoc_file:period_data_parsed' => $period_data_parsed,
+            'edoc_file:period_data_parsed_nm' => implode(',', $period_data_parsed),
             'edoc_file:use_yn' => $this->USE_YN,
             'edoc_file:work_id' => $this->WORK_ID,
             'edoc_file:app_id' => $this->APP_ID,

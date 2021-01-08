@@ -236,73 +236,25 @@
         </template>
       </app-control>
 
-      <div class="overflow-y-auto" style="max-height: 300px">
-        <vs-table
-          stripe
-          pagination
-          description
-          sst
-          :max-items="pagination.limit"
-          :data="items"
-          :total="pagination.total"
-          @change-page="handleChangePage"
-          @sort="handleSort"
-          v-model="item"
-          @selected="handleSelected"
-        >
-          <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="doc_nm">문서이름</vs-th>
-            <vs-th sort-key="type_nm">문서종류</vs-th>
-            <vs-th sort-key="doc_desc">설명(제품명)</vs-th>
-            <vs-th sort-key="period_nm">업무처리주기</vs-th>
-            <vs-th sort-key="period_data">주기내용</vs-th>
-            <vs-th sort-key="use_yn">사용구분</vs-th>
-            <vs-th sort-key="work_id">작업자</vs-th>
-            <vs-th sort-key="app_id">승인자</vs-th>
-          </template>
+      <ag-grid-vue
+        ref="agGridTable"
+        rowSelection="single"
+        @selection-changed="handleSelected"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 100%;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize"
+        :suppressPaginationPanel="true">
+      </ag-grid-vue>
 
-          <template slot-scope="{ data }">
-            <vs-tr :data="tr" :key="index" v-for="(tr, index) in items">
-              <vs-td :data="rowIndex(index)">
-                {{ rowIndex(index) }}
-              </vs-td>
-
-              <vs-td :data="data[index]['edoc_file:doc_nm']">
-                {{ data[index]["edoc_file:doc_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['edoc_file:type_nm']">
-                {{ data[index]["edoc_file:type_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['edoc_file:doc_desc']">
-                {{ data[index]["edoc_file:doc_desc"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['edoc_file:period_nm']">
-                {{ data[index]["edoc_file:period_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['edoc_file:period_data']">
-                {{ data[index]["edoc_file:period_data_parsed"].join(',') }}
-              </vs-td>
-
-              <vs-td :data="data[index]['edoc_file:use_yn']">
-                {{ data[index]["edoc_file:use_yn"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['edoc_file:work_id']">
-                {{ data[index]["edoc_file:work_id"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['edoc_file:app_id']">
-                {{ data[index]["edoc_file:app_id"] }}
-              </vs-td>
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
+      <vs-pagination
+        :total="totalPages"
+        :max="maxPageNumbers"
+        v-model="currentPage" />
     </vx-card>
   </div>
 </template>
@@ -318,13 +270,16 @@ import FileSelect from "@/layouts/components/FileSelect.vue";
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+import { AgGridVue } from 'ag-grid-vue';
 
+import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 export default {
   components: {
     FileSelect,
     AppControl,
     AppForm,
-    AppFormGroup
+    AppFormGroup,
+    AgGridVue
   },
 
   data() {
@@ -379,11 +334,6 @@ export default {
         { text: "토", value: 5 },
         { text: "일", value: 6 },
       ],
-      pagination: {
-        page: 1,
-        limit: 15,
-        total: 0,
-      },
       sorting: {
         sort: "UPD_DTM",
         order: "DESC",
@@ -395,16 +345,60 @@ export default {
         'edoc_file:use_yn': '사용구분',
         'edoc_file:work_id': '작업자',
         'edoc_file:app_id': '승인자',
-      }
+      },
+
+      maxPageNumbers: 7,
+      gridOptions: {
+        rowHeight: 40,
+        headerHeight: 40
+      },
+      gridApi: null,
+      defaultColDef: {
+        sortable: true,
+        editable: false,
+        resizable: true,
+        suppressMenu: false
+      },
+      columnDefs: [
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: '문서이름', field: 'edoc_file:doc_nm', filter: false, width: 200 },
+        { headerName: '문서종류', field: 'edoc_file:type_nm', filter: false, width: 150 },
+        { headerName: '설명(제품명)', field: 'edoc_file:doc_desc', filter: false, width: 150 },
+        { headerName: '업무처리주기', field: 'edoc_file:period_nm', filter: false, width: 150 },
+        { headerName: '주기내용', field: 'edoc_file:period_data_parsed_nm', filter: false, width: 150 },
+        { headerName: '사용구분', field: 'edoc_file:use_yn', filter: false, width: 150 },
+        { headerName: '작업자', field: 'edoc_file:work_id', filter: false, width: 150 },
+        { headerName: '승인자', field: 'edoc_file:app_id', filter: false, width: 150 },
+      ]
     };
   },
 
   computed: {
-    paginationParam: function () {
-      return {
-        page: this.pagination.page,
-        limit: this.pagination.limit,
-      };
+    itemsComp: function () {
+      return this.items.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+
+    totalPages () {
+      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      else return 0
+    },
+    paginationPageSize () {
+      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      else return 50
+    },
+    currentPage: {
+      get () {
+        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        else return 1
+      },
+      set (val) {
+        this.gridApi.paginationGoToPage(val - 1)
+      }
     },
 
     sortParam: function () {
@@ -495,28 +489,13 @@ export default {
       }
     },
 
-    rowIndex: function (index) {
-      return (
-        this.pagination.page * this.pagination.limit -
-        this.pagination.limit +
-        index +
-        1
-      );
-    },
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
 
-    handleChangePage(page) {
-      this.pagination.page = page;
-      this.query();
-    },
-
-    handleSort(sort, order) {
-      this.sorting.sort = sort;
-      this.sorting.order = order;
-      this.query();
-    },
-
-    handleSelected(tr) {
-      this.clearErrors();
+      if (rows.length > 0) {
+        this.$set(this, 'item', rows[0])
+        this.clearErrors()
+      }
     },
 
     save() {
@@ -587,15 +566,13 @@ export default {
 
       api
         .fetch({
-          ...this.paginationParam,
           ...this.sortParam,
           ...search_params,
+          limit: -1
         })
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
-          this.pagination.total = res.data.meta.total;
-          this.pagination.page = res.data.meta.current_page;
         })
         .catch(() => {
           this.displayErrors(
@@ -673,6 +650,10 @@ export default {
         this.item["edoc_file:period_data"].splice(index, 1);
       }
     }
+  },
+
+  mounted () {
+    this.gridApi = this.gridOptions.api
   },
 
   created() {
