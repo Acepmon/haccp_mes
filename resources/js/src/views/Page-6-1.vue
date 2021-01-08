@@ -86,7 +86,7 @@ export default {
       }
     },
 
-    refresh () {
+    init () {
       this.spinner()
 
       haccp_monitor
@@ -98,22 +98,62 @@ export default {
         })
         .then((res) => {
           this.spinner(false)
-
           if (res.data.data.length > 0) {
             res.data.data.forEach(device => {
               let device_nm = this.devices.filter(d => d.comm2_cd == device.device_id)
-              device_nm = device_nm[0].comm2_nm
+
               this.$set(this.items, device.device_id, {
-                ...device,
-                chartData: [],
-                chartCats: [],
-                device_nm: device_nm
+                'device_id': device.device_id,
+                'device_nm': device_nm[0].comm2_nm,
+                'chart_dialog': false,
+                'data': device.data.toFixed(2),
+                'min': device.min.toFixed(2),
+                'max': device.max.toFixed(2),
+                'avg': device.avg.toFixed(2),
+                'reg_dtm': device.reg_dtm,
+                'reg_dtm_parsed': device.reg_dtm_parsed,
+                'chartData': [],
+                'chartCats': [],
               })
             });
           }
         })
         .catch((err) => {
-          this.spinner(false);
+          this.spinner(false)
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        })
+    },
+
+    refresh (callback = Function) {
+      haccp_monitor
+        .ccp_data({
+          device_id: this.devices.map(item => item.comm2_cd).join(','),
+          sort: 'DEVICE',
+          order: 'ASC',
+          reg_dtm: moment().format('YYYYMMDD')
+        })
+        .then((res) => {
+          if (res.data.data.length > 0) {
+            res.data.data.forEach(device => {
+              this.$set(this.items[device.device_id], 'data', device.data.toFixed(2))
+              this.$set(this.items[device.device_id], 'min', device.min.toFixed(2))
+              this.$set(this.items[device.device_id], 'max', device.max.toFixed(2))
+              this.$set(this.items[device.device_id], 'avg', device.avg.toFixed(2))
+              this.$set(this.items[device.device_id], 'reg_dtm', device.reg_dtm)
+              this.$set(this.items[device.device_id], 'reg_dtm_parsed', device.reg_dtm_parsed)
+            });
+
+            callback()
+          }
+        })
+        .catch((err) => {
           this.$vs.notify({
             title: this.$t("Error"),
             position: "top-right",
@@ -136,7 +176,7 @@ export default {
         .then((res) => {
           if (res.data.data.length > 0) {
             let device_id = res.data.data[0].device_id
-            let chartData = res.data.data.map(i => i.data.toFixed(2))
+            let chartData = res.data.data.map(i => i.data)
             let chartCats = res.data.data.map(i => i.reg_dtm_parsed)
             this.$set(this.items[device_id], 'chartData', chartData)
             this.$set(this.items[device_id], 'chartCats', chartCats)
@@ -179,8 +219,18 @@ export default {
   created () {
     comm_cd.fetch({cd1: 'C00'}).then((res) => {
       this.$set(this, 'devices', res.data)
-      this.refresh()
+      this.init()
     })
+
+    setInterval(() => {
+      this.refresh(() => {
+        this.itemsComp.forEach((data) => {
+          if (data.chart_dialog) {
+            this.widgetRefresh(data)
+          }
+        })
+      })
+    }, 1000 * 60 * 1)
   }
 }
 </script>

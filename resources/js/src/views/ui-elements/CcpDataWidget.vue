@@ -1,30 +1,30 @@
 <template>
   <div>
-    <vx-card class="bg-primary-gradient cursor-pointer" @click="chartDialog = true; onPopupOpen(data);">
+    <vx-card class="bg-primary-gradient cursor-pointer" @click="data.chart_dialog = true; onPopupOpen(data);">
       <div class="h1 py-2 font-bold text-white text-center">
-        {{ data.device_nm }}: <span class="px-8">{{ data.data.toFixed(2) }}℃</span>
+        {{ data.device_nm }}: <span class="px-8">{{ data.data }}℃</span>
       </div>
       <div class="h2 py-2 text-warning text-right">
-        <span class="px-2">금일 최소: {{ data.min.toFixed(2) }}</span>
-        <span class="px-2">최대: {{ data.max.toFixed(2) }}</span>
-        <span class="px-2">평균: {{ data.avg.toFixed(2) }}</span>
+        <span class="px-2">금일 최소: {{ data.min }}</span>
+        <span class="px-2">최대: {{ data.max }}</span>
+        <span class="px-2">평균: {{ data.avg }}</span>
       </div>
       <div class="h3 py-2 text-white text-right">
         <span>최종측정시간: {{ data.reg_dtm_parsed }}</span>
       </div>
     </vx-card>
 
-    <vs-popup fullscreen :title="data.device_nm" :active.sync="chartDialog" button-close-hidden>
+    <vs-popup fullscreen :title="data.device_nm" :active.sync="data.chart_dialog" button-close-hidden>
       <app-control filterClass="sm:w-4/12" actionClass="sm:w-8/12 content-start">
         <template v-slot:filter>
           <vx-card class="bg-primary">
             <div class="h1 py-2 font-bold text-white text-center">
-              {{ data.device_nm }}: <span class="px-8">{{ data.data.toFixed(2) }}℃</span>
+              {{ data.device_nm }}: <span class="px-8">{{ data.data }}℃</span>
             </div>
             <div class="h2 py-2 text-warning text-right">
-              <span class="px-2">금일 최소: {{ data.min.toFixed(2) }}</span>
-              <span class="px-2">최대: {{ data.max.toFixed(2) }}</span>
-              <span class="px-2">평균: {{ data.avg.toFixed(2) }}</span>
+              <span class="px-2">금일 최소: {{ data.min }}</span>
+              <span class="px-2">최대: {{ data.max }}</span>
+              <span class="px-2">평균: {{ data.avg }}</span>
             </div>
             <div class="h3 py-2 text-white text-right">
               <span>최종측정시간: {{ data.reg_dtm_parsed }}</span>
@@ -41,7 +41,7 @@
             >{{ $t("Refresh") }}</vs-button
           >
           <vs-button
-            @click="chartDialog = false; onPopupClose(data)"
+            @click="data.chart_dialog = false; onPopupClose(data)"
             class="mx-1 flex-shrink-0"
             color="primary"
             type="border"
@@ -72,7 +72,6 @@ export default {
   },
   data () {
     return {
-      chartDialog: false,
       themeColors: ['#129CE9', '#46D465', '#E26B6D'],
     }
   },
@@ -80,27 +79,34 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: {
-        device_id: null,
-        device_nm: null,
-        ccp_seq: null,
-        data: null,
-        min: null,
-        max: null,
-        avg: null,
-        reg_dtm: null,
-        reg_dtm_parsed: null
+      default: () => {
+        return {
+          device_id: null,
+          device_nm: null,
+          chart_dialog: false,
+          ccp_seq: null,
+          data: null,
+          min: null,
+          max: null,
+          avg: null,
+          reg_dtm: null,
+          reg_dtm_parsed: null
+        }
       }
     },
     chartData: {
       type: Array,
       required: false,
-      default: []
+      default: () => {
+        return []
+      }
     },
     chartCategories: {
       type: Array,
       required: false,
-      default: []
+      default: () => {
+        return []
+      }
     },
     onRefresh: {
       type: Function,
