@@ -35,18 +35,4 @@ export default {
 .control-col > * {
   flex-shrink: revert;
 }
-
-.control-field {
-  width: 150px;
-}
-.control-field-dtm {
-  width: 100px;
-}
-
-.control-field-sm {
-  width: 100px;
-}
-.control-field-dtm-sm {
-  width: 80px;
-}
 </style>

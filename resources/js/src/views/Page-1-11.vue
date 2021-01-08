@@ -185,79 +185,25 @@
         </template>
       </app-control>
 
-      <div class="overflow-y-auto" style="max-height: 300px">
-        <vs-table
-          stripe
-          pagination
-          description
-          sst
-          :max-items="pagination.limit"
-          :data="items"
-          :total="pagination.total"
-          @change-page="handleChangePage"
-          @sort="handleSort"
-          v-model="item"
-          @selected="handleSelected"
-        >
-          <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="doc_nm">문서이름</vs-th>
-            <vs-th sort-key="doc_dt">보고서작성일</vs-th>
-            <vs-th sort-key="from_dt">기간(From)</vs-th>
-            <vs-th sort-key="to_dt">기간(To)</vs-th>
-            <vs-th>첨부화일</vs-th>
-          </template>
+      <ag-grid-vue
+        ref="agGridTable"
+        rowSelection="single"
+        @selection-changed="handleSelected"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 100%;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize"
+        :suppressPaginationPanel="true">
+      </ag-grid-vue>
 
-          <template slot-scope="{ data }">
-            <vs-tr :data="tr" :key="index" v-for="(tr, index) in items">
-              <vs-td :data="rowIndex(index)">
-                {{ rowIndex(index) }}
-              </vs-td>
-
-              <vs-td :data="data[index]['secu_doc_mgmt:doc_nm']">
-                {{ data[index]["secu_doc_mgmt:doc_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['secu_doc_mgmt:doc_dt']">
-                {{ data[index]["secu_doc_mgmt:doc_dt"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['secu_doc_mgmt:from_dt']">
-                {{ data[index]["secu_doc_mgmt:from_dt"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['secu_doc_mgmt:to_dt']">
-                {{ data[index]["secu_doc_mgmt:to_dt"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['secu_doc_mgmt:att_dtm']">
-                <div class="flex flex-row">
-                  <span
-                    v-if="data[index]['secu_doc_mgmt:att_file'].length > 0"
-                    v-text="data[index]['secu_doc_mgmt:att_file'][0].att_nm"
-                    class="pt-1"
-                  ></span>
-                  <!-- <vs-button
-                    color="primary"
-                    class="ml-2"
-                    :href="
-                      '/api/doc_mgmt/' +
-                      data[index]['secu_doc_mgmt:doc_id'] +
-                      '/att_file/' +
-                      data[index]['secu_doc_mgmt:att_file'][0].att_seq +
-                      '/download'
-                    "
-                    type="flat"
-                    size="small"
-                    icon-pack="feather"
-                    icon="icon-download"
-                  ></vs-button> -->
-                </div>
-              </vs-td>
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
+      <vs-pagination
+        :total="totalPages"
+        :max="maxPageNumbers"
+        v-model="currentPage" />
     </vx-card>
   </div>
 </template>
@@ -276,14 +222,17 @@ import moment from 'moment';
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+import { AgGridVue } from 'ag-grid-vue';
 
+import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 export default {
   components: {
     flatPickr,
     FileSelect,
     AppControl,
     AppForm,
-    AppFormGroup
+    AppFormGroup,
+    AgGridVue
   },
 
   data() {
@@ -317,11 +266,6 @@ export default {
       searchFrom: null,
       searchTo: null,
       types: [],
-      pagination: {
-        page: 1,
-        limit: 15,
-        total: 0,
-      },
       sorting: {
         sort: "REG_DTM",
         order: "DESC",
@@ -332,16 +276,57 @@ export default {
         'secu_doc_mgmt:from_dt': '기간',
         'secu_doc_mgmt:to_dt': '기간',
         'secu_doc_mgmt:att': '첨부화일',
-      }
+      },
+
+      maxPageNumbers: 7,
+      gridOptions: {
+        rowHeight: 40,
+        headerHeight: 40
+      },
+      gridApi: null,
+      defaultColDef: {
+        sortable: true,
+        editable: false,
+        resizable: true,
+        suppressMenu: false
+      },
+      columnDefs: [
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: '문서이름', field: 'secu_doc_mgmt:doc_nm', filter: false, width: 200 },
+        { headerName: '보고서작성일', field: 'secu_doc_mgmt:doc_dt', filter: false, width: 200 },
+        { headerName: '기간(From)', field: 'secu_doc_mgmt:from_dt', filter: false, width: 200 },
+        { headerName: '기간(To)', field: 'secu_doc_mgmt:to_dt', filter: false, width: 200 },
+        { headerName: '첨부화일', field: 'secu_doc_mgmt:att_nm', filter: false, width: 200 },
+      ]
     };
   },
 
   computed: {
-    paginationParam: function () {
-      return {
-        page: this.pagination.page,
-        limit: this.pagination.limit,
-      };
+    itemsComp: function () {
+      return this.items.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+
+    totalPages () {
+      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      else return 0
+    },
+    paginationPageSize () {
+      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      else return 50
+    },
+    currentPage: {
+      get () {
+        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        else return 1
+      },
+      set (val) {
+        this.gridApi.paginationGoToPage(val - 1)
+      }
     },
 
     sortParam: function () {
@@ -422,38 +407,23 @@ export default {
       }
     },
 
-    rowIndex: function (index) {
-      return (
-        this.pagination.page * this.pagination.limit -
-        this.pagination.limit +
-        index +
-        1
-      );
-    },
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
 
-    handleChangePage(page) {
-      this.pagination.page = page;
-      this.query();
-    },
+      if (rows.length > 0) {
+        this.$set(this, 'item', rows[0])
+        this.clearErrors();
 
-    handleSort(sort, order) {
-      this.sorting.sort = sort;
-      this.sorting.order = order;
-      this.query();
-    },
-
-    handleSelected(tr) {
-      this.clearErrors();
-
-      if (tr["secu_doc_mgmt:att_file"].length > 0) {
-        // this.item['secu_doc_mgmt:att'] = new File([""], tr['secu_doc_mgmt:att_file'][0].att_nm)
-        this.$set(
-          this.item,
-          "secu_doc_mgmt:att",
-          new File([""], tr["secu_doc_mgmt:att_file"][0].att_nm)
-        );
-      } else {
-        this.$set(this.item, "secu_doc_mgmt:att", null);
+        if (rows[0]["secu_doc_mgmt:att_file"].length > 0) {
+          // this.item['secu_doc_mgmt:att'] = new File([""], rows[0]['secu_doc_mgmt:att_file'][0].att_nm)
+          this.$set(
+            this.item,
+            "secu_doc_mgmt:att",
+            new File([""], rows[0]["secu_doc_mgmt:att_file"][0].att_nm)
+          );
+        } else {
+          this.$set(this.item, "secu_doc_mgmt:att", null);
+        }
       }
     },
 
@@ -624,15 +594,13 @@ export default {
 
       api
         .fetch({
-          ...this.paginationParam,
           ...this.sortParam,
           ...search_params,
+          limit: -1
         })
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
-          this.pagination.total = res.data.meta.total;
-          this.pagination.page = res.data.meta.current_page;
         })
         .catch(() => {
           this.displayErrors(
@@ -764,6 +732,10 @@ export default {
         accept: () => this.remove(),
       });
     },
+  },
+
+  mounted () {
+    this.gridApi = this.gridOptions.api
   },
 
   created() {
