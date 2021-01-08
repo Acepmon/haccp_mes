@@ -345,49 +345,13 @@ export default {
       },
 
       columnDefs: [
-        {
-          headerName: 'No',
-          field: 'no',
-          filter: false,
-          editable: false,
-          width: 80,
-        },
-        {
-          headerName: '사용자 ID',
-          field: 'user:user_id',
-          filter: false,
-          width: 200,
-        },
-        {
-          headerName: '이름',
-          field: 'user:user_nm',
-          filter: false,
-          width: 200,
-        },
-        {
-          headerName: '이메일',
-          field: 'user:email',
-          filter: false,
-          width: 200,
-        },
-        {
-          headerName: '담당업무',
-          field: 'user:appr_nm',
-          filter: false,
-          width: 200,
-        },
-        {
-          headerName: '메뉴접근권한',
-          field: 'user:role_nm',
-          filter: false,
-          width: 200,
-        },
-        {
-          headerName: '등록일시',
-          field: 'user:reg_dtm',
-          filter: false,
-          width: 200,
-        }
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: '사용자 ID', field: 'user:user_id', filter: false, width: 200 },
+        { headerName: '이름', field: 'user:user_nm', filter: false, width: 200 },
+        { headerName: '이메일', field: 'user:email', filter: false, width: 200 },
+        { headerName: '담당업무', field: 'user:appr_nm', filter: false, width: 200 },
+        { headerName: '메뉴접근권한', field: 'user:role_nm', filter: false, width: 200 },
+        { headerName: '등록일시', field: 'user:reg_dtm', filter: false, width: 200 }
       ],
     };
   },

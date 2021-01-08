@@ -156,68 +156,25 @@
         </template>
       </app-control>
 
-      <div class="overflow-y-auto" style="max-height: 300px">
-        <vs-table
-          stripe
-          pagination
-          description
-          sst
-          :max-items="pagination.limit"
-          :data="workers"
-          :total="pagination.total"
-          @change-page="handleChangePage"
-          @sort="handleSort"
-          @selected="handleSelected"
-          v-model="worker"
-        >
-          <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="worker_nm">이름</vs-th>
-            <vs-th sort-key="tel_no">휴대폰번호</vs-th>
-            <vs-th sort-key="work_cd">정/부구분</vs-th>
-            <vs-th sort-key="remark">업무내용</vs-th>
-            <vs-th sort-key="health_chk_dt">보건증갱신일자</vs-th>
-            <vs-th sort-key="role_cd">업무구분</vs-th>
-            <vs-th sort-key="reg_dtm">등록일시</vs-th>
-          </template>
+      <ag-grid-vue
+        ref="agGridTable"
+        rowSelection="single"
+        @selection-changed="handleSelected"
+        :gridOptions="gridOptions"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 100%;"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize"
+        :suppressPaginationPanel="true">
+      </ag-grid-vue>
 
-          <template slot-scope="{ data }">
-            <vs-tr :data="tr" :key="index" v-for="(tr, index) in workers">
-              <vs-td :data="rowIndex(index)">
-                {{ rowIndex(index) }}
-              </vs-td>
-
-              <vs-td :data="data[index]['worker:worker_nm']">
-                {{ data[index]["worker:worker_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['worker:tel_no']">
-                {{ data[index]["worker:tel_no"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['worker:work_nm']">
-                {{ data[index]["worker:work_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['worker:remark']">
-                {{ data[index]["worker:remark"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['worker:health_chk_dt']">
-                {{ data[index]["worker:health_chk_dt"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['worker:role_nm']">
-                {{ data[index]["worker:role_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['worker:reg_dtm']">
-                {{ data[index]["worker:reg_dtm"] }}
-              </vs-td>
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
+      <vs-pagination
+        :total="totalPages"
+        :max="maxPageNumbers"
+        v-model="currentPage" />
     </vx-card>
   </div>
 </template>
@@ -234,13 +191,16 @@ import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js";
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
+import { AgGridVue } from 'ag-grid-vue';
 
+import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 export default {
   components: {
     flatPickr,
     AppControl,
     AppForm,
-    AppFormGroup
+    AppFormGroup,
+    AgGridVue
   },
 
   data() {
@@ -271,11 +231,7 @@ export default {
       roles: [],
       works: [],
       workers: [],
-      pagination: {
-        page: 1,
-        limit: 15,
-        total: 0,
-      },
+
       sorting: {
         sort: "REG_DTM",
         order: "DESC",
@@ -283,16 +239,59 @@ export default {
       required: {
         'worker:worker_nm': '이름',
         'worker:tel_no': '휴대폰번호',
-      }
+      },
+
+      maxPageNumbers: 7,
+      gridOptions: {
+        rowHeight: 40,
+        headerHeight: 40
+      },
+      gridApi: null,
+      defaultColDef: {
+        sortable: true,
+        editable: false,
+        resizable: true,
+        suppressMenu: false
+      },
+      columnDefs: [
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: '이름', field: 'worker:worker_nm', filter: false, width: 200 },
+        { headerName: '휴대폰번호', field: 'worker:tel_no', filter: false, width: 150 },
+        { headerName: '정/부구분', field: 'worker:work_nm', filter: false, width: 150 },
+        { headerName: '업무내용', field: 'worker:remark', filter: false, width: 250 },
+        { headerName: '보건증갱신일자', field: 'worker:health_chk_dt', filter: false, width: 150 },
+        { headerName: '업무구분', field: 'worker:role_nm', filter: false, width: 150 },
+        { headerName: '등록일시', field: 'worker:reg_dtm', filter: false, width: 150 }
+      ]
     };
   },
 
   computed: {
-    paginationParam: function () {
-      return {
-        page: this.pagination.page,
-        limit: this.pagination.limit,
-      };
+    itemsComp: function () {
+      return this.workers.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+
+    totalPages () {
+      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      else return 0
+    },
+    paginationPageSize () {
+      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      else return 50
+    },
+    currentPage: {
+      get () {
+        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        else return 1
+      },
+      set (val) {
+        this.gridApi.paginationGoToPage(val - 1)
+      }
     },
 
     sortParam: function () {
@@ -370,15 +369,6 @@ export default {
       for (const [key, value] of Object.entries(errors)) {
         this.$set(this.errors, key, Array.isArray(value) ? value[0] : value);
       }
-    },
-
-    rowIndex: function (index) {
-      return (
-        this.pagination.page * this.pagination.limit -
-        this.pagination.limit +
-        index +
-        1
-      );
     },
 
     add() {
@@ -480,14 +470,12 @@ export default {
 
       api
         .fetch({
-          ...this.paginationParam,
           ...this.sortParam,
+          limit: -1
         })
         .then((res) => {
           this.spinner(false);
           this.workers = res.data.data;
-          this.pagination.total = res.data.meta.total;
-          this.pagination.page = res.data.meta.current_page;
         })
         .catch(() => {
           this.displayErrors(
@@ -507,19 +495,13 @@ export default {
         });
     },
 
-    handleSelected: function (tr) {
-      this.clearErrors()
-    },
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
 
-    handleChangePage(page) {
-      this.pagination.page = page;
-      this.query();
-    },
-
-    handleSort(sort, order) {
-      this.sorting.sort = sort;
-      this.sorting.order = order;
-      this.query();
+      if (rows.length > 0) {
+        this.$set(this, 'worker', rows[0])
+        this.clearErrors();
+      }
     },
 
     remove() {
@@ -624,6 +606,10 @@ export default {
         accept: () => this.remove(),
       });
     },
+  },
+
+  mounted () {
+    this.gridApi = this.gridOptions.api
   },
 
   created() {
