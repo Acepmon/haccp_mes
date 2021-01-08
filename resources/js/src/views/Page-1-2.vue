@@ -242,6 +242,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         rowSelection="single"
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
@@ -272,7 +273,8 @@ import { mapActions } from "vuex";
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
-import { AgGridVue } from 'ag-grid-vue';
+import { AgGridVue } from 'ag-grid-vue'
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';;
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 export default {
@@ -329,6 +331,7 @@ export default {
         "user:user_sts_yn": "사용여부",
       },
 
+      localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,

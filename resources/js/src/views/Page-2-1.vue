@@ -35,6 +35,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         rowSelection="single"
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
@@ -55,6 +56,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         :gridOptions="gridOptions2"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         style="height: auto;"
@@ -118,7 +120,8 @@ import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 import ImportExcel from '@/components/excel/ImportExcel.vue';
 
-import { AgGridVue } from 'ag-grid-vue';
+import { AgGridVue } from 'ag-grid-vue'
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';;
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
@@ -144,6 +147,7 @@ export default {
       items: [],
       items2: [],
 
+      localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
@@ -171,106 +175,22 @@ export default {
       },
 
       columnDefs: [
-        {
-          headerName: 'No',
-          field: 'no',
-          filter: false,
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '품목ID',
-          field: 'item_mst:item_id',
-          filter: false,
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '품목명',
-          field: 'item_mst:item_nm',
-          filter: false,
-          editable: false,
-          width: 300,
-        },
-        {
-          headerName: '규격',
-          field: 'item_mst:spec',
-          filter: false,
-          editable: false,
-          width: 300,
-        },
-        {
-          headerName: '단위',
-          field: 'item_mst:unit',
-          filter: false,
-          editable: false,
-          width: 300,
-        }
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 100 },
+        { headerName: '품목ID', field: 'item_mst:item_id', filter: false, editable: false, width: 200 },
+        { headerName: '품목명', field: 'item_mst:item_nm', filter: false, editable: false, width: 300 },
+        { headerName: '규격', field: 'item_mst:spec', filter: false, editable: false, width: 300 },
+        { headerName: '단위', field: 'item_mst:unit', filter: false, editable: false, width: 300 }
       ],
 
       columnDefs2: [
-        {
-          headerName: 'No',
-          field: 'no',
-          filter: false,
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '공정명',
-          field: 'PROC_NM',
-          filter: false,
-          editable: false,
-          width: 200
-        },
-        {
-          headerName: '소요시간 (부속 공정)',
-          // headerName: () => {
-          //   return '소요시간 <div>(부속 공정)</div>'
-          // },
-          // headerComponentParams: {
-          //   // 
-          // },
-          field: 'PROC_TIME',
-          filter: false,
-          editable: false,
-          width: 200
-        },
-        {
-          headerName: '순번',
-          field: 'SEQ_NM',
-          filter: false,
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '공정내용',
-          field: 'PROC_DTL',
-          filter: false,
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: 'BOM 재료',
-          field: 'ITEM_NM',
-          filter: false,
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '생산수량',
-          field: 'PROD_QTY',
-          filter: false,
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '소요수량',
-          field: 'USE_QTY',
-          filter: false,
-          editable: false,
-          width: 200,
-        },
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 100 },
+        { headerName: '공정명', field: 'PROC_NM', filter: false, editable: false, width: 200 },
+        { headerName: '소요시간 (부속 공정)', field: 'PROC_TIME', filter: false, editable: false, width: 200 },
+        { headerName: '순번', field: 'SEQ_NM', filter: false, editable: false, width: 200 },
+        { headerName: '공정내용', field: 'PROC_DTL', filter: false, editable: false, width: 200 },
+        { headerName: 'BOM 재료', field: 'ITEM_NM', filter: false, editable: false, width: 200 },
+        { headerName: '생산수량', field: 'PROD_QTY', filter: false, editable: false, width: 200 },
+        { headerName: '소요수량', field: 'USE_QTY', filter: false, editable: false, width: 200 }
       ]
     }
   },
@@ -492,7 +412,7 @@ export default {
           this.spinner(false);
           this.items2 = res.data.data;
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors

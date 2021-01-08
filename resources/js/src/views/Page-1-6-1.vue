@@ -79,6 +79,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         style="max-height: 100%;"
@@ -148,6 +149,7 @@ import api from "@/services/item_mst";
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
 import { AgGridVue } from 'ag-grid-vue'
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';
 
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
@@ -176,11 +178,6 @@ export default {
       searchType: '',
       importFile: null,
       importDialog: false,
-      pagination: {
-        page: 1,
-        limit: 15,
-        total: 0,
-      },
       sorting: {
         sort: "REG_DTM",
         order: "DESC",
@@ -190,6 +187,7 @@ export default {
       header: [],
       sheetName: '',
 
+      localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
@@ -302,13 +300,6 @@ export default {
       })
     },
 
-    paginationParam: function () {
-      return {
-        page: this.pagination.page,
-        limit: this.pagination.limit,
-      };
-    },
-
     sortParam: function () {
       return {
         sort: this.sorting.sort != null ? this.sorting.sort : "REG_DTM",
@@ -361,31 +352,11 @@ export default {
       }
     },
 
-    handleChangePage(page) {
-      this.pagination.page = page;
-      this.query();
-    },
-
-    handleSort(sort, order) {
-      this.sorting.sort = sort;
-      this.sorting.order = order;
-      this.query();
-    },
-
     loadDataInTable ({ results, header, meta }) {
       this.header = header
       this.tableData = results
       this.sheetName = meta.sheetName
       this.$set(this, 'importDialog', true)
-    },
-
-    rowIndex: function (index) {
-      return (
-        this.pagination.page * this.pagination.limit -
-        this.pagination.limit +
-        index +
-        1
-      );
     },
 
     query() {
@@ -403,7 +374,6 @@ export default {
 
       api
         .fetch({
-          ...this.paginationParam,
           ...this.sortParam,
           limit: -1,
           ...search_params,
@@ -414,10 +384,8 @@ export default {
             item['changed'] = false
             return item
           });
-          // this.pagination.total = res.data.meta.total;
-          // this.pagination.page = res.data.meta.current_page;
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors

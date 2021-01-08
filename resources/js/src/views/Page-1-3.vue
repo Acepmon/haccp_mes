@@ -157,6 +157,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         rowSelection="single"
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
@@ -190,7 +191,8 @@ import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js";
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
-import { AgGridVue } from 'ag-grid-vue';
+import { AgGridVue } from 'ag-grid-vue'
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';;
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 export default {
@@ -240,6 +242,7 @@ export default {
         'worker:tel_no': '휴대폰번호',
       },
 
+      localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
@@ -476,7 +479,7 @@ export default {
           this.spinner(false);
           this.workers = res.data.data;
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors

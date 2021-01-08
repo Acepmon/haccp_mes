@@ -65,6 +65,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         style="max-height: 100%;"
@@ -132,6 +133,7 @@ import item_mst from "@/services/item_mst";
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
 import { AgGridVue } from 'ag-grid-vue'
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
@@ -156,11 +158,6 @@ export default {
       searchType: '',
       importFile: null,
       importDialog: false,
-      pagination: {
-        page: 1,
-        limit: 15,
-        total: 0,
-      },
       sorting: {
         sort: "REG_DTM",
         order: "DESC",
@@ -170,6 +167,7 @@ export default {
       header: [],
       sheetName: '',
 
+      localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
@@ -185,115 +183,23 @@ export default {
       },
 
       columnDefs: [
-        {
-          headerName: 'No',
-          field: 'no',
-          filter: false,
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '코드',
-          field: 'item_mst:item_id',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '품목명',
-          field: 'item_mst:item_nm',
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '규격명',
-          field: 'item_mst:spec',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '단위',
-          field: 'item_mst:unit',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '당수량(분자)',
-          field: 'item_mst:qty1',
-          editable: false,
-          type: 'numericColumn',
-          width: 100,
-        },
-        {
-          headerName: '대표품목 환산수량',
-          field: 'item_mst:conn_no',
-          editable: false,
-          type: 'numericColumn',
-          width: 100,
-        },
-        {
-          headerName: '연결품목 환산수량',
-          field: 'item_mst:conn_qty',
-          editable: false,
-          type: 'numericColumn',
-          width: 100,
-        },
-        {
-          headerName: '품목',
-          field: 'item_mst:item_cd_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '그룹1',
-          field: 'item_mst:grp1_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '그룹2',
-          field: 'item_mst:grp2_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '단위(대)',
-          field: 'item_mst:unit1_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '수량(대)',
-          field: 'item_mst:unit1_qty',
-          type: 'numericColumn',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '단위(중)',
-          field: 'item_mst:unit2_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '수량(중)',
-          field: 'item_mst:unit2_qty',
-          type: 'numericColumn',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '단위(소)',
-          field: 'item_mst:unit3_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '수량(소)',
-          field: 'item_mst:unit3_qty',
-          type: 'numericColumn',
-          editable: false,
-          width: 100,
-        }
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 100 },
+        { headerName: '코드', field: 'item_mst:item_id', editable: false, width: 100 },
+        { headerName: '품목명', field: 'item_mst:item_nm', editable: false, width: 200 },
+        { headerName: '규격명', field: 'item_mst:spec', editable: false, width: 100 },
+        { headerName: '단위', field: 'item_mst:unit', editable: false, width: 100 },
+        { headerName: '당수량(분자)', field: 'item_mst:qty1', editable: false, type: 'numericColumn', width: 100 },
+        { headerName: '대표품목 환산수량', field: 'item_mst:conn_no', editable: false, type: 'numericColumn', width: 100 },
+        { headerName: '연결품목 환산수량', field: 'item_mst:conn_qty', editable: false, type: 'numericColumn', width: 100 },
+        { headerName: '품목', field: 'item_mst:item_cd_nm', editable: false, width: 100 },
+        { headerName: '그룹1', field: 'item_mst:grp1_nm', editable: false, width: 100 },
+        { headerName: '그룹2', field: 'item_mst:grp2_nm', editable: false, width: 100 },
+        { headerName: '단위(대)', field: 'item_mst:unit1_nm', editable: false, width: 100 },
+        { headerName: '수량(대)', field: 'item_mst:unit1_qty', type: 'numericColumn', editable: false, width: 100 },
+        { headerName: '단위(중)', field: 'item_mst:unit2_nm', editable: false, width: 100 },
+        { headerName: '수량(중)', field: 'item_mst:unit2_qty', type: 'numericColumn', editable: false, width: 100 },
+        { headerName: '단위(소)', field: 'item_mst:unit3_nm', editable: false, width: 100 },
+        { headerName: '수량(소)', field: 'item_mst:unit3_qty', type: 'numericColumn', editable: false, width: 100 }
       ],
     }
   },
@@ -306,13 +212,6 @@ export default {
           ...item
         } 
       })
-    },
-
-    paginationParam: function () {
-      return {
-        page: this.pagination.page,
-        limit: this.pagination.limit,
-      };
     },
 
     sortParam: function () {
@@ -367,31 +266,11 @@ export default {
       }
     },
 
-    handleChangePage(page) {
-      this.pagination.page = page;
-      this.query();
-    },
-
-    handleSort(sort, order) {
-      this.sorting.sort = sort;
-      this.sorting.order = order;
-      this.query();
-    },
-
     loadDataInTable ({ results, header, meta }) {
       this.header = header
       this.tableData = results
       this.sheetName = meta.sheetName
       this.$set(this, 'importDialog', true)
-    },
-
-    rowIndex: function (index) {
-      return (
-        this.pagination.page * this.pagination.limit -
-        this.pagination.limit +
-        index +
-        1
-      );
     },
 
     query() {
@@ -409,7 +288,6 @@ export default {
 
       item_mst
         .fetch({
-          ...this.paginationParam,
           ...this.sortParam,
           limit: -1,
           ...search_params,
@@ -417,10 +295,8 @@ export default {
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
-          this.pagination.total = res.data.meta.total;
-          this.pagination.page = res.data.meta.current_page;
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors

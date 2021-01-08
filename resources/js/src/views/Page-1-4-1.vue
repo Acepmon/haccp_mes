@@ -110,15 +110,6 @@
             <file-select
               v-model="haccp_mst_file['haccp_mst_file:att']"
             ></file-select>
-            <!-- <vs-button
-              type="border"
-              color="primary"
-              @click.native="haccp_mst_file['haccp_mst_file:att'] = null"
-              v-if="haccp_mst_file['haccp_mst_file:att']"
-              class="ml-1 px-4"
-            >
-              <vs-icon icon="close" />
-            </vs-button> -->
             <vs-button
               class="ml-1"
               v-if="
@@ -166,6 +157,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         rowSelection="single"
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
@@ -200,7 +192,8 @@ import FileSelect from "@/layouts/components/FileSelect.vue";
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
-import { AgGridVue } from 'ag-grid-vue';
+import { AgGridVue } from 'ag-grid-vue'
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';;
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 export default {
@@ -254,6 +247,7 @@ export default {
         'haccp_mst_file:att': '첨부화일',
       },
 
+      localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
@@ -571,7 +565,7 @@ export default {
           this.spinner(false);
           this.items = res.data.data;
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors

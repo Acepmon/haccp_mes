@@ -49,6 +49,7 @@
       </div>
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         :columnDefs="columnDefs"
@@ -74,6 +75,7 @@
 
 <script>
 import { AgGridVue } from 'ag-grid-vue'
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';
 import contacts from './data.json'
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'

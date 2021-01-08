@@ -55,6 +55,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         :gridOptions="gridOptions"
         rowSelection="single"
         @selection-changed="handleSelected"
@@ -240,6 +241,7 @@ export default {
         details_dt: null
       },
 
+      localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
@@ -257,66 +259,14 @@ export default {
         textEditor: TextEditor
       },
       columnDefs: [
-        {
-          headerName: 'No',
-          field: 'no',
-          filter: false,
-          editable: false,
-          width: 80,
-        },
-        {
-          headerName: '작업번호',
-          field: 'job_ord:job_no',
-          filter: false,
-          editable: false,
-          width: 120,
-          cellStyle: {'text-decoration': 'underline', 'cursor': 'pointer'}
-        },
-        {
-          headerName: '품목ID',
-          field: 'job_ord:item_id',
-          filter: false,
-          editable: false,
-          width: 120,
-          cellStyle: {'text-decoration': 'underline', 'cursor': 'pointer'}
-        },
-        {
-          headerName: '품목명',
-          field: 'job_ord:item_nm',
-          filter: false,
-          editable: false,
-          width: 150,
-        },
-        {
-          headerName: '지시수량',
-          field: 'job_ord:ord_qty',
-          type: 'numericColumn',
-          filter: false,
-          editable: false,
-          width: 120,
-        },
-        {
-          headerName: '생산수량',
-          field: 'job_ord:prod_qty',
-          type: 'numericColumn',
-          filter: false,
-          editable: false,
-          width: 120,
-        },
-        {
-          headerName: '담당자',
-          field: 'job_ord:ord_nm',
-          filter: false,
-          editable: false,
-          width: 120,
-        },
-        {
-          headerName: '생산공장',
-          field: 'job_ord:fact_cd',
-          filter: false,
-          editable: false,
-          width: 120,
-        },
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: '작업번호', field: 'job_ord:job_no', filter: false, editable: false, width: 120, cellStyle: {'text-decoration': 'underline', 'cursor': 'pointer'} },
+        { headerName: '품목ID', field: 'job_ord:item_id', filter: false, editable: false, width: 120, cellStyle: {'text-decoration': 'underline', 'cursor': 'pointer'} },
+        { headerName: '품목명', field: 'job_ord:item_nm', filter: false, editable: false, width: 150 },
+        { headerName: '지시수량', field: 'job_ord:ord_qty', type: 'numericColumn', filter: false, editable: false, width: 120 },
+        { headerName: '생산수량', field: 'job_ord:prod_qty', type: 'numericColumn', filter: false, editable: false, width: 120 },
+        { headerName: '담당자', field: 'job_ord:ord_nm', filter: false, editable: false, width: 120 },
+        { headerName: '생산공장', field: 'job_ord:fact_cd', filter: false, editable: false, width: 120 }
       ]
     }
   },
@@ -410,7 +360,7 @@ export default {
           this.spinner(false);
           this.detailData = res.data
         })
-        .catch(() => {
+        .catch((err) => {
           this.spinner(false);
           this.$vs.notify({
             title: this.$t("Error"),
@@ -445,7 +395,7 @@ export default {
           this.spinner(false);
           this.items = res.data.data;
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors

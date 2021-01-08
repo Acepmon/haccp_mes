@@ -58,6 +58,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         style="max-height: 100%;"
@@ -219,6 +220,7 @@ import api from "@/services/cust_info";
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
 import { AgGridVue } from 'ag-grid-vue'
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
@@ -257,6 +259,7 @@ export default {
       header: [],
       sheetName: '',
 
+      localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
@@ -494,7 +497,7 @@ export default {
           this.pagination.total = res.data.meta.total;
           this.pagination.page = res.data.meta.current_page;
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors

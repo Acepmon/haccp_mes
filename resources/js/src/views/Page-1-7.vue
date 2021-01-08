@@ -66,6 +66,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         rowSelection="single"
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
@@ -87,6 +88,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         :gridOptions="gridOptions2"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         style="height: auto;"
@@ -148,6 +150,7 @@ import bom_config from '@/services/bom_config';
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
 import { AgGridVue } from 'ag-grid-vue'
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';
 
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
@@ -156,7 +159,6 @@ import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 import NumericEditor from '@/views/ui-elements/ag-grid-table/numericEditorVue';
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
-
 export default {
   components: {
     ImportExcel,
@@ -192,6 +194,7 @@ export default {
       header: [],
       sheetName: '',
 
+      localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
       gridApi: null,
       gridApi2: null,
@@ -223,200 +226,27 @@ export default {
           editable: false,
           width: 100,
         },
-        // {
-        //   headerName: '생산품목코드',
-        //   field: 'bom_config:item1_id',
-        //   editable: false,
-        //   width: 150,
-        // },
-        // {
-        //   headerName: '생산품목명',
-        //   field: 'bom_config:item1_nm',
-        //   editable: false,
-        //   width: 200,
-        // },
-        // {
-        //   headerName: '생산공정명',
-        //   field: 'bom_config:process_nm',
-        //   editable: false,
-        //   width: 150,
-        // },
-        {
-          headerName: '소모품목코드',
-          field: 'bom_config:item2_id',
-          editable: false,
-          width: 150,
-        },
-        {
-          headerName: '소모품목명',
-          field: 'bom_config:item2_nm',
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: 'BOM버전',
-          field: 'bom_config:bom_ver',
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '생산수량',
-          field: 'bom_config:prod_qty',
-          type: 'numericColumn',
-          cellEditor: 'numericEditor',
-          width: 100,
-        },
-        {
-          headerName: '소요량',
-          field: 'bom_config:use_qty',
-          type: 'numericColumn',
-          cellEditor: 'numericEditor',
-          width: 100,
-        },
-        {
-          headerName: '단위(대)',
-          field: 'item_mst:unit1_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '수량(대)',
-          field: 'item_mst:unit1_qty',
-          type: 'numericColumn',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '단위(중)',
-          field: 'item_mst:unit2_nm',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '수량(중)',
-          field: 'item_mst:unit2_qty',
-          type: 'numericColumn',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '단위(소)',
-          field: 'item_mst:unit3_nm',
-          editable: false,
-          width: 100,
-        },
+        { headerName: '소모품목코드', field: 'bom_config:item2_id', editable: false, width: 150 },
+        { headerName: '소모품목명', field: 'bom_config:item2_nm', editable: false, width: 200 },
+        { headerName: 'BOM버전', field: 'bom_config:bom_ver', editable: false, width: 200 },
+        { headerName: '생산수량', field: 'bom_config:prod_qty', type: 'numericColumn', cellEditor: 'numericEditor', width: 100 },
+        { headerName: '소요량', field: 'bom_config:use_qty', type: 'numericColumn', cellEditor: 'numericEditor', width: 100 },
+        { headerName: '단위(대)', field: 'item_mst:unit1_nm', editable: false, width: 100 },
+        { headerName: '수량(대)', field: 'item_mst:unit1_qty', type: 'numericColumn', editable: false, width: 100 },
+        { headerName: '단위(중)', field: 'item_mst:unit2_nm', editable: false, width: 100 },
+        { headerName: '수량(중)', field: 'item_mst:unit2_qty', type: 'numericColumn', editable: false, width: 100 },
+        { headerName: '단위(소)', field: 'item_mst:unit3_nm', editable: false, width: 100 },
       ],
 
       columnDefs: [
-        {
-          headerName: 'No',
-          field: 'no',
-          filter: false,
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '코드',
-          field: 'item_mst:item_id',
-          editable: false,
-          width: 150,
-        },
-        {
-          headerName: '품목명',
-          field: 'item_mst:item_nm',
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '규격명',
-          field: 'item_mst:spec',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '단위',
-          field: 'item_mst:unit',
-          editable: false,
-          width: 100,
-        },
-        {
-          headerName: '당수량(분자)',
-          field: 'item_mst:qty1',
-          editable: false,
-          type: 'numericColumn',
-          width: 100,
-        },
-        {
-          headerName: '대표품목 환산수량',
-          field: 'item_mst:conn_no',
-          editable: false,
-          type: 'numericColumn',
-          width: 100,
-        },
-        {
-          headerName: '연결품목 환산수량',
-          field: 'item_mst:conn_qty',
-          editable: false,
-          type: 'numericColumn',
-          width: 100,
-        },
-        // {
-        //   headerName: '품목',
-        //   field: 'item_mst:item_cd_nm',
-        //   editable: false,
-        //   width: 100,
-        // },
-        // {
-        //   headerName: '그룹1',
-        //   field: 'item_mst:grp1_nm',
-        //   editable: false,
-        //   width: 100,
-        // },
-        // {
-        //   headerName: '그룹2',
-        //   field: 'item_mst:grp2_nm',
-        //   editable: false,
-        //   width: 100,
-        // },
-        // {
-        //   headerName: '단위(대)',
-        //   field: 'item_mst:unit1_nm',
-        //   editable: false,
-        //   width: 100,
-        // },
-        // {
-        //   headerName: '수량(대)',
-        //   field: 'item_mst:unit1_qty',
-        //   type: 'numericColumn',
-        //   editable: false,
-        //   width: 100,
-        // },
-        // {
-        //   headerName: '단위(중)',
-        //   field: 'item_mst:unit2_nm',
-        //   editable: false,
-        //   width: 100,
-        // },
-        // {
-        //   headerName: '수량(중)',
-        //   field: 'item_mst:unit2_qty',
-        //   type: 'numericColumn',
-        //   editable: false,
-        //   width: 100,
-        // },
-        // {
-        //   headerName: '단위(소)',
-        //   field: 'item_mst:unit3_nm',
-        //   editable: false,
-        //   width: 100,
-        // },
-        // {
-        //   headerName: '수량(소)',
-        //   field: 'item_mst:unit3_qty',
-        //   type: 'numericColumn',
-        //   editable: false,
-        //   width: 100,
-        // }
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 100 },
+        { headerName: '코드', field: 'item_mst:item_id', editable: false, width: 150 },
+        { headerName: '품목명', field: 'item_mst:item_nm', editable: false, width: 200 },
+        { headerName: '규격명', field: 'item_mst:spec', editable: false, width: 100 },
+        { headerName: '단위', field: 'item_mst:unit', editable: false, width: 100 },
+        { headerName: '당수량(분자)', field: 'item_mst:qty1', editable: false, type: 'numericColumn', width: 100 },
+        { headerName: '대표품목 환산수량', field: 'item_mst:conn_no', editable: false, type: 'numericColumn', width: 100 },
+        { headerName: '연결품목 환산수량', field: 'item_mst:conn_qty', editable: false, type: 'numericColumn', width: 100 },
       ],
     }
   },
@@ -596,8 +426,6 @@ export default {
           this.spinner(false);
           this.items = res.data.data;
           callback(this.items)
-          // this.pagination.total = res.data.meta.total;
-          // this.pagination.page = res.data.meta.current_page;
         })
         .catch((err) => {
           console.log(err)

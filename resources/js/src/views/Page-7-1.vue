@@ -63,6 +63,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         rowSelection="single"
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
@@ -86,6 +87,7 @@
 
       <ag-grid-vue
         ref="agGridTable"
+        :localeText="localeText"
         :gridOptions="gridOptions2"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         style="height: auto;"
@@ -102,6 +104,7 @@ import axios from "axios";
 import api from "@/services/comm_cd";
 import { mapActions } from "vuex";
 import { AgGridVue } from 'ag-grid-vue'
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';
 
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
@@ -131,6 +134,7 @@ export default {
       items1: [],
       items2: [],
 
+      localeText: AG_GRID_LOCALE_KR,
       gridApi: null,
       gridApi2: null,
       gridOptions: {
@@ -150,58 +154,17 @@ export default {
       },
 
       columnDefs: [
-        {
-          headerName: 'No',
-          field: 'no',
-          filter: false,
-          editable: false,
-          width: 80,
-        },
-        {
-          headerName: '그룹코드',
-          field: 'comm_cd:comm1_cd',
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '그룹코드명',
-          field: 'comm_cd:comm2_nm',
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '등록자',
-          field: 'comm_cd:reg_id',
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '등록일시',
-          field: 'comm_cd:reg_dtm',
-          editable: false,
-          width: 200,
-        }
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: '그룹코드', field: 'comm_cd:comm1_cd', editable: false, width: 200 },
+        { headerName: '그룹코드명', field: 'comm_cd:comm2_nm', editable: false, width: 200 },
+        { headerName: '등록자', field: 'comm_cd:reg_id', editable: false, width: 200 },
+        { headerName: '등록일시', field: 'comm_cd:reg_dtm', editable: false, width: 200 }
       ],
 
       columnDefs2: [
-        {
-          headerName: 'No',
-          field: 'no',
-          filter: false,
-          editable: false,
-          width: 80,
-        },
-        {
-          headerName: '코드',
-          field: 'comm_cd:comm2_cd',
-          editable: false,
-          width: 200,
-        },
-        {
-          headerName: '코드명',
-          field: 'comm_cd:comm2_nm',
-          width: 200,
-        }
+        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: '코드', field: 'comm_cd:comm2_cd', editable: false, width: 200 },
+        { headerName: '코드명', field: 'comm_cd:comm2_nm', width: 200 }
       ],
     };
   },
@@ -288,7 +251,7 @@ export default {
           this.spinner(false);
           this.items2 = res.data.data;
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors
@@ -325,7 +288,7 @@ export default {
           this.items1 = res.data.data;
           callback(this.items1)
         })
-        .catch(() => {
+        .catch((err) => {
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors
