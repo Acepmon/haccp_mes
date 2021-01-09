@@ -159,6 +159,11 @@ const router = new Router({
                 name: '거래처 등록',
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/3/1', value: 'page-3-1', label: '거래처 등록', component: 'page-3-1'}) } }
               },
+              {
+                path: '/3/2',
+                name: '거래처 조회',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/3/2', value: 'page-3-2', label: '거래처 조회', component: 'page-3-2'}) } }
+              },
               
               {
                 path: '/4',

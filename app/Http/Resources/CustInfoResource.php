@@ -29,8 +29,8 @@ class CustInfoResource extends JsonResource
             'cust_info:addr' => $this->ADDR,
             'cust_info:remark' => $this->REMARK,
             'cust_info:use_yn' => $this->USE_YN,
-            'cust_info:reg_id' => $this->REG_ID,
-            'cust_info:reg_dtm' => now()->parse($this->REG_DTM)->format('Y-m-d'),
+            //'cust_info:reg_id' => $this->REG_ID,
+            //'cust_info:reg_dtm' => now()->parse($this->REG_DTM)->format('Y-m-d'),
         ];
     }
 }

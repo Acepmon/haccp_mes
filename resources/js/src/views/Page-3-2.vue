@@ -2,25 +2,9 @@
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
-        <template v-slot:filter>
-          <v-select
-            class="control-field"
-            placeholder="검색항목"
-            :options="[{l: '품목명', v: 'item_nm'},{l: '품목 ID', v: 'item_id'}]" 
-            :reduce="item => item.v" 
-            v-model="searchBy" 
-            label="l"
-            :searchable="false" />
-          <vs-input v-model="searchKeyword" class="control-field ml-2" />
-
-          <span class="pt-2 px-4">품목</span>
-          <v-select
-            class="control-field"
-            :options="types" 
-            :reduce="item => item.comm2_cd" 
-            label="comm2_nm" 
-            v-model="searchType" 
-            :searchable="false" />
+         <template v-slot:filter>
+          <span class="px-5 pt-2">자료검색</span>
+          <vs-input class="control-field-lm" v-model="searchKeyword" placeholder="거래처명  대표자명  담당자명" />
         </template>
         <template v-slot:action>
           <vs-button
@@ -31,14 +15,29 @@
             >{{ $t("Query") }}</vs-button
           >
           <vs-button
-            :disabled="items.length <= 0"
-            @click="saveDialog()"
-            class="mx-1 flex-shrink-0"
+            @click="add()"
+            class="mx-1 invisible"
+            color="primary"
+            type="border"
+            >{{ $t("Add") }}</vs-button
+          >
+          <vs-button
+            @click="save()"
+            class="mx-1 invisible"
             color="primary"
             type="border"
             >{{ $t("Save") }}</vs-button
           >
-          <import-excel :onSuccess="loadDataInTable" v-model="importFile" :skips="1"></import-excel>
+          <vs-button
+            @click="Remove()"
+            class="mx-1 invisible"
+            color="primary"
+            type="border"
+            >{{ $t("Delete") }}</vs-button
+          >
+          <!-- <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="0" :skips="1"> -->
+          <!-- <import-excel :onSuccess="loadDataInTable" v-model="importFile" >
+          </import-excel> -->
           <vs-button
             @click="closeDialog()"
             class="mx-1"
@@ -67,15 +66,12 @@
       <ag-grid-vue
         ref="agGridTable"
         :localeText="localeText"
-        rowSelection="single"
-        @selection-changed="handleSelected"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 300px;"
+        style="max-height: 100%;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
-        :frameworkComponents="frameworkComponents"
         :pagination="true"
         :paginationPageSize="paginationPageSize"
         :suppressPaginationPanel="true">
@@ -85,18 +81,6 @@
         :total="totalPages"
         :max="maxPageNumbers"
         v-model="currentPage" />
-
-      <ag-grid-vue
-        ref="agGridTable"
-        :localeText="localeText"
-        :gridOptions="gridOptions2"
-        class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="height: auto;"
-        :columnDefs="columnDefs2"
-        :defaultColDef="defaultColDef"
-        :rowData="items2Comp"
-        :frameworkComponents="frameworkComponents">
-      </ag-grid-vue>
     </vx-card>
 
     <vs-popup fullscreen :title="$t('UploadExcel')" :active.sync="importDialog" button-close-hidden>
@@ -124,14 +108,14 @@
         <template slot="header">
           <h4>{{ sheetName }}</h4>
         </template>
-
+<!-- 
         <template slot="thead">
           <vs-th :sort-key="heading" v-for="heading in header" :key="heading">{{ heading }}</vs-th>
-        </template>
+        </template> -->
 
         <template slot-scope="{data}">
           <!-- eslint-disable-next-line -->
-          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" v-if="indextr != 0">
+          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
             <vs-td :data="col" v-for="(col, indexcol) in data[indextr]" :key="indexcol + col">
               {{ col }}
             </vs-td>
@@ -144,21 +128,18 @@
 
 <script>
 import axios from "axios";
-import comm_cd from "@/services/comm_cd";
-import api from "@/services/item_mst";
-import bom_config from '@/services/bom_config';
+// import comm_cd from "@/services/comm_cd";
+import api from "@/services/cust_info";
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
 import { AgGridVue } from 'ag-grid-vue'
 import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';
-
 import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 
-import NumericEditor from '@/views/ui-elements/ag-grid-table/numericEditorVue';
-
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
+
 export default {
   components: {
     ImportExcel,
@@ -170,14 +151,9 @@ export default {
 
   data () {
     return {
-      item: {
-      },
       items: [],
-      items2: [],
       types: [],
-      searchBy: 'item_nm',
       searchKeyword: null,
-      searchType: '',
       importFile: null,
       importDialog: false,
       pagination: {
@@ -186,8 +162,8 @@ export default {
         total: 0,
       },
       sorting: {
-        sort: "REG_DTM",
-        order: "DESC",
+        sort: "CUST_ID",
+        order: "ASC",
       },
 
       tableData: [],
@@ -196,56 +172,96 @@ export default {
 
       localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
-      gridApi: null,
-      gridApi2: null,
       gridOptions: {
         rowHeight: 40,
         headerHeight: 40
       },
-      gridOptions2: {
-        rowHeight: 40,
-        headerHeight: 40,
-        singleClickEdit: true,
-        domLayout: 'autoHeight'
-      },
+      gridApi: null,
       defaultColDef: {
         sortable: true,
-        editable: true,
         resizable: true,
         suppressMenu: false
       },
-      frameworkComponents: {
-        numericEditor: NumericEditor
-      },
 
-      columnDefs2: [
+      columnDefs: [
         {
           headerName: 'No',
           field: 'no',
           cellStyle: {textAlign: 'center'},
           width: 50
         },
-        { headerName: '소모품목코드', field: 'bom_config:item2_id', editable: false, width: 150 },
-        { headerName: '소모품목명', field: 'bom_config:item2_nm', editable: false, width: 200 },
-        { headerName: 'BOM버전', field: 'bom_config:bom_ver', editable: false, width: 200 },
-        { headerName: '생산수량', field: 'bom_config:prod_qty', type: 'numericColumn', cellEditor: 'numericEditor', width: 100 },
-        { headerName: '소요량', field: 'bom_config:use_qty', type: 'numericColumn', cellEditor: 'numericEditor', width: 100 },
-        { headerName: '단위(대)', field: 'item_mst:unit1_nm', editable: false, width: 100 },
-        { headerName: '수량(대)', field: 'item_mst:unit1_qty', type: 'numericColumn', editable: false, width: 100 },
-        { headerName: '단위(중)', field: 'item_mst:unit2_nm', editable: false, width: 100 },
-        { headerName: '수량(중)', field: 'item_mst:unit2_qty', type: 'numericColumn', editable: false, width: 100 },
-        { headerName: '단위(소)', field: 'item_mst:unit3_nm', editable: false, width: 100 },
-      ],
-
-      columnDefs: [
-        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '코드', field: 'item_mst:item_id', editable: false, width: 150 },
-        { headerName: '품목명', field: 'item_mst:item_nm', editable: false, width: 200 },
-        { headerName: '규격명', field: 'item_mst:spec', editable: false, width: 100 },
-        { headerName: '단위', field: 'item_mst:unit', editable: false, width: 100 },
-        { headerName: '당수량(분자)', field: 'item_mst:qty1', editable: false, type: 'numericColumn', width: 100 },
-        { headerName: '대표품목 환산수량', field: 'item_mst:conn_no', editable: false, type: 'numericColumn', width: 100 },
-        { headerName: '연결품목 환산수량', field: 'item_mst:conn_qty', editable: false, type: 'numericColumn', width: 100 },
+        {
+          headerName: '거래처코드',
+          field: 'cust_info:comp_id',
+          width: 100,
+        },
+        {
+          headerName: '품목거래처명',
+          field: 'cust_info:comp_nm',
+          filter: true,
+          width: 200,
+        },
+        {
+          headerName: '대표',
+          field: 'cust_info:ceo_nm',
+          width: 100,
+        },
+        {
+          headerName: '핸드폰번호',
+          field: 'cust_info:mob_no',
+          width: 100,
+        },
+        {
+          headerName: '담당',
+          field: 'cust_info:cust_nm',
+          width: 100,
+        },
+        {
+          headerName: '담당자 연락처',
+          field: 'cust_info:cust_no',
+          width: 100,
+        },
+        {
+          headerName: '전화번호',
+          headerStyle: {textAlign: 'center'},
+          field: 'cust_info:tel_no',
+          width: 100,
+        },
+        {
+          headerName: 'Fax 번호',
+          field: 'cust_info:fax_no',
+          width: 100,
+        },
+        {
+          headerName: '검색창내용',
+          field: 'cust_info:srh_no',
+          width: 100,
+        },
+        {
+          headerName: 'Email',
+          field: 'cust_info:email',
+          width: 100,
+        },
+        {
+          headerName: '계층그룹명',
+          field: 'cust_info:grp_nm',
+          width: 100,
+        },
+        {
+          headerName: '주소',
+          field: 'cust_info:addr',
+          width: 100,
+        },
+        {
+          headerName: '적요',
+          field: 'cust_info:remark',
+          width: 100,
+        },
+        {
+          headerName: '사용구분',
+          field: 'cust_info:use_yn',
+          width: 50,
+        },
       ],
     }
   },
@@ -260,15 +276,6 @@ export default {
       })
     },
 
-    items2Comp: function () {
-      return this.items2.map((item, index) => {
-        return {
-          'no': (index + 1),
-          ...item
-        } 
-      })
-    },
-
     paginationParam: function () {
       return {
         page: this.pagination.page,
@@ -276,12 +283,13 @@ export default {
       };
     },
 
-    sortParam: function () {
-      return {
-        sort: this.sorting.sort != null ? this.sorting.sort : "REG_DTM",
-        order: this.sorting.order != null ? this.sorting.order : "DESC",
-      };
-    },
+    // sortParam: function () {
+    //   return {
+    //     sort: this.sorting.sort != null ? this.sorting.sort : "REG_DTM",
+    //     order: this.sorting.order != null ? this.sorting.order : "DESC",
+    //   };
+    // },
+
 
     totalPages () {
       if (this.gridApi) return this.gridApi.paginationGetTotalPages()
@@ -304,7 +312,6 @@ export default {
 
   mounted () {
     this.gridApi = this.gridOptions.api
-    this.gridApi2 = this.gridOptions2.api
   },
 
   methods: {
@@ -340,15 +347,6 @@ export default {
       this.query();
     },
 
-    handleSelected () {
-      let rows = this.gridApi.getSelectedRows()
-
-      if (rows.length > 0) {
-        this.$set(this, 'item', rows[0])
-        this.query2(rows[0]['item_mst:item_id'])
-      }
-    },
-
     loadDataInTable ({ results, header, meta }) {
       this.header = header
       this.tableData = results
@@ -365,52 +363,13 @@ export default {
       );
     },
 
-    query2(item1_id) {
-      this.spinner();
-
-      let search_params = {
-        item1_id: item1_id
-      };
-
-      bom_config
-        .fetch({
-          limit: -1,
-          ...search_params,
-        })
-        .then((res) => {
-          this.spinner(false);
-          this.items2 = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err)
-          this.displayErrors(
-            err.response.data.hasOwnProperty("errors")
-              ? err.response.data.errors
-              : null
-          );
-          this.spinner(false);
-          this.$vs.notify({
-            title: this.$t("Error"),
-            position: "top-right",
-            color: "warning",
-            iconPack: "feather",
-            icon: "icon-alert-circle",
-            text: err.response.data.message,
-          });
-        });
-    },
-
-    query(callback = Function) {
+    query() {
       this.spinner();
 
       let search_params = {};
 
       if (this.searchKeyword != null) {
-        search_params[this.searchBy] = this.searchKeyword;
-      }
-
-      if (this.searchType != null) {
-        search_params["item_cd"] = this.searchType;
+        search_params[this.comp_nm] = this.searchKeyword;
       }
 
       api
@@ -419,15 +378,13 @@ export default {
           ...this.sortParam,
           limit: -1,
           ...search_params,
-          groupBy: 'ITEM1_ID'
+          with: '' // example: disable like this
         })
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
-          callback(this.items)
         })
         .catch((err) => {
-          console.log(err)
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors
@@ -448,9 +405,9 @@ export default {
     save () {
       this.spinner();
 
-      bom_config
+      api
         .sync({
-          'sync': this.gridOptions2.rowData
+          'sync': this.gridOptions.rowData
         })
         .then((res) => {
           this.spinner(false);
@@ -462,7 +419,7 @@ export default {
               color: "success",
               text: res.data.message,
             });
-            this.query2(this.item['item_mst:item_id']);
+            this.query();
           } else {
             this.$vs.notify({
               title: this.$t("Error"),
@@ -524,7 +481,7 @@ export default {
         formData.append("file", this.importFile);
       }
 
-      bom_config
+      api
         .import(formData)
         .then((res) => {
           this.spinner(false)
@@ -566,14 +523,10 @@ export default {
       let search_params = {};
 
       if (this.searchKeyword != null) {
-        search_params[this.searchBy] = this.searchKeyword;
+        search_params[this.comp_nm] = this.searchKeyword;
       }
 
-      if (this.searchType != null) {
-        search_params["item_cd"] = this.searchType;
-      }
-
-      window.location.href = bom_config.export(search_params);
+      window.location.href = api.export(search_params);
     },
 
     closeDialog() {
@@ -584,22 +537,18 @@ export default {
         text: this.$t("CloseDocument"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => this.removeTab("page-1-7"),
+        accept: () => this.removeTab("page-3-1"),
       });
     },
   },
 
   created() {
-    comm_cd.fetch({ cd1: "B10" }).then((res) => {
-      this.types = res.data;
-    });
+    // comm_cd.fetch({ cd1: "B10" }).then((res) => {
+    //   this.types = res.data;
+    // });
 
     setTimeout(() => {
-      this.query((items) => {
-        if (items.length > 0) {
-          this.query2(items[0]['item_mst:item_id'])
-        }
-      })
+      this.query()
     }, 500)
   },
 };

@@ -210,9 +210,8 @@ export default {
         {
           headerName: 'No',
           field: 'no',
-          filter: false,
-          editable: false,
-          width: 80,
+          cellStyle: {textAlign: 'center'},
+          width: 50
         },
         {
           headerName: '코드',

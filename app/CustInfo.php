@@ -15,8 +15,28 @@ class CustInfo extends Model
     // protected $keyType = 'string';
     public $timestamps = false;
 
-    protected $fillable = ['*'];
+    protected $fillable = [
+        '*'
+    ];
 
+    // protected $fillable = [
+    //     'COMP_ID',
+    //     'COMP_NM',
+    //     'CEO_NM',
+    //     'MOB_NO', 
+    //     'CUST_NM', 
+    //     'CUST_NO',
+    //     'TEL_NO',
+    //     'FAX_NO',
+    //     'SRH_INFO',
+    //     'EMAIL',
+    //     'GRP_NM',  
+    //     'ADDR',
+    //     'REMARK',
+    //     'USE_YN', 
+    //     'REG_ID',
+    //     'REG_DTM',
+    //     ];
     protected $hidden = [
     ];
 

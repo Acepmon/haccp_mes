@@ -183,7 +183,7 @@ export default {
       },
 
       columnDefs: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 100 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '코드', field: 'item_mst:item_id', editable: false, width: 100 },
         { headerName: '품목명', field: 'item_mst:item_nm', editable: false, width: 200 },
         { headerName: '규격명', field: 'item_mst:spec', editable: false, width: 100 },

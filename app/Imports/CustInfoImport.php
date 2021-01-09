@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Mockery\Undefined;
 
 class CustInfoImport implements ToCollection
 {
@@ -26,11 +25,12 @@ class CustInfoImport implements ToCollection
         DB::transaction(function () use ($rows) {
             foreach ($rows as $key => $row) 
             {
+                //$row = trim($row)
                 if ($key == 0 || $key == 1) {
                     continue;
                 }
 
-                if (strlen($row[0]) > 20) {
+                if (strlen($row[0]) > 20 || trim($row[0]) == NULL) {
                     continue;
                 }
 
@@ -47,9 +47,9 @@ class CustInfoImport implements ToCollection
                         'SRH_INFO' => $row[8],
                         'EMAIL' => $row[9],
                         'GRP_NM' => $row[10],
-                        'ADDR' => $row[11],
-                        'REMARK' => $row[12],
-                        'USE_YN' => $row[13],
+                        'ADDR' => $row[15],
+                        'REMARK' => $row[16],
+                        'USE_YN' => $this->parseUseYn($row[17]),
                     ]);
                     $this->updateCount++;
                 } else {
@@ -67,9 +67,9 @@ class CustInfoImport implements ToCollection
                             'SRH_INFO' => $row[8],
                             'EMAIL' => $row[9],
                             'GRP_NM' => $row[10],
-                            'ADDR' => $row[11],
-                            'REMARK' => $row[12],
-                            'USE_YN' => $this->parseUseYn($row[13]),
+                            'ADDR' => $row[15],
+                            'REMARK' => $row[16],
+                            'USE_YN' => $this->parseUseYn($row[17]),
                         ]);
                         $this->insertCount++;
                     }
@@ -82,9 +82,9 @@ class CustInfoImport implements ToCollection
 
     private function parseUseYn($useYn)
     {
-        if ($useYn == 'YES') {
+        if (strtoupper(trim($useYn)) == 'YES') {
             return 'Y';
-        } else if ($useYn == 'NO') {
+        } else {
             return 'N';
         }
 

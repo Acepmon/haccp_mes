@@ -175,7 +175,7 @@ export default {
       },
 
       columnDefs: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 100 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '품목ID', field: 'item_mst:item_id', filter: false, editable: false, width: 200 },
         { headerName: '품목명', field: 'item_mst:item_nm', filter: false, editable: false, width: 300 },
         { headerName: '규격', field: 'item_mst:spec', filter: false, editable: false, width: 300 },
@@ -183,7 +183,7 @@ export default {
       ],
 
       columnDefs2: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 100 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '공정명', field: 'PROC_NM', filter: false, editable: false, width: 200 },
         { headerName: '소요시간 (부속 공정)', field: 'PROC_TIME', filter: false, editable: false, width: 200 },
         { headerName: '순번', field: 'SEQ_NM', filter: false, editable: false, width: 200 },

@@ -48,11 +48,11 @@ export default {
     UploadExcel: 'Excel 올리기',
     Confirmation: '확인',
     CloseDocument: '현재메뉴를 닫겠습니까?',
-    ImportExcel: 'Excel 데이터를 DB에 저장하겠습니까?',
+    ImportExcel: 'Excel 데이터를 저장하겠습니까?',
     Download: '다운로드',
     Refresh: '최신자료',
 
-    DeleteData: '삭제하시겠습니까?',
+    DeleteData: '삭제하겠습니까?',
     SuccessDeleteData: '삭제되었습니다.',
     FailDeleteData: '데이터 삭제에 실패했습니다.',
 
@@ -65,10 +65,10 @@ export default {
     FailSaveData: '데이터 수정에 실패했습니다.',
 
     EmailValid: 'Email 오류',
-    Accept: '네',
+    Accept: '  네  ',
     Cancel: '아니오',
 
-    TabLimitReached: '설정된 메뉴 갯수(7개)가 초과되었습니다.',
+    TabLimitReached: '설정된 메뉴 갯수(7개)를 초과했습니다.',
 
     SelectUser: '담당자 선택',
   }

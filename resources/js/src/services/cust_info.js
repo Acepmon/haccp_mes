@@ -10,10 +10,10 @@ export default {
         // Default parameters
         let params = {
             page: 1,
-            limit: 15,
+            limit: 50,
             sort: 'cust_id',
             order: 'asc',
-            with: 'item,grp1,grp2,grp3,process',
+            with: '',
             ...args
         }
 

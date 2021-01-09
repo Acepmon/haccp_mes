@@ -198,7 +198,7 @@ export default {
         textEditor: TextEditor
       },
       columnDefs: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '작업번호', field: 'job_ord:job_no', filter: false, editable: false, width: 120 },
         { headerName: '품목ID', field: 'job_ord:item_id', filter: false, editable: false, width: 120 },
         { headerName: '품목명', field: 'job_ord:item_nm', filter: false, editable: false, width: 150 },

@@ -8,8 +8,8 @@ export default {
 
     // Number Filter & Text Filter
     filterOoo: 'Filter...',
-    equals: 'Equals',
-    notEqual: 'Not equal',
+    equals: '=',
+    notEqual: 'Not =',
     empty: 'Choose One',
 
     // Number Filter
@@ -22,10 +22,10 @@ export default {
     inRangeEnd: 'from',
 
     // Text Filter
-    contains: 'Contains',
-    notContains: 'Not contains',
-    startsWith: 'Starts with',
-    endsWith: 'Ends with',
+    contains: '포함문자',
+    notContains: 'Not 포함문자',
+    startsWith: '시작문자',
+    endsWith: '끝 문자',
 
     // Date Filter
     dateFormatOoo: 'yyyy-mm-dd',
@@ -64,7 +64,7 @@ export default {
 
     // Other
     loadingOoo: 'Loading...',
-    noRowsToShow: 'No Rows To Show',
+    noRowsToShow: '조회된 자료가 없습니다.',
     enabled: 'Enabled',
 
     // Menu

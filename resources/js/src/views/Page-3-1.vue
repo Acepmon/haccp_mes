@@ -2,7 +2,7 @@
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
-        <template v-slot:filter>
+        <!-- <template v-slot:filter>
           <v-select
             class="control-field"
             placeholder="검색항목"
@@ -12,7 +12,7 @@
             v-model="searchBy" 
             :searchable="false" />
           <vs-input v-model="searchKeyword" class="control-field ml-2" />
-          </template>
+          </template> -->
         <template v-slot:action>
           <vs-button
             @click="query()"
@@ -44,7 +44,7 @@
       <vs-divider />
 
       <app-control>
-        <template v-slot:action>
+        <!-- <template v-slot:action>
           <vs-button
             @click="exportExcel()"
             class="mx-1"
@@ -53,7 +53,7 @@
             :disabled="items.length <= 0"
             >{{ $t("ToExcel") }}</vs-button
           >
-        </template>
+        </template> -->
       </app-control>
 
       <ag-grid-vue
@@ -74,100 +74,6 @@
         :total="totalPages"
         :max="maxPageNumbers"
         v-model="currentPage" />
-
-      <div class="overflow-y-auto" style="max-height: 500px; display: none;">
-        <vs-table
-          stripe
-          pagination
-          description
-          sst
-          :max-items="pagination.limit"
-          :data="items"
-          :total="pagination.total"
-          @change-page="handleChangePage"
-          @sort="handleSort"
-        >
-          <!-- <template slot="thead">
-            <vs-th>No</vs-th>
-            <vs-th sort-key="cust_id">거래처코드</vs-th>
-            <vs-th sort-key="cust_nm">거래처명</vs-th>
-            <vs-th sort-key="ceo_nm">대표</vs-th>
-            <vs-th sort-key="mob_no">핸드폰번호</vs-th>
-            <vs-th sort-key="qty1">담당자</vs-th>
-            <vs-th sort-key="qty2">담당자 연락처</vs-th>
-            <vs-th sort-key="conn_no">전화번호</vs-th>
-            <vs-th sort-key="conn_qty">Fax 번호</vs-th>
-            <vs-th sort-key="in_amt">검색창내용</vs-th>
-            <vs-th sort-key="out_amt">Email</vs-th>
-            <vs-th sort-key="cust_no">계층그룹명</vs-th>
-            <vs-th sort-key="grp1_cd">주소</vs-th>
-            <vs-th sort-key="grp2_cd">적요</vs-th>
-            <vs-th sort-key="use_yn">사용구분</vs-th>
-           </template> -->
-
-          <template slot-scope="{ data }">
-            <vs-tr :data="tr" :key="index" v-for="(tr, index) in items">
-
-              <vs-td :data="rowIndex(index)">
-                {{ rowIndex(index) }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:cust_id']">
-                {{ data[index]["cust_info:cust_id"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:cust_nm']">
-                {{ data[index]["cust_info:cust_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:ceo_nm']">
-                {{ data[index]["cust_info:ceo_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:mob_no']">
-                {{ data[index]["cust_info:mob_no"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:cust_no']">
-                {{ data[index]["cust_info:cust_no_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:tel_no']">
-                {{ data[index]["cust_info:tel_no"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:fax_no']">
-                {{ data[index]["cust_info:fax_no"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:srh_no']">
-                {{ data[index]["cust_info:srh_no"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:email']">
-                {{ data[index]["cust_info:email"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:grp_nm']">
-                {{ data[index]["cust_info:grp_nm"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:addr']">
-                {{ data[index]["cust_info:addr"] }}
-              </vs-td>
-
-              <vs-td :data="data[index]['cust_info:remark']">
-                {{ data[index]["cust_info:remark"] }}
-              </vs-td>
-              
-              <vs-td :data="data[index]['cust_info:use_yn']">
-                {{ data[index]["cust_info:use_yn"] }}
-              </vs-td>
-                               
-            </vs-tr>
-          </template>
-        </vs-table>
-      </div>
     </vx-card>
 
     <vs-popup fullscreen :title="$t('UploadExcel')" :active.sync="importDialog" button-close-hidden>
@@ -268,7 +174,6 @@ export default {
       gridApi: null,
       defaultColDef: {
         sortable: true,
-        editable: false,
         resizable: true,
         suppressMenu: false
       },
@@ -277,98 +182,80 @@ export default {
         {
           headerName: 'No',
           field: 'no',
-          filter: false,
-          editable: false,
-          width: 100,
+          cellStyle: {textAlign: 'center'},
+          width: 50
         },
         {
           headerName: '거래처코드',
-          field: 'cust_info:cust_id',
-          editable: false,
+          field: 'cust_info:comp_id',
           width: 100,
         },
         {
           headerName: '품목거래처명',
-          field: 'cust_info:cust_nm',
-          editable: false,
+          field: 'cust_info:comp_nm',
+          filter: true,
           width: 200,
         },
         {
           headerName: '대표',
           field: 'cust_info:ceo_nm',
-          editable: false,
           width: 100,
         },
         {
           headerName: '핸드폰번호',
           field: 'cust_info:mob_no',
-          editable: false,
           width: 100,
         },
         {
           headerName: '담당',
           field: 'cust_info:cust_nm',
-          editable: false,
-          //type: 'numericColumn',
           width: 100,
         },
         {
           headerName: '담당자 연락처',
           field: 'cust_info:cust_no',
-          editable: false,
-          //type: 'numericColumn',
           width: 100,
         },
         {
           headerName: '전화번호',
+          headerStyle: {textAlign: 'center'},
           field: 'cust_info:tel_no',
-          editable: false,
-          //type: 'numericColumn',
           width: 100,
         },
         {
           headerName: 'Fax 번호',
           field: 'cust_info:fax_no',
-          editable: false,
           width: 100,
         },
         {
           headerName: '검색창내용',
           field: 'cust_info:srh_no',
-          editable: false,
           width: 100,
         },
         {
           headerName: 'Email',
           field: 'cust_info:email',
-          editable: false,
           width: 100,
         },
         {
           headerName: '계층그룹명',
           field: 'cust_info:grp_nm',
-          editable: false,
           width: 100,
         },
         {
           headerName: '주소',
           field: 'cust_info:addr',
-          //type: 'numericColumn',
-          editable: false,
           width: 100,
         },
         {
           headerName: '적요',
           field: 'cust_info:remark',
-          editable: false,
           width: 100,
         },
         {
           headerName: '사용구분',
           field: 'cust_info:use_yn',
-          //type: 'numericColumn',
-          editable: false,
-          width: 100,
+          width: 50,
         },
       ],
     }
@@ -391,12 +278,12 @@ export default {
       };
     },
 
-    sortParam: function () {
-      return {
-        sort: this.sorting.sort != null ? this.sorting.sort : "REG_DTM",
-        order: this.sorting.order != null ? this.sorting.order : "DESC",
-      };
-    },
+    // sortParam: function () {
+    //   return {
+    //     sort: this.sorting.sort != null ? this.sorting.sort : "REG_DTM",
+    //     order: this.sorting.order != null ? this.sorting.order : "DESC",
+    //   };
+    // },
 
 
     totalPages () {
@@ -490,12 +377,11 @@ export default {
           ...this.sortParam,
           limit: -1,
           ...search_params,
+          with: '' // example: disable like this
         })
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
-          this.pagination.total = res.data.meta.total;
-          this.pagination.page = res.data.meta.current_page;
         })
         .catch((err) => {
           this.displayErrors(

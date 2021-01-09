@@ -256,7 +256,7 @@ export default {
         suppressMenu: false
       },
       columnDefs: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '이름', field: 'worker:worker_nm', filter: false, width: 200 },
         { headerName: '휴대폰번호', field: 'worker:tel_no', filter: false, width: 150 },
         { headerName: '정/부구분', field: 'worker:work_nm', filter: false, width: 150 },

@@ -78,13 +78,36 @@
 .control-field {
   width: 10rem;
 }
+
 .control-field-dtm {
   width: 8rem;
+}
+
+.control-field-lm {
+  width: 15rem;
+
 }
 
 .control-field-sm {
   width: 8rem;
 }
+
 .control-field-dtm-sm {
   width: 6rem;
 }
+
+[dir=ltr] .ag-theme-material .ag-cell {
+  padding-left: 3px !important;
+  padding-right: 3px !important;
+}
+
+[dir=ltr] .ag-theme-material .ag-header-cell, 
+[dir=ltr] .ag-theme-material .ag-header-group-cell {
+  padding-left: 3px !important;
+  padding-right: 3px !important;
+}
+
+.ag-header-group-cell-label,
+.ag-header-cell-label {
+  justify-content: center !important;
+} 

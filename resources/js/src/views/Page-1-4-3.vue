@@ -21,7 +21,7 @@
             :options="[{l: 'YES', v: 'Y'},{l: 'NO', v: 'N'}]" 
             :reduce="item => item.v" 
             label="l" 
-            v-model="searchUseYn" 
+            v-model="searchUseYn"
             :searchable="false" />
         </template>
         <template v-slot:action>
@@ -363,7 +363,7 @@ export default {
         suppressMenu: false
       },
       columnDefs: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '문서이름', field: 'edoc_file:doc_nm', filter: false, width: 200 },
         { headerName: '문서종류', field: 'edoc_file:type_nm', filter: false, width: 150 },
         { headerName: '설명(제품명)', field: 'edoc_file:doc_desc', filter: false, width: 150 },

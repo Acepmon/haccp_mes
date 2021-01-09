@@ -265,7 +265,7 @@ export default {
         suppressMenu: false
       },
       columnDefs: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '문서이름', field: 'doc_mgmt:doc_nm', filter: false, width: 200 },
         { headerName: '문서종류', field: 'doc_mgmt:type_nm', filter: false, width: 200 },
         { headerName: '설명(제품명)', field: 'doc_mgmt:doc_desc', filter: false, width: 200 },

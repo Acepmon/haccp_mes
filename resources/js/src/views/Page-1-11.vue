@@ -294,7 +294,7 @@ export default {
         suppressMenu: false
       },
       columnDefs: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '문서이름', field: 'secu_doc_mgmt:doc_nm', filter: false, width: 200 },
         { headerName: '보고서작성일', field: 'secu_doc_mgmt:doc_dt', filter: false, width: 200 },
         { headerName: '기간(From)', field: 'secu_doc_mgmt:from_dt', filter: false, width: 200 },

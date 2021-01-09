@@ -346,7 +346,7 @@ export default {
       },
 
       columnDefs: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '사용자 ID', field: 'user:user_id', filter: false, width: 200 },
         { headerName: '이름', field: 'user:user_nm', filter: false, width: 200 },
         { headerName: '이메일', field: 'user:email', filter: false, width: 200 },

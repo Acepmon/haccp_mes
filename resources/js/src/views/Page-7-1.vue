@@ -154,7 +154,7 @@ export default {
       },
 
       columnDefs: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '그룹코드', field: 'comm_cd:comm1_cd', editable: false, width: 200 },
         { headerName: '그룹코드명', field: 'comm_cd:comm2_nm', editable: false, width: 200 },
         { headerName: '등록자', field: 'comm_cd:reg_id', editable: false, width: 200 },
@@ -162,7 +162,7 @@ export default {
       ],
 
       columnDefs2: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '코드', field: 'comm_cd:comm2_cd', editable: false, width: 200 },
         { headerName: '코드명', field: 'comm_cd:comm2_nm', width: 200 }
       ],

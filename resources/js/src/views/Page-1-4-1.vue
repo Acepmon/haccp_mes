@@ -261,7 +261,7 @@ export default {
         suppressMenu: false
       },
       columnDefs: [
-        { headerName: 'No', field: 'no', filter: false, editable: false, width: 80 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '개정번호', field: 'haccp_mst_file:rev_no', filter: false, width: 200 },
         { headerName: '등록일자', field: 'haccp_mst_file:rev_dt', filter: false, width: 200 },
         { headerName: '개정내용', field: 'haccp_mst_file:rev_content', filter: false, width: 200 },
