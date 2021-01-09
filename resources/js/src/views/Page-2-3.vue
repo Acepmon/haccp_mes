@@ -199,6 +199,7 @@ import "flatpickr/dist/flatpickr.css";
 import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js"
 
 import { AgGridVue } from "ag-grid-vue";
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';
 import NumericEditor from '@/views/ui-elements/ag-grid-table/numericEditorVue';
 import TextEditor from '@/views/ui-elements/ag-grid-table/textEditorVue';
 

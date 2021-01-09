@@ -121,7 +121,7 @@ import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 import ImportExcel from '@/components/excel/ImportExcel.vue';
 
 import { AgGridVue } from 'ag-grid-vue'
-import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';;
+import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.js';
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
