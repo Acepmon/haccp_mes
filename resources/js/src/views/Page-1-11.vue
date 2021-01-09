@@ -5,13 +5,13 @@
         <template v-slot:filter>
           <span class="pt-2 px-4">기간</span>
           <flat-pickr
-            class="control-field-dtm text-center flex-shrink-0"
+            class="control-field-dtm flex-shrink-0"
             :config="configdateTimePicker"
             v-model="searchFrom"
           ></flat-pickr>
           <span class="pt-2 px-2">~</span>
           <flat-pickr
-            class="control-field-dtm text-center flex-shrink-0"
+            class="control-field-dtm flex-shrink-0"
             :config="configdateTimePicker"
             v-model="searchTo"
           ></flat-pickr>
@@ -63,6 +63,7 @@
           <template v-slot:label>문서이름</template>
 
           <vs-input
+            class="control-field"
             maxlength="100"
             v-model="item['secu_doc_mgmt:doc_nm']"
             :danger="errors['secu_doc_mgmt:doc_nm'] != null"
@@ -74,8 +75,7 @@
           <template v-slot:label>보고서작성일</template>
 
           <flat-pickr
-            style="width: 120px"
-            class="text-center"
+            class="control-field-dtm"
             :config="configdateTimePicker"
             v-model="item['secu_doc_mgmt:doc_dt']"
           ></flat-pickr>
@@ -90,12 +90,11 @@
           </div>
         </app-form-group>
 
-        <app-form-group required>
+        <app-form-group required full>
           <template v-slot:label>기간</template>
 
           <flat-pickr
-            style="width: 120px"
-            class="text-center"
+            class="control-field-dtm"
             :config="configdateTimePicker"
             v-model="item['secu_doc_mgmt:from_dt']"
           ></flat-pickr>
@@ -112,8 +111,7 @@
           <span class="pt-2 px-2">~</span>
 
           <flat-pickr
-            style="width: 120px"
-            class="text-center"
+            class="control-field-dtm"
             :config="configdateTimePicker"
             v-model="item['secu_doc_mgmt:to_dt']"
           ></flat-pickr>
@@ -128,9 +126,7 @@
           </div>
         </app-form-group>
 
-        <app-form-group></app-form-group>
-
-        <app-form-group required>
+        <app-form-group required full>
           <template v-slot:label>첨부화일</template>
 
           <div class="flex flex-row">

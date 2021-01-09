@@ -48,6 +48,7 @@
           <template v-slot:label>개정번호</template>
 
           <vs-input
+            class="control-field"
             maxlength="10"
             v-model="haccp_mst_file['haccp_mst_file:rev_no']"
             :danger="errors['haccp_mst_file:rev_no'] != null"
@@ -59,8 +60,7 @@
           <template v-slot:label>개정일자</template>
 
           <flat-pickr
-            style="width: 120px"
-            class="text-center"
+            class="control-field-dtm"
             :config="configdateTimePicker"
             v-model="haccp_mst_file['haccp_mst_file:rev_dt']"
           ></flat-pickr>
@@ -75,11 +75,11 @@
           </div>
         </app-form-group>
 
-        <app-form-group>
+        <app-form-group full>
           <template v-slot:label>개정내용</template>
 
           <vs-input
-            class="w-full"
+            class="control-field-lg"
             maxlength="100"
             v-model="haccp_mst_file['haccp_mst_file:rev_content']"
             :danger="errors['haccp_mst_file:rev_content'] != null"
@@ -87,13 +87,11 @@
           />
         </app-form-group>
 
-        <app-form-group></app-form-group>
-
-        <app-form-group>
+        <app-form-group full>
           <template v-slot:label>개정사유</template>
 
           <vs-input
-            class="w-full"
+            class="control-field-lg"
             maxlength="100"
             v-model="haccp_mst_file['haccp_mst_file:rev_reason']"
             :danger="errors['haccp_mst_file:rev_reason'] != null"
@@ -101,9 +99,7 @@
           />
         </app-form-group>
 
-        <app-form-group></app-form-group>
-
-        <app-form-group required>
+        <app-form-group required full>
           <template v-slot:label>첨부화일</template>
 
           <div class="flex flex-row">

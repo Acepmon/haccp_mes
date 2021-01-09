@@ -71,20 +71,47 @@
 }
 
 .vx-card.main-card {
-  min-height: 80vh;
+  min-height: 70vh;
   max-height: max-content;
 }
 
-.control-field {
-  width: 10rem;
-}
-.control-field-dtm {
-  width: 8rem;
+.pl-05 {
+  padding-left: 0.15rem !important;
 }
 
-.control-field-sm {
-  width: 8rem;
+.control-label {
+  min-width: 8rem;
 }
-.control-field-dtm-sm {
-  width: 6rem;
+
+.control-field {
+  width: 16rem;
+}
+.control-field-sm {
+  width: 10rem;
+}
+.control-field-lg {
+  width: 28rem;
+  max-width: 90%;
+}
+
+.control-field-dtm {
+  width: 8rem;
+  text-align: center;
+}
+
+.control-col {
+  .control-field {
+    width: 10rem;
+  }
+  .control-field-dtm {
+    width: 8rem;
+    text-align: center;
+  }
+  
+  .control-field-sm {
+    width: 8rem;
+  }
+  .control-field-dtm-sm {
+    width: 6rem;
+  }
 }

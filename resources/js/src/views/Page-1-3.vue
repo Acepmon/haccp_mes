@@ -48,6 +48,7 @@
           <template v-slot:label>이름</template>
 
           <vs-input
+            class="control-field"
             maxlength="60"
             v-model="worker['worker:worker_nm']"
             :danger="errors['worker:worker_nm'] != null"
@@ -59,6 +60,7 @@
           <template v-slot:label>휴대폰번호</template>
 
           <vs-input
+            class="control-field"
             maxlength="20"
             v-model="worker['worker:tel_no']"
             :danger="errors['worker:tel_no'] != null"
@@ -70,7 +72,7 @@
           <template v-slot:label>정/부구분</template>
 
           <v-select 
-            style="width: 200px;"
+            class="control-field"
             :options="works" 
             :reduce="item => item.comm2_cd" 
             label="comm2_nm" 
@@ -91,6 +93,7 @@
           <template v-slot:label>업무내용</template>
 
           <vs-input
+            class="control-field"
             maxlength="100"
             v-model="worker['worker:remark']"
             :danger="errors['worker:remark'] != null"
@@ -102,8 +105,7 @@
           <template v-slot:label>보건증갱신일자</template>
 
           <flat-pickr
-            style="width: 120px"
-            class="text-center"
+            class="control-field-dtm"
             :config="configdateTimePicker"
             v-model="worker['worker:health_chk_dt']"
           ></flat-pickr>
@@ -122,7 +124,7 @@
           <template v-slot:label>업무 구분</template>
 
           <v-select 
-            style="width: 200px;"
+            class="control-field"
             :options="roles" 
             :reduce="item => item.comm2_cd" 
             label="comm2_nm" 

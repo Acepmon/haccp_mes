@@ -68,6 +68,7 @@
           <template v-slot:label>문서이름</template>
 
           <vs-input
+            class="control-field"
             maxlength="100"
             v-model="item['doc_mgmt:doc_nm']"
             :danger="errors['doc_mgmt:doc_nm'] != null"
@@ -79,7 +80,7 @@
           <template v-slot:label>문서종류</template>
 
           <v-select 
-            style="width: 200px;"
+            class="control-field"
             :options="types" 
             :reduce="item => item.comm2_cd" 
             label="comm2_nm" 
@@ -96,11 +97,11 @@
           </div>
         </app-form-group>
 
-        <app-form-group>
+        <app-form-group full>
           <template v-slot:label>설명(제품명)</template>
 
           <vs-input
-            class="w-full"
+            class="control-field-lg"
             maxlength="150"
             v-model="item['doc_mgmt:doc_desc']"
             :danger="errors['doc_mgmt:doc_desc'] != null"
@@ -108,9 +109,7 @@
           />
         </app-form-group>
 
-        <app-form-group></app-form-group>
-
-        <app-form-group required>
+        <app-form-group required full>
           <template v-slot:label>첨부화일</template>
 
           <div class="flex flex-row">

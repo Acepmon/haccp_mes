@@ -71,6 +71,7 @@
           <template v-slot:label>문서이름</template>
 
           <vs-input
+            class="control-field"
             maxlength="100"
             v-model="item['edoc_file:doc_nm']"
             :danger="errors['edoc_file:doc_nm'] != null"
@@ -82,7 +83,7 @@
           <template v-slot:label>문서종류</template>
 
           <v-select 
-            style="width: 200px;"
+            class="control-field"
             :options="types" 
             :reduce="item => item.comm2_cd" 
             label="comm2_nm" 
@@ -99,11 +100,11 @@
           </div>
         </app-form-group>
 
-        <app-form-group>
+        <app-form-group full>
           <template v-slot:label>설명(제품명)</template>
 
           <vs-input
-            class="w-full"
+            class="control-field-lg"
             maxlength="150"
             v-model="item['edoc_file:doc_desc']"
             :danger="errors['edoc_file:doc_desc'] != null"
@@ -111,14 +112,12 @@
           />
         </app-form-group>
 
-        <app-form-group></app-form-group>
-
         <app-form-group required>
           <template v-slot:label>업무처리주기</template>
 
           <div class="flex flex-row">
             <v-select 
-              style="width: 200px;"
+              class="control-field"
               :options="periods" 
               :reduce="item => item.comm2_cd" 
               label="comm2_nm" 
@@ -161,7 +160,7 @@
           <template v-slot:label>사용구분</template>
 
           <v-select 
-            style="width: 200px;"
+            class="control-field"
             :options="[{l: 'YES', v: 'Y'},{l: 'NO', v: 'N'}]" 
             :reduce="item => item.v" 
             label="l" 
@@ -182,7 +181,7 @@
           <template v-slot:label>작업자</template>
 
           <v-select 
-            style="width: 200px;"
+            class="control-field"
             :options="work_users" 
             :reduce="item => item['user:user_id']" 
             label="user:user_id" 
@@ -203,7 +202,7 @@
           <template v-slot:label>승인자</template>
 
           <v-select 
-            style="width: 200px;"
+            class="control-field"
             :options="app_users" 
             :reduce="item => item['user:user_id']" 
             label="user:user_id" 
