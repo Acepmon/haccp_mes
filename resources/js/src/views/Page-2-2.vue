@@ -150,6 +150,7 @@ import "@sass/vuexy/extraComponents/agGridStyleOverride.scss";
 import moment from 'moment';
 
 export default {
+  name: 'page-2-2',
   components: {
     AppControl,
     AppForm,

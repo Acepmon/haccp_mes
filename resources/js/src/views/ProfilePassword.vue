@@ -71,6 +71,7 @@ import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 
 export default {
+  name: 'profile-password',
   components: {
     AppControl,
     AppForm,

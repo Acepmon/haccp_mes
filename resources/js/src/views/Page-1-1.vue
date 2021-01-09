@@ -246,6 +246,7 @@ import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 
 export default {
+  name: 'page-1-1',
   components: {
     AppControl,
     AppForm,

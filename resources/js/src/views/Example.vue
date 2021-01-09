@@ -4,6 +4,7 @@
 
 <script>
 export default {
+	name: 'example',
 	created() {
 		console.log('Example created')
 	}

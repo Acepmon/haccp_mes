@@ -228,6 +228,7 @@ import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
+  name: 'page-3-1',
   components: {
     ImportExcel,
     AgGridVue,

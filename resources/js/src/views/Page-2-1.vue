@@ -126,6 +126,7 @@ import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
+  name: 'page-2-1',
   components: {
     AppControl,
     AppForm,

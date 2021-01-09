@@ -161,6 +161,7 @@ import TextEditor from '@/views/ui-elements/ag-grid-table/textEditorVue';
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
+  name: 'page-1-6-1',
   components: {
     ImportExcel,
     AgGridVue,

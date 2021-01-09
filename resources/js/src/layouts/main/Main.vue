@@ -52,7 +52,7 @@
 
       <div class="content-wrapper">
 
-        <div class="router-view pl-0">
+        <div class="router-view pl-0 pr-0">
           <div class="router-content">
 
             <transition :name="routerTransition">

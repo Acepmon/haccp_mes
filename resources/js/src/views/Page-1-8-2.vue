@@ -4,6 +4,7 @@
 
 <script>
 export default {
+	name: 'page-1-8-2',
 	created() {
 		console.log('Page-1-8-2 created')
 	}

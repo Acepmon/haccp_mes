@@ -275,6 +275,7 @@ import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 export default {
+  name: 'page-1-4-3',
   components: {
     FileSelect,
     AppControl,

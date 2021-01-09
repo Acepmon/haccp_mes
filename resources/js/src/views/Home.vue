@@ -11,6 +11,7 @@
 <script>
 import AgGridTable from './ui-elements/ag-grid-table/AgGridTable'
 export default {
+	name: 'home',
 	components: {
 		AgGridTable
 	}

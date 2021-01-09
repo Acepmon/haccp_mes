@@ -160,6 +160,7 @@ import NumericEditor from '@/views/ui-elements/ag-grid-table/numericEditorVue';
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 export default {
+  name: 'page-1-7',
   components: {
     ImportExcel,
     AgGridVue,
