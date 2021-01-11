@@ -14,6 +14,11 @@ class CcpEscDataResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'ccp_esc_data:device_id' => $this->DEVICE_ID,
+            'ccp_esc_data:srt_dtm' => $this->SRT_DTM,
+            'ccp_esc_data:end_dtm' => $this->END_DTM,
+            'ccp_esc_data:reason' => $this->REASON,
+        ];
     }
 }
