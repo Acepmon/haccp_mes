@@ -50,6 +50,7 @@
           <template v-slot:label>사업자등록번호</template>
 
           <vs-input
+            class="control-field"
             maxlength="20"
             v-model="item['comp_info:comp_id']"
             :danger="errors['comp_info:comp_id'] != null"
@@ -61,6 +62,7 @@
           <template v-slot:label>회사명</template>
 
           <vs-input
+            class="control-field"
             maxlength="60"
             v-model="item['comp_info:comp_nm']"
             :danger="errors['comp_info:comp_nm'] != null"
@@ -72,6 +74,7 @@
           <template v-slot:label>대표자명</template>
 
           <vs-input
+            class="control-field"
             maxlength="60"
             v-model="item['comp_info:ceo_nm']"
             :danger="errors['comp_info:ceo_nm'] != null"
@@ -83,6 +86,7 @@
           <template v-slot:label>홈페이지</template>
 
           <vs-input
+            class="control-field"
             maxlength="30"
             v-model="item['comp_info:url']"
             :danger="errors['comp_info:url'] != null"
@@ -94,6 +98,7 @@
           <template v-slot:label>전화번호</template>
 
           <vs-input
+            class="control-field"
             maxlength="20"
             v-model="item['comp_info:tel_no']"
             :danger="errors['comp_info:tel_no'] != null"
@@ -105,6 +110,7 @@
           <template v-slot:label>팩스번호</template>
 
           <vs-input
+            class="control-field"
             maxlength="20"
             v-model="item['comp_info:fax_no']"
             :danger="errors['comp_info:fax_no'] != null"
@@ -112,10 +118,11 @@
           />
         </app-form-group>
 
-        <app-form-group>
+        <app-form-group full>
           <template v-slot:label>우편번호</template>
 
           <vs-input
+            class="control-field"
             maxlength="20"
             v-model="item['comp_info:zip_cd']"
             :danger="errors['comp_info:zip_cd'] != null"
@@ -123,13 +130,11 @@
           />
         </app-form-group>
 
-        <app-form-group></app-form-group>
-
-        <app-form-group>
+        <app-form-group full>
           <template v-slot:label>주소</template>
 
           <vs-input
-            class="w-full"
+            class="control-field-lg"
             maxlength="60"
             v-model="item['comp_info:addr1']"
             :danger="errors['comp_info:addr1'] != null"
@@ -137,13 +142,11 @@
           />
         </app-form-group>
 
-        <app-form-group></app-form-group>
-
-        <app-form-group>
+        <app-form-group full>
           <template v-slot:label></template>
           
           <vs-input
-            class="w-full"
+            class="control-field-lg"
             maxlength="60"
             v-model="item['comp_info:addr2']"
             :danger="errors['comp_info:addr2'] != null"
@@ -151,9 +154,7 @@
           />
         </app-form-group>
 
-        <app-form-group></app-form-group>
-
-        <app-form-group>
+        <app-form-group full>
           <template v-slot:label>HACCP 팀장 정보</template>
 
           <vs-button
@@ -173,12 +174,11 @@
           </div>
         </app-form-group>
 
-        <app-form-group></app-form-group>
-
         <app-form-group>
           <template v-slot:label>이름</template>
 
           <vs-input
+            class="control-field"
             v-model="item['comp_info:haccp_user']['user:user_nm']"
             readonly
           />
@@ -188,26 +188,27 @@
           <template v-slot:label>휴대폰번호(ID)</template>
 
           <vs-input
+            class="control-field"
             v-model="item['comp_info:haccp_user']['user:user_id']"
             readonly
           />
         </app-form-group>
 
-        <app-form-group>
+        <app-form-group full>
           <template v-slot:label>이메일</template>
 
           <vs-input
+            class="control-field"
             v-model="item['comp_info:haccp_user']['user:email']"
             readonly
           />
         </app-form-group>
 
-        <app-form-group></app-form-group>
-
         <app-form-group>
           <template v-slot:label>HACCP 젹용 품목류</template>
 
           <vs-input
+            class="control-field"
             maxlength="100"
             v-model="item['comp_info:haccp_item']"
             :danger="errors['comp_info:haccp_item'] != null"
@@ -245,6 +246,7 @@ import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 
 export default {
+  name: 'page-1-1',
   components: {
     AppControl,
     AppForm,

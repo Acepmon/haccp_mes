@@ -76,7 +76,7 @@
 
     <div class="p-5" v-if="activeTabComponent">
       <!-- Inactive components will be cached! -->
-      <keep-alive>
+      <keep-alive :include="keepAliveComponents">
         <component v-bind:is="activeTabComponent"></component>
       </keep-alive>
     </div>
@@ -235,10 +235,6 @@ export default {
       lazyLoadView(
         import(/* webpackChunkName: "profile-password" */ "@/views/ProfilePassword.vue")
       ),
-    "tab-dropdown-test": () =>
-      lazyLoadView(
-        import(/* webpackChunkName: "dropdown-test" */ "@/views/DropdownTest.vue")
-      ),
   },
 
   data() {
@@ -253,6 +249,10 @@ export default {
       tabs: "mdn/getTabs",
       activeTabComponent: "mdn/getActiveTabComponent",
     }),
+
+    keepAliveComponents () {
+      return this.tabs.map(tab => tab.component)
+    }
   },
 
   methods: {

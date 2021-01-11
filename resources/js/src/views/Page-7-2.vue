@@ -101,6 +101,7 @@ import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 
 export default {
+  name: 'page-7-2',
   components: {
     flatPickr,
     AppControl,

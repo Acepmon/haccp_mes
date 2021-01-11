@@ -51,6 +51,7 @@ import CcpDataWidget from '@/views/ui-elements/CcpDataWidget';
 import moment from 'moment';
 
 export default {
+  name: 'page-6-1',
   components: {
     AppControl,
     AppForm,

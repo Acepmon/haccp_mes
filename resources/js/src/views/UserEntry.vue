@@ -111,6 +111,7 @@ import comm_cd from '@/services/comm_cd'
 import api from '@/services/user'
 
 export default {
+    name: 'user-entry',
     data() {
         return {
             roles: [],
