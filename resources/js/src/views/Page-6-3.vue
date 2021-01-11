@@ -171,11 +171,11 @@ export default {
       },
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '발생일시', field: 'ccp_esc_data:srt_dtm', filter: false, width: 200 },
-        { headerName: '종료일시', field: 'ccp_esc_data:end_dtm', filter: false, width: 200 },
+        { headerName: '발생일시', field: 'ccp_esc_data:srt_dtm_parsed', filter: false, width: 200 },
+        { headerName: '종료일시', field: 'ccp_esc_data:end_dtm_parsed', filter: false, width: 200 },
         { headerName: 'CCP 장비', field: 'ccp_esc_data:device_id', filter: false, width: 200 },
-        { headerName: '상한값', field: 'ccp_limit:lmt_up', filter: false, width: 200 },
-        { headerName: '하한값', field: 'ccp_limit:lmt_dn', filter: false, width: 200 },
+        { headerName: '상한값', field: 'ccp_limit:lmt_up', filter: false, type: 'numericColumn', width: 100 },
+        { headerName: '하한값', field: 'ccp_limit:lmt_dn', filter: false, type: 'numericColumn', width: 100 },
         { headerName: '발생사유', field: 'ccp_esc_data:reason', filter: false, width: 200 },
       ]
     }
@@ -230,7 +230,7 @@ export default {
       let rows = this.gridApi.getSelectedRows()
 
       if (rows.length > 0) {
-        this.$set(this, 'item', $rows[0]);
+        this.$set(this, 'item', rows[0]);
       }
     },
 

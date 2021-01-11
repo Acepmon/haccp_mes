@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\CcpEscData;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CcpEscDataResource;
 use Illuminate\Http\Request;
 
 class CcpEscDataController extends Controller
@@ -12,9 +14,39 @@ class CcpEscDataController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $items = CcpEscData::query();
+
+        $with = array_filter(explode(',', $request->input('with')));
+        $limit = $request->input('limit', 15);
+        $sort = $request->input('sort', 'REG_DTM');
+        $order = $request->input('order', 'DESC');
+
+        if ($request->has('from') && !empty($request->input('from'))) {
+            $from = $request->input('from');
+            $items = $items->where('SRT_DTM', 'LIKE', now()->parse($from)->format('Ymd') . '%');
+        }
+
+        if ($request->has('to') && !empty($request->input('to'))) {
+            $to = $request->input('to');
+            $items = $items->where('END_DTM', 'LIKE', now()->parse($to)->format('Ymd') . '%');
+        }
+
+        if ($request->has('lmt_up') && !empty($request->input('lmt_up'))) {
+            $lmtUp = $request->input('lmt_up');
+            $items = $items->whereHas('ccp_limit', function ($query) use ($lmtUp) {
+                $query->where('LMT_UP', intval($lmtUp));
+            });
+        }
+
+        if ($limit == -1) {
+            $items = $items->with($with)->orderBy($sort, $order)->get();
+        } else {
+            $items = $items->with($with)->orderBy($sort, $order)->paginate($limit);
+        }
+
+        return CcpEscDataResource::collection($items);
     }
 
     /**

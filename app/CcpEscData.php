@@ -32,4 +32,9 @@ class CcpEscData extends Model
         'updated' => CcpEscDataUpdated::class,
         'deleted' => CcpEscDataDeleted::class,
     ];
+
+    public function ccp_limit()
+    {
+        return $this->belongsTo('App\CcpLimit', 'DEVICE_ID', 'DEVICE_ID');
+    }
 }

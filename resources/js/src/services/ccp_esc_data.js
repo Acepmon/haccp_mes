@@ -11,9 +11,9 @@ export default {
         let params = {
             page: 1,
             limit: 50,
-            sort: 'REG_DTM',
+            sort: 'SRT_DTM',
             order: 'DESC',
-            with: '',
+            with: 'ccp_limit',
             ...args
         }
 
