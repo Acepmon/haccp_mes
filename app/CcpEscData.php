@@ -17,6 +17,7 @@ class CcpEscData extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
+    protected $connection = 'haccp_server';
 
     protected $guarded = [];
 
@@ -31,11 +32,4 @@ class CcpEscData extends Model
         'updated' => CcpEscDataUpdated::class,
         'deleted' => CcpEscDataDeleted::class,
     ];
-
-    public function __construct(array $attributes = array())
-    {
-        parent::__construct($attributes);
-
-        $this->setConnection(env('DB_CCP_CONNECTION', 'mysql'));
-    }
 }
