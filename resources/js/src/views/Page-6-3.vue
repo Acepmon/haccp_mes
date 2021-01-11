@@ -345,6 +345,8 @@ export default {
     },
 
     queryChartData (deviceId) {
+      this.spinner()
+
       haccp_monitor
         .ccp_data_details(deviceId, {
           from: this.item['ccp_esc_data:srt_dtm'],
@@ -355,6 +357,7 @@ export default {
           limit: -1
         })
         .then((res) => {
+          this.spinner(false)
           if (res.data.data.length > 0) {
             let chartData = res.data.data.map(i => i.data)
             let chartCats = res.data.data.map(i => i.reg_dtm_parsed)
@@ -363,6 +366,7 @@ export default {
           }
         })
         .catch((err) => {
+          this.spinner(false)
           this.$vs.notify({
             title: this.$t("Error"),
             position: "top-right",
