@@ -86,10 +86,23 @@
 .control-field {
   width: 16rem;
 }
+.control-field-number {
+  width: 16rem;
+
+  input {
+    text-align: right;
+  }
+}
 .control-field-sm {
   width: 10rem;
 }
+.control-field-number-sm {
+  width: 10rem;
 
+  input {
+    text-align: right;
+  }
+}
 .control-field-dtm {
   width: 8rem;
 }

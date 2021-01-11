@@ -29,16 +29,15 @@ export default {
         })
     },
 
-    put: function (id, formData) {
+    put: function (id, args = {}) {
 
         // Default parameters
-        formData.append('_method', 'PUT')
+        let params = {
+            _method: 'PUT',
+            ...args
+        }
 
-        return axios.post(`${config.baseUrl}/${this.api}/${id}`, formData, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
+        return axios.post(`${config.baseUrl}/${this.api}/${id}`, params)
     },
 
     delete: function (id, args = {}) {

@@ -201,6 +201,9 @@ return [
         'secu_doc_mgmt:from_dt' => '기간',
         'secu_doc_mgmt:to_dt' => '기간',
         'secu_doc_mgmt:att' => '첨부화일',
+
+        'ccp_limit:lmt_up' => '상한값',
+        'ccp_limit:lmt_dn' => '하한값',
     ],
 
 ];

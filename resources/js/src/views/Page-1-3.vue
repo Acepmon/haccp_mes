@@ -323,7 +323,6 @@ export default {
         } else {
           if (this.worker[key]) {
           } else {
-            // this.$set(this.errors, key, '필수항목입니다.')
             this.$set(this.errors, key, '필수항목입니다.')
             passed = false
           }

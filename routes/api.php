@@ -111,4 +111,10 @@ Route::group([
 
     Route::get('haccp_monitor/ccp_data', 'HaccpMonitorController@ccp_data');
     Route::get('haccp_monitor/ccp_data/{DEVICE_ID}', 'HaccpMonitorController@ccp_data_details');
+
+    Route::apiResource('ccp_limit', 'CcpLimitController');
+
+    Route::apiResource('ccp_esc_data', 'CcpEscDataController');
+
+    Route::apiResource('edoc_file_haccp', 'EdocFileHaccpController');
 });
