@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Events\CcpLimitCreated;
+use App\Events\CcpLimitDeleted;
+use App\Events\CcpLimitUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class CcpLimit extends Model
@@ -18,6 +21,12 @@ class CcpLimit extends Model
     ];
 
     protected $casts = [
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => CcpLimitCreated::class,
+        'updated' => CcpLimitUpdated::class,
+        'deleted' => CcpLimitDeleted::class,
     ];
 
     public function __construct(array $attributes = array())

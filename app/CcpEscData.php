@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Events\CcpEscDataCreated;
+use App\Events\CcpEscDataDeleted;
+use App\Events\CcpEscDataUpdated;
 use App\Traits\HasCompositePrimaryKey;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,6 +24,12 @@ class CcpEscData extends Model
     ];
 
     protected $casts = [
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => CcpEscDataCreated::class,
+        'updated' => CcpEscDataUpdated::class,
+        'deleted' => CcpEscDataDeleted::class,
     ];
 
     public function __construct(array $attributes = array())

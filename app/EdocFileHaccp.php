@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Events\EdocFileHaccpCreated;
+use App\Events\EdocFileHaccpDeleted;
+use App\Events\EdocFileHaccpUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class EdocFileHaccp extends Model
@@ -18,5 +21,11 @@ class EdocFileHaccp extends Model
     ];
 
     protected $casts = [
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => EdocFileHaccpCreated::class,
+        'updated' => EdocFileHaccpUpdated::class,
+        'deleted' => EdocFileHaccpDeleted::class,
     ];
 }
