@@ -252,6 +252,12 @@ export default {
       }
     },
 
+    displayErrors(errors) {
+      for (const [key, value] of Object.entries(errors)) {
+        this.$set(this.errors, key, Array.isArray(value) ? value[0] : value);
+      }
+    },
+
     handleSelected () {
       let rows = this.gridApi.getSelectedRows()
 

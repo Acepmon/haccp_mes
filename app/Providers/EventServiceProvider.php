@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\CcpLimitDnExceeded;
+use App\Events\CcpLimitUpExceeded;
 use App\Events\UserPasswordUpdated;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -29,6 +31,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         Login::class => [
             LogSuccessfulLogin::class,
+        ],
+        CcpLimitUpExceeded::class => [
+            'SendCcpLimitNotification'
+        ],
+        CcpLimitDnExceeded::class => [
+            'SendCcpLimitNotification'
         ]
     ];
 

@@ -347,11 +347,19 @@ export default {
     queryChartData (deviceId) {
       this.spinner()
 
+      let search_params = {};
+
+      if (this.item['ccp_esc_data:srt_dtm'] != null) {
+        search_params['from'] = this.item['ccp_esc_data:srt_dtm'];
+      }
+
+      if (this.item['ccp_esc_data:end_dtm'] != null) {
+        search_params['to'] = this.item['ccp_esc_data:end_dtm'];
+      }
+
       haccp_monitor
         .ccp_data_details(deviceId, {
-          from: this.item['ccp_esc_data:srt_dtm'],
-          // from: '20210111000000',
-          to: this.item['ccp_esc_data:end_dtm'],
+          ...search_params,
           sort: 'REG_DTM',
           order: 'ASC',
           limit: -1
