@@ -186,6 +186,21 @@ const router = new Router({
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/1', value: 'page-6-1', label: 'CCP 모니터링', component: 'page-6-1'}) } }
               },
               {
+                path: '/6/2',
+                name: 'CCP 이탈한계설정',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/2', value: 'page-6-2', label: 'CCP 이탈한계설정', component: 'page-6-2'}) } }
+              },
+              {
+                path: '/6/3',
+                name: 'CCP 이탈정보',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/3', value: 'page-6-3', label: 'CCP 이탈정보', component: 'page-6-3'}) } }
+              },
+              {
+                path: '/6/4',
+                name: 'HACCP 점검결과',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/4', value: 'page-6-4', label: 'HACCP 점검결과', component: 'page-6-4'}) } }
+              },
+              {
                 path: '/7',
                 name: '자료관리',
                 component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')

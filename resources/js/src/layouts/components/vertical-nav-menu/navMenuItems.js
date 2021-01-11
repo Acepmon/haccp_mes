@@ -292,20 +292,20 @@ export default [
       },
       {
         url: "/6/2",
-        name: "CCP 이탈관리",
-        slug: "CCP 이탈관리",
+        name: "CCP 이탈한계설정",
+        slug: "CCP 이탈한계설정",
         showSubmenuOn: '/6',
       },
       {
         url: "/6/3",
-        name: "CCP 종합정보",
-        slug: "CCP 종합정보",
+        name: "CCP 이탈정보",
+        slug: "CCP 이탈정보",
         showSubmenuOn: '/6',
       },
       {
         url: "/6/4",
-        name: "HACCP 이행점검",
-        slug: "HACCP 이행점검",
+        name: "HACCP 점검결과",
+        slug: "HACCP 점검결과",
         showSubmenuOn: '/6',
       },
       {
