@@ -18,6 +18,9 @@ class EdocFileHaccpResource extends JsonResource
             'edoc_file_haccp:haccp_seq' => $this->HACCP_SEQ,
             'edoc_file_haccp:doc_id' => $this->DOC_ID,
             'edoc_file_haccp:apr_cd' => $this->APPR_CD,
+            'edoc_file_haccp:apr_nm' => $this->whenLoaded('apr', function () {
+                return $this->apr->COMM2_NM;
+            }),
             'edoc_file_haccp:app_data' => $this->APPR_DATA,
             'edoc_file_haccp:remark' => $this->REMARK,
             'edoc_file_haccp:use_yn' => $this->USE_YN,
@@ -25,6 +28,8 @@ class EdocFileHaccpResource extends JsonResource
             'edoc_file_haccp:work_dtm' => $this->WORK_DTM,
             'edoc_file_haccp:app_id' => $this->APP_ID,
             'edoc_file_haccp:app_dtm' => $this->APP_DTM,
+
+            $this->mergeWhen($this->whenLoaded('edoc_file'), new EdocFileResource($this->edoc_file)),
         ];
     }
 }

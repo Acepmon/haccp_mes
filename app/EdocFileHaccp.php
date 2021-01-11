@@ -28,4 +28,14 @@ class EdocFileHaccp extends Model
         'updated' => EdocFileHaccpUpdated::class,
         'deleted' => EdocFileHaccpDeleted::class,
     ];
+
+    public function edoc_file()
+    {
+        return $this->belongsTo('App\EdocFile', 'DOC_ID', 'DOC_ID');
+    }
+
+    public function apr()
+    {
+        return $this->belongsTo('App\CommCd', 'APR_CD', 'COMM2_CD')->where('COMM1_CD', 'C10')->whereNotIn('COMM2_CD', ['$$']);
+    }
 }
