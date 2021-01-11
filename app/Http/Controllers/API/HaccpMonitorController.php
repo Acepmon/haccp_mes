@@ -42,6 +42,7 @@ class HaccpMonitorController extends Controller
         $sort = $request->input('sort', 'REG_DTM');
         $order = $request->input('order', 'ASC');
         $from = $request->input('from');
+        $to = $request->input('to');
         $reg_dtm = $request->input('reg_dtm');
         $limit = $request->input('limit', 15);
 
@@ -50,6 +51,11 @@ class HaccpMonitorController extends Controller
         if ($request->has('from')) {
             $from = now()->parse($from)->format('YmdHis');
             $items = $items->whereRaw('CAST(REG_DTM AS SIGNED) >= ' . intval($from));
+        }
+
+        if ($request->has('to')) {
+            $to = now()->parse($to)->format('YmdHis');
+            $items = $items->whereRaw('CAST(REG_DTM AS SIGNED) <= ' . intval($to));
         }
 
         if ($request->has('reg_dtm')) {

@@ -65,11 +65,9 @@
 
     <vs-divider />
 
-    <app-form v-if="item['ccp_esc_data:device_id'] != null">
-      <app-form-group full>
-        <!-- chart here -->
-      </app-form-group>
+    <vue-apex-charts type="area" height="350" :options="chartOptions" :series="chartSeries" v-if="item['ccp_esc_data:device_id'] != null && chartSeries.length > 0"></vue-apex-charts>
 
+    <app-form v-if="item['ccp_esc_data:device_id'] != null">
       <app-form-group full>
         <template v-slot:label>발생사유</template>
 
@@ -108,6 +106,7 @@
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
 import ccp_esc_data from "@/services/ccp_esc_data";
+import haccp_monitor from "@/services/haccp_monitor";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -124,6 +123,8 @@ import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js"
 
 import moment from 'moment';
 
+import VueApexCharts from 'vue-apexcharts'
+
 export default {
   name: 'page-6-3',
   components: {
@@ -131,7 +132,8 @@ export default {
     AppForm,
     AppFormGroup,
     AgGridVue,
-    flatPickr
+    flatPickr,
+    VueApexCharts
   },
 
   data () {
@@ -177,7 +179,11 @@ export default {
         { headerName: '상한값', field: 'ccp_limit:lmt_up', filter: false, type: 'numericColumn', width: 100 },
         { headerName: '하한값', field: 'ccp_limit:lmt_dn', filter: false, type: 'numericColumn', width: 100 },
         { headerName: '발생사유', field: 'ccp_esc_data:reason', filter: false, width: 200 },
-      ]
+      ],
+
+      themeColors: ['#129CE9', '#46D465', '#E26B6D'],
+      chartData: [],
+      chartCategories: [],
     }
   },
 
@@ -208,6 +214,57 @@ export default {
         this.gridApi.paginationGoToPage(val - 1)
       }
     },
+
+    chartSeries () {
+      return [{
+        name: this.item['ccp_esc_data:device_id'],
+        data: this.chartData
+      }]
+    },
+    chartOptions () {
+      return {
+        annotations: {
+          yaxis: [{
+            y: this.item['ccp_limit:lmt_up'],
+            borderColor: '#E26B6D',
+            borderStyle: 'solid',
+            borderWidth: 2,
+            label: {
+              show: true,
+              text: 'CCP 장비: ' + this.item['ccp_limit:lmt_up'],
+              style: {
+                color: "#fff",
+                background: '#E26B6D'
+              }
+            }
+          }]
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        colors: this.themeColors,
+        xaxis: {
+          type: 'datetime',
+          categories: this.chartCategories,
+          labels: {
+            format: 'MM-dd HH:MM',
+            formatter: function (val, timestamp) {
+              return moment(timestamp).utcOffset('+0900').format('MM-DD HH:mm')
+            },
+            datetimeUTC: true
+          },
+          tickAmount: 12
+        },
+        tooltip: {
+          x: {
+            format: 'MM-dd HH:MM'
+          },
+        }
+      }
+    }
   },
 
   methods: {
@@ -228,9 +285,12 @@ export default {
 
     handleSelected () {
       let rows = this.gridApi.getSelectedRows()
+      this.$set(this, 'chartData', [])
+      this.$set(this, 'chartCategories', [])
 
       if (rows.length > 0) {
         this.$set(this, 'item', rows[0]);
+        this.queryChartData(rows[0]['ccp_esc_data:device_id'])
       }
     },
 
@@ -282,6 +342,36 @@ export default {
             text: err.response.data.message,
           });
         });
+    },
+
+    queryChartData (deviceId) {
+      haccp_monitor
+        .ccp_data_details(deviceId, {
+          from: this.item['ccp_esc_data:srt_dtm'],
+          // from: '20210111000000',
+          to: this.item['ccp_esc_data:end_dtm'],
+          sort: 'REG_DTM',
+          order: 'ASC',
+          limit: -1
+        })
+        .then((res) => {
+          if (res.data.data.length > 0) {
+            let chartData = res.data.data.map(i => i.data)
+            let chartCats = res.data.data.map(i => i.reg_dtm_parsed)
+            this.$set(this, 'chartData', chartData)
+            this.$set(this, 'chartCategories', chartCats)
+          }
+        })
+        .catch((err) => {
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        })
     },
 
     closeDialog() {
