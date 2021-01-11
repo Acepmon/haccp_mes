@@ -95,7 +95,8 @@ export default {
           device_id: this.devices.map(item => item.comm2_cd).join(','),
           sort: 'DEVICE',
           order: 'ASC',
-          reg_dtm: moment().format('YYYYMMDD')
+          // reg_dtm: moment().format('YYYYMMDD')
+          from: moment().subtract(24, 'hours').format('YYYYMMDDHHmmss'),
         })
         .then((res) => {
           this.spinner(false)
@@ -138,7 +139,8 @@ export default {
           device_id: this.devices.map(item => item.comm2_cd).join(','),
           sort: 'DEVICE',
           order: 'ASC',
-          reg_dtm: moment().format('YYYYMMDD')
+          // reg_dtm: moment().format('YYYYMMDD')
+          from: moment().subtract(24, 'hours').format('YYYYMMDDHHmmss'),
         })
         .then((res) => {
           if (res.data.data.length > 0) {

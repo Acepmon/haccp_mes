@@ -369,7 +369,7 @@ export default {
       let search_params = {};
 
       if (this.searchKeyword != null) {
-        search_params[this.comp_nm] = this.searchKeyword;
+        search_params['comp_nm'] = this.searchKeyword;
       }
 
       api

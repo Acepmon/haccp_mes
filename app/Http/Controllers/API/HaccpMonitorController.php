@@ -77,22 +77,20 @@ class HaccpMonitorController extends Controller
         $order = $request->input('order', 'ASC');
         $device_id = $request->input('device_id');
         $reg_dtm = $request->input('reg_dtm');
+        $from = $request->input('from');
 
         $items = DB::connection('haccp_server')
             ->table('CCP_DATA')
             ->select(
                 'DEVICE_ID AS DEVICE', 
-                DB::raw('(SELECT CAST(DATA AS DECIMAL(10,2)) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND B.REG_DTM LIKE "'.$reg_dtm.'%" ORDER BY B.REG_DTM DESC LIMIT 1) AS DATA'), 
-                DB::raw('(SELECT REG_DTM FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND B.REG_DTM LIKE "'.$reg_dtm.'%" ORDER BY B.REG_DTM DESC LIMIT 1) AS REG_DTM'), 
-                DB::raw('MIN(CAST(DATA AS DECIMAL(10,2))) AS MIN'), 
-                DB::raw('MAX(CAST(DATA AS DECIMAL(10,2))) AS MAX'), 
-                DB::raw('AVG(CAST(DATA AS DECIMAL(10,2))) AS AVG')
+                DB::raw('(SELECT CAST(DATA AS DECIMAL(10,2)) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND CAST(B.REG_DTM AS SIGNED) >= '.intval($from).' ORDER BY B.REG_DTM DESC LIMIT 1) AS DATA'), 
+                DB::raw('(SELECT REG_DTM FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND CAST(B.REG_DTM AS SIGNED) >= '.intval($from).' ORDER BY B.REG_DTM DESC LIMIT 1) AS REG_DTM'), 
+                DB::raw('(SELECT MIN(CAST(B.DATA AS DECIMAL(10,2))) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND CAST(B.REG_DTM AS SIGNED) >= '.intval($from).') AS MIN'), 
+                DB::raw('(SELECT MAX(CAST(B.DATA AS DECIMAL(10,2))) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND CAST(B.REG_DTM AS SIGNED) >= '.intval($from).') AS MAX'), 
+                DB::raw('(SELECT AVG(CAST(B.DATA AS DECIMAL(10,2))) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND CAST(B.REG_DTM AS SIGNED) >= '.intval($from).') AS AVG'), 
             )
             ->whereIn('DEVICE_ID', array_filter(explode(',', $device_id)))
             ->groupBy('DEVICE_ID')
-            ->havingRaw('MIN(CAST(DATA AS DECIMAL(10,2)))')
-            ->havingRaw('MAX(CAST(DATA AS DECIMAL(10,2)))')
-            ->havingRaw('AVG(CAST(DATA AS DECIMAL(10,2)))')
             ->orderBy($sort, $order)
             ->get();
 

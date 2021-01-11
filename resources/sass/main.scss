@@ -99,7 +99,7 @@
 
 }
 
-.control-field-sm {
+.control-field-sm,
 .control-field-lg {
   width: 28rem;
   max-width: 90%;
@@ -129,19 +129,17 @@
 .ag-header-cell-label {
   justify-content: center !important;
 } 
-.control-col {
-  .control-field {
-    width: 10rem;
-  }
-  .control-field-dtm {
-    width: 8rem;
-    text-align: center;
-  }
-  
-  .control-field-sm {
-    width: 8rem;
-  }
-  .control-field-dtm-sm {
-    width: 6rem;
-  }
+.control-col .control-field {
+  width: 10rem;
+}
+.control-col .control-field-dtm {
+  width: 8rem;
+  text-align: center;
+}
+
+.control-col .control-field-sm {
+  width: 8rem;
+}
+.control-col .control-field-dtm-sm {
+  width: 6rem;
 }

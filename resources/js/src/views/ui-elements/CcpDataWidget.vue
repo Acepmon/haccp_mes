@@ -5,7 +5,7 @@
         {{ data.device_nm }}: <span class="px-8">{{ data.data }}℃</span>
       </div>
       <div class="h2 py-2 text-warning text-right">
-        <span class="px-2">금일 최소: {{ data.min }}</span>
+        <span class="px-2">일일 최소: {{ data.min }}</span>
         <span class="px-2">최대: {{ data.max }}</span>
         <span class="px-2">평균: {{ data.avg }}</span>
       </div>
@@ -22,7 +22,7 @@
               {{ data.device_nm }}: <span class="px-8">{{ data.data }}℃</span>
             </div>
             <div class="h2 py-2 text-warning text-right">
-              <span class="px-2">금일 최소: {{ data.min }}</span>
+              <span class="px-2">일일 최소: {{ data.min }}</span>
               <span class="px-2">최대: {{ data.max }}</span>
               <span class="px-2">평균: {{ data.avg }}</span>
             </div>
