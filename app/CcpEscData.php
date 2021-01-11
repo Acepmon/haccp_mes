@@ -2,15 +2,17 @@
 
 namespace App;
 
+use App\Traits\HasCompositePrimaryKey;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
-class CcpData extends Model
+class CcpEscData extends Model
 {
-    protected $table = 'CCP_DATA';
-    protected $primaryKey = 'CCP_SEQ';
-    public $incrementing = true;
-    // protected $keyType = 'string';
+    use HasCompositePrimaryKey;
+
+    protected $table = 'CCP_ESC_DATA';
+    protected $primaryKey = ['DEVICE_ID', 'SRT_DTM'];
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
 
     protected $guarded = [];

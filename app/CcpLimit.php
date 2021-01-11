@@ -3,14 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
-class CcpData extends Model
+class CcpLimit extends Model
 {
-    protected $table = 'CCP_DATA';
-    protected $primaryKey = 'CCP_SEQ';
-    public $incrementing = true;
-    // protected $keyType = 'string';
+    protected $table = 'CCP_LIMIT';
+    protected $primaryKey = 'DEVICE_ID';
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
 
     protected $guarded = [];
