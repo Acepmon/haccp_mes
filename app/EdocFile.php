@@ -6,6 +6,7 @@ use App\Events\EdocFileCreated;
 use App\Events\EdocFileDeleted;
 use App\Events\EdocFileUpdated;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class EdocFile extends Model
 {
@@ -15,20 +16,7 @@ class EdocFile extends Model
     // protected $keyType = 'string';
     public $timestamps = false;
 
-    protected $fillable = [
-        'DOC_ID',
-        'TYPE_CD',
-        'DOC_NM',
-        'DOC_DESC',
-        'DOC_CONTENT',
-        'DOC_APPDATA',
-        'PERIOD_CD',
-        'PERIOD_DATA',
-        'USE_YN',
-        'WORK_ID',
-        'APP_ID',
-        'UPD_DTM',
-    ];
+    protected $guarded = [];
 
     protected $hidden = [
     ];
@@ -48,6 +36,14 @@ class EdocFile extends Model
         self::USE_YES,
         self::USE_NO
     ];
+
+    public function previewHtml()
+    {
+        $preview = $this->DOC_HTML;
+        $preview = Str::replaceFirst("{qr_write}", "<img src='".route('api.edoc_file.qr_write', $this->DOC_ID)."' class='blank_box' />", $preview);
+        $preview = Str::replaceFirst("{qr_approval}", "<img src='".route('api.edoc_file.qr_approval', $this->DOC_ID)."' class='blank_box' />", $preview);
+        return $preview;
+    }
 
     public function type()
     {

@@ -3,11 +3,10 @@
 namespace App\Console\Commands;
 
 use App\EdocFile;
-use App\EdocFileHaccp;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
-class EdocFileHaccpSeeder extends Command
+class EdocFileSeeder extends Command
 {
     /**
      * The name and signature of the console command.
@@ -40,10 +39,9 @@ class EdocFileHaccpSeeder extends Command
      */
     public function handle()
     {
-        EdocFileHaccp::truncate();
         EdocFile::truncate();
 
-        Artisan::call('db:seed', ['--class' => 'EdocFileHaccpSeeder']);
+        Artisan::call('db:seed', ['--class' => 'EdocFileSeeder']);
 
         $this->info('The command was successful!');
     }

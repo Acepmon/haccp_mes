@@ -5,7 +5,6 @@ namespace App\Imports;
 use App\EdocFile;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\ToModel;
 
 class EdocFileImport implements ToCollection
 {
@@ -18,19 +17,20 @@ class EdocFileImport implements ToCollection
             }
 
             if ($row[0] != null) {
-                EdocFile::insert([
-                    'DOC_ID' => $row[0],
-                    'TYPE_CD' => $row[1],
-                    'DOC_NM' => $row[2],
-                    'DOC_DESC' => $row[3],
-                    'DOC_CONTENT' => $row[4],
-                    'DOC_APPDATA' => $row[5],
-                    'PERIOD_CD' => $row[6],
-                    'PERIOD_DATA' => $row[7],
-                    'USE_YN' => $row[8],
-                    'WORK_ID' => $row[9],
-                    'APP_ID' => $row[10],
-                    'UPD_DTM' => $row[11],
+                EdocFile::create([
+                    'TYPE_CD' => $row[0],
+                    'DOC_NM' => $row[1],
+                    'DOC_DESC' => $row[2],
+                    'DOC_HTML' => $row[3],
+                    'APP_VIEW' => $row[4],
+                    'APP_INPUT' => $row[5],
+                    'APP_LIST' => $row[6],
+                    'PERIOD_CD' => $row[7],
+                    'PERIOD_DATA' => $row[8],
+                    'USE_YN' => $row[9],
+                    'WORK_ID' => $row[10],
+                    'APP_ID' => $row[11],
+                    'UPD_DTM' => $row[12],
                 ]);
             }
         }

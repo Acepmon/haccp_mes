@@ -74,5 +74,9 @@ export default {
         for (let d in data)
             ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
         return ret.join('&');
+    },
+
+    previewUrl(docId) {
+        return `${config.baseUrl}/${this.api}/${docId}/preview`
     }
 }
