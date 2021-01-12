@@ -43,7 +43,7 @@ class CheckCcpLimit extends Command
      */
     public function handle()
     {
-        $from = now()->subMinutes(1)->format('Ymdhis');
+        $from = now()->subMinutes(2)->format('Ymdhis');
 
         // CcpEscData::truncate();
 
