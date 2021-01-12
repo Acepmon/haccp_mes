@@ -87,7 +87,7 @@
       v-model="currentPage" />
 
     <vs-popup fullscreen title="문서확인" :active.sync="detailDialog">
-      <iframe style="width: 100%; height: calc(100vh - 150px);" v-if="item['edoc_file_haccp:doc_id'] != null" :src="'/api/edoc_file_haccp/' + item['edoc_file_haccp:doc_id'] + '/preview'" frameborder="0"></iframe>
+      <iframe style="width: 100%; height: calc(100vh - 150px);" class="iframe-placeholder" v-if="item['edoc_file_haccp:doc_id'] != null" :src="'/api/edoc_file_haccp/' + item['edoc_file_haccp:doc_id'] + '/preview'" frameborder="0"></iframe>
     </vs-popup>
   </vx-card>
 </template>
@@ -306,3 +306,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.iframe-placeholder {
+  background: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100% 100%"><text fill="%23C0C9CE" x="50%" y="50%" font-family="\'Lucida Grande\', sans-serif" font-size="14" text-anchor="middle">loading...</text></svg>') 0px 0px no-repeat;
+}
+</style>

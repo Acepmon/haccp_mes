@@ -5,8 +5,8 @@
   <link rel="stylesheet" href="/viewer.css">
 </head>
 
-<body>
-  {!! $edocFile->DOC_CONTENT !!}
+<body style="background: #fff;">
+  {!! $preview !!}
 </body>
 
 </html>

@@ -7,6 +7,8 @@ use App\EdocFileHaccp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EdocFileHaccpResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use LaravelQRCode\Facades\QRCode;
 
 class EdocFileHaccpController extends Controller
 {
@@ -95,12 +97,26 @@ class EdocFileHaccpController extends Controller
         //
     }
 
+    public function qrWrite($docId) {
+        $edocFile = EdocFile::where('DOC_ID', $docId)->with(['edoc_file_haccp'])->firstOrFail();
+        return QRCode::text($edocFile->DOC_ID)->png();
+    }
+
+    public function qrApproval($docId) {
+        $edocFile = EdocFile::where('DOC_ID', $docId)->with(['edoc_file_haccp'])->firstOrFail();
+        return QRCode::text($edocFile->DOC_ID)->png();
+    }
+
     public function preview($docId)
     {
         $edocFile = EdocFile::where('DOC_ID', $docId)->with(['edoc_file_haccp'])->firstOrFail();
+        $preview = $edocFile->DOC_CONTENT;
+        $preview = Str::replaceFirst("{qr_write}", "<img src='".route('api.edoc_file_haccp.qr_write', $docId)."' class='blank_box' />", $preview);
+        $preview = Str::replaceFirst("{qr_approval}", "<img src='".route('api.edoc_file_haccp.qr_approval', $docId)."' class='blank_box' />", $preview);
+        $preview = Str::replaceFirst("{date}", now()->format('Y-m-d'), $preview);
 
         return view('edoc_file_preview', [
-            'edocFile' => $edocFile
+            'preview' => $preview,
         ]);
     }
 }
