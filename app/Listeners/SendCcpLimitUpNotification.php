@@ -28,7 +28,10 @@ class SendCcpLimitUpNotification
      */
     public function handle(CcpLimitUpExceeded $event)
     {
-        Mail::to(env('ADMIN_EMAIL'))
-                ->queue(new CcpLimitReached($event->ccpLimit));
+        $to = [
+            ['email' => env('ADMIN_EMAIL'), 'name' => 'Administrator', 'subject' => 'CCP Limit reached', 'from' => env('MAIL_FROM_ADDRESS')]
+        ];
+
+        Mail::to($to)->queue(new CcpLimitReached($event->ccpLimit));
     }
 }
