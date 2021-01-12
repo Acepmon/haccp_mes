@@ -32,7 +32,13 @@ class EventServiceProvider extends ServiceProvider
         ],
         Login::class => [
             LogSuccessfulLogin::class,
-        ]
+        ],
+        CcpLimitUpExceeded::class => [
+            SendCcpLimitNotification::class
+        ],
+        // CcpLimitDnExceeded::class => [
+        //     SendCcpLimitNotification::class
+        // ]
     ];
 
     /**
