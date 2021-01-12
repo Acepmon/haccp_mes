@@ -30,6 +30,7 @@ mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/assets/css/main.css', 'public/css', [
         tailwindcss('tailwind.js'), require('postcss-rtl')()
     ])
+    .copy('resources/css/viewer.css', 'public/css/viewer.css')
     .copy('node_modules/vuesax/dist/vuesax.css', 'public/css/vuesax.css') // Vuesax framework css
     .copy('resources/assets/css/iconfont.css', 'public/css/iconfont.css') // Feather Icon Font css
     .copyDirectory('resources/assets/fonts', 'public/fonts') // Feather Icon fonts
