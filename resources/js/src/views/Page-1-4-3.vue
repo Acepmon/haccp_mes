@@ -257,7 +257,7 @@
         v-model="currentPage" />
     </vx-card>
 
-    <vs-popup fullscreen title="문서확인" :active.sync="previewDialog" class="preview-dialog">
+    <vs-popup title="문서확인" :active.sync="previewDialog" class="preview-dialog">
       <iframe class="iframe-placeholder" v-if="item['edoc_file:doc_id'] != null" :src="previewUrl" frameborder="0"></iframe>
     </vs-popup>
   </div>

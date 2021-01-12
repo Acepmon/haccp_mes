@@ -224,20 +224,34 @@ export default {
     chartOptions () {
       return {
         annotations: {
-          yaxis: [{
-            y: this.item['ccp_limit:lmt_up'],
-            borderColor: '#E26B6D',
-            borderStyle: 'solid',
-            borderWidth: 2,
-            label: {
-              show: true,
-              text: 'CCP 장비: ' + this.item['ccp_limit:lmt_up'],
-              style: {
-                color: "#fff",
-                background: '#E26B6D'
+          yaxis: [
+            {
+              y: this.item['ccp_limit:lmt_up'],
+              borderColor: '#E26B6D',
+              borderWidth: 2,
+              label: {
+                show: true,
+                text: 'CCP 장비: ' + this.item['ccp_limit:lmt_up'],
+                style: {
+                  color: "#fff",
+                  background: '#E26B6D'
+                }
+              }
+            },
+            {
+              y: this.item['ccp_limit:lmt_dn'],
+              borderColor: '#129CE9',
+              borderWidth: 2,
+              label: {
+                show: true,
+                text: '하한값: ' + this.item['ccp_limit:lmt_dn'],
+                style: {
+                  color: "#fff",
+                  background: '#129CE9'
+                }
               }
             }
-          }]
+          ]
         },
         dataLabels: {
           enabled: false
@@ -256,7 +270,7 @@ export default {
             },
             datetimeUTC: true
           },
-          tickAmount: 12
+          tickAmount: 2
         },
         tooltip: {
           x: {

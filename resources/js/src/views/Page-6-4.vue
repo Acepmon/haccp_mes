@@ -86,7 +86,7 @@
       :max="maxPageNumbers"
       v-model="currentPage" />
 
-    <vs-popup fullscreen title="문서확인" :active.sync="previewDialog" class="preview-dialog">
+    <vs-popup title="문서확인" :active.sync="previewDialog" class="preview-dialog">
       <iframe style="width: 100%; height: calc(100vh - 150px);" class="iframe-placeholder" v-if="item['edoc_file_haccp:doc_id'] != null" :src="previewUrl" frameborder="0"></iframe>
     </vs-popup>
   </vx-card>

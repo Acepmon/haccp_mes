@@ -11,6 +11,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Login;
 use App\Listeners\LogSuccessfulLogin;
+use App\Listeners\SendCcpLimitNotification;
 use App\Listeners\SendNewUserInfoToAdmin;
 use App\Listeners\SendUserInfoToOwner;
 
@@ -31,12 +32,6 @@ class EventServiceProvider extends ServiceProvider
         ],
         Login::class => [
             LogSuccessfulLogin::class,
-        ],
-        CcpLimitUpExceeded::class => [
-            'SendCcpLimitNotification'
-        ],
-        CcpLimitDnExceeded::class => [
-            'SendCcpLimitNotification'
         ]
     ];
 
