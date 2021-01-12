@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\EdocFile;
 use App\EdocFileHaccp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EdocFileHaccpResource;
@@ -92,5 +93,14 @@ class EdocFileHaccpController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function preview($docId)
+    {
+        $edocFile = EdocFile::where('DOC_ID', $docId)->with(['edoc_file_haccp'])->firstOrFail();
+
+        return view('edoc_file_preview', [
+            'edocFile' => $edocFile
+        ]);
     }
 }

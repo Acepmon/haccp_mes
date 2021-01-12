@@ -58,4 +58,9 @@ class EdocFile extends Model
     {
         return $this->belongsTo('App\CommCd', 'PERIOD_CD', 'COMM2_CD')->where('COMM1_CD', 'A50')->whereNotIn('COMM2_CD', ['$$']);
     }
+
+    public function edoc_file_haccp()
+    {
+        return $this->hasMany('App\EdocFileHaccp', 'DOC_ID', 'DOC_ID');
+    }
 }

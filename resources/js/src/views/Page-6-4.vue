@@ -85,6 +85,10 @@
       :total="totalPages"
       :max="maxPageNumbers"
       v-model="currentPage" />
+
+    <vs-popup fullscreen title="문서확인" :active.sync="detailDialog">
+      <iframe style="width: 100%; height: calc(100vh - 150px);" v-if="item['edoc_file_haccp:doc_id'] != null" :src="'/api/edoc_file_haccp/' + item['edoc_file_haccp:doc_id'] + '/preview'" frameborder="0"></iframe>
+    </vs-popup>
   </vx-card>
 </template>
 
@@ -132,6 +136,8 @@ export default {
         locale: KoreanLocale,
       },
       doc_nm: null,
+
+      detailDialog: false,
 
       item: {
         'edoc_file_haccp:haccp_seq': null,
@@ -219,6 +225,7 @@ export default {
 
     handleSelected () {
       let rows = this.gridApi.getSelectedRows()
+      this.$set(this, 'detailDialog', true)
 
       if (rows.length > 0) {
         this.$set(this, 'item', rows[0]);
@@ -299,7 +306,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

@@ -1,0 +1,166 @@
+/* ------------ 문서양식 스타일----------- */
+/* 양식 wrap */
+.ccp_wrap {
+    padding:0;
+    width:800px;
+    margin:0 auto;
+    border-right:1px solid #000;
+    border-bottom:1px solid #000;
+}
+
+/* table 스타일 */
+div.table {
+    display:table;
+    width:100%;
+    font-size:12px;
+    text-align:center;
+}
+
+div.table-row {
+    width:100%;
+}
+
+div.table-cell {
+    display:table-cell;
+    vertical-align: middle;
+    border-top:1px solid #000;
+    border-left:1px solid #000;
+    word-break: break-all;
+}
+
+div.table-col-group {
+    display:table-column-group;
+}
+
+div.table-cell + div.table-cell {
+    border-left:1px solid #000;
+}
+
+div.table-cell h2 {
+    font-size: 24px;
+    font-weight:bold;
+}
+
+div.table-cell h2 span {
+    font-size:14px;
+}
+
+div.table-row {
+    display:table-row;
+}
+
+div.txt-box > div {
+    padding:5px 0;
+    font-size:12px;
+}
+
+div.txt-box > div + div {
+    border-top:1px solid #000;
+}
+div.txt-box > div:last-child {
+    border-bottom:1px solid #000;
+}
+div.img_viewer > img {
+    width: 99.9%;
+}
+
+/* second 테이블 셀 선 처리 */
+div.table.sec_tbl > div.table-row:last-child > div.table-cell {
+    border-bottom:0;
+}
+div.table.sec_tbl > div.table-row > div.table-cell:first-child {
+    border-left:0;
+}
+div.table.sec_tbl > div.table-row > div.table-cell {
+    border-top:0;
+}
+div.table.sec_tbl > div.table-row + div.table-row > div.table-cell {
+    border-top:1px solid #000;
+}
+
+/* 리스트 테이블 셀 선 처리 */
+div.table.tbl_list {
+    border-left:1px solid #000;
+}
+div.table.tbl_list > div.table-row > div.table-cell:first-child {
+    border-left:0;
+}
+
+/* 파란 배경색 */
+.cell_bg {
+    background:#cedeef;
+}
+
+/* qr코드, 이탈조치 반값 최소높이 */
+.blank_box {
+    min-height:60px;
+    height:60px;
+}
+
+/* image 크기 */
+.cell_img img {
+    width:95%;
+}
+.sign img {
+    width:60px;
+}
+
+/* table-cell이 아닌 영역 밑줄 */
+.bd-top {
+    border-top:1px solid #000;
+}
+.bd-left {
+    border-left:1px solid #000;
+}
+.bd-bottom {
+    border-bottom:1px solid #000;
+}
+.bd-right {
+    border-right:1px solid #000;
+}
+
+/* 정렬 클래스 */
+.text-left {
+    text-align:left;
+}
+.text-center {
+    text-align:center;
+}
+.text-right {
+    text-align:right;
+}
+
+/* 동일크기 필요시 적용 */
+.layout-fixed {
+    table-layout: fixed;
+}
+.font-sm {
+    font-size:13px;
+}
+
+.size_md {
+    height:40px;
+}
+.size_sm {
+    height:30px;
+}
+.mid_line {
+    line-height:40px;
+}
+
+/* 타이틀 */
+.sub-tit {
+    margin-top:0;
+    margin-bottom:20px;
+    font-size:16px;
+    font-weight:bold;
+}
+
+/* bg 설정 */
+.bg_green {
+    background:#c3f58a;
+}
+.cell_bg {
+    background:#cedeef;
+}
+

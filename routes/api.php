@@ -116,5 +116,6 @@ Route::group([
 
     Route::apiResource('ccp_esc_data', 'CcpEscDataController');
 
+    Route::get('edoc_file_haccp/{DOC_ID}/preview', 'EdocFileHaccpController@preview')->name('edoc_file_haccp.preview');
     Route::apiResource('edoc_file_haccp', 'EdocFileHaccpController');
 });
