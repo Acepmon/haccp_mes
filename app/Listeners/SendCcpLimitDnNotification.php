@@ -32,6 +32,8 @@ class SendCcpLimitDnNotification
             ['email' => env('ADMIN_EMAIL'), 'name' => 'Administrator', 'subject' => 'CCP Limit reached', 'from' => env('MAIL_FROM_ADDRESS')]
         ];
 
-        Mail::to($to)->queue(new CcpLimitReached($event->ccpLimit));
+        if (false) {
+            Mail::to($to)->queue(new CcpLimitReached($event->ccpLimit));
+        }
     }
 }
