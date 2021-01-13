@@ -42,8 +42,9 @@
         <vs-button
           @click="saveDialog()"
           class="mx-1"
-          color="primary invisible"
+          color="primary"
           type="border"
+          :disabled="item['ccp_esc_data:device_id'] == null"
           >{{ $t("Save") }}</vs-button
         >
         <vs-button
@@ -73,7 +74,6 @@
 
         <vs-input
           class="control-field-lg"
-          readonly
           v-model="item['ccp_esc_data:reason']"
         />
       </app-form-group>
@@ -157,6 +157,8 @@ export default {
         'ccp_esc_data:end_dtm': null,
         'ccp_esc_data:reason': null,
       },
+      required: {
+      },
       items: [],
       localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
@@ -175,7 +177,7 @@ export default {
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '발생일시', field: 'ccp_esc_data:srt_dtm_parsed', filter: false, width: 200 },
         { headerName: '종료일시', field: 'ccp_esc_data:end_dtm_parsed', filter: false, width: 200 },
-        { headerName: 'CCP 장비', field: 'ccp_esc_data:device_id', filter: false, width: 200 },
+        { headerName: 'CCP 장비', field: 'ccp_esc_data:device_nm', filter: false, width: 200 },
         { headerName: '상한값', field: 'ccp_limit:lmt_up', filter: false, type: 'numericColumn', width: 100 },
         { headerName: '하한값', field: 'ccp_limit:lmt_dn', filter: false, type: 'numericColumn', width: 100 },
         { headerName: '발생사유', field: 'ccp_esc_data:reason', filter: false, width: 200 },
@@ -224,20 +226,34 @@ export default {
     chartOptions () {
       return {
         annotations: {
-          yaxis: [{
-            y: this.item['ccp_limit:lmt_up'],
-            borderColor: '#E26B6D',
-            borderStyle: 'solid',
-            borderWidth: 2,
-            label: {
-              show: true,
-              text: 'CCP 장비: ' + this.item['ccp_limit:lmt_up'],
-              style: {
-                color: "#fff",
-                background: '#E26B6D'
+          yaxis: [
+            {
+              y: this.item['ccp_limit:lmt_up'],
+              borderColor: '#E26B6D',
+              borderWidth: 2,
+              label: {
+                show: true,
+                text: 'CCP 장비: ' + this.item['ccp_limit:lmt_up'],
+                style: {
+                  color: "#fff",
+                  background: '#E26B6D'
+                }
+              }
+            },
+            {
+              y: this.item['ccp_limit:lmt_dn'],
+              borderColor: '#129CE9',
+              borderWidth: 2,
+              label: {
+                show: true,
+                text: '하한값: ' + this.item['ccp_limit:lmt_dn'],
+                style: {
+                  color: "#fff",
+                  background: '#129CE9'
+                }
               }
             }
-          }]
+          ]
         },
         dataLabels: {
           enabled: false
@@ -256,7 +272,7 @@ export default {
             },
             datetimeUTC: true
           },
-          tickAmount: 12
+          tickAmount: 2
         },
         tooltip: {
           x: {
@@ -281,6 +297,26 @@ export default {
       } else {
         this.$vs.loading.close("#div-with-loading > .con-vs-loading");
       }
+    },
+
+    validateRequired() {
+      let passed = true
+      for (const [key, value] of Object.entries(this.required)) {
+        if (Array.isArray(this.item[key])) {
+          if (this.item[key] === undefined || this.item[key].length == 0) {
+            this.$set(this.errors, key, '필수항목입니다.')
+            passed = false
+          }
+        } else {
+          if (this.item[key]) {
+          } else {
+            this.$set(this.errors, key, '필수항목입니다.')
+            passed = false
+          }
+        }
+      }
+
+      return passed
     },
 
     handleSelected () {
@@ -324,7 +360,7 @@ export default {
           sort: 'SRT_DTM',
           order: 'DESC',
           limit: -1,
-          with: 'ccp_limit',
+          with: 'ccp_limit,device',
           ...search_params,
         })
         .then((res) => {
@@ -384,6 +420,66 @@ export default {
             text: err.response.data.message,
           });
         })
+    },
+
+    save () {
+      this.spinner();
+
+      ccp_esc_data
+        .put(this.item["ccp_esc_data:device_id"], this.item)
+        .then((res) => {
+          this.spinner(false);
+
+          if (res.data.success) {
+            this.$vs.notify({
+              title: this.$t("SuccessSaveData"),
+              position: "top-right",
+              color: "success",
+              text: res.data.message,
+            });
+            this.query();
+            // this.clear()
+          } else {
+            this.$vs.notify({
+              title: this.$t("Error"),
+              position: "top-right",
+              color: "warning",
+              iconPack: "feather",
+              icon: "icon-alert-circle",
+              text: res.data.message,
+            });
+          }
+        })
+        .catch((err) => {
+          this.displayErrors(
+            err.response.data.hasOwnProperty("errors")
+              ? err.response.data.errors
+              : null
+          );
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
+
+    saveDialog() {
+      if (this.validateRequired()) {
+        this.$vs.dialog({
+          type: "confirm",
+          color: "success",
+          title: this.$t("Confirmation"),
+          text: this.$t("SaveData"),
+          acceptText: this.$t("Accept"),
+          cancelText: this.$t("Cancel"),
+          accept: () => this.save(),
+        });
+      }
     },
 
     closeDialog() {

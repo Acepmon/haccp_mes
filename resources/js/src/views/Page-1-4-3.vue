@@ -256,6 +256,10 @@
         :max="maxPageNumbers"
         v-model="currentPage" />
     </vx-card>
+
+    <vs-popup title="문서확인" :active.sync="previewDialog" class="preview-dialog">
+      <iframe class="iframe-placeholder" v-if="item['edoc_file:doc_id'] != null" :src="previewUrl" frameborder="0"></iframe>
+    </vs-popup>
   </div>
 </template>
 
@@ -263,7 +267,7 @@
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
 import user from "@/services/user";
-import api from "@/services/edoc_file";
+import edoc_file from "@/services/edoc_file";
 import { mapActions } from "vuex";
 import FileSelect from "@/layouts/components/FileSelect.vue";
 
@@ -286,14 +290,17 @@ export default {
 
   data() {
     return {
+      previewDialog: false,
       item: {
         "edoc_file:doc_id": null,
         "edoc_file:type_cd": null,
         "edoc_file:type_nm": null,
         "edoc_file:doc_nm": null,
         "edoc_file:doc_desc": null,
-        "edoc_file:doc_content": null,
-        "edoc_file:doc_appdata": null,
+        "edoc_file:doc_html": null,
+        "edoc_file:app_view": null,
+        "edoc_file:app_input": null,
+        "edoc_file:app_list": null,
         "edoc_file:period_cd": null,
         "edoc_file:period_nm": null,
         "edoc_file:period_data": [],
@@ -309,8 +316,10 @@ export default {
         "edoc_file:type_nm": null,
         "edoc_file:doc_nm": null,
         "edoc_file:doc_desc": null,
-        "edoc_file:doc_content": null,
-        "edoc_file:doc_appdata": null,
+        "edoc_file:doc_html": null,
+        "edoc_file:app_view": null,
+        "edoc_file:app_input": null,
+        "edoc_file:app_list": null,
         "edoc_file:period_cd": null,
         "edoc_file:period_nm": null,
         "edoc_file:period_data": null,
@@ -353,7 +362,8 @@ export default {
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
-        headerHeight: 40
+        headerHeight: 40,
+        onCellDoubleClicked: this.handleDblClick
       },
       gridApi: null,
       defaultColDef: {
@@ -410,6 +420,10 @@ export default {
         order: this.sorting.order != null ? this.sorting.order : "DESC",
       };
     },
+
+    previewUrl () {
+      return edoc_file.previewUrl(this.item['edoc_file:doc_id'])
+    }
   },
 
   methods: {
@@ -455,8 +469,10 @@ export default {
         "edoc_file:type_nm": null,
         "edoc_file:doc_nm": null,
         "edoc_file:doc_desc": null,
-        "edoc_file:doc_content": null,
-        "edoc_file:doc_appdata": null,
+        "edoc_file:doc_html": null,
+        "edoc_file:app_view": null,
+        "edoc_file:app_input": null,
+        "edoc_file:app_list": null,
         "edoc_file:period_cd": null,
         "edoc_file:period_nm": null,
         "edoc_file:period_data": [],
@@ -474,8 +490,10 @@ export default {
         "edoc_file:type_nm": null,
         "edoc_file:doc_nm": null,
         "edoc_file:doc_desc": null,
-        "edoc_file:doc_content": null,
-        "edoc_file:doc_appdata": null,
+        "edoc_file:doc_html": null,
+        "edoc_file:app_view": null,
+        "edoc_file:app_input": null,
+        "edoc_file:app_list": null,
         "edoc_file:period_cd": null,
         "edoc_file:period_nm": null,
         "edoc_file:period_data": null,
@@ -501,13 +519,17 @@ export default {
       }
     },
 
+    handleDblClick () {
+      this.$set(this, 'previewDialog', true)
+    },
+
     save() {
       this.clearErrors();
       this.spinner();
 
       this.$set(this.item, 'edoc_file:period_data', this.item['edoc_file:period_data'].filter(period => period != ''))
 
-      api
+      edoc_file
         .put(this.item["edoc_file:doc_id"], this.item)
         .then((res) => {
           this.spinner(false);
@@ -567,7 +589,7 @@ export default {
         search_params["use_yn"] = this.searchUseYn;
       }
 
-      api
+      edoc_file
         .fetch({
           ...this.sortParam,
           ...search_params,
@@ -610,7 +632,7 @@ export default {
         search_params["use_yn"] = this.searchUseYn;
       }
 
-      window.location.href = api.downloadUrl(search_params);
+      window.location.href = edoc_file.downloadUrl(search_params);
     },
 
     closeDialog() {

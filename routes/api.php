@@ -61,6 +61,9 @@ Route::group([
     Route::get('doc_mgmt/{REV_SEQ}/att_file/{ATT_SEQ}/download', 'DocMgmtController@downloadAttFile')->name('doc_mgmt.att_file.download');
     Route::apiResource('doc_mgmt', 'DocMgmtController');
 
+    Route::get('edoc_file/{DOC_ID}/preview', 'EdocFileController@preview')->name('edoc_file.preview');
+    Route::get('edoc_file/{DOC_ID}/qr_write', 'EdocFileController@qrWrite')->name('edoc_file.qr_write');
+    Route::get('edoc_file/{DOC_ID}/qr_approval', 'EdocFileController@qrApproval')->name('edoc_file.qr_approval');
     Route::get('edoc_file/download', 'EdocFileController@download')->name('edoc_file.download');
     Route::apiResource('edoc_file', 'EdocFileController')->except(['store', 'show', 'destroy']);
 
@@ -121,8 +124,5 @@ Route::group([
 
     Route::apiResource('ccp_esc_data', 'CcpEscDataController');
 
-    Route::get('edoc_file_haccp/{DOC_ID}/preview', 'EdocFileHaccpController@preview')->name('edoc_file_haccp.preview');
-    Route::get('edoc_file_haccp/{DOC_ID}/qr_write', 'EdocFileHaccpController@qrWrite')->name('edoc_file_haccp.qr_write');
-    Route::get('edoc_file_haccp/{DOC_ID}/qr_approval', 'EdocFileHaccpController@qrApproval')->name('edoc_file_haccp.qr_approval');
     Route::apiResource('edoc_file_haccp', 'EdocFileHaccpController');
 });

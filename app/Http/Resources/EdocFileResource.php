@@ -48,8 +48,10 @@ class EdocFileResource extends JsonResource
             }),
             'edoc_file:doc_nm' => $this->DOC_NM,
             'edoc_file:doc_desc' => $this->DOC_DESC,
-            'edoc_file:doc_content' => $this->DOC_CONTENT,
-            'edoc_file:doc_appdata' => $this->DOC_APPDATA,
+            // 'edoc_file:doc_html' => $this->DOC_HTML,
+            // 'edoc_file:app_view' => $this->APP_VIEW,
+            // 'edoc_file:app_input' => $this->APP_INPUT,
+            // 'edoc_file:app_list' => $this->APP_LIST,
             'edoc_file:period_cd' => $this->PERIOD_CD,
             'edoc_file:period_nm' => $this->whenLoaded('period', function () {
                 return $this->period->COMM2_NM;

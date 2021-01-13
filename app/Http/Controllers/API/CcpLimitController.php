@@ -91,7 +91,7 @@ class CcpLimitController extends Controller
             'ccp_limit:device_id' => 'required',
             'ccp_limit:lmt_up' => 'required|numeric',
             'ccp_limit:lmt_dn' => 'required|numeric',
-            'ccp_limit:remark' => 'required|string|max:100',
+            'ccp_limit:remark' => 'nullable|string|max:100',
         ]);
 
         $item = CcpLimit::updateOrCreate(

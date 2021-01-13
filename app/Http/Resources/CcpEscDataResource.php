@@ -16,6 +16,9 @@ class CcpEscDataResource extends JsonResource
     {
         return [
             'ccp_esc_data:device_id' => $this->DEVICE_ID,
+            'ccp_esc_data:device_nm' => $this->whenLoaded('device', function () {
+                return $this->device->COMM2_NM;
+            }),
             'ccp_esc_data:srt_dtm' => $this->SRT_DTM,
             'ccp_esc_data:srt_dtm_parsed' => $this->SRT_DTM ? now()->parse($this->SRT_DTM)->format('Y-m-d h:i:s') : null,
             'ccp_esc_data:end_dtm' => $this->END_DTM,

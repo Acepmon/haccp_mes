@@ -37,4 +37,9 @@ class CcpEscData extends Model
     {
         return $this->belongsTo('App\CcpLimit', 'DEVICE_ID', 'DEVICE_ID');
     }
+
+    public function device()
+    {
+        return $this->belongsTo('App\CommCd', 'DEVICE_ID', 'COMM2_CD')->where('COMM1_CD', 'C00')->whereNotIn('COMM2_CD', ['$$']);
+    }
 }

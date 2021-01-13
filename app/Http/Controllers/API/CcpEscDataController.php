@@ -80,7 +80,21 @@ class CcpEscDataController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'ccp_esc_data:device_id' => 'required',
+            'ccp_esc_data:srt_dtm' => 'required',
+            'ccp_esc_data:reason' => 'nullable|string|max:300'
+        ]);
+
+        CcpEscData::where('DEVICE_ID', $request->input('ccp_esc_data:device_id'))
+            ->where('SRT_DTM', $request->input('ccp_esc_data:srt_dtm'))
+            ->update([
+                'REASON' => $request->input('ccp_esc_data:reason')
+            ]);
+
+        return response()->json([
+            'success' => true,
+        ]);
     }
 
     /**

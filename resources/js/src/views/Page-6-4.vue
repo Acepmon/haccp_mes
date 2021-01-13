@@ -86,8 +86,8 @@
       :max="maxPageNumbers"
       v-model="currentPage" />
 
-    <vs-popup fullscreen title="문서확인" :active.sync="detailDialog">
-      <iframe style="width: 100%; height: calc(100vh - 150px);" class="iframe-placeholder" v-if="item['edoc_file_haccp:doc_id'] != null" :src="'/api/edoc_file_haccp/' + item['edoc_file_haccp:doc_id'] + '/preview'" frameborder="0"></iframe>
+    <vs-popup title="문서확인" :active.sync="previewDialog" class="preview-dialog">
+      <iframe style="width: 100%; height: calc(100vh - 150px);" class="iframe-placeholder" v-if="item['edoc_file_haccp:doc_id'] != null" :src="previewUrl" frameborder="0"></iframe>
     </vs-popup>
   </vx-card>
 </template>
@@ -95,6 +95,7 @@
 <script>
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
+import edoc_file from "@/services/edoc_file";
 import edoc_file_haccp from "@/services/edoc_file_haccp";
 import { mapActions } from "vuex";
 
@@ -137,7 +138,7 @@ export default {
       },
       doc_nm: null,
 
-      detailDialog: false,
+      previewDialog: false,
 
       item: {
         'edoc_file_haccp:haccp_seq': null,
@@ -205,6 +206,10 @@ export default {
         this.gridApi.paginationGoToPage(val - 1)
       }
     },
+
+    previewUrl () {
+      return edoc_file.previewUrl(this.item['edoc_file_haccp:doc_id'])
+    }
   },
 
   methods: {
@@ -306,9 +311,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.iframe-placeholder {
-  background: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100% 100%"><text fill="%23C0C9CE" x="50%" y="50%" font-family="\'Lucida Grande\', sans-serif" font-size="14" text-anchor="middle">loading...</text></svg>') 0px 0px no-repeat;
-}
-</style>

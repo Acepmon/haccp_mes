@@ -7,6 +7,8 @@ use App\Exports\EdocFileExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EdocFileResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use LaravelQRCode\Facades\QRCode;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EdocFileController extends Controller
@@ -136,5 +138,25 @@ class EdocFileController extends Controller
         $useYn = $request->input('use_yn');
 
         return Excel::download(new EdocFileExport($docNm, $typeCd, $useYn), 'EDOC-FILE-' . now()->format('Y-m-d') . '.xlsx');
+    }
+
+    public function qrWrite($docId) {
+        $edocFile = EdocFile::where('DOC_ID', $docId)->with(['edoc_file_haccp'])->firstOrFail();
+        return QRCode::text($edocFile->DOC_NM)->png();
+    }
+
+    public function qrApproval($docId) {
+        $edocFile = EdocFile::where('DOC_ID', $docId)->with(['edoc_file_haccp'])->firstOrFail();
+        return QRCode::text($edocFile->DOC_NM)->png();
+    }
+
+    public function preview($docId)
+    {
+        $edocFile = EdocFile::where('DOC_ID', $docId)->with(['edoc_file_haccp'])->firstOrFail();
+        $preview = $edocFile->previewHtml();
+
+        return view('edoc_file_preview', [
+            'preview' => $preview,
+        ]);
     }
 }
