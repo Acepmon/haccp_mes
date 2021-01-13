@@ -260,7 +260,7 @@ export default {
           enabled: false
         },
         stroke: {
-          curve: 'straight'
+          curve: 'smooth'
         },
         colors: this.themeColors,
         xaxis: {

@@ -27,12 +27,17 @@
       <div @mouseenter="mouseEnter" @mouseleave="mouseLeave">
 
         <!-- Header -->
-        <div class="header-sidebar flex items-end justify-between" slot="header">
+        <div class="header-sidebar flex flex-col justify-between pt-0" slot="header">
 
           <!-- Logo -->
-          <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
+          <router-link tag="div" class="vx-logo cursor-pointer flex items-center my-4 mx-10" to="/">
+            <img src="@assets/images/logo/logo2.png" style="display: block;width: 100%; height: auto;" alt="">
             <!-- <logo class="w-10 mr-4 fill-current text-primary" /> -->
-            <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span>
+            <!-- <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span> -->
+          </router-link>
+
+          <router-link tag="div" class="vx-logo cursor-pointer flex items-center my-4 mx-10" to="/">
+            <img src="@assets/images/logo/logo1.png" style="display: block;width: 100%; height: auto;" alt="">
           </router-link>
           <!-- /Logo -->
 
