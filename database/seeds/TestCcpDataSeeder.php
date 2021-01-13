@@ -1,6 +1,7 @@
 <?php
 
 use App\CcpData;
+use App\CcpEscData;
 use Illuminate\Database\Seeder;
 
 class TestCcpDataSeeder extends Seeder
@@ -12,13 +13,14 @@ class TestCcpDataSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=1; $i <= 100; $i++) { 
-            factory(CcpData::class)->create([
-                'DATA' => $i * rand(1, 5),
-                'DEVICE_ID' => 'CONOVN'
-            ]);
+        CcpEscData::truncate();
+        // for ($i=1; $i <= 100; $i++) { 
+        //     factory(CcpData::class)->create([
+        //         'DATA' => $i * rand(1, 5),
+        //         'DEVICE_ID' => 'CONOVN'
+        //     ]);
 
-            usleep(10);
-        }
+        //     usleep(10);
+        // }
     }
 }

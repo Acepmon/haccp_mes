@@ -27,7 +27,9 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        $schedule->command('ccp:check')->everyMinute();
+        if (false) {
+            $schedule->command('ccp:check')->everyMinute();
+        }
     }
 
     /**
