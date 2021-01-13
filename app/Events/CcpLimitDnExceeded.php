@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\CcpLimit;
+use App\CcpEscData;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -15,16 +15,16 @@ class CcpLimitDnExceeded
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $ccpLimit;
+    public $ccpEscData;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(CcpLimit $ccpLimit)
+    public function __construct(CcpEscData $ccpEscData)
     {
-        $this->ccpLimit = $ccpLimit;
+        $this->ccpEscData = $ccpEscData;
     }
 
     /**

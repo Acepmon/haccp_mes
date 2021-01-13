@@ -43,14 +43,14 @@ class CheckCcpLimit extends Command
      */
     public function handle()
     {
-        $from = now()->subHours(24)->format('Ymdhis');
-
-        CcpEscData::truncate();
+        $from = now()->subMinutes(1)->format('Ymdhis');
 
         $ccpDatas = CcpData::select('DEVICE_ID', 'DATA', 'REG_DTM')
             ->whereRaw('CAST(REG_DTM AS SIGNED) >= ' . intval($from))
             ->orderBy('REG_DTM', 'ASC')
             ->get();
+
+        // dd($from, $ccpDatas->first()->REG_DTM, $ccpDatas->last()->REG_DTM, $ccpDatas->last()->DEVICE_ID);
 
         foreach (CcpLimit::whereNotNull('LMT_UP')->whereNotNull('LMT_DN')->orderBy('DEVICE_ID', 'ASC')->get() as $limit) {
             if (empty($limit->LMT_UP) && empty($limit->LMT_DN)) {
@@ -61,79 +61,57 @@ class CheckCcpLimit extends Command
                 return $ccpData->DEVICE_ID == $limit->DEVICE_ID;
             });
 
-            foreach ($filteredDatas as $key => $data) {
-                $escData = CcpEscData::where('DEVICE_ID', $limit->DEVICE_ID)->whereNull('END_DTM')->first();
+            $flag = null;
+            foreach ($filteredDatas as $data) {
+                $val = floatval($data->DATA);
+                $up = floatval($limit->LMT_UP);
+                $dn = floatval($limit->LMT_DN);
 
-                if (!empty($limit->LMT_UP)) {
-                    if (floatval($data->DATA) > floatval($limit->LMT_UP)) {
-                        if ($escData == null) {
-                            if (!CcpEscData::where('DEVICE_ID', $data->DEVICE_ID)->where('SRT_DTM', $data->REG_DTM)->exists()) {
-                                CcpEscData::create([
-                                    'DEVICE_ID' => $data->DEVICE_ID,
-                                    'SRT_DTM' => $data->REG_DTM,
-                                    'END_DTM' => null,
-                                    'ESC_DATA' => (float) number_format($data->DATA, 3),
-                                    'REASON' => null,
-                                ]);
+                // if AU insert
+                // if AD update
+                // if BD insert
+                // if BU update
 
-                                event(new CcpLimitUpExceeded($limit));
-                            }
-                        }
-                    } else {
-                        if ($escData != null) {
-                            $escData->update([
-                                'END_DTM' => $data->REG_DTM
+                if ($flag == null) {
+                    if ($val > $up) {
+                        if (!CcpEscData::where('DEVICE_ID', $data->DEVICE_ID)->where('SRT_DTM', $data->REG_DTM)->exists()) {
+                            $flag = CcpEscData::create([
+                                'DEVICE_ID' => $data->DEVICE_ID,
+                                'SRT_DTM' => $data->REG_DTM,
+                                'END_DTM' => null,
+                                'ESC_DATA' => (float) number_format($data->DATA, 3),
                             ]);
-
-                            event(new CcpLimitUpExceeded($limit));
+    
+                            event(new CcpLimitUpExceeded($flag));
+                        }
+                    } else if ($val < $dn) {
+                        if (!CcpEscData::where('DEVICE_ID', $data->DEVICE_ID)->where('SRT_DTM', $data->REG_DTM)->exists()) {
+                            $flag = CcpEscData::create([
+                                'DEVICE_ID' => $data->DEVICE_ID,
+                                'SRT_DTM' => $data->REG_DTM,
+                                'END_DTM' => null,
+                                'ESC_DATA' => (float) number_format($data->DATA, 3),
+                            ]);
+    
+                            event(new CcpLimitDnExceeded($flag));
                         }
                     }
+                } else {
+                    if ($val < $up) {
+                        $flag->update(['END_DTM' => $data->REG_DTM]);
+
+                        event(new CcpLimitUpExceeded($flag));
+
+                        $flag = null;
+                    } else if ($val > $dn) {
+                        $flag->update(['END_DTM' => $data->REG_DTM]);
+
+                        event(new CcpLimitDnExceeded($flag));
+
+                        $flag = null;
+                    }
                 }
-
-                // if d1 > up flag
-                // else if d1 < up rm flag
-                // else if d1 < dn flag
-                // else if d1 > dn rm flag
-
-                // if (!empty($limit->LMT_DN)) {
-                //     if (floatval($data->DATA) < floatval($limit->LMT_DN)) {
-                //         if ($escData == null) {
-                //             if (!CcpEscData::where('DEVICE_ID', $data->DEVICE_ID)->where('SRT_DTM', $data->REG_DTM)->exists()) {
-                //                 CcpEscData::create([
-                //                     'DEVICE_ID' => $data->DEVICE_ID,
-                //                     'SRT_DTM' => $data->REG_DTM,
-                //                     'END_DTM' => null,
-                //                     'REASON' => $limit->REMARK,
-                //                 ]);
-
-                //                 event(new CcpLimitDnExceeded($limit));
-                //             }
-                //         }
-                //     } else {
-                //         if ($escData != null) {
-                //             $escData->update([
-                //                 'END_DTM' => $data->REG_DTM
-                //             ]);
-
-                //             event(new CcpLimitDnExceeded($limit));
-                //         }
-                //     }
-                // }
             }
-        }
-    }
-
-    private function insertCcpEscData($deviceId, $srtDtm, $endDtm = null, $reason = null)
-    {
-        $srtDtm = now()->parse($srtDtm)->format('Ymdhis');
-
-        if (!CcpEscData::where('DEVICE_ID', $deviceId)->where('SRT_DTM', $srtDtm)->exists()) {
-            CcpEscData::create([
-                'DEVICE_ID' => $deviceId,
-                'SRT_DTM' => $srtDtm,
-                'END_DTM' => $endDtm,
-                'REASON' => $reason,
-            ]);
         }
     }
 }
