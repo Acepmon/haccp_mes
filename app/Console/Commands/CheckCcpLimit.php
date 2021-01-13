@@ -72,6 +72,7 @@ class CheckCcpLimit extends Command
                                     'DEVICE_ID' => $data->DEVICE_ID,
                                     'SRT_DTM' => $data->REG_DTM,
                                     'END_DTM' => null,
+                                    'ESC_DATA' => (float) number_format($data->DATA, 3),
                                     'REASON' => null,
                                 ]);
 

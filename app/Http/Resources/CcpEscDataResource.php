@@ -24,6 +24,7 @@ class CcpEscDataResource extends JsonResource
             'ccp_esc_data:end_dtm' => $this->END_DTM,
             'ccp_esc_data:end_dtm_parsed' => $this->END_DTM ? now()->parse($this->END_DTM)->format('Y-m-d h:i:s') : null,
             'ccp_esc_data:reason' => $this->REASON,
+            'ccp_esc_data:esc_data' => $this->ESC_DATA,
 
             $this->mergeWhen($this->whenLoaded('ccp_limit'), new CcpLimitResource($this->ccp_limit)),
         ];

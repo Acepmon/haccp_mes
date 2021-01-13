@@ -20,20 +20,20 @@ class LotInfoController extends Controller
     public function index(Request $request)
     {
         $items = LotInfo::query();
-        // $limit = $request->input('limit', 20);
-        // $sort = $request->input('sort', 'COMP_ID');
-        // $order = $request->input('order', 'ASC');
+        $limit = $request->input('limit', 20);
+        $sort = $request->input('sort', 'COMP_ID');
+        $order = $request->input('order', 'ASC');
 
         // if ($request->has('comp_nm')) {
         //     $compNm = $request->input('comp_nm');
         //     $items = $items->where('COMP_NM', 'LIKE', '%'.$compNm.'%')->orWhere('CEO_NM', 'LIKE', '%'.$compNm.'%')->orWhere('Lot_NM', 'LIKE', '%'.$compNm.'%');
         // }
 
-        // if ($limit == -1) {
-        //     $items = $items->get();
-        // } else {
-        //     $items = $items->paginate($limit);
-        // }
+        if ($limit == -1) {
+            $items = $items->get();
+        } else {
+            $items = $items->paginate($limit);
+        }
         return LotInfoResource::collection($items);
     }
 

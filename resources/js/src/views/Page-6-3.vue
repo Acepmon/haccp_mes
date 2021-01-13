@@ -178,6 +178,7 @@ export default {
         { headerName: '발생일시', field: 'ccp_esc_data:srt_dtm_parsed', filter: false, width: 200 },
         { headerName: '종료일시', field: 'ccp_esc_data:end_dtm_parsed', filter: false, width: 200 },
         { headerName: 'CCP 장비', field: 'ccp_esc_data:device_nm', filter: false, width: 200 },
+        { headerName: '이탈시 값', field: 'ccp_esc_data:esc_data', filter: false, width: 100, type: 'numericColumn' },
         { headerName: '상한값', field: 'ccp_limit:lmt_up', filter: false, type: 'numericColumn', width: 100 },
         { headerName: '하한값', field: 'ccp_limit:lmt_dn', filter: false, type: 'numericColumn', width: 100 },
         { headerName: '발생사유', field: 'ccp_esc_data:reason', filter: false, width: 200 },

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Login;
 use App\Listeners\LogSuccessfulLogin;
 use App\Listeners\SendCcpLimitUpNotification;
+use App\Listeners\SendCcpLimitDnNotification;
 use App\Listeners\SendNewUserInfoToAdmin;
 use App\Listeners\SendUserInfoToOwner;
 
