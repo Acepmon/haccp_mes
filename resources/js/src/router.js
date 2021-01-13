@@ -167,9 +167,20 @@ const router = new Router({
               
               {
                 path: '/4',
-                name: '생산관리',
+                name: '재고관리',
                 component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
               },
+              {
+                path: '/4/1',
+                name: '시리얼/Lot 등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/4/1', value: 'page-4-1', label: '시리얼/Lot 등록', component: 'page-4-1'}) } }
+              },
+              {
+                path: '/4/2',
+                name: '시리얼/Lot 조회',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/4/2', value: 'page-4-2', label: '시리얼/Lot 조회', component: 'page-4-2'}) } }
+              },
+              
               {
                 path: '/5',
                 name: '출하관리',

@@ -26,7 +26,7 @@ class CheckCcpLimit implements ShouldQueue
      */
     public function __construct()
     {
-        $this->from = now()->subMinutes(1)->format('Ymdhis');
+        $this->from = now()->subMinutes(5)->format('Ymdhis');
     }
 
     /**

@@ -77,6 +77,11 @@ Route::group([
     Route::post('cust_info/import', 'CustInfoController@import')->name('cust_info.import');
     Route::post('cust_info/sync', 'CustInfoController@sync')->name('cust_info.sync');
     Route::apiResource('cust_info', 'CustInfoController');
+    
+    Route::get('lot_info/export', 'LotInfoController@export')->name('lot_info.export');
+    Route::post('lot_info/import', 'LotInfoController@import')->name('lot_info.import');
+    Route::post('lot_info/sync', 'LotInfoController@sync')->name('lot_info.sync');
+    Route::apiResource('lot_info', 'LotInfoController');
 
     Route::get('bom_config/export', 'BomConfigController@export')->name('bom_config.export');
     Route::post('bom_config/import', 'BomConfigController@import')->name('bom_config.import');

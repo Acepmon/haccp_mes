@@ -234,14 +234,14 @@ export default [
     submenu: [
       {
         url: "/4/1",
-        name: "당일생산리스트",
-        slug: "당일생산리스트",
+        name: "시리얼/Lot 등록",
+        slug: "시리얼/Lot 등록",
         showSubmenuOn: '/4',
       },
       {
         url: "/4/2",
-        name: "원부자재출고",
-        slug: "원부자재출고",
+        name: "시리얼/Lot 조회",
+        slug: "시리얼/Lot 조회",
         showSubmenuOn: '/4',
       },
       {

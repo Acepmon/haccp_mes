@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Exports\CustInfoExport;
+//use App\Exports\LotInfoExport;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CustInfoResource;
-use App\Imports\CustInfoImport;
-use App\CustInfo;
+use App\Http\Resources\LotInfoResource;
+use App\Imports\LotInfoImport;
+use App\LotInfo;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
-class CustInfoController extends Controller
+class LotInfoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,22 +19,22 @@ class CustInfoController extends Controller
      */
     public function index(Request $request)
     {
-        $items = CustInfo::query();
-        $limit = $request->input('limit', 20);
-        $sort = $request->input('sort', 'COMP_ID');
-        $order = $request->input('order', 'ASC');
+        $items = LotInfo::query();
+        // $limit = $request->input('limit', 20);
+        // $sort = $request->input('sort', 'COMP_ID');
+        // $order = $request->input('order', 'ASC');
 
-        if ($request->has('comp_nm')) {
-            $compNm = $request->input('comp_nm');
-            $items = $items->where('COMP_NM', 'LIKE', '%'.$compNm.'%')->orWhere('CEO_NM', 'LIKE', '%'.$compNm.'%')->orWhere('CUST_NM', 'LIKE', '%'.$compNm.'%');
-        }
+        // if ($request->has('comp_nm')) {
+        //     $compNm = $request->input('comp_nm');
+        //     $items = $items->where('COMP_NM', 'LIKE', '%'.$compNm.'%')->orWhere('CEO_NM', 'LIKE', '%'.$compNm.'%')->orWhere('Lot_NM', 'LIKE', '%'.$compNm.'%');
+        // }
 
-        if ($limit == -1) {
-            $items = $items->get();
-        } else {
-            $items = $items->paginate($limit);
-        }
-        return CustInfoResource::collection($items);
+        // if ($limit == -1) {
+        //     $items = $items->get();
+        // } else {
+        //     $items = $items->paginate($limit);
+        // }
+        return LotInfoResource::collection($items);
     }
 
     public function sync(Request $request)
@@ -45,20 +45,20 @@ class CustInfoController extends Controller
 
         // collect($request->input('sync'))->map(function ($item) {
         //     return [
-        //         'COMP_ID' => $item['cust_info:comp_id'],
-        //         'COMP_NM' => $item['cust_info:comp_nm'],
-        //         'CEO_NM' => $item['cust_info:ceo_nm'],
-        //         'MOB_NO' => $item['cust_info:mob_no'],
-        //         'CUST_NM' => $item['cust_info:cust_nm'],
-        //         'CUST_NO' => $item['cust_info:cust_no'],
-        //         'TEL_NO' => $item['cust_info:tel_no'],
-        //         'FAX_NO' => $item['cust_info:fax_no'],
-        //         'SRH_INFO' => $item['cust_info:srh_no'],
-        //         'EMAIL' => $item['cust_info:email'],
-        //         'GRP_NM' => $item['cust_info:grp_nm'],
-        //         'ADDR' => $item['cust_info:addr'],
-        //         'REMARK' => $item['cust_info:remark'],
-        //         'USE_YN' => $item['cust_info:use_yn']
+        //         'COMP_ID' => $item['Lot_info:comp_id'],
+        //         'COMP_NM' => $item['Lot_info:comp_nm'],
+        //         'CEO_NM' => $item['Lot_info:ceo_nm'],
+        //         'MOB_NO' => $item['Lot_info:mob_no'],
+        //         'Lot_NM' => $item['Lot_info:Lot_nm'],
+        //         'Lot_NO' => $item['Lot_info:Lot_no'],
+        //         'TEL_NO' => $item['Lot_info:tel_no'],
+        //         'FAX_NO' => $item['Lot_info:fax_no'],
+        //         'SRH_INFO' => $item['Lot_info:srh_no'],
+        //         'EMAIL' => $item['Lot_info:email'],
+        //         'GRP_NM' => $item['Lot_info:grp_nm'],
+        //         'ADDR' => $item['Lot_info:addr'],
+        //         'REMARK' => $item['Lot_info:remark'],
+        //         'USE_YN' => $item['Lot_info:use_yn']
         //     ];
         // });
 
@@ -117,7 +117,7 @@ class CustInfoController extends Controller
     {
         $compNm = $request->input('comp_nm');
 
-        return Excel::download(new CustInfoExport($compNm), 'CUST-INFO' . now()->format('Y-m-d') . '.xlsx');
+        return Excel::download(new LotInfoExport($compNm), 'Lot-INFO' . now()->format('Y-m-d') . '.xlsx');
     }
 
     public function import(Request $request)
@@ -126,9 +126,9 @@ class CustInfoController extends Controller
             'file' => 'required|file'
         ]);
 
-        CustInfo::truncate();
+        LotInfo::truncate();
 
-        $result = Excel::import(new CustInfoImport(), $request->file('file'));
+        $result = Excel::import(new LotInfoImport(), $request->file('file'));
         $upCnt = session()->get('update_count');
         $inCnt = session()->get('insert_count');
 
