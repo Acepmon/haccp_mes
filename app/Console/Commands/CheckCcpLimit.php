@@ -43,9 +43,9 @@ class CheckCcpLimit extends Command
      */
     public function handle()
     {
-        $from = now()->subMinutes(2)->format('Ymdhis');
+        $from = now()->subHours(24)->format('Ymdhis');
 
-        // CcpEscData::truncate();
+        CcpEscData::truncate();
 
         $ccpDatas = CcpData::select('DEVICE_ID', 'DATA', 'REG_DTM')
             ->whereRaw('CAST(REG_DTM AS SIGNED) >= ' . intval($from))
@@ -72,7 +72,7 @@ class CheckCcpLimit extends Command
                                     'DEVICE_ID' => $data->DEVICE_ID,
                                     'SRT_DTM' => $data->REG_DTM,
                                     'END_DTM' => null,
-                                    'REASON' => $limit->REMARK,
+                                    'REASON' => null,
                                 ]);
 
                                 event(new CcpLimitUpExceeded($limit));
