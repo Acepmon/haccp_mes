@@ -30,15 +30,15 @@
         <div class="header-sidebar flex flex-col justify-between pt-0" slot="header">
 
           <!-- Logo -->
-          <router-link tag="div" class="vx-logo cursor-pointer flex items-center my-4 mx-10" to="/">
+          <div class="vx-logo flex items-center my-4 mx-10 ml-2">
             <img src="@assets/images/logo/logo2.png" style="display: block;width: 100%; height: auto;" alt="">
             <!-- <logo class="w-10 mr-4 fill-current text-primary" /> -->
             <!-- <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span> -->
-          </router-link>
+          </div>
 
-          <router-link tag="div" class="vx-logo cursor-pointer flex items-center my-4 mx-10" to="/">
+          <div class="vx-logo flex items-center my-4 mx-10 ml-2">
             <img src="@assets/images/logo/logo1.png" style="display: block;width: 100%; height: auto;" alt="">
-          </router-link>
+          </div>
           <!-- /Logo -->
 
           <!-- Menu Buttons -->
