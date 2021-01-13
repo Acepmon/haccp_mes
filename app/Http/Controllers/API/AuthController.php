@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Events\UserPasswordUpdated;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
@@ -122,6 +123,44 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Password has been reset',
+        ]);
+    }
+
+    public function notifications(Request $request)
+    {
+        $user = User::find(Auth::id());
+        $items = $user->notifications->sortBy('created_at');
+
+        return NotificationResource::collection($items);
+    }
+
+    public function unreadNotifications(Request $request)
+    {
+        $user = User::find(Auth::id());
+        $items = $user->unreadNotifications->sortBy('created_at');
+
+        return NotificationResource::collection($items);
+    }
+
+    public function readAllNotifications(Request $request)
+    {
+        $user = User::find(Auth::id());
+
+        $user->unreadNotifications->markAsRead();
+
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
+    public function deleteNotifications(Request $request)
+    {
+        $user = User::find(Auth::id());
+
+        $user->notifications()->delete();
+
+        return response()->json([
+            'status' => 'success'
         ]);
     }
 }

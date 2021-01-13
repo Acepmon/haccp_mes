@@ -42,13 +42,15 @@
         border-solid
         d-theme-border-grey-light
         cursor-pointer">
-        <span>View All Notifications</span>
+        <router-link to="/profile/notifications">View All Notifications</router-link>
       </div>
     </vs-dropdown-menu>
   </vs-dropdown>
 </template>
 
 <script>
+import axios from 'axios'
+import user from "@/services/user";
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
@@ -57,44 +59,7 @@ export default {
   },
   data () {
     return {
-      unreadNotifications: [
-        {
-          index    : 0,
-          title    : 'New Message',
-          msg      : 'Are your going to meet me tonight?',
-          icon     : 'MessageSquareIcon',
-          time     : this.randomDate({sec: 10}),
-          category : 'primary'
-        },
-        { index    : 1,
-          title    : 'New Order Recieved',
-          msg      : 'You got new order of goods.',
-          icon     : 'PackageIcon',
-          time     : this.randomDate({sec: 40}),
-          category : 'success'
-        },
-        { index    : 2,
-          title    : 'Server Limit Reached!',
-          msg      : 'Server have 99% CPU usage.',
-          icon     : 'AlertOctagonIcon',
-          time     : this.randomDate({min: 1}),
-          category : 'danger'
-        },
-        { index    : 3,
-          title    : 'New Mail From Peter',
-          msg      : 'Cake sesame snaps cupcake',
-          icon     : 'MailIcon',
-          time     : this.randomDate({min: 6}),
-          category : 'primary'
-        },
-        { index    : 4,
-          title    : 'Bruce\'s Party',
-          msg      : 'Chocolate cake oat cake tiramisu',
-          icon     : 'CalendarIcon',
-          time     : this.randomDate({hr: 2}),
-          category : 'warning'
-        }
-      ],
+      notifications: [],
       settings: {
         maxScrollbarLength: 60,
         wheelSpeed: .60
@@ -102,7 +67,15 @@ export default {
     }
   },
   computed: {
-    scrollbarTag () { return this.$store.getters.scrollbarTag }
+    scrollbarTag () { return this.$store.getters.scrollbarTag },
+    unreadNotifications () {
+      return this.notifications.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item.data
+        } 
+      })
+    }
   },
   methods: {
     elapsedTime (startTime) {
@@ -148,7 +121,20 @@ export default {
       if (sec) date.setSeconds(date.getSeconds() - sec)
 
       return date
+    },
+
+    fetchUnreadNotifications () {
+      let loggedIn = localStorage.getItem('loggedIn')
+      let json = JSON.parse(loggedIn)
+      axios.get('/sanctum/csrf-cookie').then(() => {
+        axios.get('/api/auth/user/notifications/unread').then((res) => {
+          this.$set(this, 'notifications', res.data.data)
+        })
+      })
     }
+  },
+  created () {
+    this.fetchUnreadNotifications()
   }
 }
 
