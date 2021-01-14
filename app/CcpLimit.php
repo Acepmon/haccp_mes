@@ -29,4 +29,9 @@ class CcpLimit extends Model
         'updated' => CcpLimitUpdated::class,
         'deleted' => CcpLimitDeleted::class,
     ];
+
+    public function src()
+    {
+        return $this->belongsTo('App\CommCd', 'SRC_CD', 'COMM2_CD')->where('COMM1_CD', 'W20')->whereNotIn('COMM2_CD', ['$$']);
+    }
 }

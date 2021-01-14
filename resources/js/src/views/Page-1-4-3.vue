@@ -258,7 +258,16 @@
     </vx-card>
 
     <vs-popup title="문서확인" :active.sync="previewDialog" class="preview-dialog">
-      <iframe class="iframe-placeholder" v-if="item['edoc_file:doc_id'] != null" :src="previewUrl" frameborder="0"></iframe>
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="printPreview()"
+            color="primary"
+            icon="print"
+          >{{ $t("Print") }}</vs-button>
+        </template>
+      </app-control>
+      <iframe class="iframe-placeholder" v-if="item['edoc_file:doc_id'] != null" :src="previewUrl" frameborder="0" id="printf" name="printf"></iframe>
     </vs-popup>
   </div>
 </template>
@@ -674,6 +683,11 @@ export default {
         let index = this.item["edoc_file:period_data"].indexOf(parsed);
         this.item["edoc_file:period_data"].splice(index, 1);
       }
+    },
+
+    printPreview() {
+      window.frames["printf"].focus();
+      window.frames["printf"].print();
     }
   },
 

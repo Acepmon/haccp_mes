@@ -15,6 +15,14 @@ export default {
     ImportExcel: 'Import Excel?',
     Download: 'Download',
     Refresh: 'Refresh',
+    Print: 'Print',
+    On: 'On',
+    Off: 'Off',
+
+    AllCcpToggleOn: "Are you sure start all device?",
+    AllCcpToggleOff: "Are you sure shutdown all device?",
+    CcpToggleOn: "Are you sure start this device?",
+    CcpToggleOff: "Are you sure shutdown this device?",
 
     DeleteData: 'Are you sure to delete data?',
     SuccessDeleteData: 'Successfully deleted data',
@@ -51,6 +59,14 @@ export default {
     ImportExcel: 'Excel 데이터를 저장하겠습니까?',
     Download: '다운로드',
     Refresh: '최신자료',
+    Print: 'Print',
+    On: 'On',
+    Off: 'Off',
+
+    AllCcpToggleOn: "Are you sure start all device?",
+    AllCcpToggleOff: "Are you sure shutdown all device?",
+    CcpToggleOn: "Are you sure start this device?",
+    CcpToggleOff: "Are you sure shutdown this device?",
 
     DeleteData: '삭제하겠습니까?',
     SuccessDeleteData: '삭제되었습니다.',
