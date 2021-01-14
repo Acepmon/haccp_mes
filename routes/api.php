@@ -18,6 +18,16 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::post('/sanctum/token', 'SanctumController@token');
+
+Route::group([
+    'namespace' => 'APP',
+    'as' => 'app.',
+    'middleware' => 'auth:sanctum'
+], function () {
+    Route::post('haccp/apprequest', 'AppController@apprequest')->name('haccp.apprequest');
+});
+
 Route::group([
     'namespace' => 'API',
     'prefix' => 'auth'
@@ -40,7 +50,7 @@ Route::group([
 Route::group([
     'namespace' => 'API',
     'as' => 'api.',
-    'middleware' => 'auth:sanctum',
+    // 'middleware' => 'auth:sanctum',
 ], function () {
     Route::get('user/download', 'UserController@download')->name('user.download');
     Route::put('user/{userId}/password', 'UserController@password')->name('user.password');
