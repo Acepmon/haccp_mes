@@ -27,18 +27,18 @@
       <div @mouseenter="mouseEnter" @mouseleave="mouseLeave">
 
         <!-- Header -->
-        <div class="header-sidebar flex flex-col justify-between pt-0" slot="header">
+        <div class="header-sidebar flex flex-col justify-between pt-0 pb-0" slot="header">
 
           <!-- Logo -->
           <div class="vx-logo flex items-center my-4 mx-10 ml-2">
-            <img src="@assets/images/logo/logo2.png" style="display: block;width: 100%; height: auto;" alt="">
+            <img src="@assets/images/logo/logo3.png" style="display: block;width: 100%; height: auto;" alt="">
             <!-- <logo class="w-10 mr-4 fill-current text-primary" /> -->
             <!-- <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span> -->
           </div>
-
+<!-- 
           <div class="vx-logo flex items-center my-4 mx-10 ml-2">
             <img src="@assets/images/logo/logo1.png" style="display: block;width: 100%; height: auto;" alt="">
-          </div>
+          </div> -->
           <!-- /Logo -->
 
           <!-- Menu Buttons -->
