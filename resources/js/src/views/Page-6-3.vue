@@ -260,26 +260,20 @@ export default {
           enabled: false
         },
         stroke: {
-          curve: 'straight'
+          curve: 'smooth'
         },
         colors: this.themeColors,
         xaxis: {
           type: 'datetime',
           categories: this.chartCategories,
           labels: {
-            format: 'MM-dd HH:MM',
             formatter: function (val, timestamp) {
-              return moment(timestamp).utcOffset('+0900').format('MM-DD HH:mm')
+              return moment(timestamp).utcOffset('+0900').format('MM-DD hh:mm');
             },
             datetimeUTC: true
           },
           tickAmount: 2
         },
-        tooltip: {
-          x: {
-            format: 'MM-dd HH:MM'
-          },
-        }
       }
     }
   },

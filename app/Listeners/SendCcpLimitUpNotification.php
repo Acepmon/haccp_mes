@@ -2,11 +2,14 @@
 
 namespace App\Listeners;
 
+use App\CommCd;
 use App\Events\CcpLimitUpExceeded;
-use App\Mail\CcpLimitReached;
+use App\Notifications\CcpLimitReached;
+use App\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class SendCcpLimitUpNotification
 {
@@ -28,12 +31,9 @@ class SendCcpLimitUpNotification
      */
     public function handle(CcpLimitUpExceeded $event)
     {
-        $to = [
-            ['email' => env('ADMIN_EMAIL'), 'name' => 'Administrator', 'subject' => 'CCP Limit reached', 'from' => env('MAIL_FROM_ADDRESS')]
-        ];
+        $ids = CommCd::where('COMM1_CD', 'AAA')->whereNotIn('COMM2_CD', ['$$'])->get()->pluck('COMM2_CD')->toArray();
+        $users = User::whereIn('USER_ID', $ids)->get();
 
-        if (false) {
-            Mail::to($to)->queue(new CcpLimitReached($event->ccpLimit));
-        }
+        Notification::send($users, new CcpLimitReached($event->ccpEscData));
     }
 }

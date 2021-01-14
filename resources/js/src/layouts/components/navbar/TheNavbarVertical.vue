@@ -33,9 +33,9 @@
 
         <i18n class="mr-5" />
 
-        <!-- <search-bar class="mr-4" />
+        <!-- <search-bar class="mr-4" /> -->
 
-        <notification-drop-down /> -->
+        <notification-drop-down />
 
         <vs-navbar-item>
           <router-link to="/profile">Hi {{ loggedIn.USER_NM }}</router-link>

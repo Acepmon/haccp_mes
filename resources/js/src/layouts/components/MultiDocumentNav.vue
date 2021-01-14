@@ -255,6 +255,10 @@ export default {
       lazyLoadView(
         import(/* webpackChunkName: "profile-password" */ "@/views/ProfilePassword.vue")
       ),
+    "tab-profile-notifications": () =>
+      lazyLoadView(
+        import(/* webpackChunkName: "profile-notifications" */ "@/views/ProfileNotifications.vue")
+      ),
   },
 
   data() {

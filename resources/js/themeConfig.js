@@ -37,7 +37,7 @@ const themeConfig = {
   routerTransition  : 'zoom-fade', // options[String]  : zoom-fade / slide-fade / fade-bottom / fade / zoom-out / none(default)
   rtl               : false,       // options[Boolean] : true, false(default)
   sidebarCollapsed  : false,       // options[Boolean] : true, false(default)
-  theme             : 'semi-dark',     // options[String]  : "light"(default), "dark", "semi-dark"
+  theme             : 'light',     // options[String]  : "light"(default), "dark", "semi-dark"
 
   // Not required yet - WIP
   userInfoLocalStorageKey: 'userInfo'

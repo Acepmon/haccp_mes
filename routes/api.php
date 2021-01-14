@@ -29,6 +29,10 @@ Route::group([
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('user', 'AuthController@user');
+        Route::get('user/notifications', 'AuthController@notifications');
+        Route::get('user/notifications/unread', 'AuthController@unreadNotifications');
+        Route::post('user/notifications', 'AuthController@readAllNotifications');
+        Route::delete('user/notifications', 'AuthController@deleteNotifications');
         Route::post('logout', 'AuthController@logout');
     });
 });
@@ -36,7 +40,7 @@ Route::group([
 Route::group([
     'namespace' => 'API',
     'as' => 'api.',
-    // 'middleware' => 'auth:sanctum',
+    'middleware' => 'auth:sanctum',
 ], function () {
     Route::get('user/download', 'UserController@download')->name('user.download');
     Route::put('user/{userId}/password', 'UserController@password')->name('user.password');

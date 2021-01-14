@@ -15,8 +15,8 @@
 
     <v-nav-menu
       :navMenuItems = "navMenuItems"
-      title         = "복을만드는사람들"
-      parent        = ".layout--main" />
+      parent        = ".layout--main">
+    </v-nav-menu>
 
     <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
       <div id="content-overlay" />

@@ -242,6 +242,11 @@ const router = new Router({
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/password', value: 'profile-password', label: 'Change Password', component: 'profile-password'}) } }
               },
               {
+                path: '/profile/notifications',
+                name: 'Notifications',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/notifications', value: 'profile-notifications', label: 'Notifications', component: 'profile-notifications'}) } }
+              },
+              {
                 path: '/user-entry',
                 name: 'User Entry',
                 component: () => import(/* webpackChunkName: "user-entry" */ './views/UserEntry.vue')

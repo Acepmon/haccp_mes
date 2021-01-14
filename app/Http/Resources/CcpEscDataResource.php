@@ -20,9 +20,9 @@ class CcpEscDataResource extends JsonResource
                 return $this->device->COMM2_NM;
             }),
             'ccp_esc_data:srt_dtm' => $this->SRT_DTM,
-            'ccp_esc_data:srt_dtm_parsed' => $this->SRT_DTM ? now()->parse($this->SRT_DTM)->format('Y-m-d h:i:s') : null,
+            'ccp_esc_data:srt_dtm_parsed' => $this->SRT_DTM ? now()->parse($this->SRT_DTM)->format('Y-m-d H:i:s') : null,
             'ccp_esc_data:end_dtm' => $this->END_DTM,
-            'ccp_esc_data:end_dtm_parsed' => $this->END_DTM ? now()->parse($this->END_DTM)->format('Y-m-d h:i:s') : null,
+            'ccp_esc_data:end_dtm_parsed' => $this->END_DTM ? now()->parse($this->END_DTM)->format('Y-m-d H:i:s') : null,
             'ccp_esc_data:reason' => $this->REASON,
             'ccp_esc_data:esc_data' => $this->ESC_DATA,
 

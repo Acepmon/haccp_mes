@@ -366,6 +366,12 @@ export default [
         name: "Change Password",
         slug: "Change Password",
         showSubmenuOn: '/profile',
+      },
+      {
+        url: "/profile/notifications",
+        name: "Notifications",
+        slug: "Notifications",
+        showSubmenuOn: '/profile',
       }
     ]
   }

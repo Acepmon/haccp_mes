@@ -1,8 +1,14 @@
 @component('mail::message')
-# CCP Limit reached
+# Temperature alert
+{{ now()->parse($ccpEscData->SRT_DTM)->format('Y-m-d H:i:s') }}
 
-Device: {{ $ccpLimit->DEVICE_ID }}
+## Device: {{ $ccpEscData->DEVICE_ID }}
+## Temperature: {{ $ccpEscData->ESC_DATA }}
 
-Thanks,<br>
+{{-- @component('mail::button', ['url' => ''])
+Button Text
+@endcomponent --}}
+
+{{-- Thanks,<br> --}}
 {{ config('app.name') }}
 @endcomponent

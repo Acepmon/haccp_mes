@@ -81,6 +81,28 @@ export default {
         return axios.post(`${config.baseUrl}/${this.api}/${id}/password`, params)
     },
 
+    notifications: function (args = {}) {
+
+        // Default parameters
+        let params = {
+            ...args
+        }
+
+        // Return axios promise
+        return axios.get(`${config.baseUrl}/${this.api}/notifications?${this.prepParams(params)}`)
+    },
+
+    unreadNotifications: function (args = {}) {
+
+        // Default parameters
+        let params = {
+            ...args
+        }
+
+        // Return axios promise
+        return axios.get(`${config.baseUrl}/${this.api}/notifications/unread?${this.prepParams(params)}`)
+    },
+
     // Create url query parameters for API request
     prepParams(data) {
         const ret = [];
