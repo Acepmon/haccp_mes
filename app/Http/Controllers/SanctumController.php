@@ -6,7 +6,7 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\AppUserResource;
 
 class SanctumController extends Controller
 {
@@ -33,7 +33,8 @@ class SanctumController extends Controller
             'msg' => '',
             'data' => [
                 'token' => $token,
-                'user' => new UserResource($user)
+                'comp_id' => '681-86-00273',
+                'user' => new AppUserResource($user)
             ]
         ]);
     }
