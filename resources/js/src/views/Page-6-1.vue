@@ -39,10 +39,11 @@
       <vs-divider />
 
       <div class="flex flex-wrap">
-        <div class="w-full sm:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
+        <div class="w-full md:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
           <div class="w-full flex flex-row">
             <ccp-data-widget 
               style="flex: 4"
+              :limits="item.limits"
               :data="item" 
               :onRefresh="widgetRefresh" 
               :onPopupOpen="widgetPopupOpen"
@@ -51,7 +52,7 @@
               :chartData="item.chartData" 
               :chartCategories="item.chartCats"></ccp-data-widget>
 
-            <vs-button color="warning" class="ml-3" style="flex: 1" @click="onOffDialog(item)">
+            <vs-button color="warning" class="ml-3 vs-con-loading__container" style="flex: 1" @click="toggleOnDialog(item)">
               <span class="h1 uppercase">{{ $t('On') }}</span>
             </vs-button>
           </div>
@@ -65,6 +66,7 @@
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
 import ccp_data from "@/services/ccp_data";
+import ccp_limit from "@/services/ccp_limit";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -111,7 +113,7 @@ export default {
       }
     },
 
-    init () {
+    init (callback = Function) {
       this.spinner()
 
       ccp_data
@@ -141,9 +143,11 @@ export default {
                 'reg_dtm_parsed': device.reg_dtm_parsed,
                 'chartData': [],
                 'chartCats': [],
-                'ccp_limits': device.ccp_limits
+                'limits': []
               })
             });
+
+            callback(res.data.data)
           }
         })
         .catch((err) => {
@@ -177,7 +181,6 @@ export default {
               this.$set(this.items[device.device_id], 'avg', device.avg.toFixed(2))
               this.$set(this.items[device.device_id], 'reg_dtm', device.reg_dtm)
               this.$set(this.items[device.device_id], 'reg_dtm_parsed', device.reg_dtm_parsed)
-              this.$set(this.items[device.device_id], 'ccp_limits', device.ccp_limits)
             });
 
             callback()
@@ -224,8 +227,33 @@ export default {
         })
     },
 
+    fetchLimits (deviceId) {
+      ccp_limit
+        .fetch({
+          limit: -1,
+          device_id: deviceId,
+          with: 'src'
+        })
+        .then((res) => {
+          if (res.data.data.length > 0) {
+            this.$set(this.items[deviceId], 'limits', res.data.data)
+          }
+        })
+        .catch((err) => {
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        })
+    },
+
     widgetPopupOpen (data) {
       this.widgetRefresh(data)
+      this.fetchLimits(data.device_id)
     },
 
     widgetPopupClose (data) {
@@ -301,7 +329,11 @@ export default {
   created () {
     comm_cd.fetch({cd1: 'C00'}).then((res) => {
       this.$set(this, 'devices', res.data)
-      this.init()
+      this.init((items) => {
+        this.itemsComp.forEach((data) => {
+          // get info
+        })
+      })
     })
 
     setInterval(() => {

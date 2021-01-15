@@ -30,7 +30,7 @@
               <span>최종측정시간: {{ data.reg_dtm_parsed }}</span>
             </div>
           </vx-card>
-          <vs-table :data="data.ccp_limits" v-model="selected_limit" v-on:selected="handleLimitSelect" class="ml-4">
+          <vs-table :data="limits" class="ml-4">
             <template slot="thead">
               <vs-th sort-key="ccp_limit:src_cd">CCP 재료명</vs-th>
               <vs-th sort-key="ccp_limit:lmt_up">상한 값</vs-th>
@@ -39,7 +39,7 @@
             </template>
 
             <template slot-scope="{data}">
-              <vs-tr :key="indextr" v-for="(tr, indextr) in data.ccp_limits">
+              <vs-tr :key="indextr" v-for="(tr, indextr) in limits">
                 <vs-td :data="data[indextr]['ccp_limit:src_cd']">{{ data[indextr]['ccp_limit:src_nm'] }}</vs-td>
                 <vs-td :data="data[indextr]['ccp_limit:lmt_up']">{{ data[indextr]['ccp_limit:lmt_up'] }}</vs-td>
                 <vs-td :data="data[indextr]['ccp_limit:lmt_dn']">{{ data[indextr]['ccp_limit:lmt_dn'] }}</vs-td>
@@ -95,6 +95,13 @@ export default {
     }
   },
   props: {
+    limits: {
+      type: Array,
+      required: false,
+      default: () => {
+        return []
+      }
+    },
     data: {
       type: Object,
       required: true,
@@ -110,7 +117,6 @@ export default {
           avg: null,
           reg_dtm: null,
           reg_dtm_parsed: null,
-          ccp_limits: []
         }
       }
     },
