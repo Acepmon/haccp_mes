@@ -548,7 +548,6 @@ export default {
     },
 
     numberCellRenderer (params) {
-      console.log(params)
       return params.value.replace(/[^0-9.]+/g, '')
     },
 

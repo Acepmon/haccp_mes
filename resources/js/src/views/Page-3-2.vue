@@ -2,7 +2,7 @@
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
-         <template v-slot:filter>
+        <template v-slot:filter>
           <span class="px-5 pt-2">자료검색</span>
           <vs-input class="control-field-lm" v-model="searchKeyword" placeholder="거래처명  대표자명  담당자명" />
         </template>

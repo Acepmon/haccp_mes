@@ -2,17 +2,10 @@
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
-        <!-- <template v-slot:filter>
-          <v-select
-            class="control-field"
-            placeholder="검색항목"
-            :options="[{l: '회사명', v: 'cust_nm'},{l: '사업자등록번호', v: 'cust_id'}]" 
-            :reduce="item => item.v" 
-            label="l" 
-            v-model="searchBy" 
-            :searchable="false" />
-          <vs-input v-model="searchKeyword" class="control-field ml-2" />
-          </template> -->
+        <template v-slot:filter>
+          <span class="px-5 pt-2">자료검색</span>
+          <vs-input class="control-field-lm" v-model="searchKeyword" placeholder="일자 연결전표 품목명" />
+        </template>
         <template v-slot:action>
           <vs-button
             @click="query()"
@@ -147,7 +140,7 @@ export default {
     return {
       items: [],
       types: [],
-      searchBy: 'cust_nm',
+      searchBy: 'key_word',
       searchKeyword: null,
       searchType: '',
       importFile: null,
@@ -468,19 +461,19 @@ export default {
         })
     },
 
-    exportExcel () {
-      let search_params = {};
+    // exportExcel () {
+    //   let search_params = {};
 
-      if (this.searchKeyword != null) {
-        search_params[this.searchBy] = this.searchKeyword;
-      }
+    //   if (this.searchKeyword != null) {
+    //     search_params[this.searchBy] = this.searchKeyword;
+    //   }
 
-      if (this.searchType != null) {
-        search_params["cust_no"] = this.searchType;
-      }
+    //   if (this.searchType != null) {
+    //     search_params["cust_no"] = this.searchType;
+    //   }
 
-      window.location.href = api.export(search_params);
-    },
+    //   window.location.href = api.export(search_params);
+    // },
 
     closeDialog() {
       this.$vs.dialog({

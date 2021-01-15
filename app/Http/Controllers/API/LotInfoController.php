@@ -21,13 +21,13 @@ class LotInfoController extends Controller
     {
         $items = LotInfo::query();
         $limit = $request->input('limit', 20);
-        $sort = $request->input('sort', 'COMP_ID');
-        $order = $request->input('order', 'ASC');
+        // $sort = $request->input('sort', 'COMP_ID');
+        // $order = $request->input('order', 'ASC');
 
-        // if ($request->has('comp_nm')) {
-        //     $compNm = $request->input('comp_nm');
-        //     $items = $items->where('COMP_NM', 'LIKE', '%'.$compNm.'%')->orWhere('CEO_NM', 'LIKE', '%'.$compNm.'%')->orWhere('Lot_NM', 'LIKE', '%'.$compNm.'%');
-        // }
+        if ($request->has('key_word')) {
+            $keyWord = $request->input('key_word');
+            $items = $items->where('DT_NO', 'LIKE', '%'.$keyWord.'%')->orWhere('ITEM_NM', 'LIKE', '%'.$keyWord.'%')->orWhere('ACC_NOLot_NM', 'LIKE', '%'.$keyWord.'%');
+        }
 
         if ($limit == -1) {
             $items = $items->get();
@@ -113,12 +113,12 @@ class LotInfoController extends Controller
         //
     }
 
-    public function export(Request $request)
-    {
-        $compNm = $request->input('comp_nm');
+    // public function export(Request $request)
+    // {
+    //     $keyWord = $request->input('comp_nm');
 
-        return Excel::download(new LotInfoExport($compNm), 'Lot-INFO' . now()->format('Y-m-d') . '.xlsx');
-    }
+    //     return Excel::download(new LotInfoExport($keyWord), 'Lot-INFO' . now()->format('Y-m-d') . '.xlsx');
+    // }
 
     public function import(Request $request)
     {
@@ -126,7 +126,7 @@ class LotInfoController extends Controller
             'file' => 'required|file'
         ]);
 
-        LotInfo::truncate();
+        //LotInfo::truncate();
 
         $result = Excel::import(new LotInfoImport(), $request->file('file'));
         $upCnt = session()->get('update_count');

@@ -20,7 +20,7 @@ class SanctumController extends Controller
         $user = User::where('user_id', $request->input('user_id'))->first();
 
         if (!$user || !Hash::check($request->input('user_pw'), $user->USER_PW)) {
-            return response()->json([
+            return $this->jsonResponse([
                 'status' => 'error',
                 'msg' => '사용자 ID나 비밀번호가 틀렸습니다.'
             ], 422);
@@ -28,7 +28,7 @@ class SanctumController extends Controller
 
         $token = $user->createToken($user->USER_ID)->plainTextToken;
 
-        return response()->json([
+        return $this->jsonResponse([
             'status' => 'success',
             'msg' => '',
             'data' => [
@@ -36,6 +36,6 @@ class SanctumController extends Controller
                 'comp_id' => '681-86-00273',
                 'user' => new AppUserResource($user)
             ]
-        ]);
+        ], 200);
     }
 }
