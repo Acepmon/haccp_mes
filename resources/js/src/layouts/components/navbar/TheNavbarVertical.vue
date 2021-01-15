@@ -31,7 +31,7 @@
 
         <vs-spacer />
 
-        <i18n class="mr-5" />
+        <!-- <i18n class="mr-5" /> -->
 
         <!-- <search-bar class="mr-4" /> -->
 

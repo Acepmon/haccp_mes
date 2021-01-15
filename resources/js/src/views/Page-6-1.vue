@@ -2,6 +2,22 @@
   <div>
     <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
       <app-control>
+        <template v-slot:filter>
+          <vs-button
+            @click="allOff()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >전체끄기</vs-button
+          >
+          <vs-button
+            @click="allOn()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >전체켜기</vs-button
+          >
+        </template>
         <template v-slot:action>
           <vs-button
             @click="refresh()"
@@ -24,13 +40,20 @@
 
       <div class="flex flex-wrap">
         <div class="w-full sm:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
-          <ccp-data-widget 
-            :data="item" 
-            :onRefresh="widgetRefresh" 
-            :onPopupOpen="widgetPopupOpen"
-            :onPopupClose="widgetPopupClose"
-            :chartData="item.chartData" 
-            :chartCategories="item.chartCats"></ccp-data-widget>
+          <div class="w-full flex flex-row">
+            <ccp-data-widget 
+              style="flex: 4"
+              :data="item" 
+              :onRefresh="widgetRefresh" 
+              :onPopupOpen="widgetPopupOpen"
+              :onPopupClose="widgetPopupClose"
+              :chartData="item.chartData" 
+              :chartCategories="item.chartCats"></ccp-data-widget>
+
+            <vs-button color="warning" class="ml-3" style="flex: 1" @click="onOff(item)">
+              <span class="h1 uppercase">{{ $t('On') }}</span>
+            </vs-button>
+          </div>
         </div>
       </div>
     </vx-card>
@@ -215,6 +238,48 @@ export default {
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
         accept: () => this.removeTab("page-6-1"),
+      });
+    },
+
+    allOn() {
+      this.$vs.dialog({
+        type: "confirm",
+        color: "dark",
+        title: this.$t("Confirmation"),
+        text: this.$t("AllCcpToggleOn"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => {
+          console.log('all on')
+        },
+      });
+    },
+
+    allOff() {
+      this.$vs.dialog({
+        type: "confirm",
+        color: "dark",
+        title: this.$t("Confirmation"),
+        text: this.$t("AllCcpToggleOff"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => {
+          console.log('all off')
+        },
+      });
+    },
+
+    onOff(item) {
+      this.$vs.dialog({
+        type: "confirm",
+        color: "dark",
+        title: this.$t("Confirmation"),
+        text: this.$t("CcpToggleOn"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => {
+          console.log('toggle on/off ' + item.device_id)
+        },
       });
     }
   },
