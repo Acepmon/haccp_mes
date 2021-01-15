@@ -9,9 +9,9 @@ use App\Http\Resources\CcpDataResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class HaccpMonitorController extends Controller
+class CcpDataController extends Controller
 {
-    public function ccp_data(Request $request)
+    public function index(Request $request)
     {
         $sort = $request->input('sort', 'DEVICE');
         $order = $request->input('order', 'ASC');
@@ -37,7 +37,7 @@ class HaccpMonitorController extends Controller
         return CcpDataResource::collection($items);
     }
 
-    public function ccp_data_details(Request $request, $deviceId)
+    public function details(Request $request, $deviceId)
     {
         $sort = $request->input('sort', 'REG_DTM');
         $order = $request->input('order', 'ASC');

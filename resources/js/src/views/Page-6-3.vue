@@ -106,7 +106,7 @@
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
 import ccp_esc_data from "@/services/ccp_esc_data";
-import haccp_monitor from "@/services/haccp_monitor";
+import ccp_data from "@/services/ccp_data";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -388,8 +388,8 @@ export default {
         search_params['to'] = this.item['ccp_esc_data:end_dtm'];
       }
 
-      haccp_monitor
-        .ccp_data_details(deviceId, {
+      ccp_data
+        .details(deviceId, {
           ...search_params,
           sort: 'REG_DTM',
           order: 'ASC',

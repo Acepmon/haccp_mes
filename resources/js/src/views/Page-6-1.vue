@@ -63,7 +63,7 @@
 <script>
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
-import haccp_monitor from "@/services/haccp_monitor";
+import ccp_data from "@/services/ccp_data";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -113,8 +113,8 @@ export default {
     init () {
       this.spinner()
 
-      haccp_monitor
-        .ccp_data({
+      ccp_data
+        .fetch({
           device_id: this.devices.map(item => item.comm2_cd).join(','),
           sort: 'DEVICE',
           order: 'ASC',
@@ -157,8 +157,8 @@ export default {
     },
 
     refresh (callback = Function) {
-      haccp_monitor
-        .ccp_data({
+      ccp_data
+        .fetch({
           device_id: this.devices.map(item => item.comm2_cd).join(','),
           sort: 'DEVICE',
           order: 'ASC',
@@ -192,8 +192,8 @@ export default {
     },
 
     widgetRefresh (data) {
-      haccp_monitor
-        .ccp_data_details(data.device_id, {
+      ccp_data
+        .details(data.device_id, {
           from: moment().subtract(24, 'hours').format('YYYYMMDDHHmmss'),
           sort: 'REG_DTM',
           order: 'ASC',

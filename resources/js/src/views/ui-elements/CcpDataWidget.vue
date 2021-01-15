@@ -60,7 +60,7 @@
 <script>
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
-import haccp_monitor from "@/services/haccp_monitor";
+import ccp_data from "@/services/ccp_data";
 import AppControl from "@/views/ui-elements/AppControl";
 import moment from 'moment';
 import VueApexCharts from 'vue-apexcharts'
