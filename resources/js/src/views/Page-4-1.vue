@@ -140,7 +140,7 @@ export default {
     return {
       items: [],
       types: [],
-      searchBy: 'cust_nm',
+      searchBy: 'key_word',
       searchKeyword: null,
       searchType: '',
       importFile: null,
@@ -461,19 +461,19 @@ export default {
         })
     },
 
-    exportExcel () {
-      let search_params = {};
+    // exportExcel () {
+    //   let search_params = {};
 
-      if (this.searchKeyword != null) {
-        search_params[this.searchBy] = this.searchKeyword;
-      }
+    //   if (this.searchKeyword != null) {
+    //     search_params[this.searchBy] = this.searchKeyword;
+    //   }
 
-      if (this.searchType != null) {
-        search_params["cust_no"] = this.searchType;
-      }
+    //   if (this.searchType != null) {
+    //     search_params["cust_no"] = this.searchType;
+    //   }
 
-      window.location.href = api.export(search_params);
-    },
+    //   window.location.href = api.export(search_params);
+    // },
 
     closeDialog() {
       this.$vs.dialog({

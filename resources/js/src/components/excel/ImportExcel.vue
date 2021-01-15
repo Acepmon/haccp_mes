@@ -109,7 +109,6 @@ export default {
           const firstSheetName = workbook.SheetNames[0]
           const worksheet = workbook.Sheets[firstSheetName]
           const header = this.getHeaderRow(worksheet)
-          console.log(this.header)
           const results = XLSX.utils.sheet_to_json(worksheet, {header: this.header})
           const meta = { sheetName: firstSheetName }
           this.generateData({ header, results, meta })

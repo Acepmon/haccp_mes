@@ -21,10 +21,10 @@ class AppController extends Controller
         switch ($type) {
             case 'get_doc_daily_list': return $this->getDocDailyList($request);
             default:
-                return response()->json([
+                return $this->jsonResponse([
                     'status' => 'error',
                     'msg' => 'Request type incorrect'
-                ]);
+                ], 422);
         }
     }
 
@@ -59,7 +59,7 @@ class AppController extends Controller
         $items = $items->where('PERIOD_CD', 'ED');
         $items = $items->orderBy($sort, $order)->get();
 
-        return response()->json([
+        return $this->jsonResponse([
             'status' => 'success',
             'msg' => '',
             'data' => AppGetDocDailyListResource::collection($items)

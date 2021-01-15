@@ -10,4 +10,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected function jsonResponse($data, $statusCode = 200)
+    {
+        return response()->json($data, $statusCode, [
+            'Content-Type' => 'application/json;charset=UTF-8',
+            'Charset' => 'utf-8'
+        ], JSON_UNESCAPED_UNICODE);
+    }
 }
