@@ -4,14 +4,14 @@
       <app-control>
         <template v-slot:filter>
           <vs-button
-            @click="allOff()"
+            @click="allOffDialog()"
             class="mx-1"
             color="primary"
             type="border"
             >전체끄기</vs-button
           >
           <vs-button
-            @click="allOn()"
+            @click="allOnDialog()"
             class="mx-1"
             color="primary"
             type="border"
@@ -47,10 +47,11 @@
               :onRefresh="widgetRefresh" 
               :onPopupOpen="widgetPopupOpen"
               :onPopupClose="widgetPopupClose"
+              :onLimitSelected="widgetLimitSelected"
               :chartData="item.chartData" 
               :chartCategories="item.chartCats"></ccp-data-widget>
 
-            <vs-button color="warning" class="ml-3" style="flex: 1" @click="onOff(item)">
+            <vs-button color="warning" class="ml-3" style="flex: 1" @click="onOffDialog(item)">
               <span class="h1 uppercase">{{ $t('On') }}</span>
             </vs-button>
           </div>
@@ -126,6 +127,7 @@ export default {
           if (res.data.data.length > 0) {
             res.data.data.forEach(device => {
               let device_nm = this.devices.filter(d => d.comm2_cd == device.device_id)
+              console.log(device)
 
               this.$set(this.items, device.device_id, {
                 'device_id': device.device_id,
@@ -139,6 +141,7 @@ export default {
                 'reg_dtm_parsed': device.reg_dtm_parsed,
                 'chartData': [],
                 'chartCats': [],
+                'ccp_limits': device.ccp_limits
               })
             });
           }
@@ -174,6 +177,7 @@ export default {
               this.$set(this.items[device.device_id], 'avg', device.avg.toFixed(2))
               this.$set(this.items[device.device_id], 'reg_dtm', device.reg_dtm)
               this.$set(this.items[device.device_id], 'reg_dtm_parsed', device.reg_dtm_parsed)
+              this.$set(this.items[device.device_id], 'ccp_limits', device.ccp_limits)
             });
 
             callback()
@@ -229,6 +233,10 @@ export default {
       this.$set(this.items[data.device_id], 'chartCats', [])
     },
 
+    widgetLimitSelected (limit) {
+      console.log(limit)
+    },
+
     closeDialog() {
       this.$vs.dialog({
         type: "confirm",
@@ -242,6 +250,10 @@ export default {
     },
 
     allOn() {
+      console.log('all on')
+    },
+
+    allOnDialog() {
       this.$vs.dialog({
         type: "confirm",
         color: "dark",
@@ -249,13 +261,15 @@ export default {
         text: this.$t("AllCcpToggleOn"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => {
-          console.log('all on')
-        },
+        accept: () => this.allOn(),
       });
     },
 
     allOff() {
+      console.log('all off')
+    },
+
+    allOffDialog() {
       this.$vs.dialog({
         type: "confirm",
         color: "dark",
@@ -263,13 +277,15 @@ export default {
         text: this.$t("AllCcpToggleOff"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => {
-          console.log('all off')
-        },
+        accept: () => this.allOff(),
       });
     },
 
     onOff(item) {
+      console.log('toggle on/off ' + item.device_id)
+    },
+
+    onOffDialog(item) {
       this.$vs.dialog({
         type: "confirm",
         color: "dark",
@@ -277,9 +293,7 @@ export default {
         text: this.$t("CcpToggleOn"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => {
-          console.log('toggle on/off ' + item.device_id)
-        },
+        accept: () => this.onOff(item),
       });
     }
   },
