@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLotInfoTable extends Migration
+class CreateCcpEscYnTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateLotInfoTable extends Migration
      */
     public function up()
     {
-        $path = database_path("migrations/lot_info.sql");
+        $path = database_path("migrations/ccp_esc_yn.sql");
         $sql = file_get_contents($path);
         DB::unprepared($sql);
     }
@@ -26,6 +26,6 @@ class CreateLotInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('LOT_INFO');
+        Schema::dropIfExists('CCP_ESC_YN');
     }
 }
