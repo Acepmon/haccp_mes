@@ -25,6 +25,7 @@ class ProcDtlResource extends JsonResource
             'proc_nm' => $this->PROC_NM,
             'proc_time' => $this->PROC_TIME,
             'proc_dtl' => $this->PROC_DTL,
+            'ccp_yn' => $this->CCP_YN,
             'reg_id' => $this->REG_ID,
             'reg_dtm' => now()->parse($this->REG_DTM)->format('Y-m-d'),
             'proc_dtl_sub' => $this->whenLoaded('proc_dtl_sub', ProcDtlSubResource::collection($this->proc_dtl_sub)),
