@@ -35,7 +35,7 @@ class JobOrdExport implements FromCollection, WithHeadings, WithStyles, WithMapp
             $items = $items->whereDate('REG_DTM', '<=', now()->parse($this->to)->format('YmdHis'));
         }
 
-        $items = $items->orderBy('REG_DTM', 'DESC');
+        $items = $items->orderBy('JOB_NO', 'DESC');
 
         return $items->with(['item'])->get();
     }

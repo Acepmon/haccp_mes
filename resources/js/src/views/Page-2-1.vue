@@ -170,7 +170,12 @@ export default {
       gridOptions2: {
         rowHeight: 40,
         headerHeight: 40,
-        domLayout: 'autoHeight'
+        domLayout: 'autoHeight',
+        getRowClass: (params) => {
+          if (params.data['TABLE_NM'] == 'PROC_DTL_SUB') {
+            return 'proc-dtl-sub-row';
+          }
+        }
       },
       gridApi2: null,
       defaultColDef2: {
@@ -543,3 +548,9 @@ export default {
   },
 };
 </script> 
+
+<style>
+.proc-dtl-sub-row > .ag-cell {
+  background: rgba(18, 156, 233, 0.05) !important;
+}
+</style>
