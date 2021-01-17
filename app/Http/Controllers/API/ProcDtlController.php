@@ -45,41 +45,49 @@ class ProcDtlController extends Controller
             return ItemMstResource::collection($items);
         } else {
             $itemId = $request->input('item_id');
-            // $query = "SELECT SEQ_NO SEQ1, 0 SEQ2, PROC_NM, PROC_TIME, SEQ_NM, PROC_DTL FROM PROC_DTL WHERE ITEM_ID = '".$itemId."' UNION SELECT SEQ_NO, SUB_SEQ_NO, ' ', PROC_NM, SEQ_NM, PROC_DTL FROM PROC_DTL_SUB B WHERE ITEM_ID = '".$itemId."' ORDER BY 1, 2;";
-            // $items = DB::select($query);
-            $query1 = DB::table('PROC_DTL')
-                ->select(DB::raw('SEQ_NO SEQ1, 0 SEQ2, PROC_NM, PROC_TIME, SEQ_NM, PROC_DTL'))
-                ->where('ITEM_ID', $itemId);
+            // // $query = "SELECT SEQ_NO SEQ1, 0 SEQ2, PROC_NM, PROC_TIME, SEQ_NM, PROC_DTL FROM PROC_DTL WHERE ITEM_ID = '".$itemId."' UNION SELECT SEQ_NO, SUB_SEQ_NO, ' ', PROC_NM, SEQ_NM, PROC_DTL FROM PROC_DTL_SUB B WHERE ITEM_ID = '".$itemId."' ORDER BY 1, 2;";
+            // // $items = DB::select($query);
+            // $query1 = DB::table('PROC_DTL')
+            //     ->select(DB::raw('SEQ_NO SEQ1, "전체공정" SEQ2, PROC_NM, PROC_TIME, SEQ_NM, PROC_DTL, PROC_TIME, CCP_YN'))
+            //     ->where('ITEM_ID', $itemId);
 
-            $query2 = DB::table(DB::raw('PROC_DTL_SUB B'))
-                ->select(DB::raw('SEQ_NO, SUB_SEQ_NO, " ", PROC_NM, SEQ_NM, PROC_DTL'))
-                ->where('ITEM_ID', $itemId);
+            // $query2 = DB::table(DB::raw('PROC_DTL_SUB B'))
+            //     ->select(DB::raw('SEQ_NO, SRC_CD SEQ2, " ", PROC_NM, SEQ_NM, PROC_DTL, "" PROC_TIME, CCP_YN'))
+            //     ->where('ITEM_ID', $itemId);
 
-            $items = $query1->union($query2)
-                ->orderBy(DB::raw('1, 2'), 'ASC')
+            // $items = $query1->union($query2)
+            //     ->orderBy(DB::raw('1, 2'), 'ASC')
+            //     ->get();
+
+            $nwItems1 = DB::table('PROC_DTL')
+                ->select(DB::raw('SEQ_NO, "전체공정" SRC_CD, SEQ_NM, PROC_NM, PROC_DTL, PROC_TIME, CCP_YN'))
+                ->where('ITEM_ID', $itemId)
+                ->get();
+            $nwItems2 = DB::table('PROC_DTL_SUB')
+                ->select(DB::raw('SEQ_NO, SRC_CD, SEQ_NM, PROC_NM, PROC_DTL, "" PROC_TIME, CCP_YN'))
                 ->get();
 
-            $items2 = DB::table('BOM_CONFIG')
-                ->select(DB::raw('(SELECT ITEM_NM FROM ITEM_MST WHERE ITEM_ID = ITEM2_ID) ITEM_NM, PROD_QTY, USE_QTY'))
-                ->where('ITEM1_ID', $itemId)
-                ->get();
+            // $items2 = DB::table('BOM_CONFIG')
+            //     ->select(DB::raw('(SELECT ITEM_NM FROM ITEM_MST WHERE ITEM_ID = ITEM2_ID) ITEM_NM, PROD_QTY, USE_QTY'))
+            //     ->where('ITEM1_ID', $itemId)
+            //     ->get();
 
-            if ($items2->count() > $items->count()) {
-                $merged = $items2->map(function ($item, $index) use ($items) {
-                    $item1 = $items->get($index);
-                    $merged = array_merge((array) $item, (array) $item1);
-                    return $merged;
-                });
-            } else {
-                $merged = $items->map(function ($item, $index) use ($items2) {
-                    $item2 = $items2->get($index);
-                    $merged = array_merge((array) $item, (array) $item2);
-                    return $merged;
-                });
-            }
+            // if ($items2->count() > $items->count()) {
+            //     $merged = $items2->map(function ($item, $index) use ($items) {
+            //         $item1 = $items->get($index);
+            //         $merged = array_merge((array) $item, (array) $item1);
+            //         return $merged;
+            //     });
+            // } else {
+            //     $merged = $items->map(function ($item, $index) use ($items2) {
+            //         $item2 = $items2->get($index);
+            //         $merged = array_merge((array) $item, (array) $item2);
+            //         return $merged;
+            //     });
+            // }
 
             return response()->json([
-                'data' => $merged
+                'data' => $nwItems1->merge($nwItems2)
             ]);
         }
     }

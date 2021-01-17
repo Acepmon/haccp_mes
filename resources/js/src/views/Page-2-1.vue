@@ -16,11 +16,12 @@
             >{{ $t("Query") }}</vs-button
           >
           <vs-button
-            @click="remove()"
-            class="mx-1 invisible"
+            @click="saveDialog()"
+            class="mx-1"
             color="primary"
             type="border"
-            >{{ $t("Delete") }}</vs-button
+            :disabled="true"
+            >{{ $t("Save") }}</vs-button
           >
           <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="1"></import-excel>
           <vs-button
@@ -185,13 +186,15 @@ export default {
 
       columnDefs2: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
+        { headerName: '공정구분', field: 'SRC_CD', filter: false, editable: false, width: 200 },
+        { headerName: '공정순서', field: 'SEQ_NM', filter: false, editable: false, width: 200 },
         { headerName: '공정명', field: 'PROC_NM', filter: false, editable: false, width: 200 },
-        { headerName: '소요시간 (부속 공정)', field: 'PROC_TIME', filter: false, editable: false, width: 200 },
-        { headerName: '순번', field: 'SEQ_NM', filter: false, editable: false, width: 200 },
         { headerName: '공정내용', field: 'PROC_DTL', filter: false, editable: false, width: 200 },
-        { headerName: 'BOM 재료', field: 'ITEM_NM', filter: false, editable: false, width: 200 },
-        { headerName: '생산수량', field: 'PROD_QTY', filter: false, editable: false, width: 200 },
-        { headerName: '소요수량', field: 'USE_QTY', filter: false, editable: false, width: 200 }
+        { headerName: '소요시간', field: 'PROC_TIME', filter: false, editable: false, width: 200 },
+        { headerName: 'CCP_YN', field: 'CCP_YN', filter: false, editable: false, width: 200 },
+        // { headerName: 'BOM 재료', field: 'ITEM_NM', filter: false, editable: false, width: 200 },
+        // { headerName: '생산수량', field: 'PROD_QTY', filter: false, editable: false, width: 200 },
+        // { headerName: '소요수량', field: 'USE_QTY', filter: false, editable: false, width: 200 }
       ]
     }
   },
