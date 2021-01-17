@@ -193,7 +193,7 @@
       </div>
     </vs-popup>
 
-    <vs-popup fullscreen title="" :active.sync="empDialog" button-close-hidden class="preview-dialog">
+    <vs-popup title="" :active.sync="empDialog" button-close-hidden class="preview-dialog">
       <app-control>
         <template v-slot:action>
           <vs-button
@@ -212,6 +212,36 @@
           >
         </template>
       </app-control>
+
+      <vs-table multiple v-model="items3_selected" :data="items3">
+        <template slot="thead">
+          <vs-th>이름</vs-th>
+          <vs-th>부서</vs-th>
+          <vs-th>직책</vs-th>
+          <vs-th>정/부</vs-th>
+          <vs-th>주요작업</vs-th>
+        </template>
+
+        <template slot-scope="{data}">
+          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" >
+            <vs-td :data="data[indextr]['worker:emp_nm']">
+              {{ data[indextr]['worker:emp_nm'] }}
+            </vs-td>
+            <vs-td :data="data[indextr]['worker:dept_cd']">
+              {{ data[indextr]['worker:dept_cd_nm'] }}
+            </vs-td>
+            <vs-td :data="data[indextr]['worker:duty_cd']">
+              {{ data[indextr]['worker:duty_cd_nm'] }}
+            </vs-td>
+            <vs-td :data="data[indextr]['worker:role_cd']">
+              {{ data[indextr]['worker:role_cd_nm'] }}
+            </vs-td>
+            <vs-td :data="data[indextr]['worker:main_job']">
+              {{ data[indextr]['worker:main_job'] }}
+            </vs-td>
+          </vs-tr>
+        </template>
+      </vs-table>
     </vs-popup>
   </div>
 </template>
@@ -221,6 +251,8 @@ import axios from "axios";
 import comm_cd from "@/services/comm_cd";
 import job_ord from "@/services/job_ord";
 import job_ord_dtl from "@/services/job_ord_dtl";
+import worker from "@/services/worker";
+import job_ord_dtl_work from "@/services/job_ord_dtl_work";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -270,6 +302,7 @@ export default {
       items: [],
       items2: [],
       items3: [],
+      items3_selected: [],
 
       detailDialog: false,
       empDialog: false,
@@ -424,12 +457,11 @@ export default {
       if (rows.length > 0) {
         this.$set(this, 'item2', rows[0])
         this.$set(this, 'empDialog', true)
-        // this.query3({
-        //   job_no: rows[0]['job_ord:job_no'],
-        //   item_id: rows[0]['job_ord:item_id'],
-        //   seq_no: rows[0]['job_ord:seq_no'],
-        //   with: 'worker'
-        // })
+        this.query3({
+          job_no: rows[0]['job_ord:job_no'],
+          item_id: rows[0]['job_ord:item_id'],
+          seq_no: rows[0]['job_ord:seq_no']
+        })
       }
     },
 
@@ -540,6 +572,60 @@ export default {
             text: err.response.data.message,
           });
         });
+    },
+
+    query3 (jobNo, itemId, seqNo) {
+      this.spinner();
+
+      worker
+        .fetch({
+          limit: -1,
+          dept_cd: '10'
+        })
+        .then((res) => {
+          if (res.data.data.length > 0) {
+            this.items3 = res.data.data
+
+            job_ord_dtl_work
+              .fetch({
+                limit: -1,
+                job_no: jobNo,
+                item_id: itemId,
+                seq_no: seqNo
+              })
+              .then((res2) => {
+                spinner(false)
+  
+                this.items3_selected = res2.data.data
+              })
+              .catch((err) => {
+                this.spinner(false);
+                this.$vs.notify({
+                  title: this.$t("Error"),
+                  position: "top-right",
+                  color: "warning",
+                  iconPack: "feather",
+                  icon: "icon-alert-circle",
+                  text: err.response.data.message,
+                });
+              });
+          }
+        })
+        .catch((err) => {
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
+
+    saveEmp() {
+      // 
     },
 
     closeDialog() {
