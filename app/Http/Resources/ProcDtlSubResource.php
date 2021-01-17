@@ -19,6 +19,7 @@ class ProcDtlSubResource extends JsonResource
             'seq_no' => $this->SEQ_NO,
             'sub_seq_no' => $this->SUB_SEQ_NO,
             'seq_nm' => $this->SEQ_NM,
+            'proc_time' => $this->PROC_TIME,
             'proc_cd' => $this->PROC_CD,
             'proc_cd_nm' => $this->whenLoaded('proc', function () {
                 return $this->proc->COMM2_NM;

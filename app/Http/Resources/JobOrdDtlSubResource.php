@@ -35,6 +35,8 @@ class JobOrdDtlSubResource extends JsonResource
             'job_ord_dtl_sub:chk2_temp' => $this->CHK2_TEMP,
             'job_ord_dtl_sub:ccp_cd' => $this->CCP_CD,
             'job_ord_dtl_sub:ccp_yn' => $this->CCP_YN,
+            'job_ord_dtl_sub:srt_dtm' => $this->SRT_DTM,
+            'job_ord_dtl_sub:end_dtm' => $this->END_DTM,
             'job_ord_dtl_sub:remark' => $this->REMARK,
         ];
     }
