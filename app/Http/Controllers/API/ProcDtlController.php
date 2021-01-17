@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\CommCd;
 use App\ProcDtl;
 use App\ProcDtlSub;
 use App\Http\Resources\ProcDtlResource;
@@ -60,12 +61,51 @@ class ProcDtlController extends Controller
             //     ->get();
 
             $nwItems1 = DB::table('PROC_DTL')
-                ->select(DB::raw('SEQ_NO, "전체공정" SRC_CD, SEQ_NM, PROC_NM, PROC_DTL, PROC_TIME, CCP_YN'))
+                ->select(DB::raw('SEQ_NO, "" SRC_CD, "전체공정" SRC_NM, SEQ_NM, PROC_NM, PROC_DTL, PROC_TIME, CCP_YN, "PROC_DTL" TABLE_NM, ITEM_ID'))
                 ->where('ITEM_ID', $itemId)
                 ->get();
+
+            $lastSrcNm = null;
+            foreach ($nwItems1 as $index => $item1) {
+                if ($index == 0) {
+                    $lastSrcNm = $item1->SRC_NM;
+                    continue;
+                }
+
+                if ($lastSrcNm == $item1->SRC_NM) {
+                    $item1->SRC_NM = "";
+                } else {
+                    $lastSrcNm = $item1->SRC_NM;
+                }
+            }
+
             $nwItems2 = DB::table('PROC_DTL_SUB')
-                ->select(DB::raw('SEQ_NO, SRC_CD, SEQ_NM, PROC_NM, PROC_DTL, "" PROC_TIME, CCP_YN'))
+                ->select(DB::raw('SEQ_NO, SRC_CD, "" SRC_NM, SEQ_NM, PROC_NM, PROC_DTL, PROC_TIME, CCP_YN, "PROC_DTL_SUB" TABLE_NM, ITEM_ID'))
                 ->get();
+
+            $lastSrcNm = null;
+            foreach ($nwItems2 as $index => $item2) {
+                $item2->SRC_NM = $item2->SRC_CD;
+
+                if ($index == 0) {
+                    $lastSrcNm = $item2->SRC_NM;
+                    continue;
+                }
+
+                if ($lastSrcNm == $item2->SRC_NM) {
+                    $item2->SRC_NM = "";
+                } else {
+                    $lastSrcNm = $item2->SRC_NM;
+                }
+            }
+
+            foreach ($nwItems2 as $index => $item2) {
+                if (!empty($item2->SRC_NM)) {
+                    if (CommCd::where('COMM1_CD', 'W20')->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $item2->SRC_NM)->exists()) {
+                        $item2->SRC_NM = CommCd::where('COMM1_CD', 'W20')->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $item2->SRC_NM)->value('COMM2_NM');
+                    }
+                }
+            }
 
             // $items2 = DB::table('BOM_CONFIG')
             //     ->select(DB::raw('(SELECT ITEM_NM FROM ITEM_MST WHERE ITEM_ID = ITEM2_ID) ITEM_NM, PROD_QTY, USE_QTY'))
@@ -135,5 +175,31 @@ class ProcDtlController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function sync(Request $request)
+    {
+        $request->validate([
+            'sync' => 'required|array'
+        ]);
+
+        collect($request->input('sync'))->each(function ($item) {
+            if ($item['TABLE_NM'] == 'PROC_DTL') {
+                ProcDtl::where('ITEM_ID', $item['ITEM_ID'])->where('SEQ_NO', $item['SEQ_NO'])->update([
+                    'PROC_TIME' => $item['PROC_TIME'],
+                    'CCP_YN' => $item['CCP_YN'],
+                ]);
+            } else if ($item['TABLE_NM'] == 'PROC_DTL_SUB') {
+                ProcDtlsUB::where('ITEM_ID', $item['ITEM_ID'])->where('SRC_CD', $item['SRC_CD'])->where('SEQ_NO', $item['SEQ_NO'])->update([
+                    'PROC_TIME' => $item['PROC_TIME'],
+                    'CCP_YN' => $item['CCP_YN'],
+                ]);
+            }
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => __('Successfully saved'),
+        ]);
     }
 }

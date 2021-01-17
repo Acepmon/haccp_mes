@@ -20,7 +20,6 @@
             class="mx-1"
             color="primary"
             type="border"
-            :disabled="true"
             >{{ $t("Save") }}</vs-button
           >
           <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="1"></import-excel>
@@ -61,6 +60,8 @@
         :gridOptions="gridOptions2"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         style="height: auto;"
+        :frameworkComponents="frameworkComponents"
+        @cellValueChanged="onCellValueChanged($event)"
         :columnDefs="columnDefs2"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp2">
@@ -126,6 +127,9 @@ import AG_GRID_LOCALE_KR from '@/views/ui-elements/ag-grid-table/agGridLocaleKr.
 
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
+import NumericEditor from '@/views/ui-elements/ag-grid-table/numericEditorVue';
+import TextEditor from '@/views/ui-elements/ag-grid-table/textEditorVue';
+
 export default {
   name: 'page-2-1',
   components: {
@@ -175,6 +179,10 @@ export default {
         resizable: true,
         suppressMenu: false
       },
+      frameworkComponents: {
+        numericEditor: NumericEditor,
+        textEditor: TextEditor
+      },
 
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
@@ -186,12 +194,22 @@ export default {
 
       columnDefs2: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '공정구분', field: 'SRC_CD', filter: false, editable: false, width: 200 },
+        { headerName: '공정구분', field: 'SRC_NM', filter: false, editable: false, width: 200 },
         { headerName: '공정순서', field: 'SEQ_NM', filter: false, editable: false, width: 200 },
         { headerName: '공정명', field: 'PROC_NM', filter: false, editable: false, width: 200 },
         { headerName: '공정내용', field: 'PROC_DTL', filter: false, editable: false, width: 200 },
-        { headerName: '소요시간', field: 'PROC_TIME', filter: false, editable: false, width: 200 },
-        { headerName: 'CCP_YN', field: 'CCP_YN', filter: false, editable: false, width: 200 },
+        { headerName: '소요시간', field: 'PROC_TIME', filter: false, editable: true, width: 200, type: 'numericColumn', cellEditor: 'numericEditor' },
+        { 
+          headerName: 'CCP_YN',
+          field: 'CCP_YN',
+          filter: false,
+          editable: true,
+          width: 200,
+          cellEditor: 'agSelectCellEditor',
+          cellEditorParams: {
+            values: ['Y', 'N'],
+          }
+        },
         // { headerName: 'BOM 재료', field: 'ITEM_NM', filter: false, editable: false, width: 200 },
         // { headerName: '생산수량', field: 'PROD_QTY', filter: false, editable: false, width: 200 },
         // { headerName: '소요수량', field: 'USE_QTY', filter: false, editable: false, width: 200 }
@@ -414,7 +432,10 @@ export default {
         })
         .then((res) => {
           this.spinner(false);
-          this.items2 = res.data.data;
+          this.items2 = res.data.data.map((item) => {
+            item['changed'] = false
+            return item
+          });
         })
         .catch((err) => {
           this.displayErrors(
@@ -432,6 +453,70 @@ export default {
             text: err.response.data.message,
           });
         });
+    },
+
+    onCellValueChanged (event) {
+      let newData = event.data
+      newData.changed = true
+      if (!("" + newData.no).includes('*')) {
+        newData.no = '* ' + newData.no
+      }
+      event.api.updateRowData(newData)
+    },
+
+    save() {
+      this.spinner();
+
+      let changedData = this.gridOptions2.rowData.filter((item) => item.changed)
+
+      proc_dtl
+        .sync({
+          'sync': changedData
+        })
+        .then((res) => {
+          this.spinner(false);
+
+          if (res.data.success) {
+            this.$vs.notify({
+              title: this.$t("SuccessSaveData"),
+              position: "top-right",
+              color: "success",
+            });
+            this.query2(this.items[0]['item_mst:item_id']);
+          } else {
+            this.$vs.notify({
+              title: this.$t("Error"),
+              position: "top-right",
+              color: "warning",
+              iconPack: "feather",
+              icon: "icon-alert-circle",
+              text: res.data.message,
+            });
+          }
+        })
+        .catch((err) => {
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
+
+    saveDialog() {
+      this.$vs.dialog({
+        type: "confirm",
+        color: "success",
+        title: this.$t("Confirmation"),
+        text: this.$t("SaveData"),
+        acceptText: this.$t("Accept"),
+        cancelText: this.$t("Cancel"),
+        accept: () => this.save(),
+      });
     },
 
     closeDialog() {
