@@ -31,4 +31,9 @@ class JobOrdDtl extends Model
         'updated' => JobOrdDtlUpdated::class,
         'deleted' => JobOrdDtlDeleted::class,
     ];
+
+    public function proc()
+    {
+        return $this->belongsTo('App\CommCd', 'PROC_CD', 'COMM2_CD')->where('COMM1_CD', 'B80')->whereNotIn('COMM2_CD', ['$$']);
+    }
 }

@@ -68,8 +68,6 @@ class JobOrdImport implements ToCollection
                             'PROC_NM' => $procDtl->PROC_NM,
                             'PROC_TIME' => $procDtl->PROC_TIME,
                             'PROC_DTL' => $procDtl->PROC_DTL,
-                            'HACCP_CD' => null,
-                            'HACCP_YN' => null,
                             'REMARK' => $remark,
                         ]);
 
@@ -165,17 +163,11 @@ class JobOrdImport implements ToCollection
     private function insertJobOrdDtl($keys = [], $attributes = [])
     {
         if (DB::table('JOB_ORD_DTL')->where($keys)->exists()) {
-            DB::table('JOB_ORD_DTL')->where($keys)->update(array_merge([
-                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
-                'REG_DTM' => now()->format('Ymdhis'),
-            ], $attributes));
+            DB::table('JOB_ORD_DTL')->where($keys)->update($attributes);
 
             $this->updateCount++;
         } else {
-            DB::table('JOB_ORD_DTL')->insert(array_merge([
-                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
-                'REG_DTM' => now()->format('Ymdhis'),
-            ], $attributes));
+            DB::table('JOB_ORD_DTL')->insert($attributes);
 
             $this->insertCount++;
         }
