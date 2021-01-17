@@ -9,9 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\JobOrdResource;
 use App\Imports\JobOrdImport;
 use App\JobOrd;
-use App\JobOrdBom;
-use App\JobOrdDtl;
-use App\JobOrdDtlSub;
 use App\ProcDtl;
 use App\ProcDtlSub;
 use Illuminate\Http\Request;
@@ -216,11 +213,6 @@ class JobOrdController extends Controller
                 'message' => __('BOM config data not found.')
             ], 422);
         }
-
-        // JobOrd::truncate();
-        // JobOrdDtl::truncate();
-        // JobOrdDtlSub::truncate();
-        // JobOrdBom::truncate();
 
         Excel::import(new JobOrdImport(), $request->file('file'));
         $upCnt = session()->get('update_count');

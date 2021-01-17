@@ -6,9 +6,7 @@ use App\CommCd;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use PDO;
 
 class JobOrdImport implements ToCollection
 {
@@ -76,13 +74,13 @@ class JobOrdImport implements ToCollection
                             $this->insertJobOrdDtlSub([
                                 ['JOB_NO', $jobNo],
                                 ['ITEM_ID', $itemId],
-                                ['SEQ_NO', $procDtl->SEQ_NO],
-                                ['SUB_SEQ_NO', $procDtlSub->SUB_SEQ_NO],
+                                ['SRC_CD', $procDtlSub->SRC_CD],
+                                ['SEQ_NO', $procDtlSub->SEQ_NO],
                             ], [
                                 'JOB_NO' => $jobNo,
                                 'ITEM_ID' => $itemId,
-                                'SEQ_NO' => $procDtl->SEQ_NO,
-                                'SUB_SEQ_NO' => $procDtlSub->SUB_SEQ_NO,
+                                'SRC_CD' => $procDtlSub->SRC_CD,
+                                'SEQ_NO' => $procDtlSub->SEQ_NO,
                                 'SEQ_NM' => $procDtlSub->SEQ_NM,
                                 'PROC_CD' => $procDtlSub->PROC_CD,
                                 'PROC_NM' => $procDtlSub->PROC_NM,
@@ -176,17 +174,11 @@ class JobOrdImport implements ToCollection
     private function insertJobOrdDtlSub($keys = [], $attributes = [])
     {
         if (DB::table('JOB_ORD_DTL_SUB')->where($keys)->exists()) {
-            DB::table('JOB_ORD_DTL_SUB')->where($keys)->update(array_merge([
-                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
-                'REG_DTM' => now()->format('Ymdhis'),
-            ], $attributes));
+            DB::table('JOB_ORD_DTL_SUB')->where($keys)->update($attributes);
 
             $this->updateCount++;
         } else {
-            DB::table('JOB_ORD_DTL_SUB')->insert(array_merge([
-                'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
-                'REG_DTM' => now()->format('Ymdhis'),
-            ], $attributes));
+            DB::table('JOB_ORD_DTL_SUB')->insert( $attributes);
 
             $this->insertCount++;
         }
