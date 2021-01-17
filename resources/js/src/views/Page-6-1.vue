@@ -129,7 +129,6 @@ export default {
           if (res.data.data.length > 0) {
             res.data.data.forEach(device => {
               let device_nm = this.devices.filter(d => d.comm2_cd == device.device_id)
-              console.log(device)
 
               this.$set(this.items, device.device_id, {
                 'device_id': device.device_id,
