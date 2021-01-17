@@ -43,16 +43,20 @@ class DropTable extends Command
         $builder = DB::table('information_schema.TABLES')->where('TABLE_SCHEMA', config('database.connections.mysql.database'))->select('TABLE_NAME');
 
         if ($arg == 'all') {
-            foreach ($builder->get() as $table) {
-                Schema::dropIfExists(strtoupper($table->TABLE_NAME));
+            if ($this->confirm('Are you sure to drop all tables?')) {
+                foreach ($builder->get() as $table) {
+                    Schema::dropIfExists(strtoupper($table->TABLE_NAME));
+                }
+    
+                $this->info('All tables dropped.');
             }
-
-            $this->info('All tables dropped.');
         } else {
             if ($builder->where('TABLE_NAME', strtoupper($arg))->exists()) {
-                Schema::dropIfExists(strtoupper($arg));
-                DB::table('migrations')->where('migration', 'LIKE', '%create_' . strtolower($arg) . '_table')->delete();
-                $this->info('Table dropped.');
+                if ($this->confirm('Are you sure to drop '.$arg.' table? It has ' . number_format(DB::table(strtoupper($arg))->count()) . ' records.')) {
+                    Schema::dropIfExists(strtoupper($arg));
+                    DB::table('migrations')->where('migration', 'LIKE', '%create_' . strtolower($arg) . '_table')->delete();
+                    $this->info('Table dropped.');
+                }
             } else {
                 $this->error('Table does not exists.');
             }
