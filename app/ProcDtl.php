@@ -37,11 +37,6 @@ class ProcDtl extends Model
         return $this->belongsTo('App\ItemMst', 'ITEM_ID', 'ITEM_ID');
     }
 
-    public function proc_dtl_sub()
-    {
-        return $this->hasMany('App\ProcDtlSub', 'SEQ_NO', 'SEQ_NO');
-    }
-
     public function proc()
     {
         return $this->belongsTo('App\CommCd', 'PROC_CD', 'COMM2_CD')->where('COMM1_CD', 'B80')->whereNotIn('COMM2_CD', ['$$']);

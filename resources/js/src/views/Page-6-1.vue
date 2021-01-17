@@ -4,14 +4,14 @@
       <app-control>
         <template v-slot:filter>
           <vs-button
-            @click="allOff()"
+            @click="allOffDialog()"
             class="mx-1"
             color="primary"
             type="border"
             >전체끄기</vs-button
           >
           <vs-button
-            @click="allOn()"
+            @click="allOnDialog()"
             class="mx-1"
             color="primary"
             type="border"
@@ -39,18 +39,20 @@
       <vs-divider />
 
       <div class="flex flex-wrap">
-        <div class="w-full sm:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
+        <div class="w-full md:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
           <div class="w-full flex flex-row">
             <ccp-data-widget 
               style="flex: 4"
+              :limits="item.limits"
               :data="item" 
               :onRefresh="widgetRefresh" 
               :onPopupOpen="widgetPopupOpen"
               :onPopupClose="widgetPopupClose"
+              :onLimitSelected="widgetLimitSelected"
               :chartData="item.chartData" 
               :chartCategories="item.chartCats"></ccp-data-widget>
 
-            <vs-button color="warning" class="ml-3" style="flex: 1" @click="onOff(item)">
+            <vs-button color="warning" class="ml-3 vs-con-loading__container" style="flex: 1" @click="toggleOnDialog(item)">
               <span class="h1 uppercase">{{ $t('On') }}</span>
             </vs-button>
           </div>
@@ -63,7 +65,8 @@
 <script>
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
-import haccp_monitor from "@/services/haccp_monitor";
+import ccp_data from "@/services/ccp_data";
+import ccp_limit from "@/services/ccp_limit";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -110,11 +113,11 @@ export default {
       }
     },
 
-    init () {
+    init (callback = Function) {
       this.spinner()
 
-      haccp_monitor
-        .ccp_data({
+      ccp_data
+        .fetch({
           device_id: this.devices.map(item => item.comm2_cd).join(','),
           sort: 'DEVICE',
           order: 'ASC',
@@ -139,8 +142,11 @@ export default {
                 'reg_dtm_parsed': device.reg_dtm_parsed,
                 'chartData': [],
                 'chartCats': [],
+                'limits': []
               })
             });
+
+            callback(res.data.data)
           }
         })
         .catch((err) => {
@@ -157,8 +163,8 @@ export default {
     },
 
     refresh (callback = Function) {
-      haccp_monitor
-        .ccp_data({
+      ccp_data
+        .fetch({
           device_id: this.devices.map(item => item.comm2_cd).join(','),
           sort: 'DEVICE',
           order: 'ASC',
@@ -192,8 +198,8 @@ export default {
     },
 
     widgetRefresh (data) {
-      haccp_monitor
-        .ccp_data_details(data.device_id, {
+      ccp_data
+        .details(data.device_id, {
           from: moment().subtract(24, 'hours').format('YYYYMMDDHHmmss'),
           sort: 'REG_DTM',
           order: 'ASC',
@@ -220,13 +226,42 @@ export default {
         })
     },
 
+    fetchLimits (deviceId) {
+      ccp_limit
+        .fetch({
+          limit: -1,
+          device_id: deviceId,
+          with: 'src'
+        })
+        .then((res) => {
+          if (res.data.data.length > 0) {
+            this.$set(this.items[deviceId], 'limits', res.data.data)
+          }
+        })
+        .catch((err) => {
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        })
+    },
+
     widgetPopupOpen (data) {
       this.widgetRefresh(data)
+      this.fetchLimits(data.device_id)
     },
 
     widgetPopupClose (data) {
       this.$set(this.items[data.device_id], 'chartData', [])
       this.$set(this.items[data.device_id], 'chartCats', [])
+    },
+
+    widgetLimitSelected (limit) {
+      console.log(limit)
     },
 
     closeDialog() {
@@ -242,6 +277,10 @@ export default {
     },
 
     allOn() {
+      console.log('all on')
+    },
+
+    allOnDialog() {
       this.$vs.dialog({
         type: "confirm",
         color: "dark",
@@ -249,13 +288,15 @@ export default {
         text: this.$t("AllCcpToggleOn"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => {
-          console.log('all on')
-        },
+        accept: () => this.allOn(),
       });
     },
 
     allOff() {
+      console.log('all off')
+    },
+
+    allOffDialog() {
       this.$vs.dialog({
         type: "confirm",
         color: "dark",
@@ -263,13 +304,15 @@ export default {
         text: this.$t("AllCcpToggleOff"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => {
-          console.log('all off')
-        },
+        accept: () => this.allOff(),
       });
     },
 
     onOff(item) {
+      console.log('toggle on/off ' + item.device_id)
+    },
+
+    onOffDialog(item) {
       this.$vs.dialog({
         type: "confirm",
         color: "dark",
@@ -277,9 +320,7 @@ export default {
         text: this.$t("CcpToggleOn"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => {
-          console.log('toggle on/off ' + item.device_id)
-        },
+        accept: () => this.onOff(item),
       });
     }
   },
@@ -287,7 +328,11 @@ export default {
   created () {
     comm_cd.fetch({cd1: 'C00'}).then((res) => {
       this.$set(this, 'devices', res.data)
-      this.init()
+      this.init((items) => {
+        this.itemsComp.forEach((data) => {
+          // get info
+        })
+      })
     })
 
     setInterval(() => {

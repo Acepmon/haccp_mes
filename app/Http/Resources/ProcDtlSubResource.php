@@ -23,8 +23,13 @@ class ProcDtlSubResource extends JsonResource
             'proc_cd_nm' => $this->whenLoaded('proc', function () {
                 return $this->proc->COMM2_NM;
             }),
+            'src_cd' => $this->SRC_CD,
+            'src_cd_nm' => $this->whenLoaded('src', function () {
+                return $this->src->COMM2_NM;
+            }),
             'proc_nm' => $this->PROC_NM,
             'proc_dtl' => $this->PROC_DTL,
+            'ccp_yn' => $this->CCP_YN,
             'reg_id' => $this->REG_ID,
             'reg_dtm' => now()->parse($this->REG_DTM)->format('Y-m-d'),
         ];

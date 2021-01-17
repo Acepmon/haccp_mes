@@ -18,7 +18,7 @@
 
             <div class="vx-col hidden lg:block lg:w-1/2">
               <div class="flex py-8">
-                <img src="@assets/images/pages/logo3.png" alt="logo1" class="mx-auto logo-img">
+                <img src="@assets/images/pages/bok_logo_horizontal.png" alt="logo1" class="mx-auto logo-img" style="height: 70px;">
                 <img src="@assets/images/pages/logo2.png" alt="logo2" class="mx-auto logo-img">
               </div>
               <img src="@assets/images/pages/login.png" alt="login" class="mx-auto">

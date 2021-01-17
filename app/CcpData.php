@@ -30,4 +30,9 @@ class CcpData extends Model
         'updated' => CcpDataUpdated::class,
         'deleted' => CcpDataDeleted::class,
     ];
+
+    public function ccp_limit()
+    {
+        return $this->hasMany('App\CcpLimit', 'DEVICE_ID', 'DEVICE_ID');
+    }
 }

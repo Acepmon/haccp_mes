@@ -3,19 +3,22 @@
 namespace App\Http\Controllers\API;
 
 use App\CcpData;
+use App\CcpLimit;
 use App\CommCd;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CcpDataResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class HaccpMonitorController extends Controller
+class CcpDataController extends Controller
 {
-    public function ccp_data(Request $request)
+    public function index(Request $request)
     {
+        $deviceCds = CommCd::where('COMM1_CD', 'C00')->whereNotIn('COMM2_CD', ['$$'])->get();
+
         $sort = $request->input('sort', 'DEVICE');
         $order = $request->input('order', 'ASC');
-        $device_id = $request->input('device_id', implode(',', CommCd::where('COMM1_CD', 'C00')->whereNotIn('COMM2_CD', ['$$'])->get()->pluck('COMM2_CD')->toArray()));
+        $device_id = $request->input('device_id', implode(',', $deviceCds->pluck('COMM2_CD')->toArray()));
         $reg_dtm = $request->input('reg_dtm');
         $from = $request->input('from');
 
@@ -37,7 +40,7 @@ class HaccpMonitorController extends Controller
         return CcpDataResource::collection($items);
     }
 
-    public function ccp_data_details(Request $request, $deviceId)
+    public function details(Request $request, $deviceId)
     {
         $sort = $request->input('sort', 'REG_DTM');
         $order = $request->input('order', 'ASC');

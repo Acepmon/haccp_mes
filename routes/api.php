@@ -141,8 +141,8 @@ Route::group([
     Route::post('job_ord_dtl/sync', 'JobOrdDtlController@sync')->name('job_ord_dtl.sync');
     Route::apiResource('job_ord_dtl', 'JobOrdDtlController');
 
-    Route::get('haccp_monitor/ccp_data', 'HaccpMonitorController@ccp_data');
-    Route::get('haccp_monitor/ccp_data/{DEVICE_ID}', 'HaccpMonitorController@ccp_data_details');
+    Route::get('ccp_data', 'CcpDataController@index');
+    Route::get('ccp_data/{DEVICE_ID}', 'CcpDataController@details');
 
     Route::apiResource('ccp_limit', 'CcpLimitController');
 

@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UnifiedProcImport implements ToCollection
 {
@@ -31,6 +32,10 @@ class UnifiedProcImport implements ToCollection
 
             foreach ($groups as $itemId => $group) 
             {
+                if (Str::contains($itemId, '-headers')) {
+                    continue;
+                }
+
                 foreach ($group as $index => $row) {
                     $seqNo = $index + 1;
 
@@ -44,20 +49,33 @@ class UnifiedProcImport implements ToCollection
 
                     $grp = $row->slice(6)->chunk(3);
 
+                    $headers = collect($groups[$itemId . '-headers']);
+                    $headers = $headers->slice(6)->chunk(3);
+
                     foreach ($grp as $subIndex => $grp2) {
-                        $subSeqNo = $subIndex + 1;
+                        $subHeaders = $headers->get($subIndex);
                         
                         $row2 = [];
                         foreach ($grp2 as $grp2Val) {
                             array_push($row2, $grp2Val);
                         }
 
+                        $subHeaders2 = [];
+                        foreach ($subHeaders as $subHeaderVal) {
+                            array_push($subHeaders2, $subHeaderVal);
+                        }
+
+                        $srcCd = array_key_exists(0, $subHeaders2) ? $subHeaders2[0] : 'etc';
+                        // if (!DB::table('COMM_CD')->where('COMM1_CD', 'W20')->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $srcCd)->exists()) {
+                        //     $srcCd = 'etc';
+                        // }
+
                         $seqNm = array_key_exists(0, $row2) ? trim($row2[0]) : '';
                         $procNm = array_key_exists(1, $row2) ? trim($row2[1]) : '';
                         $procDtl = array_key_exists(2, $row2) ? trim($row2[2]) : '';
 
                         if (!empty($seqNm) && !empty($procNm)) {
-                            $this->insertProcDtlSub($itemId, $seqNo, $subSeqNo, $seqNm, $procNm, $procDtl);
+                            $this->insertProcDtlSub($itemId, $srcCd, $seqNo, $seqNm, $procNm, $procDtl);
                         }
                     }
 
@@ -88,6 +106,7 @@ class UnifiedProcImport implements ToCollection
             } else {
                 $lastItemId = $firstCol;
                 $groups[$firstCol] = [];
+                $groups[$firstCol . '-headers'] = $row;
             }
         }
 
@@ -115,21 +134,23 @@ class UnifiedProcImport implements ToCollection
             'PROC_NM' => $procNm,
             'PROC_TIME' => $procTime,
             'PROC_DTL' => $procDtl,
+            'CCP_YN' => 'N',
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
             'REG_DTM' => now()->format('Ymdhis'),
         ]);
     }
 
-    private function insertProcDtlSub($itemId, $seqNo, $subSeqNo, $seqNm, $procNm, $procDtl)
+    private function insertProcDtlSub($itemId, $srcCd, $seqNo, $seqNm, $procNm, $procDtl)
     {
         DB::table('PROC_DTL_SUB')->insert([
             'ITEM_ID' => $itemId,
+            'SRC_CD' => $srcCd,
             'SEQ_NO' => $seqNo,
-            'SUB_SEQ_NO' => $subSeqNo,
             'SEQ_NM' => $seqNm,
             'PROC_CD' => $this->getCodeByName('B80', $procNm),
             'PROC_NM' => $procNm,
             'PROC_DTL' => $procDtl,
+            'CCP_YN' => 'N',
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
             'REG_DTM' => now()->format('Ymdhis'),
         ]);

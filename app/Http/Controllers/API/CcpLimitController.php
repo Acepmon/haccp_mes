@@ -112,6 +112,14 @@ class CcpLimitController extends Controller
         ]);
     }
 
+    public function patch(Request $request)
+    {
+        $request->validate([
+            'ccp_limit:device_id' => 'required',
+            'ccp_limit:src_cd' => 'required',
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
