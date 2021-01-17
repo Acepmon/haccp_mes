@@ -81,6 +81,7 @@ class ProcDtlController extends Controller
 
             $nwItems2 = DB::table('PROC_DTL_SUB')
                 ->select(DB::raw('SEQ_NO, SRC_CD, "" SRC_NM, SEQ_NM, PROC_NM, PROC_DTL, PROC_TIME, CCP_YN, "PROC_DTL_SUB" TABLE_NM, ITEM_ID'))
+                ->where('ITEM_ID', $itemId)
                 ->get();
 
             $lastSrcNm = null;

@@ -12,8 +12,8 @@ export default {
             page: 1,
             limit: 15,
             sort: 'REG_DTM',
-            order: 'DESC',
-            with: 'item',
+            order: 'ASC',
+            with: '',
             ...args
         }
 

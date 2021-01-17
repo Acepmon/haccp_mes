@@ -205,7 +205,7 @@ export default {
         { headerName: '공정내용', field: 'PROC_DTL', filter: false, editable: false, width: 200 },
         { headerName: '소요시간', field: 'PROC_TIME', filter: false, editable: true, width: 200, type: 'numericColumn', cellEditor: 'numericEditor' },
         { 
-          headerName: 'CCP_YN',
+          headerName: 'CCP 유무',
           field: 'CCP_YN',
           filter: false,
           editable: true,

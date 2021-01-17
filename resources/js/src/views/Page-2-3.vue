@@ -60,7 +60,7 @@
         rowSelection="single"
         @selection-changed="handleSelected"
         class="ag-theme-material w-100 my-4 ag-grid-table mt-0"
-        style="max-height: 100%;"
+        style="max-height: 300px;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
@@ -74,6 +74,17 @@
         :total="totalPages"
         :max="maxPageNumbers"
         v-model="currentPage" />
+      
+      <ag-grid-vue
+        ref="agGridTable"
+        :localeText="localeText"
+        :gridOptions="gridOptions2"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="height: auto;"
+        :columnDefs="columnDefs2"
+        :defaultColDef="defaultColDef"
+        :rowData="itemsComp2">
+      </ag-grid-vue>
 
     </vx-card>
 
@@ -187,6 +198,7 @@
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
 import job_ord from "@/services/job_ord";
+import job_ord_dtl from "@/services/job_ord_dtl";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -220,7 +232,7 @@ export default {
   data () {
     return {
       format: "yyyy-MM-dd",
-      from: moment().startOf('month').format('YYYY-MM-DD'),
+      from: moment().format('YYYY-MM-DD'),
       to: moment().format('YYYY-MM-DD'),
       configFromdateTimePicker: {
         maxDate: null,
@@ -233,6 +245,7 @@ export default {
       importFile: null,
       item: null,
       items: [],
+      items2: [],
 
       detailDialog: false,
       detailData: {
@@ -247,7 +260,8 @@ export default {
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
-        headerHeight: 40
+        headerHeight: 40,
+        onCellDoubleClicked: this.handleDoubleClick
       },
       gridApi: null,
       defaultColDef: {
@@ -269,6 +283,40 @@ export default {
         { headerName: '생산수량', field: 'job_ord:prod_qty', type: 'numericColumn', filter: false, editable: false, width: 120 },
         { headerName: '담당자', field: 'job_ord:ord_nm', filter: false, editable: false, width: 120 },
         { headerName: '생산공장', field: 'job_ord:fact_cd', filter: false, editable: false, width: 120 }
+      ],
+
+      gridOptions2: {
+        rowHeight: 40,
+        headerHeight: 40,
+        domLayout: 'autoHeight',
+        getRowClass: (params) => {
+          if (params.data['TABLE_NM'] == 'JOB_ORD_DTL_SUB') {
+            return 'job-ord-dtl-sub-row';
+          }
+        }
+      },
+      gridApi2: null,
+      defaultColDef2: {
+        sortable: true,
+        editable: false,
+        resizable: true,
+        suppressMenu: false
+      },
+      columnDefs2: [
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
+        { headerName: '공정구분', field: 'SRC_NM', filter: false, editable: false, width: 100 },
+        { headerName: '공정순서', field: 'SEQ_NM', filter: false, editable: false, width: 100 },
+        { headerName: '공정명', field: 'PROC_NM', filter: false, editable: false, width: 100 },
+        { headerName: '공정내용', field: 'PROC_DTL', filter: false, editable: false, width: 150 },
+        { headerName: '소요시간', field: 'PROC_TIME', filter: false, editable: false, width: 100 },
+        { headerName: 'CCP 유무', field: 'CCP_YN', filter: false, editable: false, width: 100 },
+        { headerName: '시작시간', field: 'SRT_DTM', filter: false, editable: false, width: 100 },
+        { headerName: '종료시간', field: 'END_DTM', filter: false, editable: false, width: 100 },
+        { headerName: 'CCP 구분', field: 'CCP_CD', filter: false, editable: false, width: 100 },
+        { headerName: '측정 시간', field: 'CHK1_DTM', filter: false, editable: false, width: 100 },
+        { headerName: '측정 온도', field: 'CHK_TEMP', filter: false, editable: false, width: 100 },
+        { headerName: '가열 시간', field: 'CHK2_TIME', filter: false, editable: false, width: 100 },
+        { headerName: '품온', field: 'CHK2_TEMP', filter: false, editable: false, width: 100 },
       ]
     }
   },
@@ -276,6 +324,14 @@ export default {
   computed: {
     itemsComp: function () {
       return this.items.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+    itemsComp2: function () {
+      return this.items2.map((item, index) => {
         return {
           'no': (index + 1),
           ...item
@@ -325,7 +381,7 @@ export default {
       this.$set(this.configFromdateTimePicker, "maxDate", dateStr);
     },
 
-    handleSelected () {
+    handleDoubleClick () {
       let rows = this.gridApi.getSelectedRows()
       this.$set(this, 'item', {
         job_ord: null,
@@ -341,6 +397,14 @@ export default {
         this.fetch({
           job_no: rows[0]['job_ord:job_no'],
         })
+      }
+    },
+
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
+      if (rows.length > 0) {
+        this.$set(this, 'item', rows[0])
+        this.query2(rows[0]['job_ord:job_no'], rows[0]['job_ord:item_id'])
       }
     },
 
@@ -375,7 +439,7 @@ export default {
         });
     },
 
-    query () {
+    query (callback = Function) {
       this.spinner();
 
       let search_params = {};
@@ -392,10 +456,13 @@ export default {
         .fetch({
           limit: -1,
           ...search_params,
+          sort: 'JOB_NO',
+          order: 'DESC',
         })
         .then((res) => {
           this.spinner(false);
           this.items = res.data.data;
+          callback(this.items)
         })
         .catch((err) => {
           this.displayErrors(
@@ -403,6 +470,33 @@ export default {
               ? err.response.data.errors
               : null
           );
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
+
+    query2 (jobNo, itemId) {
+      this.spinner();
+
+      job_ord_dtl
+        .fetch({
+          limit: -1,
+          job_no: jobNo,
+          item_id: itemId,
+          with: ''
+        })
+        .then((res) => {
+          this.spinner(false);
+          this.items2 = res.data.data;
+        })
+        .catch((err) => {
           this.spinner(false);
           this.$vs.notify({
             title: this.$t("Error"),
@@ -434,7 +528,11 @@ export default {
 
   created () {
     setTimeout(() => {
-      this.query()
+      this.query((items) => {
+        if (items.length > 0) {
+          this.query2(items[0]['job_ord:job_no'], items[0]['job_ord:item_id'])
+        }
+      })
     }, 500)
   }
 };
@@ -446,5 +544,8 @@ export default {
 }
 th.text-center .vs-table-text {
   justify-content: center;
+}
+.job-ord-dtl-sub-row > .ag-cell {
+  background: rgba(18, 156, 233, 0.05) !important;
 }
 </style>
