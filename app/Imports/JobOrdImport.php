@@ -66,6 +66,7 @@ class JobOrdImport implements ToCollection
                             'PROC_NM' => $procDtl->PROC_NM,
                             'PROC_TIME' => $procDtl->PROC_TIME,
                             'PROC_DTL' => $procDtl->PROC_DTL,
+                            'CCP_YN' => $procDtl->CCP_YN,
                             'REMARK' => $remark,
                         ]);
 
@@ -86,6 +87,7 @@ class JobOrdImport implements ToCollection
                                 'PROC_CD' => $procDtlSub->PROC_CD,
                                 'PROC_NM' => $procDtlSub->PROC_NM,
                                 'PROC_DTL' => $procDtlSub->PROC_DTL,
+                                'CCP_YN' => $procDtl->CCP_YN,
                                 'REMARK' => $remark,
                             ]);
                         }

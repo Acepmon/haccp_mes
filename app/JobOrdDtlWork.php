@@ -31,4 +31,9 @@ class JobOrdDtlWork extends Model
         'updated' => JobOrdDtlWorkUpdated::class,
         'deleted' => JobOrdDtlWorkDeleted::class,
     ];
+
+    public function worker()
+    {
+        return $this->belongsTo('App\Worker', 'EMP_ID', 'EMP_ID');
+    }
 }

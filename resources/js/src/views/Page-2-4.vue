@@ -79,6 +79,7 @@
         ref="agGridTable"
         :localeText="localeText"
         :gridOptions="gridOptions2"
+        rowSelection="single"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         style="height: auto;"
         :columnDefs="columnDefs2"
@@ -191,6 +192,27 @@
         </vs-table>
       </div>
     </vs-popup>
+
+    <vs-popup fullscreen title="" :active.sync="empDialog" button-close-hidden class="preview-dialog">
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="saveEmp()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >{{ $t("Save") }}</vs-button
+          >
+          <vs-button
+            @click="empDialog = false"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >{{ $t("Close") }}</vs-button
+          >
+        </template>
+      </app-control>
+    </vs-popup>
   </div>
 </template>
 
@@ -219,7 +241,7 @@ import "@sass/vuexy/extraComponents/agGridStyleOverride.scss";
 import moment from 'moment';
 
 export default {
-  name: 'page-2-3',
+  name: 'page-2-4',
   components: {
     AppControl,
     AppForm,
@@ -244,10 +266,13 @@ export default {
       },
       importFile: null,
       item: null,
+      item2: null,
       items: [],
       items2: [],
+      items3: [],
 
       detailDialog: false,
+      empDialog: false,
       detailData: {
         job_ord: null,
         summary_dt: null,
@@ -289,11 +314,7 @@ export default {
         rowHeight: 40,
         headerHeight: 40,
         domLayout: 'autoHeight',
-        getRowClass: (params) => {
-          if (params.data['TABLE_NM'] == 'JOB_ORD_DTL_SUB') {
-            return 'job-ord-dtl-sub-row';
-          }
-        }
+        onCellDoubleClicked: this.handleDoubleClick2
       },
       gridApi2: null,
       defaultColDef2: {
@@ -304,19 +325,14 @@ export default {
       },
       columnDefs2: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '공정구분', field: 'SRC_NM', filter: false, editable: false, width: 100 },
-        { headerName: '공정순서', field: 'SEQ_NM', filter: false, editable: false, width: 100 },
-        { headerName: '공정명', field: 'PROC_NM', filter: false, editable: false, width: 100 },
+        { headerName: '공정순서', field: 'SEQ_NM', filter: false, editable: false, width: 150 },
+        { headerName: '공정명', field: 'PROC_NM', filter: false, editable: false, width: 150 },
         { headerName: '공정내용', field: 'PROC_DTL', filter: false, editable: false, width: 150 },
-        { headerName: '소요시간', field: 'PROC_TIME', filter: false, editable: false, width: 100 },
-        { headerName: 'CCP 유무', field: 'CCP_YN', filter: false, editable: false, width: 100 },
-        { headerName: '시작시간', field: 'SRT_DTM', filter: false, editable: false, width: 100 },
-        { headerName: '종료시간', field: 'END_DTM', filter: false, editable: false, width: 100 },
-        { headerName: 'CCP 구분', field: 'CCP_CD', filter: false, editable: false, width: 100 },
-        { headerName: '측정 시간', field: 'CHK1_DTM', filter: false, editable: false, width: 100 },
-        { headerName: '측정 온도', field: 'CHK_TEMP', filter: false, editable: false, width: 100 },
-        { headerName: '가열 시간', field: 'CHK2_TIME', filter: false, editable: false, width: 100 },
-        { headerName: '품온', field: 'CHK2_TEMP', filter: false, editable: false, width: 100 },
+        { headerName: '소요시간', field: 'PROC_TIME', filter: false, editable: false, width: 150 },
+        { headerName: 'CCP 유무', field: 'CCP_YN', filter: false, editable: false, width: 150 },
+        { headerName: '시작시간', field: 'SRT_DTM', filter: false, editable: false, width: 150 },
+        { headerName: '종료시간', field: 'END_DTM', filter: false, editable: false, width: 150 },
+        { headerName: '작업자', field: 'EMP_NM', filter: false, editable: false, width: 150 },
       ]
     }
   },
@@ -397,6 +413,23 @@ export default {
         this.fetch({
           job_no: rows[0]['job_ord:job_no'],
         })
+      }
+    },
+
+    handleDoubleClick2 () {
+      let rows = this.gridApi2.getSelectedRows()
+      console.log(rows);
+      this.$set(this, 'item3', [])
+
+      if (rows.length > 0) {
+        this.$set(this, 'item2', rows[0])
+        this.$set(this, 'empDialog', true)
+        // this.query3({
+        //   job_no: rows[0]['job_ord:job_no'],
+        //   item_id: rows[0]['job_ord:item_id'],
+        //   seq_no: rows[0]['job_ord:seq_no'],
+        //   with: 'worker'
+        // })
       }
     },
 
@@ -490,7 +523,7 @@ export default {
           limit: -1,
           job_no: jobNo,
           item_id: itemId,
-          with: 'job_ord_dtl_sub',
+          with: 'emp',
         })
         .then((res) => {
           this.spinner(false);
@@ -524,6 +557,7 @@ export default {
 
   mounted () {
     this.gridApi = this.gridOptions.api
+    this.gridApi2 = this.gridOptions2.api
   },
 
   created () {
