@@ -219,10 +219,14 @@ export default {
       lazyLoadView(
         import(/* webpackChunkName: "page-4-1" */ "@/views/Page-4-1.vue")
       ),
-    // "tab-page-4-2": () =>
-    //   lazyLoadView(
-    //     import(/* webpackChunkName: "page-4-2" */ "@/views/Page-4-2.vue")
-    //   ),
+      "tab-page-4-2": () =>
+      lazyLoadView(
+        import(/* webpackChunkName: "page-4-2" */ "@/views/Page-4-2.vue")
+      ),
+    "tab-page-4-3": () =>
+      lazyLoadView(
+        import(/* webpackChunkName: "page-4-3" */ "@/views/Page-4-3.vue")
+      ),
     "tab-page-6-1": () =>
       lazyLoadView(
         import(/* webpackChunkName: "page-6-1" */ "@/views/Page-6-1.vue")

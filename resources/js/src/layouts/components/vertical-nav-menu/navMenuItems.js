@@ -240,14 +240,14 @@ export default [
       },
       {
         url: "/4/2",
-        name: "시리얼/Lot 조회",
-        slug: "시리얼/Lot 조회",
+        name: "생산불출 등록",
+        slug: "생산불출 등록",
         showSubmenuOn: '/4',
       },
       {
         url: "/4/3",
-        name: "제조사원업무등록",
-        slug: "제조사원업무등록",
+        name: "창고별 재고현황",
+        slug: "창고별 재고현황",
         showSubmenuOn: '/4',
       },
       {

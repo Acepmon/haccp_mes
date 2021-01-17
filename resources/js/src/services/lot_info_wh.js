@@ -2,7 +2,7 @@ import axios from 'axios'
 import config from './config'
 
 export default {
-    api: 'lot_info',
+    api: 'lot_info_wh',
 
     // Fetch login history datas
     fetch: function (args = {}) {

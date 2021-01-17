@@ -4,7 +4,7 @@
       <app-control>
         <template v-slot:filter>
           <span class="px-5 pt-2">자료검색</span>
-          <vs-input class="control-field-lm" v-model="searchKeyword" placeholder="일자 연결전표 품목코드 품목명 시리얼/Lot" />
+          <vs-input class="control-field-lm" v-model="searchKeyword" placeholder="일자 연결전표 품목코드 품목명" />
         </template>
         <template v-slot:action>
           <vs-button
@@ -22,8 +22,9 @@
             >{{ $t("Add") }}</vs-button
           >
           <!-- <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="0" :skips="1"> -->
-          <import-excel :onSuccess="loadDataInTable" v-model="importFile" >
-          </import-excel>
+          <import-excel :onSuccess="loadDataInTable" v-model="importFile" :header="0" :skips="1"></import-excel>
+          <!-- <import-excel :onSuccess="loadDataInTable" v-model="importFile" >
+          </import-excel> -->
           <vs-button
             @click="closeDialog()"
             class="mx-1"
@@ -115,7 +116,7 @@
 <script>
 import axios from "axios";
 // import comm_cd from "@/services/comm_cd";
-import api from "@/services/lot_info";
+import api from "@/services/prod_info";
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
 import { AgGridVue } from 'ag-grid-vue'
@@ -127,7 +128,7 @@ import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 import '@sass/vuexy/extraComponents/agGridStyleOverride.scss'
 
 export default {
-  name: 'page-4-1',
+  name: 'page-4-2',
   components: {
     ImportExcel,
     AgGridVue,
@@ -151,7 +152,7 @@ export default {
         total: 0,
       },
       sorting: {
-        sort: "DT_NO",
+        sort: "ACC_NO",
         order: "ASC",
       },
 
@@ -174,32 +175,14 @@ export default {
 
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50},
-        { headerName: '일자-No', field: 'lot_info:dt_no', width: 100,},
-        { headerName: '연결전표 No', field: 'lot_info:acc_no', width: 100,},
-        { headerName: '품목코드', field: 'lot_info:item_id', filter: true, width: 100,},
-        { headerName: '품목명', field: 'lot_info:item_nm', filter: true, width: 200,},
-        { headerName: '규격', field: 'lot_info:spec', width: 100,},
-        { headerName: '단위', field: 'lot_info:unit', width: 100,},
-        { headerName: '원산지', field: 'lot_info:origin', width: 100,},
-        { headerName: '시리얼/Lot No', headerStyle: {textAlign: 'center'}, field: 'lot_info:lot_no', width: 100,},
-        { headerName: '수량', field: 'lot_info:qty', type: 'numericColumn', width: 100,},
-        { headerName: '전표구분', field: 'lot_info:acc_cd', width: 100,},
-        { headerName: '입고단가', field: 'lot_info:in_cost', type: 'numericColumn', width: 100,},
-        { headerName: '출고단가', field: 'lot_info:out_cost', type: 'numericColumn', width: 100,},
-        { headerName: '거래처코드', field: 'lot_info:comp_id', width: 100,},
-        { headerName: '거래처명', field: 'lot_info:comp_nm', width: 100,},
-        { headerName: '창고코드', field: 'lot_info:wh_cd', width: 100,},
-        { headerName: '창고명', field: 'lot_info:wh_nm', width: 100,},
-        { headerName: '받는창고코드', field: 'lot_info:in_wh_cd', width: 100,},
-        { headerName: '받는창고명', field: 'lot_info:in_wh_nm', width: 100,},
-        { headerName: '생산공정코드', field: 'lot_info:proc_cd', width: 100,},
-        { headerName: '생산공정명', field: 'lot_info:proc_nm', width: 100,},
-        { headerName: '품목구분', field: 'lot_info:item_dvn', width: 100,},
-        { headerName: '바코드', field: 'lot_info:barcode', width: 100,},
-        { headerName: '담당자ID', field: 'lot_info:work_id', width: 100,},
-        { headerName: '담당자명', field: 'lot_info:work_nm', width: 100,},
-        { headerName: '적요', field: 'lot_info:remark', width: 100,},
-        { headerName: '안전재고', field: 'lot_info:safe_qty', width: 100,},
+        { headerName: '일자-No', field: 'prod_info:dt_no', width: 100,},
+        { headerName: '품목코드', field: 'prod_info:item_nm', filter: true, width: 100,},
+        { headerName: '품목이름', field: 'prod_info:dt_no', width: 300,},
+        { headerName: '출고창고', field: 'prod_info:out_wh_nm', width: 100,},
+        { headerName: '입고창고', field: 'prod_info:in_wh_nm', width: 100,},
+        { headerName: '규격', field: 'prod_info:spec', width: 200,},
+        { headerName: '수량', field: 'prod_info:qty', type: 'numericColumn', width: 100,},
+        { headerName: '시리얼/Lot No', field: 'prod_info:lot_no', width: 100,},
       ],
     }
   },
@@ -308,10 +291,6 @@ export default {
 
       if (this.searchKeyword != null) {
         search_params[this.searchBy] = this.searchKeyword;
-      }
-
-      if (this.searchType != null) {
-        search_params["cust_no"] = this.searchType;
       }
 
       api

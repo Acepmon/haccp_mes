@@ -26,9 +26,11 @@ class CustInfoController extends Controller
 
         if ($request->has('comp_nm')) {
             $compNm = $request->input('comp_nm');
-            $items = $items->where('COMP_NM', 'LIKE', '%'.$compNm.'%')->orWhere('CEO_NM', 'LIKE', '%'.$compNm.'%')->orWhere('CUST_NM', 'LIKE', '%'.$compNm.'%');
+            $items = $items->where('COMP_NM', 'LIKE', '%'.$compNm.'%')
+            ->orWhere('CEO_NM', 'LIKE', '%'.$compNm.'%')
+            ->orWhere('CUST_NM', 'LIKE', '%'.$compNm.'%');
         }
-
+        
         if ($limit == -1) {
             $items = $items->get();
         } else {

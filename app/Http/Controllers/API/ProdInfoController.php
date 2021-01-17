@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
-//use App\Exports\LotInfoExport;
+//use App\Exports\ProdInfoExport;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\LotInfoResource;
-use App\Imports\LotInfoImport;
-use App\LotInfo;
+use App\Http\Resources\ProdInfoResource;
+use App\Imports\ProdInfoImport;
+use App\ProdInfo;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
-class LotInfoController extends Controller
+class ProdInfoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,16 +19,15 @@ class LotInfoController extends Controller
      */
     public function index(Request $request)
     {
-        $items = LotInfo::query();
+        $items = ProdInfo::query();
         $limit = $request->input('limit', 20);
         // $sort = $request->input('sort', 'COMP_ID');
         // $order = $request->input('order', 'ASC');
 
         if ($request->has('key_word')) {
             $keyWord = $request->input('key_word');
-            $items = $items->where('DT_NO', 'LIKE', '%'.$keyWord.'%')->orWhere('ITEM_ID', 'LIKE', '%'.$keyWord.'%')
-            ->orWhere('ITEM_NM', 'LIKE', '%'.$keyWord.'%')->orWhere('LOT_NO', 'LIKE', '%'.$keyWord.'%')
-            ->orWhere('ACC_NO', 'LIKE', '%'.$keyWord.'%');
+            $items = $items->where('ACC_NO', 'LIKE', '%'.$keyWord.'%')->orWhere('ITEM_ID', 'LIKE', '%'.$keyWord.'%')
+            ->orWhere('ITEM_NM', 'LIKE', '%'.$keyWord.'%')->orWhere('LOT_NO', 'LIKE', '%'.$keyWord.'%');
         }
 
         if ($limit == -1) {
@@ -36,7 +35,7 @@ class LotInfoController extends Controller
         } else {
             $items = $items->paginate($limit);
         }
-        return LotInfoResource::collection($items);
+        return ProdInfoResource::collection($items);
     }
 
     public function sync(Request $request)
@@ -47,20 +46,20 @@ class LotInfoController extends Controller
 
         // collect($request->input('sync'))->map(function ($item) {
         //     return [
-        //         'COMP_ID' => $item['Lot_info:comp_id'],
-        //         'COMP_NM' => $item['Lot_info:comp_nm'],
-        //         'CEO_NM' => $item['Lot_info:ceo_nm'],
-        //         'MOB_NO' => $item['Lot_info:mob_no'],
-        //         'Lot_NM' => $item['Lot_info:Lot_nm'],
-        //         'Lot_NO' => $item['Lot_info:Lot_no'],
-        //         'TEL_NO' => $item['Lot_info:tel_no'],
-        //         'FAX_NO' => $item['Lot_info:fax_no'],
-        //         'SRH_INFO' => $item['Lot_info:srh_no'],
-        //         'EMAIL' => $item['Lot_info:email'],
-        //         'GRP_NM' => $item['Lot_info:grp_nm'],
-        //         'ADDR' => $item['Lot_info:addr'],
-        //         'REMARK' => $item['Lot_info:remark'],
-        //         'USE_YN' => $item['Lot_info:use_yn']
+        //         'COMP_ID' => $item['Prod_info:comp_id'],
+        //         'COMP_NM' => $item['Prod_info:comp_nm'],
+        //         'CEO_NM' => $item['Prod_info:ceo_nm'],
+        //         'MOB_NO' => $item['Prod_info:mob_no'],
+        //         'Prod_NM' => $item['Prod_info:Prod_nm'],
+        //         'Prod_NO' => $item['Prod_info:Prod_no'],
+        //         'TEL_NO' => $item['Prod_info:tel_no'],
+        //         'FAX_NO' => $item['Prod_info:fax_no'],
+        //         'SRH_INFO' => $item['Prod_info:srh_no'],
+        //         'EMAIL' => $item['Prod_info:email'],
+        //         'GRP_NM' => $item['Prod_info:grp_nm'],
+        //         'ADDR' => $item['Prod_info:addr'],
+        //         'REMARK' => $item['Prod_info:remark'],
+        //         'USE_YN' => $item['Prod_info:use_yn']
         //     ];
         // });
 
@@ -119,7 +118,7 @@ class LotInfoController extends Controller
     // {
     //     $keyWord = $request->input('comp_nm');
 
-    //     return Excel::download(new LotInfoExport($keyWord), 'Lot-INFO' . now()->format('Y-m-d') . '.xlsx');
+    //     return Excel::download(new ProdInfoExport($keyWord), 'Prod-INFO' . now()->format('Y-m-d') . '.xlsx');
     // }
 
     public function import(Request $request)
@@ -128,9 +127,9 @@ class LotInfoController extends Controller
             'file' => 'required|file'
         ]);
 
-        //LotInfo::truncate();
+        ProdInfo::truncate();
 
-        $result = Excel::import(new LotInfoImport(), $request->file('file'));
+        $result = Excel::import(new ProdInfoImport(), $request->file('file'));
         $upCnt = session()->get('update_count');
         $inCnt = session()->get('insert_count');
 

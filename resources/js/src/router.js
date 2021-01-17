@@ -177,8 +177,13 @@ const router = new Router({
               },
               {
                 path: '/4/2',
-                name: '시리얼/Lot 조회',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/4/2', value: 'page-4-2', label: '시리얼/Lot 조회', component: 'page-4-2'}) } }
+                name: '생산불출 등록',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/4/2', value: 'page-4-2', label: '생산불출 등록', component: 'page-4-2'}) } }
+              },
+              {
+                path: '/4/3',
+                name: '창고별 재고조회',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/4/3', value: 'page-4-3', label: '창고별 재고조회', component: 'page-4-3'}) } }
               },
               
               {

@@ -100,6 +100,16 @@ Route::group([
     Route::post('lot_info/sync', 'LotInfoController@sync')->name('lot_info.sync');
     Route::apiResource('lot_info', 'LotInfoController');
 
+    Route::post('prod_info/import', 'ProdInfoController@import')->name('prod_info.import');
+    Route::post('prod_info/sync', 'ProdInfoController@sync')->name('prod_info.sync');
+    Route::apiResource('prod_info', 'ProdInfoController');
+
+
+    Route::get('lot_info_wh/export', 'LotInfoWhController@export')->name('lot_info_wh.export');
+    Route::post('lot_info_wh/import', 'LotInfoWhController@import')->name('lot_info_wh.import');
+    Route::post('lot_info_wh/sync', 'LotInfoWhController@sync')->name('lot_info_wh.sync');
+    Route::apiResource('lot_info_wh', 'LotInfoWhController');
+
     Route::get('bom_config/export', 'BomConfigController@export')->name('bom_config.export');
     Route::post('bom_config/import', 'BomConfigController@import')->name('bom_config.import');
     Route::post('bom_config/sync', 'BomConfigController@sync')->name('bom_config.sync');

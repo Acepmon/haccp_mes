@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\API;
 
 //use App\Exports\LotInfoExport;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\LotInfoResource;
-use App\Imports\LotInfoImport;
+use App\Http\Resources\LotInfoWhResource;
+//use App\Imports\LotInfoImport;
 use App\LotInfo;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
-class LotInfoController extends Controller
+class LotInfoWhController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,24 +20,36 @@ class LotInfoController extends Controller
      */
     public function index(Request $request)
     {
-        $items = LotInfo::query();
-        $limit = $request->input('limit', 20);
-        // $sort = $request->input('sort', 'COMP_ID');
-        // $order = $request->input('order', 'ASC');
+        $qty = 0;
+       $items = collect(DB::select(DB::raw("SELECT wh_nm, item_id, item_nm, SUM(total) total
+                    FROM (SELECT wh_nm, item_id, item_nm,
+                    SUM(IF(acc_cd = '구매', qty, 0)) - SUM(IF(acc_cd = '생산불출', qty, 0)) -
+                    SUM(IF(acc_cd = '생산소모', qty, 0)) + SUM(IF(acc_cd = '생산입고', qty, 0)) -
+                    SUM(IF(acc_cd = '불량-폐기', qty, 0)) - SUM(IF(acc_cd = '자가사용', qty, 0)) +
+                    SUM(IF(acc_cd = '재고조정', qty, 0)) - SUM(IF(acc_cd = '창고이동', qty, 0)) -
+                    SUM(IF(acc_cd = '판매', qty, 0)) + SUM(IF(acc_cd = '견적', 0, 0)) total
+                    FROM LOT_INFO WHERE qty > ?
+                    GROUP BY wh_nm, item_id, item_nm
+                    UNION ALL
+                    SELECT in_wh_nm, item_id, item_nm,
+                    SUM(IF(acc_cd = '생산불출', qty, 0)) + SUM(IF(acc_cd = '창고이동', qty, 0)) total
+                    FROM LOT_INFO WHERE qty > ? AND in_wh_nm IS NOT NULL
+                    GROUP BY in_wh_nm, item_id, item_nm) WH_ITEM GROUP BY wh_nm, item_id, item_nm"), [$qty, $qty]));
 
-        if ($request->has('key_word')) {
-            $keyWord = $request->input('key_word');
-            $items = $items->where('DT_NO', 'LIKE', '%'.$keyWord.'%')->orWhere('ITEM_ID', 'LIKE', '%'.$keyWord.'%')
-            ->orWhere('ITEM_NM', 'LIKE', '%'.$keyWord.'%')->orWhere('LOT_NO', 'LIKE', '%'.$keyWord.'%')
-            ->orWhere('ACC_NO', 'LIKE', '%'.$keyWord.'%');
-        }
+        // $items = $items->where('acc_id', $);
 
-        if ($limit == -1) {
-            $items = $items->get();
-        } else {
-            $items = $items->paginate($limit);
-        }
-        return LotInfoResource::collection($items);
+        //$items = $items->toArray();
+        // $items = json_decode(json_encode($items), true);
+        // error_log('Some message here.');
+        // error_log($items);
+        //dd($items);
+
+        // if ($limit == -1) {
+        //     $items = $items->get();
+        // } else {
+        //     $items = $items->paginate($limit);
+        // }
+        return LotInfoWhResource::collection($items);
     }
 
     public function sync(Request $request)
