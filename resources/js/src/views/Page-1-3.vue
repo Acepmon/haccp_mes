@@ -260,13 +260,13 @@ export default {
       },
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '이름', field: 'worker:worker_nm', filter: false, width: 200 },
-        { headerName: '휴대폰번호', field: 'worker:tel_no', filter: false, width: 150 },
-        { headerName: '정/부구분', field: 'worker:work_nm', filter: false, width: 150 },
+        { headerName: '이름', field: 'worker:emp_nm', filter: false, width: 200 },
+        { headerName: '휴대폰번호', field: 'worker:mob_no', filter: false, width: 150 },
+        { headerName: '정/부구분', field: 'worker:duty_cd_nm', filter: false, width: 150 },
         { headerName: '업무내용', field: 'worker:remark', filter: false, width: 250 },
-        { headerName: '보건증갱신일자', field: 'worker:health_chk_dt', filter: false, width: 150 },
+        { headerName: '보건증갱신일자', field: 'worker:health_chk_dt_parsed', filter: false, width: 150 },
         { headerName: '업무구분', field: 'worker:role_nm', filter: false, width: 150 },
-        { headerName: '등록일시', field: 'worker:reg_dtm', filter: false, width: 150 }
+        { headerName: '등록일시', field: 'worker:reg_dtm_parsed', filter: false, width: 150 }
       ]
     };
   },

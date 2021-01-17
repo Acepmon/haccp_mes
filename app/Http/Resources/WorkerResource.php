@@ -37,6 +37,7 @@ class WorkerResource extends JsonResource
             'worker:email' => $this->EMAIL,
             'worker:main_job' => $this->MAIN_JOB,
             'worker:health_chk_dt' => $this->HEALTH_CHK_DT,
+            'worker:health_chk_dt_parsed' => now()->parse($this->HEALTH_CHK_DT)->format('Y-m-d'),
             'worker:haccp_doc' => $this->HACCP_DOC,
             'worker:role_cd' => $this->ROLE_CD,
             'worker:role_cd_nm' => $this->whenLoaded('role', function () {
@@ -45,6 +46,7 @@ class WorkerResource extends JsonResource
             'worker:haccp_role' => $this->HACCP_ROLE,
             'worker:reg_id' => $this->REG_ID,
             'worker:reg_dtm' => $this->REG_DTM,
+            'worker:reg_dtm_parsed' => now()->parse($this->REG_DTM)->format('Y-m-d'),
         ];
     }
 }

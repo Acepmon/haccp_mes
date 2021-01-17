@@ -82,6 +82,7 @@ class JobOrdImport implements ToCollection
                                 'SRC_CD' => $procDtlSub->SRC_CD,
                                 'SEQ_NO' => $procDtlSub->SEQ_NO,
                                 'SEQ_NM' => $procDtlSub->SEQ_NM,
+                                'PROC_TIME' => $procDtlSub->PROC_TIME,
                                 'PROC_CD' => $procDtlSub->PROC_CD,
                                 'PROC_NM' => $procDtlSub->PROC_NM,
                                 'PROC_DTL' => $procDtlSub->PROC_DTL,
