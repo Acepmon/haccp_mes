@@ -15,21 +15,36 @@ class WorkerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'worker:worker_id' => $this->WORKER_ID,
-            'worker:worker_nm' => $this->WORKER_NM,
-            'worker:tel_no' => $this->TEL_NO,
-            'worker:work_cd' => $this->WORK_CD,
-            'worker:work_nm' => $this->whenLoaded('work', function () {
-                return $this->work->COMM2_NM;
+            'worker:emp_id' => $this->EMP_ID,
+            'worker:emp_nm' => $this->EMP_NM,
+            'worker:duty_cd' => $this->DUTY_CD,
+            'worker:duty_cd_nm' => $this->whenLoaded('duty', function () {
+                return $this->duty->COMM2_NM;
             }),
-            'worker:health_chk_dt' => now()->parse($this->HEALTH_CHK_DT)->format('Y-m-d'),
+            'worker:mob_no' => $this->MOB_NO,
+            'worker:pass_no' => $this->PASS_NO,
+            'worker:dept_cd' => $this->DEPT_CD,
+            'worker:dept_cd_nm' => $this->whenLoaded('dept', function () {
+                return $this->dept->COMM2_NM;
+            }),
+            'worker:in_dt' => $this->IN_DT,
+            'worker:out_dt' => $this->OUT_DT,
+            'worker:jumin_no' => $this->JUMIN_NO,
+            'worker:birth_dt' => $this->BIRTH_DT,
+            'worker:bank_nm' => $this->BANK_NM,
+            'worker:acct_no' => $this->ACCT_NO,
+            'worker:address' => $this->ADDRESS,
+            'worker:email' => $this->EMAIL,
+            'worker:main_job' => $this->MAIN_JOB,
+            'worker:health_chk_dt' => $this->HEALTH_CHK_DT,
+            'worker:haccp_doc' => $this->HACCP_DOC,
             'worker:role_cd' => $this->ROLE_CD,
-            'worker:role_nm' => $this->whenLoaded('role', function () {
+            'worker:role_cd_nm' => $this->whenLoaded('role', function () {
                 return $this->role->COMM2_NM;
             }),
-            'worker:remark' => $this->REMARK,
+            'worker:haccp_role' => $this->HACCP_ROLE,
             'worker:reg_id' => $this->REG_ID,
-            'worker:reg_dtm' => now()->parse($this->REG_DTM)->format('Y-m-d'),
+            'worker:reg_dtm' => $this->REG_DTM,
         ];
     }
 }

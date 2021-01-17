@@ -1,13 +1,25 @@
 CREATE TABLE `WORKER` (
-	`WORKER_ID`     INT          NOT NULL AUTO_INCREMENT COMMENT '작업자 ID', -- WORKER_ID
-	`WORKER_NM`     VARCHAR(60)  NULL     COMMENT '작업자이름', -- WORKER_NM 
-	`TEL_NO`        VARCHAR(20)  NULL     COMMENT '전화번호', -- TEL_NO
-	`WORK_CD`       VARCHAR(20)  NULL     COMMENT '작업코드', -- WORK_CD
-	`HEALTH_CHK_DT` VARCHAR(8)   NULL     COMMENT '보건증갱신일', -- HEALTH_CHK_DT
-	`ROLE_CD`       VARCHAR(20)  NULL     COMMENT '역할코드', -- ROLE_CD 
-	`REMARK`        VARCHAR(100) NULL     COMMENT '참고사항', -- REMARK
-	`REG_ID`        VARCHAR(15)  NULL     COMMENT '등록자ID', -- REG_ID 
-	`REG_DTM`       VARCHAR(14)  NULL     COMMENT '등록일시', -- REG_DTM
-	PRIMARY KEY(WORKER_ID)
+`EMP_ID`        VARCHAR(15)  NOT NULL COMMENT '직원번호', -- WORKER_ID
+`EMP_NM`        VARCHAR(20)  NULL     COMMENT '직원이름', -- EMP_NM
+`DUTY_CD`       VARCHAR(20)  NULL     COMMENT '직책코드', -- DUTY_CD >  W30
+`MOB_NO`        VARCHAR(20)  NULL     COMMENT '번화번호', -- MOB_NO
+`PASS_NO`       VARCHAR(10)  NULL     COMMENT '비밀번호', -- PASS_NO
+`DEPT_CD`       VARCHAR(20)  NULL     COMMENT '부서코드', -- DEPT_CD > W40
+`IN_DT`         VARCHAR(8)   NULL     COMMENT '입사일자', -- IN_DT
+`OUT_DT`        VARCHAR(8)   NULL     COMMENT '퇴사입자', -- OUT_DT
+`JUMIN_NO`      VARCHAR(20)  NULL     COMMENT '주민번호', -- JUMIN_NO
+`BIRTH_DT`      VARCHAR(8)   NULL     COMMENT '출생일자', -- BIRTH_DT
+`BANK_NM`       VARCHAR(20)  NULL     COMMENT '은행명', -- BANK_NM
+`ACCT_NO`       VARCHAR(30)  NULL     COMMENT '계좌번호', -- ACCT_NO
+`ADDRESS`       VARCHAR(100) NULL     COMMENT '주소', -- ADDRESS
+`EMAIL`         VARCHAR(30)  NULL     COMMENT '이메일', -- EMAIL
+`MAIN_JOB`      VARCHAR(100) NULL     COMMENT '주요작업', -- MAIN_JOB
+`HEALTH_CHK_DT` VARCHAR(8)   NULL     COMMENT '보건증갱신일', -- HEALTH_CHK_DT
+`HACCP_DOC`     VARCHAR(100) NULL     COMMENT '문서담당부분', -- HACCP_DOC
+`ROLE_CD`       VARCHAR(20)  NULL     COMMENT '역할코드', -- ROLE_CD > A05
+`HACCP_ROLE`    VARCHAR(100) NULL     COMMENT '햇섭점검내용', -- HACCP_ROLE
+`REG_ID`        VARCHAR(15)  NULL     COMMENT '등록자ID', -- REG_ID 
+`REG_DTM`       VARCHAR(14)  NULL     COMMENT '등록일시', -- REG_DTM
+PRIMARY KEY(EMP_ID)
 )
 COMMENT 'Worker';

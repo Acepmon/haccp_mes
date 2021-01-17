@@ -20,6 +20,9 @@ class JobOrdDtlResource extends JsonResource
             'job_ord_dtl:seq_no' => $this->SEQ_NO,
             'job_ord_dtl:seq_nm' => $this->SEQ_NM,
             'job_ord_dtl:proc_cd' => $this->PROC_CD,
+            'job_ord_dtl:proc_cd_nm' => $this->whenLoaded('proc', function () {
+                return $this->proc->COMM2_NM;
+            }),
             'job_ord_dtl:proc_nm' => $this->PROC_NM,
             'job_ord_dtl:proc_time' => $this->PROC_TIME,
             'job_ord_dtl:proc_dtl' => $this->PROC_DTL,

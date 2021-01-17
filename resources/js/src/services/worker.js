@@ -11,9 +11,9 @@ export default {
         let params = {
             page: 1,
             limit: 15,
-            sort: 'reg_dtm',
-            order: 'asc',
-            with: 'work,role',
+            sort: 'REG_DTM',
+            order: 'DESC',
+            with: 'duty,dept,role',
             ...args
         }
 
