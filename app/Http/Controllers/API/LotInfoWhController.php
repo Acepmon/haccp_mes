@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LotInfoWhResource;
 //use App\Imports\LotInfoImport;
-use App\LotInfo;
+//use App\LotInfo;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
