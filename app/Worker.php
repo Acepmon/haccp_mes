@@ -38,13 +38,18 @@ class Worker extends Model
         'deleted' => WorkerDeleted::class,
     ];
 
-    public function role()
+    public function duty()
     {
-        return $this->belongsTo('App\CommCd', 'ROLE_CD', 'COMM2_CD')->where('COMM1_CD', 'A00')->whereNotIn('COMM2_CD', ['$$']);
+        return $this->belongsTo('App\CommCd', 'DUTY_CD', 'COMM2_CD')->where('COMM1_CD', 'W30')->whereNotIn('COMM2_CD', ['$$']);
     }
 
-    public function work()
+    public function dept()
     {
-        return $this->belongsTo('App\CommCd', 'WORK_CD', 'COMM2_CD')->where('COMM1_CD', 'A05')->whereNotIn('COMM2_CD', ['$$']);
+        return $this->belongsTo('App\CommCd', 'DEPT_CD', 'COMM2_CD')->where('COMM1_CD', 'W40')->whereNotIn('COMM2_CD', ['$$']);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo('App\CommCd', 'ROLE_CD', 'COMM2_CD')->where('COMM1_CD', 'A05')->whereNotIn('COMM2_CD', ['$$']);
     }
 }

@@ -2,7 +2,7 @@ import axios from 'axios'
 import config from './config'
 
 export default {
-    api: 'job_ord_dtl',
+    api: 'job_ord_dtl_work',
 
     // Fetch login history datas
     fetch: function (args = {}) {
@@ -11,8 +11,8 @@ export default {
         let params = {
             page: 1,
             limit: 15,
-            sort: 'REG_DTM',
-            order: 'ASC',
+            sort: 'JOB_NO',
+            order: 'DESC',
             with: '',
             ...args
         }
@@ -21,24 +21,25 @@ export default {
         return axios.get(`${config.baseUrl}/${this.api}?${this.prepParams(params)}`)
     },
 
-    post: function (formData) {
-        return axios.post(`${config.baseUrl}/${this.api}`, formData, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-    },
-
-    put: function (id, formData) {
+    post: function (args = {}) {
 
         // Default parameters
-        formData.append('_method', 'PUT')
+        let params = {
+            ...args
+        }
 
-        return axios.post(`${config.baseUrl}/${this.api}/${id}`, formData, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
+        return axios.post(`${config.baseUrl}/${this.api}`, params)
+    },
+
+    put: function (id, args = {}) {
+
+        // Default parameters
+        let params = {
+            _method: 'PUT',
+            ...args
+        }
+
+        return axios.post(`${config.baseUrl}/${this.api}/${id}`, params)
     },
 
     delete: function (id, args = {}) {
@@ -62,16 +63,21 @@ export default {
         return axios.post(`${config.baseUrl}/${this.api}/sync`, params)
     },
 
-    export: function (params) {
-        return `${config.baseUrl}/${this.api}/export?${this.prepParams(params)}`
+    download: function () {
+
+        // Default parameters
+        let params = {
+            responseType: 'blob'
+            // headers: {
+            //     'Accept': 'application/xls'
+            // }
+        }
+
+        return axios.get(`${config.baseUrl}/${this.api}/download`, params)
     },
 
-    import: function (formData) {
-        return axios.post(`${config.baseUrl}/${this.api}/import`, formData, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
+    downloadUrl: function () {
+        return `${config.baseUrl}/${this.api}/download`
     },
 
     // Create url query parameters for API request

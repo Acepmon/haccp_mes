@@ -2,10 +2,6 @@
 
 namespace App\Imports;
 
-use App\ItemMst;
-use App\ProcSrc;
-use App\ProcDtl;
-use App\ProcDtlSub;
 use App\CommCd;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -147,6 +143,7 @@ class UnifiedProcImport implements ToCollection
             'SRC_CD' => $srcCd,
             'SEQ_NO' => $seqNo,
             'SEQ_NM' => $seqNm,
+            'PROC_TIME' => 10,
             'PROC_CD' => $this->getCodeByName('B80', $procNm),
             'PROC_NM' => $procNm,
             'PROC_DTL' => $procDtl,

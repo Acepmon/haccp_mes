@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProdInfoTable extends Migration
+class CreateCcpCdInfoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateProdInfoTable extends Migration
      */
     public function up()
     {
-        $path = database_path("migrations/prod_info.sql");
+        $path = database_path("migrations/ccp_cd_info.sql");
         $sql = file_get_contents($path);
         DB::unprepared($sql);
     }
@@ -26,6 +26,6 @@ class CreateProdInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('PROD_INFO');
+        Schema::dropIfExists('CCP_CD_INFO');
     }
 }

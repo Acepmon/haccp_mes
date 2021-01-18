@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProdInfoTable extends Migration
+class CreateJobOrdDtlWorkTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateProdInfoTable extends Migration
      */
     public function up()
     {
-        $path = database_path("migrations/prod_info.sql");
+        $path = database_path("migrations/job_ord_dtl_work.sql");
         $sql = file_get_contents($path);
         DB::unprepared($sql);
     }
@@ -26,6 +26,6 @@ class CreateProdInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('PROD_INFO');
+        Schema::dropIfExists('JOB_ORD_DTL_WORK');
     }
 }

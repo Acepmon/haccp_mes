@@ -158,6 +158,10 @@ $gridBorderColor: #e2e2e2;
   }
 }
 
+select.ag-cell-edit-input {
+  border: 0px;
+}
+
 // Can not use vuexy admin variables
 // agGrid vars and imported vars may conflict
 .theme-dark {

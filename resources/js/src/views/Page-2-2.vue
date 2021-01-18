@@ -287,6 +287,8 @@ export default {
         .fetch({
           limit: -1,
           ...search_params,
+          sort: 'JOB_NO',
+          order: 'DESC'
         })
         .then((res) => {
           this.spinner(false);

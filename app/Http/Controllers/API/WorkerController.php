@@ -26,6 +26,10 @@ class WorkerController extends Controller
         $sort = $request->input('sort', 'REG_DTM');
         $order = $request->input('order', 'DESC');
 
+        if ($request->has('dept_cd')) {
+            $items = $items->where('DEPT_CD', $request->input('dept_cd'));
+        }
+
         if ($limit == -1) {
             $items = $items->with($with)->orderBy($sort, $order)->get();
         } else {

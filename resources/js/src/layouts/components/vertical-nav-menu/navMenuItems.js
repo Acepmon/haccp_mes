@@ -180,8 +180,8 @@ export default [
       },
       {
         url: "/2/4",
-        name: "입고관리",
-        slug: "입고관리",
+        name: "작업자 배치",
+        slug: "작업자 배치",
         showSubmenuOn: '/2',
       },
       {

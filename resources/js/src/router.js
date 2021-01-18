@@ -148,6 +148,11 @@ const router = new Router({
                 name: '생산지시 조회',
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/2/3', value: 'page-2-3', label: '생산지시 조회', component: 'page-2-3'}) } }
               },
+              {
+                path: '/2/4',
+                name: '작업자 배치',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/2/4', value: 'page-2-4', label: '작업자 배치', component: 'page-2-4'}) } }
+              },
 
               {
                 path: '/3',
