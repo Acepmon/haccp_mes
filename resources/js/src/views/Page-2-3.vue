@@ -74,6 +74,8 @@
         :total="totalPages"
         :max="maxPageNumbers"
         v-model="currentPage" />
+      
+      <vs-divider />
 
       <app-control>
         <template v-slot:action>
