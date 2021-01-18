@@ -175,7 +175,8 @@ export default {
           if (params.data['TABLE_NM'] == 'PROC_DTL_SUB') {
             return 'proc-dtl-sub-row';
           }
-        }
+        },
+        singleClickEdit: true
       },
       gridApi2: null,
       defaultColDef2: {

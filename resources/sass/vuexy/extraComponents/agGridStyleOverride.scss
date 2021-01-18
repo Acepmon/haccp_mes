@@ -160,6 +160,9 @@ $gridBorderColor: #e2e2e2;
 
 select.ag-cell-edit-input {
   border: 0px;
+  margin-top: -4px;
+  margin-left: -4px;
+  background: transparent;
 }
 
 // Can not use vuexy admin variables
