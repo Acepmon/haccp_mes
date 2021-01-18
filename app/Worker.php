@@ -10,21 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 class Worker extends Model
 {
     protected $table = 'WORKER';
-    protected $primaryKey = 'WORKER_ID';
-    public $incrementing = true;
+    protected $primaryKey = 'EMP_ID';
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
 
-    protected $fillable = [
-        'WORKER_ID',
-        'WORKER_NM',
-        'TEL_NO',
-        'WORK_CD',
-        'HEALTH_CHK_DT',
-        'ROLE_CD',
-        'REMARK',
-        'REG_ID',
-        'REG_DTM',
-    ];
+    protected $guarded = [];
 
     protected $hidden = [
     ];

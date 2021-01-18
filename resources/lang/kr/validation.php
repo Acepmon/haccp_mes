@@ -169,12 +169,12 @@ return [
         'user:job_cd' => '업무권한',
         'user:user_sts_yn' => '사용여부',
 
-        'worker:worker_nm' => '이름',
-        'worker:tel_no' => '휴대폰번호',
-        'worker:work_cd' => '업무구분',
-        'worker:health_chk_dt' => '보건증갱신일자',
-        'worker:role_cd' => '정/부 구분',
-        'worker:remark' => '업무내용',
+        // 'worker:worker_nm' => '이름',
+        // 'worker:tel_no' => '휴대폰번호',
+        // 'worker:work_cd' => '업무구분',
+        // 'worker:health_chk_dt' => '보건증갱신일자',
+        // 'worker:role_cd' => '정/부 구분',
+        // 'worker:remark' => '업무내용',
 
         'haccp_mst_file:rev_no' => '개정번호',
         'haccp_mst_file:rev_dt' => '개정일자',

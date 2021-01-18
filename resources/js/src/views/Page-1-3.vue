@@ -45,100 +45,138 @@
 
       <app-form>
         <app-form-group required>
-          <template v-slot:label>이름</template>
+          <template v-slot:label>EMP_ID</template>
 
-          <vs-input
-            class="control-field"
-            maxlength="60"
-            v-model="worker['worker:worker_nm']"
-            :danger="errors['worker:worker_nm'] != null"
-            :danger-text="errors['worker:worker_nm']"
-          />
-        </app-form-group>
-
-        <app-form-group required>
-          <template v-slot:label>휴대폰번호</template>
-
-          <vs-input
-            class="control-field"
-            maxlength="20"
-            v-model="worker['worker:tel_no']"
-            :danger="errors['worker:tel_no'] != null"
-            :danger-text="errors['worker:tel_no']"
-          />
+          <vs-input class="control-field" maxlength="15" v-model="worker['worker:emp_id']" :danger="errors['worker:emp_id'] != null" :danger-text="errors['worker:emp_id']" />
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>정/부구분</template>
+          <template v-slot:label>EMP_NM</template>
 
-          <v-select 
-            class="control-field"
-            :options="works" 
-            :reduce="item => item.comm2_cd" 
-            label="comm2_nm" 
-            v-model="worker['worker:work_cd']" 
-            :searchable="false" />
-          <div
-            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-            v-if="errors['worker:work_cd'] != null"
-          >
-            <span
-              class="span-text-validation"
-              v-text="errors['worker:work_cd']"
-            ></span>
+          <vs-input class="control-field" maxlength="20" v-model="worker['worker:emp_nm']" :danger="errors['worker:emp_nm'] != null" :danger-text="errors['worker:emp_nm']" />
+        </app-form-group>
+
+        <app-form-group> 
+          <template v-slot:label>DUTY_CD</template>
+
+          <v-select class="control-field" :options="duties" :reduce="item => item.comm2_cd" label="comm2_nm"  v-model="worker['worker:duty_cd']" :searchable="false" />
+          <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['worker:duty_cd'] != null">
+            <span class="span-text-validation" v-text="errors['worker:duty_cd']"></span>
           </div>
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>업무내용</template>
+          <template v-slot:label>MOB_NO</template>
 
-          <vs-input
-            class="control-field"
-            maxlength="100"
-            v-model="worker['worker:remark']"
-            :danger="errors['worker:remark'] != null"
-            :danger-text="errors['worker:remark']"
-          />
+          <vs-input class="control-field" maxlength="20" v-model="worker['worker:mob_no']" :danger="errors['worker:mob_no'] != null" :danger-text="errors['worker:mob_no']" />
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>보건증갱신일자</template>
+          <template v-slot:label>PASS_NO</template>
 
-          <flat-pickr
-            class="control-field-dtm"
-            :config="configdateTimePicker"
-            v-model="worker['worker:health_chk_dt']"
-          ></flat-pickr>
-          <div
-            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-            v-if="errors['worker:health_chk_dt'] != null"
-          >
-            <span
-              class="span-text-validation"
-              v-text="errors['worker:health_chk_dt']"
-            ></span>
+          <vs-input class="control-field" maxlength="10" v-model="worker['worker:pass_no']" :danger="errors['worker:pass_no'] != null" :danger-text="errors['worker:pass_no']" />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>DEPT_CD</template>
+
+          <v-select class="control-field" :options="depts" :reduce="item => item.comm2_cd" label="comm2_nm"  v-model="worker['worker:dept_cd']" :searchable="false" />
+          <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['worker:dept_cd'] != null">
+            <span class="span-text-validation" v-text="errors['worker:dept_cd']"></span>
           </div>
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>업무 구분</template>
+          <template v-slot:label>IN_DT</template>
 
-          <v-select 
-            class="control-field"
-            :options="roles" 
-            :reduce="item => item.comm2_cd" 
-            label="comm2_nm" 
-            v-model="worker['worker:role_cd']" 
-            :searchable="false" />
-          <div
-            class="con-text-validation span-text-validation-danger vs-input--text-validation-span"
-            v-if="errors['worker:role_cd'] != null"
-          >
-            <span
-              class="span-text-validation"
-              v-text="errors['worker:role_cd']"
-            ></span>
+          <flat-pickr class="control-field-dtm" :config="configdateTimePicker" v-model="worker['worker:in_dt']"></flat-pickr>
+          <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span"  v-if="errors['worker:in_dt'] != null">
+            <span class="span-text-validation" v-text="errors['worker:in_dt']"></span>
           </div>
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>OUT_DT</template>
+
+          <flat-pickr class="control-field-dtm" :config="configdateTimePicker" v-model="worker['worker:out_dt']"></flat-pickr>
+          <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span"  v-if="errors['worker:out_dt'] != null">
+            <span class="span-text-validation" v-text="errors['worker:out_dt']"></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>JUMIN_NO</template>
+
+          <vs-input class="control-field" maxlength="20" v-model="worker['worker:jumin_no']" :danger="errors['worker:jumin_no'] != null" :danger-text="errors['worker:jumin_no']" />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>BIRTH_DT</template>
+
+          <flat-pickr class="control-field-dtm" :config="configdateTimePicker" v-model="worker['worker:birth_dt']"></flat-pickr>
+          <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span"  v-if="errors['worker:birth_dt'] != null">
+            <span class="span-text-validation" v-text="errors['worker:birth_dt']"></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>BANK_NM</template>
+
+          <vs-input class="control-field" maxlength="20" v-model="worker['worker:bank_nm']" :danger="errors['worker:bank_nm'] != null" :danger-text="errors['worker:bank_nm']" />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>ACCT_NO</template>
+
+          <vs-input class="control-field" maxlength="30" v-model="worker['worker:acct_no']" :danger="errors['worker:acct_no'] != null" :danger-text="errors['worker:acct_no']" />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>ADDRESS</template>
+
+          <vs-input class="control-field-lg" maxlength="100" v-model="worker['worker:address']" :danger="errors['worker:address'] != null" :danger-text="errors['worker:address']" />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>EMAIL</template>
+
+          <vs-input class="control-field" maxlength="30" v-model="worker['worker:email']" :danger="errors['worker:email'] != null" :danger-text="errors['worker:email']" />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>MAIN_JOB</template>
+
+          <vs-input class="control-field-lg" maxlength="100" v-model="worker['worker:main_job']" :danger="errors['worker:main_job'] != null" :danger-text="errors['worker:main_job']" />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>HEALTH_CHK_DT</template>
+
+          <flat-pickr class="control-field-dtm" :config="configdateTimePicker" v-model="worker['worker:health_chk_dt']"></flat-pickr>
+          <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span"  v-if="errors['worker:health_chk_dt'] != null">
+            <span class="span-text-validation" v-text="errors['worker:health_chk_dt']"></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>HACCP_DOC</template>
+
+          <vs-input class="control-field-lg" maxlength="100" v-model="worker['worker:haccp_doc']" :danger="errors['worker:haccp_doc'] != null" :danger-text="errors['worker:haccp_doc']" />
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>ROLE_CD</template>
+
+          <v-select class="control-field" :options="roles" :reduce="item => item.comm2_cd" label="comm2_nm"  v-model="worker['worker:role_cd']" :searchable="false" />
+          <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['worker:role_cd'] != null">
+            <span class="span-text-validation" v-text="errors['worker:role_cd']"></span>
+          </div>
+        </app-form-group>
+
+        <app-form-group>
+          <template v-slot:label>HACCP_ROLE</template>
+
+          <vs-input class="control-field-lg" maxlength="100" v-model="worker['worker:haccp_role']" :danger="errors['worker:haccp_role'] != null" :danger-text="errors['worker:haccp_role']" />
         </app-form-group>
       </app-form>
 
@@ -213,27 +251,64 @@ export default {
         locale: KoreanLocale,
       },
       worker: {
-        "worker:worker_id": null,
-        "worker:worker_nm": null,
-        "worker:tel_no": null,
-        "worker:work_cd": null,
+        "worker:emp_id": null,
+        "worker:emp_nm": null,
+        "worker:duty_cd": null,
+        "worker:duty_cd_nm": null,
+        "worker:mob_no": null,
+        "worker:pass_no": null,
+        "worker:dept_cd": null,
+        "worker:dept_cd_nm": null,
+        "worker:in_dt": null,
+        "worker:out_dt": null,
+        "worker:jumin_no": null,
+        "worker:birth_dt": null,
+        "worker:bank_nm": null,
+        "worker:acct_no": null,
+        "worker:address": null,
+        "worker:email": null,
+        "worker:main_job": null,
         "worker:health_chk_dt": null,
+        "worker:health_chk_dt_parsed": null,
+        "worker:haccp_doc": null,
         "worker:role_cd": null,
-        "worker:remark": null,
+        "worker:role_cd_nm": null,
+        "worker:haccp_role": null,
         "worker:reg_id": null,
         "worker:reg_dtm": null,
+        "worker:reg_dtm_parsed": null,
       },
       errors: {
-        "worker:worker_id": null,
-        "worker:worker_nm": null,
-        "worker:tel_no": null,
-        "worker:work_cd": null,
+        "worker:emp_id": null,
+        "worker:emp_nm": null,
+        "worker:duty_cd": null,
+        "worker:duty_cd_nm": null,
+        "worker:mob_no": null,
+        "worker:pass_no": null,
+        "worker:dept_cd": null,
+        "worker:dept_cd_nm": null,
+        "worker:in_dt": null,
+        "worker:out_dt": null,
+        "worker:jumin_no": null,
+        "worker:birth_dt": null,
+        "worker:bank_nm": null,
+        "worker:acct_no": null,
+        "worker:address": null,
+        "worker:email": null,
+        "worker:main_job": null,
         "worker:health_chk_dt": null,
+        "worker:health_chk_dt_parsed": null,
+        "worker:haccp_doc": null,
         "worker:role_cd": null,
-        "worker:remark": null,
+        "worker:role_cd_nm": null,
+        "worker:haccp_role": null,
+        "worker:reg_id": null,
+        "worker:reg_dtm": null,
+        "worker:reg_dtm_parsed": null,
       },
+      duties: [],
+      depts: [],
       roles: [],
-      works: [],
       workers: [],
 
       sorting: {
@@ -241,8 +316,7 @@ export default {
         order: "DESC",
       },
       required: {
-        'worker:worker_nm': '이름',
-        'worker:tel_no': '휴대폰번호',
+        'worker:emp_id': 'EMP_ID',
       },
 
       localeText: AG_GRID_LOCALE_KR,
@@ -260,13 +334,27 @@ export default {
       },
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '이름', field: 'worker:emp_nm', filter: false, width: 200 },
-        { headerName: '휴대폰번호', field: 'worker:mob_no', filter: false, width: 150 },
-        { headerName: '정/부구분', field: 'worker:duty_cd_nm', filter: false, width: 150 },
-        { headerName: '업무내용', field: 'worker:remark', filter: false, width: 250 },
-        { headerName: '보건증갱신일자', field: 'worker:health_chk_dt_parsed', filter: false, width: 150 },
-        { headerName: '업무구분', field: 'worker:role_nm', filter: false, width: 150 },
-        { headerName: '등록일시', field: 'worker:reg_dtm_parsed', filter: false, width: 150 }
+        { headerName: 'emp_id', field: 'worker:emp_id', filter: false, width: 100 },
+        { headerName: 'emp_nm', field: 'worker:emp_nm', filter: false, width: 100 },
+        { headerName: 'duty_cd', field: 'worker:duty_cd_nm', filter: false, width: 100 },
+        { headerName: 'mob_no', field: 'worker:mob_no', filter: false, width: 100 },
+        { headerName: 'pass_no', field: 'worker:pass_no', filter: false, width: 100 },
+        { headerName: 'dept_cd', field: 'worker:dept_cd_nm', filter: false, width: 100 },
+        { headerName: 'in_dt', field: 'worker:in_dt', filter: false, width: 100 },
+        { headerName: 'out_dt', field: 'worker:out_dt', filter: false, width: 100 },
+        { headerName: 'jumin_no', field: 'worker:jumin_no', filter: false, width: 100 },
+        { headerName: 'birth_dt', field: 'worker:birth_dt', filter: false, width: 100 },
+        { headerName: 'bank_nm', field: 'worker:bank_nm', filter: false, width: 100 },
+        { headerName: 'acct_no', field: 'worker:acct_no', filter: false, width: 100 },
+        { headerName: 'address', field: 'worker:address', filter: false, width: 100 },
+        { headerName: 'email', field: 'worker:email', filter: false, width: 100 },
+        { headerName: 'main_job', field: 'worker:main_job', filter: false, width: 100 },
+        { headerName: 'health_chk_dt', field: 'worker:health_chk_dt_parsed', filter: false, width: 100 },
+        { headerName: 'haccp_doc', field: 'worker:haccp_doc', filter: false, width: 100 },
+        { headerName: 'role_cd', field: 'worker:role_cd_nm', filter: false, width: 100 },
+        { headerName: 'haccp_role', field: 'worker:haccp_role', filter: false, width: 100 },
+        { headerName: 'reg_id', field: 'worker:reg_id', filter: false, width: 100 },
+        { headerName: 'reg_dtm', field: 'worker:reg_dtm_parsed', filter: false, width: 100 },
       ]
     };
   },
@@ -344,29 +432,15 @@ export default {
     },
 
     clear() {
-      this.$set(this, "worker", {
-        worker_id: null,
-        worker_nm: null,
-        tel_no: null,
-        work_cd: null,
-        health_chk_dt: null,
-        role_cd: null,
-        remark: null,
-        reg_id: null,
-        reg_dtm: null,
-      });
+      for (const [key, value] of Object.entries(this.worker)) {
+        this.$set(this.worker, key, null)
+      }
     },
 
     clearErrors() {
-      this.$set(this, "errors", {
-        worker_id: null,
-        worker_nm: null,
-        tel_no: null,
-        work_cd: null,
-        health_chk_dt: null,
-        role_cd: null,
-        remark: null,
-      });
+      for (const [key, value] of Object.entries(this.errors)) {
+        this.$set(this.errors, key, null)
+      }
     },
 
     displayErrors(errors) {
@@ -427,7 +501,7 @@ export default {
       this.spinner();
 
       api
-        .put(this.worker["worker:worker_id"], this.worker)
+        .put(this.worker["worker:emp_id"], this.worker)
         .then((res) => {
           this.spinner(false);
 
@@ -513,7 +587,7 @@ export default {
       this.spinner();
 
       api
-        .delete(this.worker["worker:worker_id"])
+        .delete(this.worker["worker:emp_id"])
         .then((res) => {
           this.spinner(false);
 
@@ -617,17 +691,21 @@ export default {
   },
 
   created() {
-    comm_cd.fetch({ cd1: "A00" }).then((res) => {
-      this.roles = res.data;
+    comm_cd.fetch({ cd1: "W30" }).then((res) => {
+      this.duties = res.data;
+    });
+
+    comm_cd.fetch({ cd1: "W40" }).then((res) => {
+      this.depts = res.data;
     });
 
     comm_cd.fetch({ cd1: "A05" }).then((res) => {
-      this.works = res.data;
+      this.roles = res.data;
     });
 
     setTimeout(() => {
       this.query();
-    }, 200);
+    }, 500);
   },
 };
 </script>

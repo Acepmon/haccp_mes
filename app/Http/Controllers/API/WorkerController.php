@@ -26,8 +26,16 @@ class WorkerController extends Controller
         $sort = $request->input('sort', 'REG_DTM');
         $order = $request->input('order', 'DESC');
 
+        if ($request->has('duty_cd')) {
+            $items = $items->where('DUTY_CD', $request->input('duty_cd'));
+        }
+
         if ($request->has('dept_cd')) {
             $items = $items->where('DEPT_CD', $request->input('dept_cd'));
+        }
+
+        if ($request->has('role_cd')) {
+            $items = $items->where('ROLE_CD', $request->input('role_cd'));
         }
 
         if ($limit == -1) {
@@ -48,21 +56,47 @@ class WorkerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'worker:worker_nm' => 'required|string|max:60',
-            'worker:tel_no' => 'required|string|max:20',
-            'worker:work_cd' => 'nullable|string|max:20',
-            'worker:health_chk_dt' => 'nullable|string|date_format:Y-m-d',
-            'worker:role_cd' => 'nullable|string|max:20',
-            'worker:remark' => 'nullable|string|max:100',
+            "worker:emp_id" => "required|string|max:15|unique:WORKER,EMP_ID",
+            "worker:emp_nm" => "nullable|string|max:20",
+            "worker:duty_cd" => "nullable|string|max:20",
+            "worker:mob_no" => "nullable|string|max:20",
+            "worker:pass_no" => "nullable|string|max:10",
+            "worker:dept_cd" => "nullable|string|max:20",
+            "worker:in_dt" => "nullable|string|date_format:Y-m-d",
+            "worker:out_dt" => "nullable|string|date_format:Y-m-d",
+            "worker:jumin_no" => "nullable|string|max:20",
+            "worker:birth_dt" => "nullable|string|date_format:Y-m-d",
+            "worker:bank_nm" => "nullable|string|max:20",
+            "worker:acct_no" => "nullable|string|max:30",
+            "worker:address" => "nullable|string|max:100",
+            "worker:email" => "nullable|string|email|max:30",
+            "worker:main_job" => "nullable|string|max:100",
+            "worker:health_chk_dt" => "nullable|string|date_format:Y-m-d",
+            "worker:haccp_doc" => "nullable|string|max:100",
+            "worker:role_cd" => "nullable|string|max:20",
+            "worker:haccp_role" => "nullable|string|max:100",
         ]);
 
         $item = Worker::create([
-            'WORKER_NM' => $request->input('worker:worker_nm'),
-            'TEL_NO' => $request->input('worker:tel_no'),
-            'WORK_CD' => $request->input('worker:work_cd'),
+            'EMP_ID' => $request->input('worker:emp_id'),
+            'EMP_NM' => $request->input('worker:emp_nm'),
+            'DUTY_CD' => $request->input('worker:duty_cd'),
+            'MOB_NO' => $request->input('worker:mob_no'),
+            'PASS_NO' => $request->input('worker:pass_no'),
+            'DEPT_CD' => $request->input('worker:dept_cd'),
+            'IN_DT' => now()->parse($request->input('worker:in_dt'))->format('Ymd'),
+            'OUT_DT' => now()->parse($request->input('worker:out_dt'))->format('Ymd'),
+            'JUMIN_NO' => $request->input('worker:jumin_no'),
+            'BIRTH_DT' => now()->parse($request->input('worker:birth_dt'))->format('Ymd'),
+            'BANK_NM' => $request->input('worker:bank_nm'),
+            'ACCT_NO' => $request->input('worker:acct_no'),
+            'ADDRESS' => $request->input('worker:address'),
+            'EMAIL' => $request->input('worker:email'),
+            'MAIN_JOB' => $request->input('worker:main_job'),
             'HEALTH_CHK_DT' => now()->parse($request->input('worker:health_chk_dt'))->format('Ymd'),
+            'HACCP_DOC' => $request->input('worker:haccp_doc'),
             'ROLE_CD' => $request->input('worker:role_cd'),
-            'REMARK' => $request->input('worker:remark'),
+            'HACCP_ROLE' => $request->input('worker:haccp_role'),
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
             'REG_DTM' => now()->format('Ymdhis'),
         ]);
@@ -81,7 +115,7 @@ class WorkerController extends Controller
      */
     public function show($id)
     {
-        $item = Worker::where('WORKER_ID', $id)->first();
+        $item = Worker::where('EMP_ID', $id)->first();
 
         if (!$item) {
             return response()->json([
@@ -105,7 +139,7 @@ class WorkerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = Worker::where('WORKER_ID', $id)->first();
+        $item = Worker::where('EMP_ID', $id)->first();
 
         if (!$item) {
             return response()->json([
@@ -115,21 +149,45 @@ class WorkerController extends Controller
         }
 
         $request->validate([
-            'worker_nm' => 'worker:required|string|max:60',
-            'tel_no' => 'worker:required|string|max:20',
-            'work_cd' => 'worker:nullable|string|max:20',
-            'health_chk_dt' => 'worker:nullable|string|date_format:Y-m-d',
-            'role_cd' => 'worker:nullable|string|max:20',
-            'remark' => 'worker:nullable|string|max:100',
+            "worker:emp_nm" => "nullable|string|max:20",
+            "worker:duty_cd" => "nullable|string|max:20",
+            "worker:mob_no" => "nullable|string|max:20",
+            "worker:pass_no" => "nullable|string|max:10",
+            "worker:dept_cd" => "nullable|string|max:20",
+            "worker:in_dt" => "nullable|string|date_format:Y-m-d",
+            "worker:out_dt" => "nullable|string|date_format:Y-m-d",
+            "worker:jumin_no" => "nullable|string|max:20",
+            "worker:birth_dt" => "nullable|string|date_format:Y-m-d",
+            "worker:bank_nm" => "nullable|string|max:20",
+            "worker:acct_no" => "nullable|string|max:30",
+            "worker:address" => "nullable|string|max:100",
+            "worker:email" => "nullable|string|email|max:30",
+            "worker:main_job" => "nullable|string|max:100",
+            "worker:health_chk_dt" => "nullable|string|date_format:Y-m-d",
+            "worker:haccp_doc" => "nullable|string|max:100",
+            "worker:role_cd" => "nullable|string|max:20",
+            "worker:haccp_role" => "nullable|string|max:100",
         ]);
 
         $item->update([
-            'WORKER_NM' => $request->input('worker:worker_nm'),
-            'TEL_NO' => $request->input('worker:tel_no'),
-            'WORK_CD' => $request->input('worker:work_cd'),
+            'EMP_NM' => $request->input('worker:emp_nm'),
+            'DUTY_CD' => $request->input('worker:duty_cd'),
+            'MOB_NO' => $request->input('worker:mob_no'),
+            'PASS_NO' => $request->input('worker:pass_no'),
+            'DEPT_CD' => $request->input('worker:dept_cd'),
+            'IN_DT' => now()->parse($request->input('worker:in_dt'))->format('Ymd'),
+            'OUT_DT' => now()->parse($request->input('worker:out_dt'))->format('Ymd'),
+            'JUMIN_NO' => $request->input('worker:jumin_no'),
+            'BIRTH_DT' => now()->parse($request->input('worker:birth_dt'))->format('Ymd'),
+            'BANK_NM' => $request->input('worker:bank_nm'),
+            'ACCT_NO' => $request->input('worker:acct_no'),
+            'ADDRESS' => $request->input('worker:address'),
+            'EMAIL' => $request->input('worker:email'),
+            'MAIN_JOB' => $request->input('worker:main_job'),
             'HEALTH_CHK_DT' => now()->parse($request->input('worker:health_chk_dt'))->format('Ymd'),
+            'HACCP_DOC' => $request->input('worker:haccp_doc'),
             'ROLE_CD' => $request->input('worker:role_cd'),
-            'REMARK' => $request->input('worker:remark'),
+            'HACCP_ROLE' => $request->input('worker:haccp_role'),
             'REG_ID' => Auth::check() ? Auth::user()->USER_ID : null,
             'REG_DTM' => now()->format('Ymdhis'),
         ]);
@@ -148,7 +206,7 @@ class WorkerController extends Controller
      */
     public function destroy($id)
     {
-        $item = Worker::where('WORKER_ID', $id)->first();
+        $item = Worker::where('EMP_ID', $id)->first();
 
         if (!$item) {
             return response()->json([
