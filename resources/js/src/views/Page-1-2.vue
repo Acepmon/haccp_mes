@@ -11,7 +11,7 @@
             >{{ $t("Query") }}</vs-button
           >
           <vs-button
-            @click="add()"
+            @click="empDialog = true"
             class="mx-1"
             color="primary"
             type="border"
@@ -260,6 +260,57 @@
         :max="maxPageNumbers"
         v-model="currentPage" />
     </vx-card>
+
+    <vs-popup title="" :active.sync="empDialog" button-close-hidden class="preview-dialog">
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="saveEmp()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >{{ $t("Save") }}</vs-button
+          >
+          <vs-button
+            @click="empDialog = false"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >{{ $t("Close") }}</vs-button
+          >
+        </template>
+      </app-control>
+
+      <vs-table multiple v-model="items3_selected" :data="items3">
+        <template slot="thead">
+          <vs-th>이름</vs-th>
+          <vs-th>부서</vs-th>
+          <vs-th>직책</vs-th>
+          <vs-th>정/부</vs-th>
+          <vs-th>주요작업</vs-th>
+        </template>
+
+        <template slot-scope="{data}">
+          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" >
+            <vs-td :data="data[indextr]['worker:emp_nm']">
+              {{ data[indextr]['worker:emp_nm'] }}
+            </vs-td>
+            <vs-td :data="data[indextr]['worker:dept_cd']">
+              {{ data[indextr]['worker:dept_cd_nm'] }}
+            </vs-td>
+            <vs-td :data="data[indextr]['worker:duty_cd']">
+              {{ data[indextr]['worker:duty_cd_nm'] }}
+            </vs-td>
+            <vs-td :data="data[indextr]['worker:role_cd']">
+              {{ data[indextr]['worker:role_cd_nm'] }}
+            </vs-td>
+            <vs-td :data="data[indextr]['worker:main_job']">
+              {{ data[indextr]['worker:main_job'] }}
+            </vs-td>
+          </vs-tr>
+        </template>
+      </vs-table>
+    </vs-popup>
   </div>
 </template>
 
@@ -267,6 +318,7 @@
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
 import api from "@/services/user";
+import worker from "@/services/worker";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -286,6 +338,7 @@ export default {
   },
   data() {
     return {
+      empDialog: false,
       roles: [],
       approvals: [],
       jobs: [],
@@ -316,6 +369,8 @@ export default {
         "user:user_sts_yn": null,
       },
       datas: [],
+      items3: [],
+      items3_selected: [],
 
       sorting: {
         sort: "REG_DTM",
@@ -704,6 +759,29 @@ export default {
     excel() {
       window.location.href = api.downloadUrl();
     },
+
+    query3 () {
+      worker
+        .fetch({
+          limit: -1,
+          dept_cd: '10'
+        })
+        .then((res) => {
+          if (res.data.data.length > 0) {
+            this.items3 = res.data.data
+          }
+        })
+        .catch((err) => {
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
   },
 
   mounted () {
@@ -725,6 +803,7 @@ export default {
 
     setTimeout(() => {
       this.query();
+      this.query3();
     }, 200);
   },
 };
