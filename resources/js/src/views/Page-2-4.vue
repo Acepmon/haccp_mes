@@ -451,17 +451,12 @@ export default {
 
     handleDoubleClick2 () {
       let rows = this.gridApi2.getSelectedRows()
-      console.log(rows);
       this.$set(this, 'item3', [])
 
       if (rows.length > 0) {
         this.$set(this, 'item2', rows[0])
         this.$set(this, 'empDialog', true)
-        this.query3({
-          job_no: rows[0]['job_ord:job_no'],
-          item_id: rows[0]['job_ord:item_id'],
-          seq_no: rows[0]['job_ord:seq_no']
-        })
+        this.query4(rows[0].JOB_NO, rows[0].ITEM_ID, rows[0].SEQ_NO)
       }
     },
 
@@ -530,11 +525,6 @@ export default {
           callback(this.items)
         })
         .catch((err) => {
-          this.displayErrors(
-            err.response.data.hasOwnProperty("errors")
-              ? err.response.data.errors
-              : null
-          );
           this.spinner(false);
           this.$vs.notify({
             title: this.$t("Error"),
@@ -574,9 +564,7 @@ export default {
         });
     },
 
-    query3 (jobNo, itemId, seqNo) {
-      this.spinner();
-
+    query3 () {
       worker
         .fetch({
           limit: -1,
@@ -585,31 +573,42 @@ export default {
         .then((res) => {
           if (res.data.data.length > 0) {
             this.items3 = res.data.data
-
-            job_ord_dtl_work
-              .fetch({
-                limit: -1,
-                job_no: jobNo,
-                item_id: itemId,
-                seq_no: seqNo
-              })
-              .then((res2) => {
-                spinner(false)
-  
-                this.items3_selected = res2.data.data
-              })
-              .catch((err) => {
-                this.spinner(false);
-                this.$vs.notify({
-                  title: this.$t("Error"),
-                  position: "top-right",
-                  color: "warning",
-                  iconPack: "feather",
-                  icon: "icon-alert-circle",
-                  text: err.response.data.message,
-                });
-              });
           }
+        })
+        .catch((err) => {
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
+
+    query4 (jobNo, itemId, seqNo) {
+      this.spinner()
+
+      job_ord_dtl_work
+        .fetch({
+          limit: -1,
+          job_no: jobNo,
+          item_id: itemId,
+          seq_no: seqNo
+        })
+        .then((res) => {
+          this.spinner(false)
+
+          let empIds = res.data.data.map(item => {
+            return item['job_ord_dtl_work:emp_id']
+          })
+
+          let selectedItems3 = this.items3.filter((item3) => {
+            return empIds.includes(item3['worker:emp_id'])
+          });
+
+          this.$set(this, 'items3_selected', selectedItems3)
         })
         .catch((err) => {
           this.spinner(false);
@@ -625,7 +624,43 @@ export default {
     },
 
     saveEmp() {
-      // 
+      this.spinner()
+
+      let selected = this.items3_selected.map((item3) => {
+        return item3['worker:emp_id']
+      })
+
+      job_ord_dtl_work
+        .sync({
+          job_no: this.item2.JOB_NO,
+          item_id: this.item2.ITEM_ID,
+          seq_no: this.item2.SEQ_NO,
+          sync: selected
+        })
+        .then((res) => {
+          this.spinner(false)
+
+          if (res.data.success) {
+            this.$set(this, 'empDialog', false)
+            this.query2(this.item2.JOB_NO, this.item2.ITEM_ID)
+            this.$vs.notify({
+              title: this.$t("SuccessSaveData"),
+              position: "top-right",
+              color: "success",
+            });
+          }
+        })
+        .catch((err) => {
+          this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
     },
 
     closeDialog() {
@@ -648,6 +683,7 @@ export default {
 
   created () {
     setTimeout(() => {
+      this.query3()
       this.query((items) => {
         if (items.length > 0) {
           this.query2(items[0]['job_ord:job_no'], items[0]['job_ord:item_id'])

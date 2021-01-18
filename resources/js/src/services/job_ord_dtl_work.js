@@ -53,6 +53,16 @@ export default {
         return axios.post(`${config.baseUrl}/${this.api}/${id}`, params)
     },
 
+    sync: function (args = {}) {
+        // Default parameters
+        let params = {
+            ...args
+        }
+
+        // Return axios promise
+        return axios.post(`${config.baseUrl}/${this.api}/sync`, params)
+    },
+
     download: function () {
 
         // Default parameters

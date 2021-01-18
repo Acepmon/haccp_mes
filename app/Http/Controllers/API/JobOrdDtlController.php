@@ -27,7 +27,7 @@ class JobOrdDtlController extends Controller
         $with = collect(array_filter(explode(',', $request->input('with'))));
 
         $nwItems1 = DB::table('JOB_ORD_DTL')
-            ->select(DB::raw('SEQ_NO, "" SRC_CD, "전체공정" SRC_NM, SEQ_NM, PROC_NM, PROC_DTL, PROC_TIME, CCP_YN, "JOB_ORD_DTL" TABLE_NM, ITEM_ID, SRT_DTM, END_DTM, CCP_CD, CHK1_DTM, CHK_TEMP, CHK2_TIME, CHK2_TEMP, "" EMP_NM'))
+            ->select(DB::raw('SEQ_NO, "" SRC_CD, "전체공정" SRC_NM, SEQ_NM, PROC_NM, PROC_DTL, PROC_TIME, CCP_YN, "JOB_ORD_DTL" TABLE_NM, ITEM_ID, SRT_DTM, END_DTM, CCP_CD, CHK1_DTM, CHK_TEMP, CHK2_TIME, CHK2_TEMP, "" EMP_NM, JOB_NO'))
             ->where('JOB_NO', $jobNo)
             ->where('ITEM_ID', $itemId)
             ->get();
@@ -61,7 +61,7 @@ class JobOrdDtlController extends Controller
 
         if ($with->contains('job_ord_dtl_sub')) {
             $nwItems2 = DB::table('JOB_ORD_DTL_SUB')
-                ->select(DB::raw('SEQ_NO, SRC_CD, "" SRC_NM, SEQ_NM, PROC_NM, PROC_DTL, PROC_TIME, CCP_YN, "JOB_ORD_DTL_SUB" TABLE_NM, ITEM_ID, SRT_DTM, END_DTM, CCP_CD, CHK1_DTM, CHK_TEMP, CHK2_TIME, CHK2_TEMP, "" EMP_NM'))
+                ->select(DB::raw('SEQ_NO, SRC_CD, "" SRC_NM, SEQ_NM, PROC_NM, PROC_DTL, PROC_TIME, CCP_YN, "JOB_ORD_DTL_SUB" TABLE_NM, ITEM_ID, SRT_DTM, END_DTM, CCP_CD, CHK1_DTM, CHK_TEMP, CHK2_TIME, CHK2_TEMP, "" EMP_NM, JOB_NO'))
                 ->where('JOB_NO', $jobNo)
                 ->where('ITEM_ID', $itemId)
                 ->get();

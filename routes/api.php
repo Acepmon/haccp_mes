@@ -141,6 +141,7 @@ Route::group([
     Route::post('job_ord_dtl/sync', 'JobOrdDtlController@sync')->name('job_ord_dtl.sync');
     Route::apiResource('job_ord_dtl', 'JobOrdDtlController');
 
+    Route::post('job_ord_dtl_work/sync', 'JobOrdDtlWorkController@sync')->name('job_ord_dtl_work.sync');
     Route::apiResource('job_ord_dtl_work', 'JobOrdDtlWorkController');
 
     Route::get('ccp_data', 'CcpDataController@index');
