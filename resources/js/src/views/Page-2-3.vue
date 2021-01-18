@@ -74,6 +74,19 @@
         :total="totalPages"
         :max="maxPageNumbers"
         v-model="currentPage" />
+
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="exportExcel()"
+            class="mx-1"
+            color="primary"
+            type="border"
+            :disabled="items.length <= 0"
+            >{{ $t("ToExcel") }}</vs-button
+          >
+        </template>
+      </app-control>
       
       <ag-grid-vue
         ref="agGridTable"
@@ -509,6 +522,15 @@ export default {
         });
     },
 
+    exportExcel () {
+      let params = {};
+      params['job_no'] = this.item['job_ord:job_no'];
+      params["item_id"] = this.item['job_ord:item_id'];
+      params['with'] = 'job_ord_dtl_sub';
+
+      window.location.href = job_ord_dtl.export(params);
+    },
+
     closeDialog() {
       this.$vs.dialog({
         type: "confirm",
@@ -530,6 +552,7 @@ export default {
     setTimeout(() => {
       this.query((items) => {
         if (items.length > 0) {
+          this.$set(this, 'item', items[0])
           this.query2(items[0]['job_ord:job_no'], items[0]['job_ord:item_id'])
         }
       })

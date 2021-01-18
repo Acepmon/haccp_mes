@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\CommCd;
 use App\Exports\JobOrdDtlExport;
+use App\Exports\JobOrdDtlExport2;
+use App\Exports\JobOrdDtlSubExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ItemMstResource;
 use App\JobOrd;
@@ -145,6 +147,14 @@ class JobOrdDtlController extends Controller
 
     public function export(Request $request)
     {
-        // 
+        $jobNo = $request->input('job_no');
+        $itemId = $request->input('item_id');
+        $with = collect(array_filter(explode(',', $request->input('with'))));
+
+        if ($with->contains('job_ord_dtl_sub')) {
+            return Excel::download(new JobOrdDtlSubExport($jobNo, $itemId), 'JOB-ORD-DTL-SUB-' . now()->format('Y-m-d') . '.xlsx');
+        } else {
+            return Excel::download(new JobOrdDtlExport($jobNo, $itemId), 'JOB-ORD-DTL-' . now()->format('Y-m-d') . '.xlsx');
+        }
     }
 }
