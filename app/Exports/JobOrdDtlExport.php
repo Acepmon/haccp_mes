@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\JobOrd;
 use App\JobOrdDtlWork;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -9,9 +10,11 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\FromView;
+use Illuminate\Contracts\View\View;
 
-
-class JobOrdDtlExport implements FromCollection, WithHeadings, WithStyles, WithMapping
+// class JobOrdDtlExport implements FromCollection, WithHeadings, WithStyles, WithMapping
+class JobOrdDtlExport implements FromView
 {
     public $jobNo, $itemId;
 
@@ -19,6 +22,22 @@ class JobOrdDtlExport implements FromCollection, WithHeadings, WithStyles, WithM
     {
         $this->jobNo = $jobNo;
         $this->itemId = $itemId;
+    }
+
+    public function view(): View
+    {
+        $jobOrd = JobOrd::query()
+            ->where('JOB_NO', $this->jobNo)
+            ->where('ITEM_ID', $this->itemId)
+            ->with(['item'])
+            ->first();
+
+        $items = $this->collection();
+
+        return view('exports.job_ord_dtl', [
+            'jobOrd' => $jobOrd,
+            'items' => $items,
+        ]);
     }
 
     /**

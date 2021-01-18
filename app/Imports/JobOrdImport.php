@@ -43,6 +43,7 @@ class JobOrdImport implements ToCollection
                     ], [
                         'JOB_NO' => $jobNo,
                         'ITEM_ID' => $itemId,
+                        'ITEM_NM' => DB::table('ITEM_MST')->where('ITEM_ID', $itemId)->value('ITEM_NM'),
                         'ORD_QTY' => $ordQty,
                         'PROD_QTY' => 0,
                         'ORD_NM' => $ordNm,
