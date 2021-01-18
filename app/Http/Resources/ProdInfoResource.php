@@ -21,7 +21,7 @@ class ProdInfoResource extends JsonResource
             'prod_info:out_wh_nm' => $this->OUT_WH_NM,
             'prod_info:in_wh_nm' => $this->IN_WH_NM,
             'prod_info:spec' => $this->SPEC,
-            'prod_info:qty' => $this->QTY,
+            'prod_info:qty' => number_format($this->QTY),
             'prod_info:lot_no' => $this->LOT_NO,
             'prod_info:remark' => $this->REMARK,
         ];

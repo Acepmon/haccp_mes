@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-//use App\Exports\LotInfoExport;
+use App\Exports\LotInfoWhExport;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LotInfoWhResource;
@@ -20,35 +20,46 @@ class LotInfoWhController extends Controller
      */
     public function index(Request $request)
     {
-        $qty = 0;
-       $items = collect(DB::select(DB::raw("SELECT wh_nm, item_id, item_nm, SUM(total) total
+        // $qty = 0;
+        // $items = collect(DB::select(DB::raw("SELECT wh_nm, item_id, item_nm, SUM(total) total
+        //             FROM (SELECT wh_nm, item_id, item_nm,
+        //             SUM(IF(acc_cd = '구매', qty, 0)) - SUM(IF(acc_cd = '생산불출', qty, 0)) -
+        //             SUM(IF(acc_cd = '생산소모', qty, 0)) + SUM(IF(acc_cd = '생산입고', qty, 0)) -
+        //             SUM(IF(acc_cd = '불량-폐기', qty, 0)) - SUM(IF(acc_cd = '자가사용', qty, 0)) +
+        //             SUM(IF(acc_cd = '재고조정', qty, 0)) - SUM(IF(acc_cd = '창고이동', qty, 0)) -
+        //             SUM(IF(acc_cd = '판매', qty, 0)) + SUM(IF(acc_cd = '견적', 0, 0)) total
+        //             FROM LOT_INFO WHERE qty > ?
+        //             GROUP BY wh_nm, item_id, item_nm
+        //             UNION ALL
+        //             SELECT in_wh_nm, item_id, item_nm,
+        //             SUM(IF(acc_cd = '생산불출', qty, 0)) + SUM(IF(acc_cd = '창고이동', qty, 0)) total
+        //             FROM LOT_INFO WHERE qty > ? AND in_wh_nm IS NOT NULL
+        //             GROUP BY in_wh_nm, item_id, item_nm) WH_ITEM GROUP BY wh_nm, item_id, item_nm"), [$qty, $qty]));
+        // $items = $items->where('acc_id', $);
+
+       $items = DB::select(DB::raw("SELECT wh_nm, item_id, item_nm, acc_cd, SUM(qty) sub_tot
+                    FROM LOT_INFO WHERE qty IS NOT NULL
+                    GROUP BY wh_nm, item_id, item_nm, acc_cd
+                    UNION 
+                    SELECT in_wh_nm, item_id, item_nm, acc_cd,SUM(qty) sub_tot
+                    FROM LOT_INFO WHERE qty IS NOT NULL AND IN_WH_NM IS NOT NULL
+                    GROUP BY in_wh_nm, item_id, item_nm, acc_cd
+                    UNION 
+                    SELECT wh_nm, item_id, item_nm, '현재재고' acc_cd, SUM(total) total
                     FROM (SELECT wh_nm, item_id, item_nm,
                     SUM(IF(acc_cd = '구매', qty, 0)) - SUM(IF(acc_cd = '생산불출', qty, 0)) -
                     SUM(IF(acc_cd = '생산소모', qty, 0)) + SUM(IF(acc_cd = '생산입고', qty, 0)) -
                     SUM(IF(acc_cd = '불량-폐기', qty, 0)) - SUM(IF(acc_cd = '자가사용', qty, 0)) +
                     SUM(IF(acc_cd = '재고조정', qty, 0)) - SUM(IF(acc_cd = '창고이동', qty, 0)) -
                     SUM(IF(acc_cd = '판매', qty, 0)) + SUM(IF(acc_cd = '견적', 0, 0)) total
-                    FROM LOT_INFO WHERE qty > ?
+                    FROM LOT_INFO WHERE qty IS NOT NULL
                     GROUP BY wh_nm, item_id, item_nm
-                    UNION ALL
+                    UNION 
                     SELECT in_wh_nm, item_id, item_nm,
-                    SUM(IF(acc_cd = '생산불출', qty, 0)) + SUM(IF(acc_cd = '창고이동', qty, 0)) total
-                    FROM LOT_INFO WHERE qty > ? AND in_wh_nm IS NOT NULL
-                    GROUP BY in_wh_nm, item_id, item_nm) WH_ITEM GROUP BY wh_nm, item_id, item_nm"), [$qty, $qty]));
-
-        // $items = $items->where('acc_id', $);
-
-        //$items = $items->toArray();
-        // $items = json_decode(json_encode($items), true);
-        // error_log('Some message here.');
-        // error_log($items);
-        //dd($items);
-
-        // if ($limit == -1) {
-        //     $items = $items->get();
-        // } else {
-        //     $items = $items->paginate($limit);
-        // }
+                    SUM(IF(acc_cd = '창고이동', qty, 0)) total
+                    FROM LOT_INFO WHERE qty IS NOT NULL AND in_wh_nm IS NOT NULL
+                    GROUP BY in_wh_nm, item_id, item_nm) WH_ITEM GROUP BY wh_nm, item_id, item_nm ORDER BY 1,2,4"));
+        
         return LotInfoWhResource::collection($items);
     }
 
@@ -128,12 +139,12 @@ class LotInfoWhController extends Controller
         //
     }
 
-    // public function export(Request $request)
-    // {
-    //     $keyWord = $request->input('comp_nm');
+    public function export(Request $request)
+    {
+        $keyWord = 'stock'; //$request->input('comp_nm');
 
-    //     return Excel::download(new LotInfoExport($keyWord), 'Lot-INFO' . now()->format('Y-m-d') . '.xlsx');
-    // }
+        return Excel::download(new LotInfoWhExport($keyWord), 'STOCK-INFO' . now()->format('Y-m-d') . '.xlsx');
+    }
 
     public function import(Request $request)
     {

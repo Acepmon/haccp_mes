@@ -149,10 +149,10 @@ export default {
         limit: 15,
         total: 0,
       },
-      sorting: {
-        sort: "CUST_ID",
-        order: "ASC",
-      },
+      // sorting: {
+      //   sort: "CUST_ID",
+      //   order: "ASC",
+      // },
 
       tableData: [],
       header: [],
@@ -173,10 +173,11 @@ export default {
 
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50},
-        { headerName: '참고명', field: 'lot_info_wh:wh_nm', width: 200,},
+        { headerName: '참고명', field: 'lot_info_wh:wh_nm', filter: true, width: 200,},
         { headerName: '품목코드', field: 'lot_info_wh:item_id', filter: true, width: 200,},
-        { headerName: '품목명', field: 'lot_info_wh:item_nm', filter: true, width: 400,},
-        { headerName: '수량', field: 'lot_info_wh:total', type: 'numericColumn', width: 100,},
+        { headerName: '품목명', field: 'lot_info_wh:item_nm', filter: true, width: 300,},
+        { headerName: '전표구분', field: 'lot_info_wh:acc_cd', filter: true, width: 100,},
+        { headerName: '수량', field: 'lot_info_wh:sub_tot', type: 'numericColumn', width: 100,},
       ],
     }
   },
@@ -328,7 +329,7 @@ export default {
         text: this.$t("CloseDocument"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => this.removeTab("page-3-2"),
+        accept: () => this.removeTab("page-4-3"),
       });
     },
   },

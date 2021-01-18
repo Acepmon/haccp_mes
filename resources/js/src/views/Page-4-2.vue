@@ -4,7 +4,7 @@
       <app-control>
         <template v-slot:filter>
           <span class="px-5 pt-2">자료검색</span>
-          <vs-input class="control-field-lm" v-model="searchKeyword" placeholder="일자 연결전표 품목코드 품목명" />
+          <vs-input class="control-field-lm" v-model="searchKeyword" placeholder="일자 품목코드 품목명 규격 LOT번호" />
         </template>
         <template v-slot:action>
           <vs-button
@@ -175,9 +175,9 @@ export default {
 
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50},
-        { headerName: '일자-No', field: 'prod_info:dt_no', width: 100,},
-        { headerName: '품목코드', field: 'prod_info:item_nm', filter: true, width: 100,},
-        { headerName: '품목이름', field: 'prod_info:dt_no', width: 300,},
+        { headerName: '일자-No', field: 'prod_info:acc_no', width: 100,},
+        { headerName: '품목코드', field: 'prod_info:item_id', filter: true, width: 100,},
+        { headerName: '품목이름', field: 'prod_info:item_nm', width: 300,},
         { headerName: '출고창고', field: 'prod_info:out_wh_nm', width: 100,},
         { headerName: '입고창고', field: 'prod_info:in_wh_nm', width: 100,},
         { headerName: '규격', field: 'prod_info:spec', width: 200,},

@@ -27,7 +27,7 @@ class ProdInfoController extends Controller
         if ($request->has('key_word')) {
             $keyWord = $request->input('key_word');
             $items = $items->where('ACC_NO', 'LIKE', '%'.$keyWord.'%')->orWhere('ITEM_ID', 'LIKE', '%'.$keyWord.'%')
-            ->orWhere('ITEM_NM', 'LIKE', '%'.$keyWord.'%')->orWhere('LOT_NO', 'LIKE', '%'.$keyWord.'%');
+            ->orWhere('ITEM_NM', 'LIKE', '%'.$keyWord.'%')->orWhere('SPEC', 'LIKE', '%'.$keyWord.'%')->orWhere('LOT_NO', 'LIKE', '%'.$keyWord.'%');
         }
 
         if ($limit == -1) {
