@@ -26,11 +26,11 @@ class CcpDataController extends Controller
             ->table('CCP_DATA')
             ->select(
                 'DEVICE_ID AS DEVICE', 
-                DB::raw('(SELECT CAST(DATA AS DECIMAL(10,2)) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND CAST(B.REG_DTM AS SIGNED) >= '.intval($from).' ORDER BY B.REG_DTM DESC LIMIT 1) AS DATA'), 
-                DB::raw('(SELECT REG_DTM FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND CAST(B.REG_DTM AS SIGNED) >= '.intval($from).' ORDER BY B.REG_DTM DESC LIMIT 1) AS REG_DTM'), 
-                DB::raw('(SELECT MIN(CAST(B.DATA AS DECIMAL(10,2))) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND CAST(B.REG_DTM AS SIGNED) >= '.intval($from).') AS MIN'), 
-                DB::raw('(SELECT MAX(CAST(B.DATA AS DECIMAL(10,2))) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND CAST(B.REG_DTM AS SIGNED) >= '.intval($from).') AS MAX'), 
-                DB::raw('(SELECT AVG(CAST(B.DATA AS DECIMAL(10,2))) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE AND CAST(B.REG_DTM AS SIGNED) >= '.intval($from).') AS AVG'), 
+                DB::raw('(SELECT CAST(DATA AS DECIMAL(10,2)) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE ORDER BY B.REG_DTM DESC LIMIT 1) AS DATA'), 
+                DB::raw('(SELECT REG_DTM FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE ORDER BY B.REG_DTM DESC LIMIT 1) AS REG_DTM'), 
+                DB::raw('(SELECT MIN(CAST(B.DATA AS DECIMAL(10,2))) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE)AS MIN'), 
+                DB::raw('(SELECT MAX(CAST(B.DATA AS DECIMAL(10,2))) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE) AS MAX'), 
+                DB::raw('(SELECT AVG(CAST(B.DATA AS DECIMAL(10,2))) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE) AS AVG'), 
             )
             ->whereIn('DEVICE_ID', array_filter(explode(',', $device_id)))
             ->groupBy('DEVICE_ID')

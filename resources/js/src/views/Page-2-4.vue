@@ -78,6 +78,9 @@
       <vs-divider />
 
       <app-control>
+        <template v-slot:filter>
+          <span>작업자 선택을 위해 해당 열을 더블클릭하세요!</span>
+        </template>
         <template v-slot:action>
           <vs-button
             @click="exportExcel()"
@@ -380,7 +383,7 @@ export default {
         { headerName: 'CCP 유무', field: 'CCP_YN', filter: false, editable: false, width: 150 },
         { headerName: '시작시간', field: 'SRT_DTM', filter: false, editable: false, width: 150 },
         { headerName: '종료시간', field: 'END_DTM', filter: false, editable: false, width: 150 },
-        { headerName: '작업자', field: 'EMP_NM', filter: false, editable: false, width: 150 },
+        { headerName: '작업자', field: 'EMP_NM', filter: false, editable: false, width: 200 },
       ]
     }
   },

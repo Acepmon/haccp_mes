@@ -93,6 +93,7 @@ class JobOrdDtlExport implements FromCollection, WithHeadings, WithStyles, WithM
         return [
             // Style the first row as bold text.
             1 => ['font' => ['bold' => true]],
+            2 => ['font' => ['bold' => true]],
         ];
     }
 }

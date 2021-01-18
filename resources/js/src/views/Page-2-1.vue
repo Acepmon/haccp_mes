@@ -200,16 +200,16 @@ export default {
       columnDefs2: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '공정구분', field: 'SRC_NM', filter: false, editable: false, width: 200 },
-        { headerName: '공정순서', field: 'SEQ_NM', filter: false, editable: false, width: 200 },
+        { headerName: '공정순서', field: 'SEQ_NM', filter: false, editable: false, width: 100 },
         { headerName: '공정명', field: 'PROC_NM', filter: false, editable: false, width: 200 },
-        { headerName: '공정내용', field: 'PROC_DTL', filter: false, editable: false, width: 200 },
-        { headerName: '소요시간', field: 'PROC_TIME', filter: false, editable: true, width: 200, type: 'numericColumn', cellEditor: 'numericEditor' },
+        { headerName: '공정내용', field: 'PROC_DTL', filter: false, editable: false, width: 400 },
+        { headerName: '소요시간', field: 'PROC_TIME', filter: false, editable: true, width: 100, type: 'numericColumn', cellEditor: 'numericEditor' },
         { 
           headerName: 'CCP 유무',
           field: 'CCP_YN',
           filter: false,
           editable: true,
-          width: 200,
+          width: 100,
           cellEditor: 'agSelectCellEditor',
           cellEditorParams: {
             values: ['Y', 'N'],

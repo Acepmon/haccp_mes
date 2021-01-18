@@ -36,10 +36,8 @@
         </template>
       </app-control>
 
-      <vs-divider />
-
       <div class="flex flex-wrap">
-        <div class="w-full md:w-1/2 px-5 my-5" v-for="(item, index) in itemsComp" :key="index">
+        <div class="w-full md:w-1/2 px-4 my-1" v-for="(item, index) in itemsComp" :key="index">
           <div class="w-full flex flex-row">
             <ccp-data-widget 
               style="flex: 4"
