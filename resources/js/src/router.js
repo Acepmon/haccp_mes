@@ -190,6 +190,11 @@ const router = new Router({
                 name: '창고별 재고조회',
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/4/3', value: 'page-4-3', label: '창고별 재고조회', component: 'page-4-3'}) } }
               },
+              {
+                path: '/4/4',
+                name: '품목별 단가정보',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/4/4', value: 'page-4-4', label: '품목별 단가정보', component: 'page-4-4'}) } }
+              },
               
               {
                 path: '/5',

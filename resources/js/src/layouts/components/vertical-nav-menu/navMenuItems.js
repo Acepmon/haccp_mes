@@ -252,8 +252,8 @@ export default [
       },
       {
         url: "/4/4",
-        name: "사원별업무투입현황",
-        slug: "사원별업무투입현황",
+        name: "품목별 단가정보",
+        slug: "품목별 단가정보",
         showSubmenuOn: '/4',
       }
     ]
