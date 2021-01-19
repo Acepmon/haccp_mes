@@ -145,6 +145,9 @@
 .control-col .control-field {
   width: 10rem;
 }
+.control-col .control-field-lg {
+  width: 14rem;
+}
 .control-col .control-field-dtm {
   width: 8rem;
   text-align: center;
@@ -170,4 +173,14 @@
   .iframe-placeholder {
     background: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100% 100%"><text fill="#C0C9CE" x="50%" y="15%" font-size="14" text-anchor="middle">loading...</text></svg>') 0px 0px no-repeat;
   }
+}
+
+.tr-expand td .content-tr-expand {
+  padding: 0px;
+}
+.tr-expand td .content-tr-expand .vs-con-table .vs-con-tbody {
+  border: 0px;
+}
+.td-check {
+  width: 100px !important;
 }

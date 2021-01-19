@@ -111,6 +111,9 @@ Route::group([
     Route::post('lot_info_wh/sync', 'LotInfoWhController@sync')->name('lot_info_wh.sync');
     Route::apiResource('lot_info_wh', 'LotInfoWhController');
 
+    Route::get('lot_info_cost/export', 'LotInfoCostController@export')->name('lot_info_cost.export');
+    Route::get('lot_info_cost', 'LotInfoCostController@index')->name('lot_info_cost.index');
+
     Route::get('bom_config/export', 'BomConfigController@export')->name('bom_config.export');
     Route::post('bom_config/import', 'BomConfigController@import')->name('bom_config.import');
     Route::post('bom_config/sync', 'BomConfigController@sync')->name('bom_config.sync');
