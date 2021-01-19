@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Worker;
+use App\CommCd;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -16,34 +17,55 @@ class WorkerExport implements FromCollection, WithHeadings, WithStyles, WithMapp
     */
     public function collection()
     {
-        return Worker::orderBy('REG_DTM', 'desc')->get();
+        return Worker::orderBy('EMP_ID', 'asc')->get();
     }
 
     public function map($worker): array
     {
         return [
-            $worker->WORKER_ID,
-            $worker->WORKER_NM,
-            $worker->TEL_NO,
-            ($worker->work ? $worker->work->COMM2_NM : null),
-            $worker->REMARK,
-            now()->parse($worker->HEALTH_CHK_DT)->format('Y-m-d'),
-            ($worker->role ? $worker->role->COMM2_NM : null),
-            now()->parse($worker->REG_DTM)->format('Y-m-d')
-        ];
+            $worker->EMP_ID,
+            $worker->EMP_NM,
+            $worker->DUTY_CD,
+            //DB::select("SELECT get_codename('W30', $worker->DUTY_CD)"),
+            $worker->DEPT_CD,
+            $worker->MOB_NO,
+            $worker->IN_DT,
+            $worker->OUT_DT,
+            $worker->JUMIN_NO,
+            $worker->BIRTH_DT,
+            $worker->BANK_NM,
+            $worker->ACCT_NO,
+            $worker->ADDRESS,
+            $worker->EMAIL,
+            $worker->MAIN_JOB,
+            $worker->HEALTH_CHK_DT,
+            $worker->HACCP_DOC,
+            $worker->ROLE_CD,
+            $worker->HACCP_ROLE,
+         ];
     }
 
     public function headings(): array
     {
         return [
-            'No',
+            '사번',
             '이름',
-            '휴대폰번호',
-            '정/부구분',
-            '업무내용',
+            '직책',
+            '부서',
+            '전화번호',
+            '입사일자',
+            '퇴사일자',
+            '주민번호',
+            '생년월일',
+            '은행명',
+            '계좌번호',
+            '주소',
+            '이메일',
+            '주요업무',
             '보건증갱신일자',
-            '업무구분',
-            '등록일시',
+            'HACCP 문서관리',
+            '정/부구분',
+            'HACCP 담당역할',
         ];
     }
 

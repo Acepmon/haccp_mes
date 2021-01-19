@@ -45,49 +45,49 @@
 
       <app-form>
         <app-form-group required>
-          <template v-slot:label>EMP_ID</template>
+          <template v-slot:label>사원번호</template>
 
           <vs-input class="control-field" maxlength="15" v-model="worker['worker:emp_id']" :danger="errors['worker:emp_id'] != null" :danger-text="errors['worker:emp_id']" />
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>EMP_NM</template>
+          <template v-slot:label>이름</template>
 
           <vs-input class="control-field" maxlength="20" v-model="worker['worker:emp_nm']" :danger="errors['worker:emp_nm'] != null" :danger-text="errors['worker:emp_nm']" />
         </app-form-group>
 
         <app-form-group> 
-          <template v-slot:label>DUTY_CD</template>
+          <template v-slot:label>직책</template>
 
           <v-select class="control-field" :options="duties" :reduce="item => item.comm2_cd" label="comm2_nm"  v-model="worker['worker:duty_cd']" :searchable="false" />
           <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['worker:duty_cd'] != null">
             <span class="span-text-validation" v-text="errors['worker:duty_cd']"></span>
           </div>
         </app-form-group>
-
         <app-form-group>
-          <template v-slot:label>MOB_NO</template>
-
-          <vs-input class="control-field" maxlength="20" v-model="worker['worker:mob_no']" :danger="errors['worker:mob_no'] != null" :danger-text="errors['worker:mob_no']" />
-        </app-form-group>
-
-        <app-form-group>
-          <template v-slot:label>PASS_NO</template>
-
-          <vs-input class="control-field" maxlength="10" v-model="worker['worker:pass_no']" :danger="errors['worker:pass_no'] != null" :danger-text="errors['worker:pass_no']" />
-        </app-form-group>
-
-        <app-form-group>
-          <template v-slot:label>DEPT_CD</template>
+          <template v-slot:label>부서</template>
 
           <v-select class="control-field" :options="depts" :reduce="item => item.comm2_cd" label="comm2_nm"  v-model="worker['worker:dept_cd']" :searchable="false" />
           <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['worker:dept_cd'] != null">
             <span class="span-text-validation" v-text="errors['worker:dept_cd']"></span>
           </div>
         </app-form-group>
+        
+        <app-form-group>
+          <template v-slot:label>비밀번호</template>
+
+          <vs-input class="control-field" maxlength="10" v-model="worker['worker:pass_no']" :danger="errors['worker:pass_no'] != null" :danger-text="errors['worker:pass_no']" />
+        </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>IN_DT</template>
+          <template v-slot:label>전화번호</template>
+
+          <vs-input class="control-field" maxlength="20" v-model="worker['worker:mob_no']" :danger="errors['worker:mob_no'] != null" :danger-text="errors['worker:mob_no']" />
+        </app-form-group>
+
+
+        <app-form-group>
+          <template v-slot:label>입사일자</template>
 
           <flat-pickr class="control-field-dtm" :config="configdateTimePicker" v-model="worker['worker:in_dt']"></flat-pickr>
           <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span"  v-if="errors['worker:in_dt'] != null">
@@ -96,7 +96,7 @@
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>OUT_DT</template>
+          <template v-slot:label>퇴사일자</template>
 
           <flat-pickr class="control-field-dtm" :config="configdateTimePicker" v-model="worker['worker:out_dt']"></flat-pickr>
           <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span"  v-if="errors['worker:out_dt'] != null">
@@ -105,13 +105,13 @@
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>JUMIN_NO</template>
+          <template v-slot:label>주민번호</template>
 
           <vs-input class="control-field" maxlength="20" v-model="worker['worker:jumin_no']" :danger="errors['worker:jumin_no'] != null" :danger-text="errors['worker:jumin_no']" />
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>BIRTH_DT</template>
+          <template v-slot:label>생년월일</template>
 
           <flat-pickr class="control-field-dtm" :config="configdateTimePicker" v-model="worker['worker:birth_dt']"></flat-pickr>
           <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span"  v-if="errors['worker:birth_dt'] != null">
@@ -120,37 +120,37 @@
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>BANK_NM</template>
+          <template v-slot:label>은행명</template>
 
           <vs-input class="control-field" maxlength="20" v-model="worker['worker:bank_nm']" :danger="errors['worker:bank_nm'] != null" :danger-text="errors['worker:bank_nm']" />
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>ACCT_NO</template>
+          <template v-slot:label>계좌번호</template>
 
           <vs-input class="control-field" maxlength="30" v-model="worker['worker:acct_no']" :danger="errors['worker:acct_no'] != null" :danger-text="errors['worker:acct_no']" />
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>ADDRESS</template>
+          <template v-slot:label>주소</template>
 
           <vs-input class="control-field-lg" maxlength="100" v-model="worker['worker:address']" :danger="errors['worker:address'] != null" :danger-text="errors['worker:address']" />
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>EMAIL</template>
+          <template v-slot:label>이메일</template>
 
           <vs-input class="control-field" maxlength="30" v-model="worker['worker:email']" :danger="errors['worker:email'] != null" :danger-text="errors['worker:email']" />
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>MAIN_JOB</template>
+          <template v-slot:label>주요업무</template>
 
           <vs-input class="control-field-lg" maxlength="100" v-model="worker['worker:main_job']" :danger="errors['worker:main_job'] != null" :danger-text="errors['worker:main_job']" />
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>HEALTH_CHK_DT</template>
+          <template v-slot:label>보건증일자</template>
 
           <flat-pickr class="control-field-dtm" :config="configdateTimePicker" v-model="worker['worker:health_chk_dt']"></flat-pickr>
           <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span"  v-if="errors['worker:health_chk_dt'] != null">
@@ -159,13 +159,13 @@
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>HACCP_DOC</template>
+          <template v-slot:label>HACCP 문서관리</template>
 
           <vs-input class="control-field-lg" maxlength="100" v-model="worker['worker:haccp_doc']" :danger="errors['worker:haccp_doc'] != null" :danger-text="errors['worker:haccp_doc']" />
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>ROLE_CD</template>
+          <template v-slot:label>정/부구분</template>
 
           <v-select class="control-field" :options="roles" :reduce="item => item.comm2_cd" label="comm2_nm"  v-model="worker['worker:role_cd']" :searchable="false" />
           <div class="con-text-validation span-text-validation-danger vs-input--text-validation-span" v-if="errors['worker:role_cd'] != null">
@@ -174,7 +174,7 @@
         </app-form-group>
 
         <app-form-group>
-          <template v-slot:label>HACCP_ROLE</template>
+          <template v-slot:label>HACCP 담당역할</template>
 
           <vs-input class="control-field-lg" maxlength="100" v-model="worker['worker:haccp_role']" :danger="errors['worker:haccp_role'] != null" :danger-text="errors['worker:haccp_role']" />
         </app-form-group>
@@ -334,27 +334,27 @@ export default {
       },
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: 'emp_id', field: 'worker:emp_id', filter: false, width: 100 },
-        { headerName: 'emp_nm', field: 'worker:emp_nm', filter: false, width: 100 },
-        { headerName: 'duty_cd', field: 'worker:duty_cd_nm', filter: false, width: 100 },
-        { headerName: 'mob_no', field: 'worker:mob_no', filter: false, width: 100 },
-        { headerName: 'pass_no', field: 'worker:pass_no', filter: false, width: 100 },
-        { headerName: 'dept_cd', field: 'worker:dept_cd_nm', filter: false, width: 100 },
-        { headerName: 'in_dt', field: 'worker:in_dt', filter: false, width: 100 },
-        { headerName: 'out_dt', field: 'worker:out_dt', filter: false, width: 100 },
-        { headerName: 'jumin_no', field: 'worker:jumin_no', filter: false, width: 100 },
-        { headerName: 'birth_dt', field: 'worker:birth_dt', filter: false, width: 100 },
-        { headerName: 'bank_nm', field: 'worker:bank_nm', filter: false, width: 100 },
-        { headerName: 'acct_no', field: 'worker:acct_no', filter: false, width: 100 },
-        { headerName: 'address', field: 'worker:address', filter: false, width: 100 },
-        { headerName: 'email', field: 'worker:email', filter: false, width: 100 },
-        { headerName: 'main_job', field: 'worker:main_job', filter: false, width: 100 },
-        { headerName: 'health_chk_dt', field: 'worker:health_chk_dt_parsed', filter: false, width: 100 },
-        { headerName: 'haccp_doc', field: 'worker:haccp_doc', filter: false, width: 100 },
-        { headerName: 'role_cd', field: 'worker:role_cd_nm', filter: false, width: 100 },
-        { headerName: 'haccp_role', field: 'worker:haccp_role', filter: false, width: 100 },
-        { headerName: 'reg_id', field: 'worker:reg_id', filter: false, width: 100 },
-        { headerName: 'reg_dtm', field: 'worker:reg_dtm_parsed', filter: false, width: 100 },
+        { headerName: '사원번호', field: 'worker:emp_id', filter: false, width: 100 },
+        { headerName: '이름', field: 'worker:emp_nm', filter: false, width: 100 },
+        { headerName: '직책', field: 'worker:duty_cd_nm', filter: false, width: 100 },
+        { headerName: '부서명', field: 'worker:dept_cd_nm', filter: false, width: 100 },
+        { headerName: '전화번호', field: 'worker:mob_no', filter: false, width: 100 },
+        { headerName: '비밀번호', field: 'worker:pass_no', filter: false, width: 100 },
+        { headerName: '입사일자', field: 'worker:in_dt', filter: false, width: 100 },
+        { headerName: '퇴사일자', field: 'worker:out_dt', filter: false, width: 100 },
+        { headerName: '주민번호', field: 'worker:jumin_no', filter: false, width: 100 },
+        { headerName: '생년월일', field: 'worker:birth_dt', filter: false, width: 100 },
+        { headerName: '은행명', field: 'worker:bank_nm', filter: false, width: 100 },
+        { headerName: '계좌번호', field: 'worker:acct_no', filter: false, width: 100 },
+        { headerName: '주소', field: 'worker:address', filter: false, width: 150 },
+        { headerName: '이메일', field: 'worker:email', filter: false, width: 100 },
+        { headerName: '주요업무', field: 'worker:main_job', filter: false, width: 100 },
+        { headerName: '보건증일자', field: 'worker:health_chk_dt_parsed', filter: false, width: 100 },
+        { headerName: 'HACCP 문서관리', field: 'worker:haccp_doc', filter: false, width: 100 },
+        { headerName: '정/부구분', field: 'worker:role_cd_nm', filter: false, width: 100 },
+        { headerName: 'HACCP 담당역할', field: 'worker:haccp_role', filter: false, width: 100 },
+        //{ headerName: 'reg_id', field: 'worker:reg_id', filter: false, width: 100 },
+        //{ headerName: 'reg_dtm', field: 'worker:reg_dtm_parsed', filter: false, width: 100 },
       ]
     };
   },
