@@ -158,4 +158,7 @@ Route::group([
     Route::apiResource('ccp_esc_data', 'CcpEscDataController');
 
     Route::apiResource('edoc_file_haccp', 'EdocFileHaccpController');
+
+    Route::get('app_version', 'AppVersionController@index');
+    Route::put('app_version', 'AppVersionController@update');
 });
