@@ -5,14 +5,51 @@ namespace App\Http\Controllers\API;
 use App\CcpData;
 use App\CcpLimit;
 use App\CommCd;
+use App\Exports\CcpDataExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CcpDataResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CcpDataController extends Controller
 {
     public function index(Request $request)
+    {
+        $sort = $request->input('sort', 'REG_DTM');
+        $order = $request->input('order', 'DESC');
+        $limit = $request->input('limit', 15);
+
+        $items = CcpData::select('DEVICE_ID AS DEVICE', 'DATA', 'REG_DTM');
+
+        if ($request->has('device_id') && !empty($request->input('device_id'))) {
+            $items = $items->where('DEVICE_ID', $request->input('device_id'));
+        }
+
+        if ($request->has('from') && !empty($request->input('from'))) {
+            $from = now()->parse($request->input('from'))->format('YmdHis');
+            $items = $items->whereRaw('CAST(REG_DTM AS SIGNED) >= ' . intval($from));
+        }
+
+        if ($request->has('to') && !empty($request->input('to'))) {
+            $to = now()->parse($request->input('to'))->format('YmdHis');
+            $items = $items->whereRaw('CAST(REG_DTM AS SIGNED) <= ' . intval($to));
+        }
+
+        if ($request->has('reg_dtm') && !empty($request->input('reg_dtm'))) {
+            $items = $items->where('REG_DTM', 'LIKE', $request->input('reg_dtm') . '%');
+        }
+
+        if ($limit == -1) {
+            $items = $items->orderBy($sort, $order)->get();
+        } else {
+            $items = $items->orderBy($sort, $order)->paginate($limit);
+        }
+
+        return CcpDataResource::collection($items);
+    }
+
+    public function dashboard(Request $request)
     {
         $deviceCds = CommCd::where('COMM1_CD', 'C00')->whereNotIn('COMM2_CD', ['$$'])->get();
 
@@ -72,5 +109,14 @@ class CcpDataController extends Controller
         }
 
         return CcpDataResource::collection($items); 
+    }
+
+    public function export(Request $request)
+    {
+        $from = $request->input('from');
+        $to = $request->input('to');
+        $deviceId = $request->input('device_id');
+
+        return Excel::download(new CcpDataExport($from, $to, $deviceId), 'CCP-DATA-' . now()->format('Y-m-d') . '.xlsx');
     }
 }

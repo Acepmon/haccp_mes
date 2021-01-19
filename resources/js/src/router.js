@@ -228,8 +228,8 @@ const router = new Router({
               },
               {
                 path: '/6/4',
-                name: 'CCP 이탈정보',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/4', value: 'page-6-4', label: 'CCP 이탈정보', component: 'page-6-4'}) } }
+                name: 'CCP 자료 조회',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/4', value: 'page-6-4', label: 'CCP 자료 조회', component: 'page-6-4'}) } }
               },
               {
                 path: '/6/5',

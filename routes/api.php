@@ -146,6 +146,8 @@ Route::group([
     Route::apiResource('job_ord_dtl_work', 'JobOrdDtlWorkController');
 
     Route::get('ccp_data', 'CcpDataController@index');
+    Route::get('ccp_data/dashboard', 'CcpDataController@dashboard');
+    Route::get('ccp_data/export', 'CcpDataController@export');
     Route::get('ccp_data/{DEVICE_ID}', 'CcpDataController@details');
 
     Route::apiResource('ccp_limit', 'CcpLimitController');

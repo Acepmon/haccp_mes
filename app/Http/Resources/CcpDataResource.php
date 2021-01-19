@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\CcpLimit;
+use App\CommCd;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CcpDataResource extends JsonResource
@@ -17,6 +18,7 @@ class CcpDataResource extends JsonResource
     {
         return [
             'device_id' => $this->DEVICE,
+            'device_nm' => CommCd::where('COMM1_CD', 'C00')->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $this->DEVICE)->value('COMM2_NM'),
             'data' => floatval($this->DATA),
             'min' => $this->when(!empty($this->MIN), function () {
                 return floatval($this->MIN);
