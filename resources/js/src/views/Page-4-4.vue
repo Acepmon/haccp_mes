@@ -51,7 +51,11 @@
       </template>
     </app-control>
 
-    <vs-table :data="itemsComp" pagination max-items="15">
+    <vs-divider />
+
+    <vue-apex-charts type="area" height="350" :options="chartOptions" :series="chartSeries" v-if="selected != null"></vue-apex-charts>
+
+    <vs-table :data="itemsComp" pagination max-items="15" v-model="selected" @selected="handleSelected">
       <template slot="thead">
         <vs-th style="width: 50px;">No</vs-th>
         <vs-th style="width: 150px;">품목코드</vs-th>
@@ -61,7 +65,7 @@
       </template>
 
       <template slot-scope="{data}">
-        <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+        <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
           <vs-td :data="data[indextr].no">
             {{data[indextr].no}}
           </vs-td>
@@ -124,6 +128,8 @@ import AppControl from "@/views/ui-elements/AppControl";
 import AppForm from "@/views/ui-elements/AppForm";
 import AppFormGroup from "@/views/ui-elements/AppFormGroup";
 
+import VueApexCharts from 'vue-apexcharts'
+
 export default {
   name: 'page-4-4',
 
@@ -131,12 +137,17 @@ export default {
     AppControl,
     AppForm,
     AppFormGroup,
+    VueApexCharts
   },
 
   data () {
     return {
       division: 'in',
-      items: []
+      items: [],
+      selected: null,
+
+      chartData: [],
+      chartCategories: [],
     }
   },
 
@@ -167,6 +178,29 @@ export default {
 
       return itemsComp
     },
+
+    chartSeries () {
+      return [{
+        name: 'asd',
+        data: this.chartData
+      }]
+    },
+    chartOptions () {
+      return {
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        colors: this.themeColors,
+        xaxis: {
+          type: 'category',
+          categories: this.chartCategories,
+          tickAmount: 12
+        },
+      }
+    }
   },
 
   methods: {
@@ -225,6 +259,11 @@ export default {
       }
 
       window.location.href = lot_info_cost.export(search_params);
+    },
+
+    handleSelected () {
+      this.$set(this, 'chartData', this.selected.SUB_ITEMS.map(item => item.COST))
+      this.$set(this, 'chartCategories', this.selected.SUB_ITEMS.map(item => item.DATE))
     },
 
     closeDialog() {
