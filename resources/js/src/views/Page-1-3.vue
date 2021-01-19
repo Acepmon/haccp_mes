@@ -316,7 +316,7 @@ export default {
         order: "DESC",
       },
       required: {
-        'worker:emp_id': 'EMP_ID',
+        'worker:emp_id': '사원번호',
       },
 
       localeText: AG_GRID_LOCALE_KR,
