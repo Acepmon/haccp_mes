@@ -151,7 +151,13 @@ export default [
         name: "정보보호관리",
         slug: "정보보호관리",
         showSubmenuOn: '/1',
-      }
+      },
+      {
+        url: "/1/12",
+        name: "App Version",
+        slug: "App Version",
+        showSubmenuOn: '/1',
+      },
     ]
   },
   {
@@ -252,8 +258,8 @@ export default [
       },
       {
         url: "/4/4",
-        name: "사원별업무투입현황",
-        slug: "사원별업무투입현황",
+        name: "품목별 단가정보",
+        slug: "품목별 단가정보",
         showSubmenuOn: '/4',
       }
     ]
@@ -304,12 +310,18 @@ export default [
       },
       {
         url: "/6/4",
+        name: "CCP 자료 조회",
+        slug: "CCP 자료 조회",
+        showSubmenuOn: '/6',
+      },
+      {
+        url: "/6/5",
         name: "HACCP 점검결과",
         slug: "HACCP 점검결과",
         showSubmenuOn: '/6',
       },
       {
-        url: "/6/5",
+        url: "/6/6",
         name: "시험검사관리",
         slug: "시험검사관리",
         showSubmenuOn: '/6',

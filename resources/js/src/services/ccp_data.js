@@ -4,7 +4,6 @@ import config from './config'
 export default {
     api: 'ccp_data',
 
-    // Fetch login history datas
     fetch: function (args = {}) {
 
         // Default parameters
@@ -14,6 +13,21 @@ export default {
 
         // Return axios promise
         return axios.get(`${config.baseUrl}/${this.api}?${this.prepParams(params)}`)
+    },
+
+    dashboard: function (args = {}) {
+
+        // Default parameters
+        let params = {
+            ...args
+        }
+
+        // Return axios promise
+        return axios.get(`${config.baseUrl}/${this.api}/dashboard?${this.prepParams(params)}`)
+    },
+
+    export: function (params) {
+        return `${config.baseUrl}/${this.api}/export?${this.prepParams(params)}`
     },
 
     details: function (device_id, args = {}) {

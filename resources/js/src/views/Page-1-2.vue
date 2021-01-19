@@ -11,7 +11,7 @@
             >{{ $t("Query") }}</vs-button
           >
           <vs-button
-            @click="empDialog = true"
+            @click="openEmpDialog()"
             class="mx-1"
             color="primary"
             type="border"
@@ -760,15 +760,22 @@ export default {
       window.location.href = api.downloadUrl();
     },
 
+    openEmpDialog () {
+      this.empDialog = true
+      this.query3()
+    },
+
     query3 () {
       worker
         .fetch({
           limit: -1,
-          dept_cd: '10'
         })
         .then((res) => {
           if (res.data.data.length > 0) {
-            this.items3 = res.data.data
+            let resDatas = res.data.data
+            resDatas = resDatas.filter(resData => resData['worker:dept_cd'] != '10')
+            resDatas = resDatas.filter(resData => !this.datas.map(data => data['user:user_id']).includes(resData['worker:emp_id']))
+            this.$set(this, 'items3', resDatas)
           }
         })
         .catch((err) => {
@@ -782,6 +789,56 @@ export default {
           });
         });
     },
+
+    saveEmp () {
+      this.spinner()
+
+      let selected = this.items3_selected.map(data => {
+        return {
+          'user:user_id': data['worker:emp_id'],
+          'user:user_nm': data['worker:emp_nm'],
+          'user:email': data['worker:email'],
+        }
+      })
+
+      console.log(selected)
+
+      api.bulk({
+        bulk: selected
+      })
+      .then((res) => {
+        this.spinner(false);
+        if (res.data.success) {
+          this.$vs.notify({
+            color: "success",
+            position: "top-right",
+            title: this.$t("SuccessAddData"),
+            text: res.data.message,
+          });
+          this.empDialog = false
+          this.$set(this, 'items3_selected', [])
+          this.$set(this, 'items3', [])
+          this.query();
+          // this.clear()
+        }
+      })
+      .catch((err) => {
+        this.displayErrors(
+          err.response.data.hasOwnProperty("errors")
+            ? err.response.data.errors
+            : null
+        );
+        this.spinner(false);
+        this.$vs.notify({
+          title: this.$t("Error"),
+          position: "top-right",
+          color: "warning",
+          iconPack: "feather",
+          icon: "icon-alert-circle",
+          text: err.response.data.message,
+        });
+      });
+    }
   },
 
   mounted () {
@@ -803,7 +860,6 @@ export default {
 
     setTimeout(() => {
       this.query();
-      this.query3();
     }, 200);
   },
 };

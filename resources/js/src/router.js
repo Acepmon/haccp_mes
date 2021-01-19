@@ -127,6 +127,11 @@ const router = new Router({
                 name: '정보보호관리',
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/11', value: 'page-1-11', label: '정보보호관리', component: 'page-1-11'}) } }
               },
+              {
+                path: '/1/12',
+                name: 'App Version',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/12', value: 'page-1-12', label: 'App Version', component: 'page-1-12'}) } }
+              },
 
               {
                 path: '/2',
@@ -190,6 +195,11 @@ const router = new Router({
                 name: '창고별 재고조회',
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/4/3', value: 'page-4-3', label: '창고별 재고조회', component: 'page-4-3'}) } }
               },
+              {
+                path: '/4/4',
+                name: '품목별 단가정보',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/4/4', value: 'page-4-4', label: '품목별 단가정보', component: 'page-4-4'}) } }
+              },
               
               {
                 path: '/5',
@@ -218,8 +228,13 @@ const router = new Router({
               },
               {
                 path: '/6/4',
+                name: 'CCP 자료 조회',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/4', value: 'page-6-4', label: 'CCP 자료 조회', component: 'page-6-4'}) } }
+              },
+              {
+                path: '/6/5',
                 name: 'HACCP 점검결과',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/4', value: 'page-6-4', label: 'HACCP 점검결과', component: 'page-6-4'}) } }
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/5', value: 'page-6-5', label: 'HACCP 점검결과', component: 'page-6-5'}) } }
               },
               {
                 path: '/7',

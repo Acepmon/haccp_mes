@@ -2,7 +2,7 @@
   <vx-card id="div-with-loading" class="vs-con-loading__container main-card">
     <app-control>
       <template v-slot:filter>
-        <span class="flex items-center px-5 pt-2">기간</span>
+        <span class="flex items-center px-5">작성기간</span>
         <flat-pickr
           :config="configFromdateTimePicker"
           v-model="from"
@@ -10,7 +10,7 @@
           @on-change="onFromChange"
           class="control-field-dtm mx-1"
         />
-        <span class="flex items-center px-2 pt-2">~</span>
+        <span class="flex items-center px-2">~</span>
         <flat-pickr
           :config="configTodateTimePicker"
           v-model="to"
@@ -18,14 +18,11 @@
           @on-change="onToChange"
           class="control-field-dtm mx-1"
         />
-        <span class="flex items-center px-5 pt-2">CCP 장비</span>
-        <v-select 
-          class="control-field-lg"
-          :options="devices" 
-          :reduce="item => item.comm2_cd" 
-          label="comm2_nm" 
-          v-model="searchDeviceId" 
-          :searchable="false" />
+        <span class="flex items-center px-5">문서명</span>
+        <vs-input
+          class="control-field-sm"
+          v-model="doc_nm"
+        />
       </template>
       <template v-slot:action>
         <vs-button
@@ -34,6 +31,13 @@
           color="primary"
           type="border"
           >{{ $t("Query") }}</vs-button
+        >
+        <vs-button
+          @click="addDialog()"
+          class="mx-1"
+          color="primary invisible"
+          type="border"
+          >{{ $t("Add") }}</vs-button
         >
         <vs-button
           @click="saveDialog()"
@@ -50,14 +54,6 @@
           >{{ $t("Delete") }}</vs-button
         >
         <vs-button
-          @click="exportExcel()"
-          class="mx-1"
-          color="primary"
-          type="border"
-          :disabled="items.length <= 0"
-          >{{ $t("ToExcel") }}</vs-button
-        >
-        <vs-button
           @click="closeDialog()"
           class="mx-1"
           color="primary"
@@ -67,9 +63,13 @@
       </template>
     </app-control>
 
+    <vs-divider />
+
     <ag-grid-vue
       ref="agGridTable"
       :localeText="localeText"
+      rowSelection="single"
+      @selection-changed="handleSelected"
       :gridOptions="gridOptions"
       class="ag-theme-material w-100 my-4 ag-grid-table"
       style="max-height: 100%;"
@@ -85,13 +85,18 @@
       :total="totalPages"
       :max="maxPageNumbers"
       v-model="currentPage" />
+
+    <vs-popup title="문서확인" :active.sync="previewDialog" class="preview-dialog">
+      <iframe style="width: 100%; height: calc(100vh - 150px);" class="iframe-placeholder" v-if="item['edoc_file_haccp:doc_id'] != null" :src="previewUrl" frameborder="0"></iframe>
+    </vs-popup>
   </vx-card>
 </template>
 
 <script>
 import axios from "axios";
 import comm_cd from "@/services/comm_cd";
-import ccp_data from "@/services/ccp_data";
+import edoc_file from "@/services/edoc_file";
+import edoc_file_haccp from "@/services/edoc_file_haccp";
 import { mapActions } from "vuex";
 
 import AppControl from "@/views/ui-elements/AppControl";
@@ -109,22 +114,20 @@ import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js"
 import moment from 'moment';
 
 export default {
-  name: 'page-6-4',
-
+  name: 'page-6-5',
   components: {
     AppControl,
     AppForm,
     AppFormGroup,
     AgGridVue,
-    flatPickr,
+    flatPickr
   },
 
   data () {
     return {
       format: "yyyy-MM-dd",
-      from: moment().startOf('month').format('YYYY-MM-DD'),
-      to: moment().format('YYYY-MM-DD'),
-      searchDeviceId: '',
+      from: null,
+      to: null,
       configFromdateTimePicker: {
         maxDate: null,
         locale: KoreanLocale,
@@ -133,8 +136,22 @@ export default {
         minDate: null,
         locale: KoreanLocale,
       },
+      doc_nm: null,
 
-      devices: [],
+      previewDialog: false,
+
+      item: {
+        'edoc_file_haccp:haccp_seq': null,
+        'edoc_file_haccp:doc_id': null,
+        'edoc_file_haccp:apr_cd': null,
+        'edoc_file_haccp:app_data': null,
+        'edoc_file_haccp:remark': null,
+        'edoc_file_haccp:use_yn': null,
+        'edoc_file_haccp:work_id': null,
+        'edoc_file_haccp:work_dtm': null,
+        'edoc_file_haccp:app_id': null,
+        'edoc_file_haccp:app_dtm': null,
+      },
       items: [],
       localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
@@ -151,9 +168,13 @@ export default {
       },
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '장비명', field: 'device_nm', filter: false, width: 300 },
-        { headerName: '데이터', field: 'data', filter: false, width: 300 },
-        { headerName: '일시', field: 'reg_dtm_parsed', filter: false, width: 300 },
+        { headerName: '작성일시', field: 'edoc_file_haccp:work_dtm', filter: false, width: 200 },
+        { headerName: '문서명', field: 'edoc_file:doc_nm', filter: false, width: 200 },
+        { headerName: '승인상태', field: 'edoc_file_haccp:apr_cd', filter: false, width: 200 },
+        { headerName: '작성자', field: 'edoc_file_haccp:work_id', filter: false, width: 200 },
+        { headerName: '승인일시', field: 'edoc_file_haccp:app_dtm', filter: false, width: 200 },
+        { headerName: '승인자', field: 'edoc_file_haccp:app_id', filter: false, width: 200 },
+        { headerName: '비고', field: 'edoc_file_haccp:remark', filter: false, width: 200 },
       ],
     }
   },
@@ -185,6 +206,10 @@ export default {
         this.gridApi.paginationGoToPage(val - 1)
       }
     },
+
+    previewUrl () {
+      return edoc_file.previewUrl(this.item['edoc_file_haccp:doc_id'])
+    }
   },
 
   methods: {
@@ -203,6 +228,15 @@ export default {
       }
     },
 
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
+      this.$set(this, 'detailDialog', true)
+
+      if (rows.length > 0) {
+        this.$set(this, 'item', rows[0]);
+      }
+    },
+
     onFromChange(selectedDates, dateStr, instance) {
       this.$set(this.configTodateTimePicker, "minDate", dateStr);
     },
@@ -211,7 +245,7 @@ export default {
       this.$set(this.configFromdateTimePicker, "maxDate", dateStr);
     },
 
-    query() {
+    query () {
       this.spinner();
 
       let search_params = {};
@@ -224,15 +258,16 @@ export default {
         search_params['to'] = this.to;
       }
 
-      if (this.searchDeviceId != null) {
-        search_params['device_id'] = this.searchDeviceId;
+      if (this.doc_nm != null) {
+        search_params['doc_nm'] = this.doc_nm;
       }
 
-      ccp_data
+      edoc_file_haccp
         .fetch({
-          sort: 'REG_DTM',
+          sort: 'WORK_DTM',
           order: 'DESC',
           limit: -1,
+          with: 'edoc_file,apr',
           ...search_params,
         })
         .then((res) => {
@@ -252,24 +287,6 @@ export default {
         });
     },
 
-    exportExcel() {
-      let search_params = {};
-
-      if (this.from != null) {
-        search_params['from'] = this.from;
-      }
-
-      if (this.to != null) {
-        search_params['to'] = this.to;
-      }
-
-      if (this.searchDeviceId != null) {
-        search_params['device_id'] = this.searchDeviceId;
-      }
-
-      window.location.href = ccp_data.export(search_params);
-    },
-
     closeDialog() {
       this.$vs.dialog({
         type: "confirm",
@@ -278,7 +295,7 @@ export default {
         text: this.$t("CloseDocument"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => this.removeTab("page-6-3"),
+        accept: () => this.removeTab("page-6-4"),
       });
     }
   },
@@ -288,17 +305,9 @@ export default {
   },
 
   created () {
-    comm_cd.fetch({ cd1: "C00" }).then((res) => {
-      this.$set(this, 'devices', [{ comm2_cd: '', comm2_nm: 'All Devices' }].concat(res.data))
-    });
-
-    // setTimeout(() => {
-    //   this.query();
-    // }, 500);
+    setTimeout(() => {
+      this.query();
+    }, 200);
   }
 }
 </script>
-
-<style>
-
-</style>

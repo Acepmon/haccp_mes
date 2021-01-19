@@ -115,7 +115,7 @@ export default {
       this.spinner()
 
       ccp_data
-        .fetch({
+        .dashboard({
           device_id: this.devices.map(item => item.comm2_cd).join(','),
           sort: 'DEVICE',
           order: 'ASC',
@@ -162,7 +162,7 @@ export default {
 
     refresh (callback = Function) {
       ccp_data
-        .fetch({
+        .dashboard({
           device_id: this.devices.map(item => item.comm2_cd).join(','),
           sort: 'DEVICE',
           order: 'ASC',

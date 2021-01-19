@@ -1,15 +1,15 @@
 <template>
   <div>
     <vx-card class="bg-primary-gradient cursor-pointer ccp-data-widget" @click="data.chart_dialog = true; onPopupOpen(data);">
-      <div class="h3 py-2 font-bold text-white text-center">
+      <div class="h3 py-1 font-bold text-white text-center">
         {{ data.device_nm }}: <span class="px-8">{{ data.data }}℃</span>
       </div>
-      <div class="h3 py-2 text-warning text-right">
-        <span class="px-2">일일 최소: {{ data.min }}</span>
-        <span class="px-2">최대: {{ data.max }}</span>
-        <span class="px-2">평균: {{ data.avg }}</span>
+      <div class="h3 py-1 text-warning text-right">
+        <span class="pl-2">일일 최소: {{ data.min }}</span>
+        <span class="pl-2">최대: {{ data.max }}</span>
+        <span class="pl-2">평균: {{ data.avg }}</span>
       </div>
-      <div class="h4 py-2 text-white text-right">
+      <div class="h4 py-1 text-white text-right">
         <span>최종측정시간: {{ data.reg_dtm_parsed }}</span>
       </div>
     </vx-card>
@@ -18,15 +18,15 @@
       <app-control filterClass="sm:w-8/12" actionClass="sm:w-4/12 content-start">
         <template v-slot:filter>
           <vx-card class="bg-primary" style="width: 500px;">
-            <div class="h3 py-2 font-bold text-white text-center">
+            <div class="h3 py-1 font-bold text-white text-center">
               {{ data.device_nm }}: <span class="px-8">{{ data.data }}℃</span>
             </div>
-            <div class="h3 py-2 text-warning text-right">
-              <span class="px-2">일일 최소: {{ data.min }}</span>
-              <span class="px-2">최대: {{ data.max }}</span>
-              <span class="px-2">평균: {{ data.avg }}</span>
+            <div class="h3 py-1 text-warning text-right">
+              <span class="pl-2">일일 최소: {{ data.min }}</span>
+              <span class="pl-2">최대: {{ data.max }}</span>
+              <span class="pl-2">평균: {{ data.avg }}</span>
             </div>
-            <div class="h4 py-2 text-white text-right">
+            <div class="h4 py-1 text-white text-right">
               <span>최종측정시간: {{ data.reg_dtm_parsed }}</span>
             </div>
           </vx-card>
