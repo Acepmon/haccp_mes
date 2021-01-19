@@ -114,7 +114,7 @@ import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js"
 import moment from 'moment';
 
 export default {
-  name: 'page-6-4',
+  name: 'page-6-5',
   components: {
     AppControl,
     AppForm,

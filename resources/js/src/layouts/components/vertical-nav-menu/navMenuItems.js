@@ -304,12 +304,18 @@ export default [
       },
       {
         url: "/6/4",
+        name: "CCP 자료 조회",
+        slug: "CCP 자료 조회",
+        showSubmenuOn: '/6',
+      },
+      {
+        url: "/6/5",
         name: "HACCP 점검결과",
         slug: "HACCP 점검결과",
         showSubmenuOn: '/6',
       },
       {
-        url: "/6/5",
+        url: "/6/6",
         name: "시험검사관리",
         slug: "시험검사관리",
         showSubmenuOn: '/6',

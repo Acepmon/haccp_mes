@@ -218,8 +218,13 @@ const router = new Router({
               },
               {
                 path: '/6/4',
+                name: 'CCP 이탈정보',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/4', value: 'page-6-4', label: 'CCP 이탈정보', component: 'page-6-4'}) } }
+              },
+              {
+                path: '/6/5',
                 name: 'HACCP 점검결과',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/4', value: 'page-6-4', label: 'HACCP 점검결과', component: 'page-6-4'}) } }
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/6/5', value: 'page-6-5', label: 'HACCP 점검결과', component: 'page-6-5'}) } }
               },
               {
                 path: '/7',
