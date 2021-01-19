@@ -31,6 +31,16 @@ export default {
         return axios.post(`${config.baseUrl}/${this.api}`, params)
     },
 
+    bulk: function (args = {}) {
+
+        // Default parameters
+        let params = {
+            ...args
+        }
+
+        return axios.post(`${config.baseUrl}/${this.api}/bulk`, params)
+    },
+
     put: function (id, args = {}) {
 
         // Default parameters

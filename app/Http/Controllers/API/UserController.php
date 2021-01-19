@@ -85,6 +85,41 @@ class UserController extends Controller
         ]);
     }
 
+    public function storeBulk(Request $request)
+    {
+        $request->validate([
+            'bulk' => 'required|array'
+        ]);
+
+        $bulk = $request->input('bulk');
+        $users = collect();
+
+        foreach ($bulk as $item) {
+            if (User::where('USER_ID', $item['user:user_id'])->exists()) {
+                continue;
+            }
+
+            $password = '123456';
+            $user = User::create([
+                'USER_ID' => $item['user:user_id'],
+                'USER_PW' => Hash::make($password),
+                'USER_NM' => $item['user:user_nm'],
+                'EMAIL' => $item['user:email'],
+                'USER_STS_YN' => 'Y',
+                'REG_DTM' => now()->format('YmdHis')
+            ]);
+            $users->push($user);
+
+            // event(new Registered($user));
+            // event(new UserPasswordUpdated($user, $password, 'Thank you for registering'));
+        }
+
+        return response()->json([
+            'success' => true,
+            'result' => UserResource::collection($users),
+        ]);
+    }
+
     /**
      * Display the specified resource.
      *

@@ -54,6 +54,7 @@ Route::group([
 ], function () {
     Route::get('user/download', 'UserController@download')->name('user.download');
     Route::put('user/{userId}/password', 'UserController@password')->name('user.password');
+    Route::post('user/bulk', 'UserController@storeBulk')->name('user.store.bulk');
     Route::apiResource('user', 'UserController');
 
     Route::apiResource('login_hist', 'LoginHistController');
