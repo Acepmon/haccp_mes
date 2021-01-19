@@ -151,7 +151,13 @@ export default [
         name: "정보보호관리",
         slug: "정보보호관리",
         showSubmenuOn: '/1',
-      }
+      },
+      {
+        url: "/1/12",
+        name: "App Version",
+        slug: "App Version",
+        showSubmenuOn: '/1',
+      },
     ]
   },
   {

@@ -127,6 +127,11 @@ const router = new Router({
                 name: '정보보호관리',
                 component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/11', value: 'page-1-11', label: '정보보호관리', component: 'page-1-11'}) } }
               },
+              {
+                path: '/1/12',
+                name: 'App Version',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/1/12', value: 'page-1-12', label: 'App Version', component: 'page-1-12'}) } }
+              },
 
               {
                 path: '/2',

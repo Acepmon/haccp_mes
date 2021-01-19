@@ -195,6 +195,10 @@ export default {
       lazyLoadView(
         import(/* webpackChunkName: "page-1-11" */ "@/views/Page-1-11.vue")
       ),
+    "tab-page-1-12": () =>
+      lazyLoadView(
+        import(/* webpackChunkName: "page-1-12" */ "@/views/Page-1-12.vue")
+      ),
     "tab-page-2-1": () =>
       lazyLoadView(
         import(/* webpackChunkName: "page-2-1" */ "@/views/Page-2-1.vue")
