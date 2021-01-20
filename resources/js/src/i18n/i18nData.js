@@ -18,6 +18,7 @@ export default {
     Print: 'Print',
     On: 'On',
     Off: 'Off',
+    Error: 'Error',
 
     AllCcpToggleOn: "Are you sure start all device?",
     AllCcpToggleOff: "Are you sure shutdown all device?",
@@ -62,6 +63,7 @@ export default {
     Print: '프린트',
     On: 'On',
     Off: 'Off',
+    Error: 'Error',
 
     AllCcpToggleOn: "모든 장비를 켜시겠습니다까?",
     AllCcpToggleOff: "모든 장비를 끄겠습니까?",
