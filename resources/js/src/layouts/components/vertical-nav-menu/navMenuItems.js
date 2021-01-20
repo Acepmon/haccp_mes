@@ -316,12 +316,12 @@ export default [
         slug: "HACCP 점검결과",
         showSubmenuOn: '/6',
       },
-      {
-        url: "/6/6",
-        name: "시험검사관리",
-        slug: "시험검사관리",
-        showSubmenuOn: '/6',
-      }
+      // {
+      //   url: "/6/6",
+      //   name: "시험검사관리",
+      //   slug: "시험검사관리",
+      //   showSubmenuOn: '/6',
+      // }
     ]
   },
   {
@@ -342,18 +342,18 @@ export default [
         slug: "사용자 로그이력",
         showSubmenuOn: '/7',
       },
-      {
-        url: "/7/3",
-        name: "A Management",
-        slug: "A Management",
-        showSubmenuOn: '/7',
-      },
-      {
-        url: "/7/4",
-        name: "B Management",
-        slug: "B Management",
-        showSubmenuOn: '/7',
-      }
+      // {
+      //   url: "/7/3",
+      //   name: "A Management",
+      //   slug: "A Management",
+      //   showSubmenuOn: '/7',
+      // },
+      // {
+      //   url: "/7/4",
+      //   name: "B Management",
+      //   slug: "B Management",
+      //   showSubmenuOn: '/7',
+      // }
     ]
   },
   {
