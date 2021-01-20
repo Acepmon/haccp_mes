@@ -201,6 +201,13 @@ export default {
         { headerName: '적요', field: 'lot_info:remark', width: 100,},
         { headerName: '안전재고', field: 'lot_info:safe_qty', width: 100,},
       ],
+
+      pagination: {
+        total: 0,
+        totalPages: 0,
+        pageSize: 50,
+        currentPage: 1
+      }
     }
   },
 
@@ -208,7 +215,7 @@ export default {
     itemsComp: function () {
       return this.items.map((item, index) => {
         return {
-          'no': (index + 1),
+          'no': (this.pagination.currentPage - 1) * this.pagination.pageSize + (index + 1),
           ...item
         } 
       })
@@ -230,22 +237,23 @@ export default {
 
 
     totalPages () {
-      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      if (this.pagination) return this.pagination.totalPages
       else return 0
     },
     paginationPageSize () {
-      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      if (this.pagination) return this.pagination.pageSize
       else return 50
     },
     currentPage: {
       get () {
-        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        if (this.pagination) return this.pagination.currentPage
         else return 1
       },
       set (val) {
-        this.gridApi.paginationGoToPage(val - 1)
+        this.pagination.currentPage = val
+        this.query(false)
       }
-    }
+    },
   },
 
   mounted () {
@@ -316,22 +324,21 @@ export default {
 
       api
         .fetch({
-          ...this.paginationParam,
+          limit: this.pagination.pageSize,
+          page: this.pagination.currentPage,
           ...this.sortParam,
-          limit: -1,
           ...search_params,
           with: '' // example: disable like this
         })
         .then((res) => {
           this.spinner(false);
-          this.items = res.data.data;
+          if (res.data) {
+            this.$set(this.pagination, 'total', res.data.meta.total)
+            this.$set(this.pagination, 'totalPages', Math.round(res.data.meta.total / res.data.meta.per_page))
+            this.$set(this, 'items', res.data.data)
+          }
         })
         .catch((err) => {
-          this.displayErrors(
-            err.response.data.hasOwnProperty("errors")
-              ? err.response.data.errors
-              : null
-          );
           this.spinner(false);
           this.$vs.notify({
             title: this.$t("Error"),

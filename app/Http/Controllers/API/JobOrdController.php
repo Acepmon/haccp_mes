@@ -78,9 +78,12 @@ class JobOrdController extends Controller
                     $subItem->COLOR = "yellow";
 
                     if (!empty($subItem->END_DTM)) {
-                        $subItem->END_DTM = now()->parse($subItem->END_DTM)->format('H:i');
                         $subItem->COLOR = "blue";
                     }
+                }
+
+                if (!empty($subItem->END_DTM)) {
+                    $subItem->END_DTM = now()->parse($subItem->END_DTM)->format('H:i');
                 }
             }
 

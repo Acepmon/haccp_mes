@@ -1,14 +1,16 @@
 <template>
-  <div>
-    <h1 class="text-center">Monitoring of Job Order Processing : {{ monitorDate }}</h1>
+  <div class="job-ord-monitor">
+    <div class="flex flex-row items-center justify-center my-32">
+      <div class="text-center" style="font-size: 5rem; padding: 15px; background: #0970D2; color: white;">품목별 생산공정 진행현황 : {{ monitorDate }}</div>
+    </div>
 
     <vs-table :datas="[]" hoverFlat style="width: 100%;" class="mt-5">
       <vs-tr>
-        <vs-th style="pointer-events: none;" class="h5 py-2 font-bold text-center">작업번호</vs-th>
-        <vs-th style="pointer-events: none;" class="h5 py-2 font-bold text-center">품목ID</vs-th>
-        <vs-th style="pointer-events: none;" class="h5 py-2 font-bold text-center">품목명</vs-th>
-        <vs-th style="pointer-events: none;" class="h5 py-2 font-bold text-center">지시수량</vs-th>
-        <vs-th style="pointer-events: none;" class="h5 py-2 font-bold text-center" :colspan="colSpanCount">품목별 생산공정 진행현황</vs-th>
+        <vs-th style="pointer-events: none;" class="py-10 font-bold text-center">작업번호</vs-th>
+        <vs-th style="pointer-events: none;" class="py-10 font-bold text-center">품목ID</vs-th>
+        <vs-th style="pointer-events: none;" class="py-10 font-bold text-center">품목명</vs-th>
+        <vs-th style="pointer-events: none;" class="py-10 font-bold text-center">지시수량</vs-th>
+        <vs-th style="pointer-events: none;" class="py-10 font-bold text-center" :colspan="colSpanCount">품목별 생산공정 진행현황</vs-th>
       </vs-tr>
 
       <template v-for="(item) in items">
@@ -17,8 +19,8 @@
             <vs-td>{{ subItem['JOB_NO'] }}</vs-td>
             <vs-td>{{ subItem['ITEM_ID'] }}</vs-td>
             <vs-td>{{ subItem['ITEM_NM'] }}</vs-td>
-            <vs-td>{{ subItem['ORD_QTY'] }}</vs-td>
-            <vs-td v-for="(dtlItem, dtlItemIndex) in subItem['DTL']" :key="'DTL-' + dtlItemIndex" :class="subItemIndex == 0 ? 'dtl-td-' + dtlItem['COLOR'] : ''">
+            <vs-td class="text-right">{{ subItem['ORD_QTY'] }}</vs-td>
+            <vs-td class="text-center" v-for="(dtlItem, dtlItemIndex) in subItem['DTL']" :key="'DTL-' + dtlItemIndex" :class="subItemIndex == 0 ? 'dtl-td-' + dtlItem['COLOR'] : ''">
               <span v-if="subItemIndex == 0">
                 {{ dtlItem['PROC_NM'] }}
               </span>
@@ -109,16 +111,18 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .dtl-td-blue {
-  background: rgba(18, 156, 233, 0.2) !important;
+  background: rgba(18, 156, 233, 0.4) !important;
 }
 
 .dtl-td-yellow {
-  background: rgba(252, 203, 78, 0.2) !important;
+  /* background: rgba(252, 203, 78, 0.5) !important; */
+  background: #0970D2 !important;
+  color: #fff !important;
 }
 
 .dtl-td-orange {
-  background: rgba(253, 126, 20, 0.2) !important;
+  background: rgba(253, 126, 20, 0.5) !important;
 }
 </style>

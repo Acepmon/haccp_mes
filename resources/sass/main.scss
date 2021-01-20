@@ -184,3 +184,26 @@
 .td-check {
   width: 100px !important;
 }
+
+.text-center > .vs-table-text {
+  text-align: center;
+  justify-content: center;
+}
+
+.job-ord-monitor .vs-con-table .vs-con-tbody .vs-table--tbody-table {
+  font-size: 2rem !important;
+}
+
+.job-ord-monitor .vs-con-table .vs-con-tbody .vs-table--tbody-table th {
+  font-size: 3rem !important;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.job-ord-monitor .not-data-table {
+  display: none !important;
+}
+
+.ccp-data-monitor-popup-widget .h3,
+.ccp-data-monitor-popup-widget .h4 {
+  font-size: 3rem !important;
+}
