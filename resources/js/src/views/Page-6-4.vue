@@ -155,6 +155,12 @@ export default {
         { headerName: '데이터', field: 'data', filter: false, width: 300 },
         { headerName: '일시', field: 'reg_dtm_parsed', filter: false, width: 300 },
       ],
+      pagination: {
+        total: 0,
+        totalPages: 0,
+        pageSize: 50,
+        currentPage: 1
+      }
     }
   },
 
@@ -162,27 +168,28 @@ export default {
     itemsComp: function () {
       return this.items.map((item, index) => {
         return {
-          'no': (index + 1),
+          'no': (this.pagination.currentPage - 1) * this.pagination.pageSize + (index + 1),
           ...item
         } 
       })
     },
 
     totalPages () {
-      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+      if (this.pagination) return this.pagination.totalPages
       else return 0
     },
     paginationPageSize () {
-      if (this.gridApi) return this.gridApi.paginationGetPageSize()
+      if (this.pagination) return this.pagination.pageSize
       else return 50
     },
     currentPage: {
       get () {
-        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+        if (this.pagination) return this.pagination.currentPage
         else return 1
       },
       set (val) {
-        this.gridApi.paginationGoToPage(val - 1)
+        this.pagination.currentPage = val
+        this.query(false)
       }
     },
   },
@@ -232,12 +239,17 @@ export default {
         .fetch({
           sort: 'REG_DTM',
           order: 'DESC',
-          limit: -1,
           ...search_params,
+          limit: this.pagination.pageSize,
+          page: this.pagination.currentPage
         })
         .then((res) => {
           this.spinner(false);
-          this.items = res.data.data;
+          if (res.data) {
+            this.$set(this.pagination, 'total', res.data.meta.total)
+            this.$set(this.pagination, 'totalPages', Math.round(res.data.meta.total / res.data.meta.per_page))
+            this.$set(this, 'items', res.data.data)
+          }
         })
         .catch((err) => {
           this.spinner(false);
@@ -292,9 +304,9 @@ export default {
       this.$set(this, 'devices', [{ comm2_cd: '', comm2_nm: 'All Devices' }].concat(res.data))
     });
 
-    // setTimeout(() => {
-    //   this.query();
-    // }, 500);
+    setTimeout(() => {
+      this.query();
+    }, 500);
   }
 }
 </script>
