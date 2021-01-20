@@ -118,8 +118,13 @@ export default {
 
 .dtl-td-yellow {
   /* background: rgba(252, 203, 78, 0.5) !important; */
-  background: #0970D2 !important;
-  color: #fff !important;
+  /* background: #0970D2 !important; */
+  /* color: #fff !important; */
+
+  -webkit-animation: dtl-td-yellow-blink 1.5s infinite;  /* Safari 4+ */
+  -moz-animation: dtl-td-yellow-blink 1.5s infinite;  /* Fx 5+ */
+  -o-animation: dtl-td-yellow-blink 1.5s infinite;  /* Opera 12+ */
+  animation: dtl-td-yellow-blink 1.5s infinite;  /* IE 10+, Fx 29+ */
 }
 
 .dtl-td-orange {
