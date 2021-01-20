@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\JobOrdResource;
 use App\Imports\JobOrdImport;
 use App\JobOrd;
+use App\JobOrdDtl;
 use App\ProcDtl;
 use App\ProcDtlSub;
 use Illuminate\Http\Request;
@@ -54,6 +55,44 @@ class JobOrdController extends Controller
         }
 
         return JobOrdResource::collection($items);
+    }
+
+    public function monitor(Request $request)
+    {
+        $items = DB::table('JOB_ORD')->select("JOB_NO", "ITEM_ID", "ITEM_NM", "ORD_QTY");
+
+        $limit = $request->input('limit', 15);
+        $sort = $request->input('sort', 'JOB_NO');
+        $order = $request->input('order', 'ASC');
+
+        $items = $items->orderBy($sort, $order)->get();
+        $items = $items->groupBy('JOB_NO');
+
+        foreach ($items as $jobNo => $item) {
+            $subItems = JobOrdDtl::where('JOB_NO', $jobNo)->select('PROC_NM', 'SRT_DTM', 'END_DTM')->get();
+            foreach ($subItems as $key => $subItem) {
+                $subItem->COLOR = "orange";
+
+                if (!empty($subItem->SRT_DTM)) {
+                    $subItem->SRT_DTM = now()->parse($subItem->SRT_DTM)->format('H:i');
+                    $subItem->COLOR = "yellow";
+
+                    if (!empty($subItem->END_DTM)) {
+                        $subItem->END_DTM = now()->parse($subItem->END_DTM)->format('H:i');
+                        $subItem->COLOR = "blue";
+                    }
+                }
+            }
+
+            $item->first()->DTL = $subItems;
+            $item->last()->DTL = $subItems;
+            $item->first()->ORD_QTY = number_format($item->first()->ORD_QTY);
+            $item->last()->ORD_QTY = number_format($item->last()->ORD_QTY);
+        }
+
+        return response()->json([
+            'data' => $items
+        ]);
     }
 
     /**

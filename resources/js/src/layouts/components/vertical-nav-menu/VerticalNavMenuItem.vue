@@ -30,31 +30,105 @@
       </template>
 
       <template v-else>
-        <router-link
-          tabindex="-1"
-          v-if="to"
-          exact
-          :class="[{'router-link-active': activeLink}]"
-          :to="to"
-          :target="target" >
-            <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
-            <feather-icon v-else-if="icon" :class="{'w-3 h-3': iconSmall}" :icon="icon" />
-            <slot />
-        </router-link>
+        <template v-if="popup">
+          <a
+            tabindex="-1"
+            exact
+            class="cursor-pointer"
+            @click="showPopupDialog"
+            :target="target" >
+              <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
+              <feather-icon v-else-if="icon" :class="{'w-3 h-3': iconSmall}" :icon="icon" />
+              <slot />
+          </a>
+        </template>
+        <template v-else>
+          <router-link
+            tabindex="-1"
+            v-if="to"
+            exact
+            :class="[{'router-link-active': activeLink}]"
+            :to="to"
+            :target="target" >
+              <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
+              <feather-icon v-else-if="icon" :class="{'w-3 h-3': iconSmall}" :icon="icon" />
+              <slot />
+          </router-link>
 
-        <a v-else :target="target" :href="href" tabindex="-1">
-          <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
-          <!-- <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" /> -->
-          <slot />
-        </a>
+          <a v-else :target="target" :href="href" tabindex="-1">
+            <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
+            <!-- <feather-icon v-else :class="{'w-3 h-3': iconSmall}" :icon="icon" /> -->
+            <slot />
+          </a>
+        </template>
       </template>
+
+      <vs-popup v-if="popup" fullscreen title="" :active.sync="popupDialog" button-close-hidden>
+        <app-control>
+          <template v-slot:action>
+            <vs-button
+              @click="popupDialog = false"
+              class="mx-1"
+              color="primary"
+              type="border"
+              >{{ $t("Close") }}</vs-button
+            >
+          </template>
+        </app-control>
+        <keep-alive>
+          <component v-bind:is="'tab-' + popupComponent"></component>
+        </keep-alive>
+      </vs-popup>
   </div>
 </template>
 
 <script>
+function lazyLoadView(AsyncView) {
+  const AsyncHandler = () => ({
+    component: AsyncView,
+    // A component to use while the component is loading.
+    loading: require("@/views/_loading.vue").default,
+    // Delay before showing the loading component.
+    // Default: 200 (milliseconds).
+    delay: 0,
+    // A fallback component in case the timeout is exceeded
+    // when loading the component.
+    error: require("@/views/_timeout.vue").default,
+    // Time before giving up trying to load the component.
+    // Default: Infinity (milliseconds).
+    timeout: 10000,
+  });
+
+  return Promise.resolve({
+    functional: true,
+    render(h, { data, children }) {
+      // Transparently pass any props or children
+      // to the view component.
+      return h(AsyncHandler, data, children);
+    },
+  });
+}
+
+import AppControl from "@/views/ui-elements/AppControl";
 import {mapGetters} from 'vuex';
 export default {
   name: 'v-nav-menu-item',
+  components: {
+    AppControl,
+    "tab-page-2-5": () =>
+      lazyLoadView(
+        import(/* webpackChunkName: "page-2-5" */ "@/views/Page-2-5.vue")
+      ),
+    "tab-page-2-6": () =>
+      lazyLoadView(
+        import(/* webpackChunkName: "page-2-6" */ "@/views/Page-2-6.vue")
+      ),
+  },
+  data () {
+    return {
+      popupDialog: false
+    }
+  },
   props: {
     icon        : { type: String,                 default: ''               },
     iconSmall   : { type: Boolean,                default: false            },
@@ -65,7 +139,9 @@ export default {
     index       : { type: [String, Number],       default: null             },
     featherIcon : { type: Boolean,                default: true             },
     target      : { type: String,                 default: '_self'          },
-    isDisabled  : { type: Boolean,                default: false            }
+    isDisabled  : { type: Boolean,                default: false            },
+    popup       : { type: Boolean,                default: false            },
+    popupComponent:{type: String,                 default: null             }
   },
   computed: {
     activeLink () {
@@ -83,6 +159,10 @@ export default {
         text: this.$t('TabLimitReached'),
         acceptText: this.$t('Accept')
       })
+    },
+
+    showPopupDialog () {
+      this.$set(this, 'popupDialog', true)
     }
   }
 }

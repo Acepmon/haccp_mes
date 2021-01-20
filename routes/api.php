@@ -138,6 +138,7 @@ Route::group([
     Route::get('job_ord/summary_details', 'JobOrdController@summaryDetails')->name('job_ord.summary_details');
     Route::post('job_ord/import', 'JobOrdController@import')->name('job_ord.import');
     Route::post('job_ord/sync', 'JobOrdController@sync')->name('job_ord.sync');
+    Route::get('job_ord/monitor', 'JobOrdController@monitor')->name('job_ord.monitor');
     Route::apiResource('job_ord', 'JobOrdController');
 
     Route::get('job_ord_dtl/export', 'JobOrdDtlController@export')->name('job_ord_dtl.export');

@@ -192,23 +192,19 @@ export default [
       },
       {
         url: "/2/5",
-        name: "재고이력관리",
-        slug: "재고이력관리",
+        name: "생산공정모티터링",
+        slug: "생산공정모티터링",
         showSubmenuOn: '/2',
-        submenu: [
-          {
-            url: "/2/5/1",
-            name: "(가공)원료재고이력",
-            slug: "(가공)원료재고이력",
-            showSubmenuOn: '/2',
-          },
-          {
-            url: "/2/5/2",
-            name: "부자재 재고이력",
-            slug: "부자재 재고이력",
-            showSubmenuOn: '/2',
-          }
-        ]
+        popup: true,
+        popupComponent: 'page-2-5'
+      },
+      {
+        url: "/2/6",
+        name: "CCP 장비모니터링",
+        slug: "CCP 장비모니터링",
+        showSubmenuOn: '/2',
+        popup: true,
+        popupComponent: 'page-2-6'
       }
     ]
   },

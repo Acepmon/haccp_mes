@@ -21,6 +21,17 @@ export default {
         return axios.get(`${config.baseUrl}/${this.api}?${this.prepParams(params)}`)
     },
 
+    monitor: function (args = {}) {
+
+        // Default parameters
+        let params = {
+            ...args
+        }
+
+        // Return axios promise
+        return axios.get(`${config.baseUrl}/${this.api}/monitor?${this.prepParams(params)}`)
+    },
+
     summary_details: function (args = {}) {
 
         // Default parameters
