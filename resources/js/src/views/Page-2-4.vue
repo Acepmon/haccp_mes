@@ -127,7 +127,7 @@
         </template>
       </app-control>
       <div class="container">
-        <vs-table stripe>
+        <vs-table stripe :data="detailData.summary">
           <vs-tr>
             <vs-th style="pointer-events: none;" colspan="5">
               <span class="h4 py-2 font-bold">작업지시서전표</span>
@@ -166,7 +166,7 @@
           </vs-tr>
         </vs-table>
 
-        <vs-table stripe class="mt-5" >
+        <vs-table stripe class="mt-5" :data="detailData.details">
           <vs-tr>
             <vs-th style="pointer-events: none;" colspan="6">
               <span class="h4 py-2 font-bold">작업지시서전표</span>
@@ -181,19 +181,18 @@
             <vs-th class="h5 py-2 font-bold text-center">원산지</vs-th>
           </vs-tr>
 
-          <!-- eslint-disable-next-line -->
-          <template v-for="detail in detailData.details">
-            <!-- eslint-disable-next-line -->
-            <vs-tr v-for="(tr, indextr) in detail.subdetails" :key="indextr">
-              <vs-td>{{ tr['item_id'] }}</vs-td>
-              <vs-td>{{ tr['item_nm'] }}</vs-td>
-              <vs-td class="text-right">{{ tr['req'] }}</vs-td>
-              <vs-td></vs-td>
-              <vs-td class="text-center">{{ parseFloat(tr['ratio'], 2) }}</vs-td>
-              <vs-td class="text-center">{{ tr['origin'] }}</vs-td>
-            </vs-tr>
-            <!-- eslint-disable-next-line -->
-            <vs-tr>
+          <template v-for="(detail, index) in detailData.details">
+            <template>
+              <vs-tr v-for="tr in detail.subdetails" :key="tr['item_id']">
+                <vs-td>{{ tr['item_id'] }}</vs-td>
+                <vs-td>{{ tr['item_nm'] }}</vs-td>
+                <vs-td class="text-right">{{ tr['req'] }}</vs-td>
+                <vs-td></vs-td>
+                <vs-td class="text-center">{{ parseFloat(tr['ratio'], 2) }}</vs-td>
+                <vs-td class="text-center">{{ tr['origin'] }}</vs-td>
+              </vs-tr>
+            </template>
+            <vs-tr :key="'A' + index">
               <td colspan="2" class="text-center">합계</td>
               <td class="text-right">{{ detail.reqSum }}</td>
               <td></td>
@@ -502,7 +501,26 @@ export default {
         })
         .then((res) => {
           this.spinner(false);
-          this.detailData = res.data
+
+          if (res.data.details) {
+            this.$set(this.detailData, 'details', res.data.details)
+          }
+
+          if (res.data.details_dt) {
+            this.$set(this.detailData, 'details_dt', res.data.details_dt)
+          }
+
+          if (res.data.job_no) {
+            this.$set(this.detailData, 'job_no', res.data.job_no)
+          }
+
+          if (res.data.summary) {
+            this.$set(this.detailData, 'summary', res.data.summary)
+          }
+
+          if (res.data.summary_dt) {
+            this.$set(this.detailData, 'summary_dt', res.data.summary_dt)
+          }
         })
         .catch((err) => {
           this.spinner(false);
