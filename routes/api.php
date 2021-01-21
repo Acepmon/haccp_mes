@@ -23,6 +23,13 @@ Route::post('/sanctum/token', 'SanctumController@token');
 Route::group([
     'namespace' => 'APP',
     'as' => 'app.',
+], function () {
+    Route::post('haccp/attendance', 'AppController@apprequest')->name('haccp.attendance');
+});
+
+Route::group([
+    'namespace' => 'APP',
+    'as' => 'app.',
     'middleware' => 'auth:sanctum'
 ], function () {
     Route::post('haccp/apprequest', 'AppController@apprequest')->name('haccp.apprequest');
