@@ -269,6 +269,7 @@
             class="mx-1"
             color="primary"
             type="border"
+            :disabled="items3_selected.length == 0"
             >{{ $t("Save") }}</vs-button
           >
           <vs-button
@@ -286,8 +287,9 @@
           <vs-th>이름</vs-th>
           <vs-th>부서</vs-th>
           <vs-th>직책</vs-th>
-          <vs-th>정/부</vs-th>
-          <vs-th>주요작업</vs-th>
+          <vs-th>전화번호</vs-th>
+          <vs-th>이메일</vs-th>
+          <vs-th>주요업무</vs-th>
         </template>
 
         <template slot-scope="{data}">
@@ -301,8 +303,11 @@
             <vs-td :data="data[indextr]['worker:duty_cd']">
               {{ data[indextr]['worker:duty_cd_nm'] }}
             </vs-td>
-            <vs-td :data="data[indextr]['worker:role_cd']">
-              {{ data[indextr]['worker:role_cd_nm'] }}
+            <vs-td :data="data[indextr]['worker:mob_no']">
+              {{ data[indextr]['worker:mob_no'] }}
+            </vs-td>
+            <vs-td :data="data[indextr]['worker:email']">
+              {{ data[indextr]['worker:email'] }}
             </vs-td>
             <vs-td :data="data[indextr]['worker:main_job']">
               {{ data[indextr]['worker:main_job'] }}
@@ -795,7 +800,7 @@ export default {
 
       let selected = this.items3_selected.map(data => {
         return {
-          'user:user_id': data['worker:emp_id'],
+          'user:user_id': data['worker:mob_no'].replaceAll('-', ''),
           'user:user_nm': data['worker:emp_nm'],
           'user:email': data['worker:email'],
         }
