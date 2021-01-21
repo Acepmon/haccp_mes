@@ -76,7 +76,7 @@
           </template>
         </app-control>
         <keep-alive>
-          <component v-bind:is="'tab-' + popupComponent"></component>
+          <component v-bind:is="activeComponent"></component>
         </keep-alive>
       </vs-popup>
   </div>
@@ -149,7 +149,13 @@ export default {
     },
     ...mapGetters({
       tabExceeded: 'mdn/tabExceeded',
-    })
+    }),
+    activeComponent () {
+      if (this.popupComponent == 'page-2-5' || this.popupComponent == 'page-2-6') {
+        return this.$store.getters.switchPopupComponent
+      }
+      return 'tab-' + this.popupComponent
+    }
   },
   methods: {
     showExceededDialog () {

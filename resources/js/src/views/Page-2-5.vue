@@ -102,6 +102,7 @@ export default {
   },
 
   created () {
+    this.$store.commit('SET_SWITCH_POPUP_COMPONENT', 'page-2-5')
     this.query()
 
     setInterval(() => {

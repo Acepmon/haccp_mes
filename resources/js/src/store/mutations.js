@@ -118,6 +118,10 @@ const mutations = {
     // Store data in localStorage
     localStorage.setItem("userInfo", JSON.stringify(userInfo))
   },
+
+  SET_SWITCH_POPUP_COMPONENT (state, val) {
+    state.switchPopupComponent = val
+  }
 }
 
 export default mutations
