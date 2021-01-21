@@ -26,6 +26,7 @@ class AppController extends Controller
             case 'apply_leave_work': return $this->applyLeaveWork($request);
             default:
                 return $this->jsonResponse([
+                    'request_type' => $request->input('request_type'),
                     'status' => 'error',
                     'msg' => 'Request type incorrect'
                 ], 422);
@@ -64,6 +65,7 @@ class AppController extends Controller
         $items = $items->orderBy($sort, $order)->get();
 
         return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
             'status' => 'success',
             'msg' => '',
             'data' => AppGetDocDailyListResource::collection($items)
@@ -80,6 +82,7 @@ class AppController extends Controller
 
         if (!Worker::where('PASS_NO', $input)->exists()) {
             return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
                 'status' => 'error',
                 'msg' => '번호를 잘못 입력하였습니다. (개인번호를 확인하세요)'
             ], 422);
@@ -90,6 +93,7 @@ class AppController extends Controller
 
         if (WorkerAttn::where('EMP_ID', $worker->EMP_ID)->where('ON_DTM', 'LIKE', $today . '%')->exists()) {
             return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
                 'status' => 'error',
                 'msg' => $worker->EMP_NM . '님은 오늘날짜 출근기록이 이미 기록되이있습니다.'
             ], 422);
@@ -101,6 +105,7 @@ class AppController extends Controller
         ]);
 
         return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
             'status' => 'success',
             'msg' => $worker->EMP_NM . '님 출근기록이 되었습니다.',
             'time' => now()->parse($workerAttn->ON_DTM)->format('Y-m-d H:i'),
@@ -117,6 +122,7 @@ class AppController extends Controller
 
         if (!Worker::where('PASS_NO', $input)->exists()) {
             return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
                 'status' => 'error',
                 'msg' => '번호를 잘못 입력하였습니다. (개인번호를 확인하세요)'
             ], 422);
@@ -127,6 +133,7 @@ class AppController extends Controller
 
         if (!WorkerAttn::where('EMP_ID', $worker->EMP_ID)->where('ON_DTM', 'LIKE', $today . '%')->exists()) {
             return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
                 'status' => 'error',
                 'msg' => $worker->EMP_NM . '님은 출근기록이 없이 퇴근기록을 할 수 없습니다.'
             ], 422);
@@ -134,6 +141,7 @@ class AppController extends Controller
 
         if (WorkerAttn::where('EMP_ID', $worker->EMP_ID)->where('ON_DTM', 'LIKE', $today . '%')->whereNotNull('OFF_DTM')->exists()) {
             return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
                 'status' => 'error',
                 'msg' => $worker->EMP_NM . '님은 오늘날짜 퇴근기록이 이미 기록되이있습니다.'
             ], 422);
@@ -145,6 +153,7 @@ class AppController extends Controller
         ]);
 
         return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
             'status' => 'success',
             'msg' => $worker->EMP_NM . '님 퇴근기록이 되었습니다.',
             'time' => now()->parse($offDtm)->format('Y-m-d H:i'),
