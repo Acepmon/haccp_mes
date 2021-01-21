@@ -205,6 +205,12 @@ export default [
         showSubmenuOn: '/2',
         popup: true,
         popupComponent: 'page-2-6'
+      },
+      {
+        url: "/2/7",
+        name: "생산자 근태기록",
+        slug: "생산자 근태기록",
+        showSubmenuOn: '/2',
       }
     ]
   },

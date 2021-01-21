@@ -259,7 +259,7 @@ export default {
     },
 
     widgetLimitSelected (limit) {
-      console.log(limit)
+      // console.log(limit)
     },
 
     closeDialog() {
@@ -275,7 +275,7 @@ export default {
     },
 
     allOn() {
-      console.log('all on')
+      // console.log('all on')
     },
 
     allOnDialog() {
@@ -291,7 +291,7 @@ export default {
     },
 
     allOff() {
-      console.log('all off')
+      // console.log('all off')
     },
 
     allOffDialog() {
@@ -307,7 +307,7 @@ export default {
     },
 
     onOff(item) {
-      console.log('toggle on/off ' + item.device_id)
+      // console.log('toggle on/off ' + item.device_id)
     },
 
     onOffDialog(item) {

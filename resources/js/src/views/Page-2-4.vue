@@ -715,7 +715,7 @@ export default {
         text: this.$t("CloseDocument"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
-        accept: () => this.removeTab("page-2-3"),
+        accept: () => this.removeTab("page-2-4"),
       });
     },
   },

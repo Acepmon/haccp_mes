@@ -383,7 +383,6 @@ export default {
           this.items2 = res.data.data;
         })
         .catch((err) => {
-          console.log(err)
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors
@@ -428,7 +427,6 @@ export default {
           callback(this.items)
         })
         .catch((err) => {
-          console.log(err)
           this.displayErrors(
             err.response.data.hasOwnProperty("errors")
               ? err.response.data.errors

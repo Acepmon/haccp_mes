@@ -106,7 +106,6 @@ export default {
         .then((res) => {
           if (res.data.data.length > 0) {
             res.data.data.forEach(device => {
-              console.log(device)
               this.$set(this.items[device.device_id], 'data', device.data.toFixed(2))
               this.$set(this.items[device.device_id], 'min', device.min.toFixed(2))
               this.$set(this.items[device.device_id], 'max', device.max.toFixed(2))

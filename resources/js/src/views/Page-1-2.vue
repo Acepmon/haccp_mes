@@ -801,8 +801,6 @@ export default {
         }
       })
 
-      console.log(selected)
-
       api.bulk({
         bulk: selected
       })

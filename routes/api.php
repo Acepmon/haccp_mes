@@ -169,4 +169,7 @@ Route::group([
 
     Route::get('app_version', 'AppVersionController@index');
     Route::put('app_version', 'AppVersionController@update');
+
+    Route::get('worker_attn/export', 'WorkerAttnController@export')->name('worker_attn.export');
+    Route::apiResource('worker_attn', 'WorkerAttnController');
 });
