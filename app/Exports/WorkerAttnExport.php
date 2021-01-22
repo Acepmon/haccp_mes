@@ -45,8 +45,8 @@ class WorkerAttnExport implements FromCollection, WithHeadings, WithStyles, With
             $workerAttn->EMP_ID,
             $workerAttn->worker->EMP_NM,
             now()->parse($workerAttn->ON_DTM)->format('Y-m-d H:i'),
-            (!empty($workerAttn->OFF_DTM)) ? now()->parse($workerAttn->ON_DTM)->diffInHours(now()->parse($workerAttn->OFF_DTM)) . ' hours' : '',
             (!empty($workerAttn->OFF_DTM)) ? now()->parse($workerAttn->OFF_DTM)->format('Y-m-d H:i') : '',
+            (!empty($workerAttn->OFF_DTM)) ? now()->parse($workerAttn->ON_DTM)->diffInMinutes(now()->parse($workerAttn->OFF_DTM)) : '',
         ];
     }
 
@@ -56,8 +56,8 @@ class WorkerAttnExport implements FromCollection, WithHeadings, WithStyles, With
             '사번',
             '이름',
             '출근일시',
-            'duration',
             '퇴근일시',
+            '근무시간',
         ];
     }
 

@@ -22,8 +22,8 @@
 export default [
   {
     url: "/1",
-    name: "정보관리",
-    slug: "정보관리",
+    name: "정보관리", //company-info
+    slug: "정보관리", 
     showSubmenuOn: '/1',
     submenu: [
       {

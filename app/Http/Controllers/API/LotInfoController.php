@@ -21,8 +21,8 @@ class LotInfoController extends Controller
     {
         $items = LotInfo::query();
         $limit = $request->input('limit', 20);
-        // $sort = $request->input('sort', 'COMP_ID');
-        // $order = $request->input('order', 'ASC');
+        $sort = $request->input('sort', 'DT_NO');
+        $order = $request->input('order', 'DESC');
 
         if ($request->has('key_word')) {
             $keyWord = $request->input('key_word');
@@ -32,9 +32,9 @@ class LotInfoController extends Controller
         }
 
         if ($limit == -1) {
-            $items = $items->get();
+            $items = $items->orderBy($sort, $order)->get();
         } else {
-            $items = $items->paginate($limit);
+            $items = $items->orderBy($sort, $order)->paginate($limit);
         }
         return LotInfoResource::collection($items);
     }

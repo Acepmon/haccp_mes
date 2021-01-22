@@ -32,7 +32,7 @@ class CcpDataController extends Controller
         }
 
         if ($request->has('to') && !empty($request->input('to'))) {
-            $to = now()->parse($request->input('to'))->format('YmdHis');
+            $to = now()->parse($request->input('to') . '235959')->format('YmdHis');
             $items = $items->whereRaw('CAST(REG_DTM AS SIGNED) <= ' . intval($to));
         }
 

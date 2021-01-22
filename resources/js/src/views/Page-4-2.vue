@@ -296,7 +296,8 @@ export default {
       api
         .fetch({
           ...this.paginationParam,
-          ...this.sortParam,
+          sort: 'ACC_NO',
+          order: 'DESC',
           limit: -1,
           ...search_params,
           with: '' // example: disable like this

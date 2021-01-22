@@ -326,7 +326,8 @@ export default {
         .fetch({
           limit: this.pagination.pageSize,
           page: this.pagination.currentPage,
-          ...this.sortParam,
+          sort: 'DT_NO',
+          order: 'DESC',
           ...search_params,
           with: '' // example: disable like this
         })

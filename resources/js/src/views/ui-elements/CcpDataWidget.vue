@@ -2,7 +2,7 @@
   <div>
     <vx-card class="bg-primary-gradient cursor-pointer ccp-data-widget" @click="data.chart_dialog = true; onPopupOpen(data);">
       <div class="h3 py-1 font-bold text-white text-center">
-        {{ data.device_nm }}: <span class="px-8">{{ data.data }}℃</span>
+        {{ data.device_nm }}: <span class="px-8">{{ data.data }}{{ unit }}</span>
       </div>
       <div class="h3 py-1 text-warning text-right">
         <span class="pl-2">일일 최소: {{ data.min }}</span>
@@ -19,7 +19,7 @@
         <template v-slot:filter>
           <vx-card class="bg-primary" style="width: 500px;">
             <div class="h3 py-1 font-bold text-white text-center">
-              {{ data.device_nm }}: <span class="px-8">{{ data.data }}℃</span>
+              {{ data.device_nm }}: <span class="px-8">{{ data.data }}{{ unit }}</span>
             </div>
             <div class="h3 py-1 text-warning text-right">
               <span class="pl-2">일일 최소: {{ data.min }}</span>
@@ -152,6 +152,12 @@ export default {
     }
   },
   computed: {
+    unit ()  {
+      if (['CHUMI1', 'RHUMI1', 'SIRIH1'].includes(this.data.device_id)) {
+        return '%'
+      }
+      return '℃'
+    },
     chartSeries () {
       return [{
         name: this.data.device_nm,
