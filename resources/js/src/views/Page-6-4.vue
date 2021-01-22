@@ -29,7 +29,7 @@
       </template>
       <template v-slot:action>
         <vs-button
-          @click="query()"
+          @click="pagination.currentPage = 1; query()"
           class="mx-1 mr-16"
           color="primary"
           type="border"

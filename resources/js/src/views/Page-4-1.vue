@@ -8,7 +8,7 @@
         </template>
         <template v-slot:action>
           <vs-button
-            @click="query()"
+            @click="pagination.currentPage = 1; query()"
             class="mx-1 mr-16"
             color="primary"
             type="border"
@@ -35,19 +35,6 @@
       </app-control>
 
       <vs-divider />
-
-      <app-control>
-        <!-- <template v-slot:action>
-          <vs-button
-            @click="exportExcel()"
-            class="mx-1"
-            color="primary"
-            type="border"
-            :disabled="items.length <= 0"
-            >{{ $t("ToExcel") }}</vs-button
-          >
-        </template> -->
-      </app-control>
 
       <ag-grid-vue
         ref="agGridTable"
@@ -94,8 +81,8 @@
         <template slot="header">
           <h4>{{ sheetName }}</h4>
         </template>
-<!-- 
-        <template slot="thead">
+
+        <!-- <template slot="thead">
           <vs-th :sort-key="heading" v-for="heading in header" :key="heading">{{ heading }}</vs-th>
         </template> -->
 
@@ -181,7 +168,7 @@ export default {
         { headerName: '규격', field: 'lot_info:spec', width: 100,},
         { headerName: '단위', field: 'lot_info:unit', width: 100,},
         { headerName: '원산지', field: 'lot_info:origin', width: 100,},
-        { headerName: '시리얼/Lot No', headerStyle: {textAlign: 'center'}, field: 'lot_info:lot_no', width: 100,},
+        { headerName: '시리얼/Lot No', field: 'lot_info:lot_no', width: 100,},
         { headerName: '수량', field: 'lot_info:qty', type: 'numericColumn', width: 100,},
         { headerName: '전표구분', field: 'lot_info:acc_cd', width: 100,},
         { headerName: '입고단가', field: 'lot_info:in_cost', type: 'numericColumn', width: 100,},
@@ -329,7 +316,7 @@ export default {
           sort: 'DT_NO',
           order: 'DESC',
           ...search_params,
-          with: '' // example: disable like this
+          with: ''
         })
         .then((res) => {
           this.spinner(false);
@@ -468,20 +455,6 @@ export default {
           });
         })
     },
-
-    // exportExcel () {
-    //   let search_params = {};
-
-    //   if (this.searchKeyword != null) {
-    //     search_params[this.searchBy] = this.searchKeyword;
-    //   }
-
-    //   if (this.searchType != null) {
-    //     search_params["cust_no"] = this.searchType;
-    //   }
-
-    //   window.location.href = api.export(search_params);
-    // },
 
     closeDialog() {
       this.$vs.dialog({

@@ -32,3 +32,8 @@
 [dir] .v-select .vs__dropdown-toggle {
   padding: 0.29px 0 4px 0;
 }
+
+[dir] .vs-input--placeholder.normal {
+  padding: 0.5rem !important;
+  text-overflow: ellipsis;
+}

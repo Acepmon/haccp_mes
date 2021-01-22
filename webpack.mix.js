@@ -18,6 +18,7 @@ mix.js('resources/js/app.js', 'public/js')
     .webpackConfig({
         resolve: {
             alias: {
+                'vue$': 'vue/dist/vue.esm.js', // 'vue/dist/vue.common.js' for webpack 1
                 '@': path.resolve(__dirname, 'resources/js/src'),
                 '@assets': path.resolve(__dirname, 'resources/assets'),
                 '@sass': path.resolve(__dirname, 'resources/sass')
@@ -63,7 +64,8 @@ if (mix.inProduction()) {
 
 mix.webpackConfig({
     output: {
-        chunkFilename: 'js/chunks/[name].js',
+        // chunkFilename: 'js/chunks/[name].js',
+        chunkFilename: "js/chunks/[id].chunk.[chunkhash].js"
     }
 });
 
