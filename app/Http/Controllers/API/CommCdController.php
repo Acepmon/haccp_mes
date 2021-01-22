@@ -87,7 +87,10 @@ class CommCdController extends Controller
                 ->where('COMM1_CD', $comm1cd)
                 ->whereNotIn('COMM2_CD', ['$$'])
                 ->where('COMM2_CD', $item['COMM2_CD'])
-                ->update($item);
+                ->updateOrInsert(
+                    ['COMM1_CD' => $item['COMM1_CD'], 'COMM2_CD' => $item['COMM2_CD']],
+                    $item
+                );
         });
 
         return response()->json([

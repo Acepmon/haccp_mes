@@ -145,7 +145,8 @@ export default {
       gridOptions2: {
         rowHeight: 40,
         headerHeight: 40,
-        domLayout: 'autoHeight'
+        domLayout: 'autoHeight',
+        singleClickEdit: true
       },
       defaultColDef: {
         sortable: true,
@@ -163,8 +164,13 @@ export default {
       ],
 
       columnDefs2: [
-        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '코드', field: 'comm_cd:comm2_cd', editable: false, width: 200 },
+        { headerName: 'No', field: 'no', editable: false, cellStyle: {textAlign: 'center'}, width: 50 },
+        { headerName: '코드', field: 'comm_cd:comm2_cd', editable: (params) => {
+          if (params.data['no'] == '' || params.data['no'] == null || params.data['no'] == undefined) {
+            return true
+          }
+          return false
+        }, width: 200 },
         { headerName: '코드명', field: 'comm_cd:comm2_nm', width: 200 }
       ],
     };
@@ -313,6 +319,8 @@ export default {
       this.clearErrors();
       this.spinner();
 
+      console.log(this.items2, this.gridOptions2.rowData)
+
       api
         .sync(this.item1["comm_cd:comm1_cd"], {
           'sync': this.gridOptions2.rowData
@@ -326,8 +334,8 @@ export default {
               position: "top-right",
               color: "success"
             });
-            this.query();
             this.clear();
+            // this.query();
           } else {
             this.$vs.notify({
               title: this.$t("Error"),
@@ -453,13 +461,19 @@ export default {
     },
 
     addRow() {
-      this.items2.push({
-        "comm_cd:comm1_cd": null,
-        "comm_cd:comm2_cd": null,
-        "comm_cd:comm2_nm": null,
-        "comm_cd:reg_id": null,
-        "comm_cd:reg_dtm": null,
-      });
+      let newRow = {
+        no: null,
+        "comm_cd:comm1_cd": this.item1["comm_cd:comm1_cd"],
+        "comm_cd:comm2_cd": '',
+        "comm_cd:comm2_nm": '',
+        "comm_cd:reg_id": '',
+        "comm_cd:reg_dtm": '',
+      }
+
+      this.items2.push(newRow)
+      // this.gridOptions2.api.updateRowData({
+      //   add: [newRow]
+      // })
     },
 
     removeRow(index) {
