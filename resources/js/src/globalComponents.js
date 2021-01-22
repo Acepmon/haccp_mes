@@ -16,6 +16,9 @@ import VxBreadcrumb  from './layouts/components/VxBreadcrumb.vue'
 import FeatherIcon  from './components/FeatherIcon.vue'
 import VxInputGroup  from './components/vx-input-group/VxInputGroup.vue'
 
+import Page25 from './views/Page-2-5.vue'
+import Page26 from './views/Page-2-6.vue'
+
 Vue.component(VxTooltip.name, VxTooltip)
 Vue.component(VxCard.name, VxCard)
 Vue.component(VxList.name, VxList)
@@ -23,6 +26,8 @@ Vue.component(VxBreadcrumb.name, VxBreadcrumb)
 Vue.component(FeatherIcon.name, FeatherIcon)
 Vue.component(VxInputGroup.name, VxInputGroup)
 
+Vue.component(Page25.name, Page25)
+Vue.component(Page26.name, Page26)
 
 // v-select component
 import vSelect from 'vue-select'

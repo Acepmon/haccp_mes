@@ -129,7 +129,6 @@ export default {
   },
 
   created () {
-    this.$store.commit('SET_SWITCH_POPUP_COMPONENT', 'page-2-5')
     comm_cd.fetch({cd1: 'C00'}).then((res) => {
       this.$set(this, 'devices', res.data)
       this.init()

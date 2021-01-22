@@ -27,10 +27,6 @@ const getters = {
 
   scrollbarTag: state => {
     return state.is_touch_device ? 'div' : 'VuePerfectScrollbar'
-  },
-
-  switchPopupComponent: state => {
-    return state.switchPopupComponent
   }
 }
 

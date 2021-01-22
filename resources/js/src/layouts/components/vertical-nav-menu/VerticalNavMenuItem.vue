@@ -35,7 +35,7 @@
             tabindex="-1"
             exact
             class="cursor-pointer"
-            @click="showPopupDialog"
+            @click="showPopupDialog(popupComponent)"
             :target="target" >
               <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon" />
               <feather-icon v-else-if="icon" :class="{'w-3 h-3': iconSmall}" :icon="icon" />
@@ -75,7 +75,8 @@
             >
           </template>
         </app-control>
-        <keep-alive>
+
+        <keep-alive :include="activeComponent">
           <component v-bind:is="activeComponent"></component>
         </keep-alive>
       </vs-popup>
@@ -83,31 +84,6 @@
 </template>
 
 <script>
-function lazyLoadView(AsyncView) {
-  const AsyncHandler = () => ({
-    component: AsyncView,
-    // A component to use while the component is loading.
-    loading: require("@/views/_loading.vue").default,
-    // Delay before showing the loading component.
-    // Default: 200 (milliseconds).
-    delay: 0,
-    // A fallback component in case the timeout is exceeded
-    // when loading the component.
-    error: require("@/views/_timeout.vue").default,
-    // Time before giving up trying to load the component.
-    // Default: Infinity (milliseconds).
-    timeout: 10000,
-  });
-
-  return Promise.resolve({
-    functional: true,
-    render(h, { data, children }) {
-      // Transparently pass any props or children
-      // to the view component.
-      return h(AsyncHandler, data, children);
-    },
-  });
-}
 
 import AppControl from "@/views/ui-elements/AppControl";
 import {mapGetters} from 'vuex';
@@ -115,18 +91,11 @@ export default {
   name: 'v-nav-menu-item',
   components: {
     AppControl,
-    "tab-page-2-5": () =>
-      lazyLoadView(
-        import(/* webpackChunkName: "page-2-5" */ "@/views/Page-2-5.vue")
-      ),
-    "tab-page-2-6": () =>
-      lazyLoadView(
-        import(/* webpackChunkName: "page-2-6" */ "@/views/Page-2-6.vue")
-      ),
   },
   data () {
     return {
-      popupDialog: false
+      popupDialog: false,
+      activeComponent: this.popupComponent
     }
   },
   props: {
@@ -149,13 +118,7 @@ export default {
     },
     ...mapGetters({
       tabExceeded: 'mdn/tabExceeded',
-    }),
-    activeComponent () {
-      if (this.popupComponent == 'page-2-5' || this.popupComponent == 'page-2-6') {
-        return this.$store.getters.switchPopupComponent
-      }
-      return 'tab-' + this.popupComponent
-    }
+    })
   },
   methods: {
     showExceededDialog () {
@@ -167,9 +130,20 @@ export default {
       })
     },
 
-    showPopupDialog () {
+    showPopupDialog (popupComponent) {
+      this.activeComponent = popupComponent
       this.$set(this, 'popupDialog', true)
-    }
+    },
+  },
+
+  created () {
+    setInterval(() => {
+      if (this.activeComponent == 'page-2-5') {
+        this.$set(this, 'activeComponent', 'page-2-6')
+      } else if (this.activeComponent == 'page-2-6') {
+        this.$set(this, 'activeComponent', 'page-2-5')
+      }
+    }, 1000 * 30)
   }
 }
 

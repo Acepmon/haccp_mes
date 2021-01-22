@@ -220,16 +220,6 @@ export default {
     const color = this.navbarColor === '#fff' && this.isThemeDark ? '#10163a' : this.navbarColor
     this.updateNavbarColor(color)
     this.setNavMenuVisibility(this.$store.state.mainLayoutType)
-
-    setInterval(() => {
-      if (this.$store.getters.switchPopupComponent == 'page-2-5') {
-        this.$store.commit('SET_SWITCH_POPUP_COMPONENT', 'page-2-6')
-      } else if (this.$store.getters.switchPopupComponent == 'page-2-6') {
-        this.$store.commit('SET_SWITCH_POPUP_COMPONENT', 'page-2-5')
-      } else if (this.$store.getters.switchPopupComponent == null) {
-        this.$store.commit('SET_SWITCH_POPUP_COMPONENT', 'page-2-5')
-      }
-    }, 1000 * 30)
   }
 }
 
