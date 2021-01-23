@@ -31,6 +31,11 @@ class AppController extends Controller
             case 'get_ccp_doc_list_month': return $this->getCcpDocListMonth($request);
             case 'get_ccp_doc_list_quarter': return $this->getCcpDocListQuarter($request);
             case 'get_ccp_doc_list_year': return $this->getCcpDocListYear($request);
+            case 'get_haccp_doc_list_daily': return $this->getHaccpDocListDaily($request);
+            case 'get_haccp_doc_list_week': return $this->getHaccpDocListWeek($request);
+            case 'get_haccp_doc_list_month': return $this->getHaccpDocListMonth($request);
+            case 'get_haccp_doc_list_quarter': return $this->getHaccpDocListQuarter($request);
+            case 'get_haccp_doc_list_year': return $this->getHaccpDocListYear($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -258,6 +263,66 @@ class AppController extends Controller
     public function getCcpDocListYear(Request $request)
     {
         $typeCd = 10;
+        $periodCd = 'YR';
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    public function getHaccpDocListDaily(Request $request)
+    {
+        $typeCd = 20;
+        $periodCd = 'ED';
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    public function getHaccpDocListWeek(Request $request)
+    {
+        $typeCd = 20;
+        $periodCd = 'WK';
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    public function getHaccpDocListMonth(Request $request)
+    {
+        $typeCd = 20;
+        $periodCd = 'MM';
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    public function getHaccpDocListQuarter(Request $request)
+    {
+        $typeCd = 20;
+        $periodCd = 'QT';
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    public function getHaccpDocListYear(Request $request)
+    {
+        $typeCd = 20;
         $periodCd = 'YR';
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
