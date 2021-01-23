@@ -1,9 +1,9 @@
 -- eDoc File having HACCP
 CREATE TABLE `EDOC_FILE_HACCP` (
-`HACCP_SEQ` INT          NOT NULL COMMENT 'HACCP순서', -- TYPE_CD
+`HACCP_SEQ` INT          NOT NULL AUTO_INCREMENT COMMENT 'HACCP순서', -- TYPE_CD
 `DOC_ID`    INT          NULL     COMMENT '문서 ID', -- DOC_ID
 `DOC_NM`    VARCHAR(100) NULL     COMMENT '문서이름', -- DOC_NM
-`APR_CD`    VARCHAR(20)  NULL     COMMENT '승인코드', -- APR_CD
+`APR_CD`    VARCHAR(20)  NULL     COMMENT '승인코드', -- APR_CD  C10 TEMP > 10 -ing  > 20 finish, TEMP tempeary status
 `DOC_HTML`  TEXT         NULL     COMMENT '문서형식', -- DOC_HTML
 `APP_DATA`  TEXT         NULL     COMMENT 'APP 자료', -- APP_DATA
 `REMARK`    VARCHAR(100) NULL     COMMENT '비고', -- REMARK

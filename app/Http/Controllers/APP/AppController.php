@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\APP;
 
 use App\EdocFile;
+use App\EdocFileHaccp;
 use App\CommCd;
 use App\Worker;
 use App\WorkerAttn;
@@ -38,6 +39,8 @@ class AppController extends Controller
             case 'get_haccp_doc_list_quarter': return $this->getHaccpDocListQuarter($request);
             case 'get_haccp_doc_list_year': return $this->getHaccpDocListYear($request);
             case 'get_checklist_detail': return $this->getChecklistDetail($request);
+            case 'write_checklist_detail_temp': return $this->writeChecklistDetailTemp($request);
+            case 'write_checklist_detail_complete': return $this->writeChecklistDetailComplete($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -356,6 +359,48 @@ class AppController extends Controller
         ]);
     }
 
+    public function writeChecklistDetailTemp(Request $request)
+    {
+        $request->validate([
+            'doc_idx' => 'required',
+            'appdata' => 'required',
+            'doc_approval_idx' => 'required',
+        ]);
+
+        $docIdx = $request->input('doc_idx');
+        $appdata = $request->input('appdata');
+        $docApprovalIdx = $request->input('doc_approval_idx');
+
+        $item = $this->insertEdocFileHaccp($docIdx, $appdata, $docApprovalIdx, 'TEMP');
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => 'Successfully inserted haccp doc file temp',
+        ]);
+    }
+
+    public function writeChecklistDetailComplete(Request $request)
+    {
+        $request->validate([
+            'doc_idx' => 'required',
+            'appdata' => 'required',
+            'doc_approval_idx' => 'required',
+        ]);
+
+        $docIdx = $request->input('doc_idx');
+        $appdata = $request->input('appdata');
+        $docApprovalIdx = $request->input('doc_approval_idx');
+
+        $item = $this->insertEdocFileHaccp($docIdx, $appdata, $docApprovalIdx, '10');
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => 'Successfully inserted haccp doc file complete',
+        ]);
+    }
+
     private function queryEdocFile($typeCd, $periodCd)
     {
         $items = EdocFile::where('USE_YN', 'Y')
@@ -365,6 +410,23 @@ class AppController extends Controller
             ->get();
 
         return $items;
+    }
+
+    private function insertEdocFileHaccp($docIdx, $appdata, $docApprovalIdx, $aprCd)
+    {
+        $edocFile = EdocFile::where('DOC_ID', $docIdx)->first();
+        $item = EdocFileHaccp::create([
+            'DOC_ID' => $docIdx,
+            'DOC_NM' => $edocFile->DOC_NM,
+            'DOC_HTML' => $edocFile->DOC_HTML,
+            'APP_DATA' => $appdata,
+            'APR_CD' => $aprCd,
+            'WORK_ID' => $docApprovalIdx,
+            'WORK_DTM' => now()->format('Ymdhis'),
+            'USE_YN' => 'Y'
+        ]);
+
+        return $item;
     }
 
 }

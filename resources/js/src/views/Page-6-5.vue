@@ -168,9 +168,9 @@ export default {
       },
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '작성일시', field: 'edoc_file_haccp:work_dtm', filter: false, width: 200 },
+        { headerName: '작성일시', field: 'edoc_file_haccp:work_dtm_parsed', filter: false, width: 200 },
         { headerName: '문서명', field: 'edoc_file:doc_nm', filter: false, width: 200 },
-        { headerName: '승인상태', field: 'edoc_file_haccp:apr_cd', filter: false, width: 200 },
+        { headerName: '승인상태', field: 'edoc_file_haccp:apr_nm', filter: false, width: 200 },
         { headerName: '작성자', field: 'edoc_file_haccp:work_id', filter: false, width: 200 },
         { headerName: '승인일시', field: 'edoc_file_haccp:app_dtm', filter: false, width: 200 },
         { headerName: '승인자', field: 'edoc_file_haccp:app_id', filter: false, width: 200 },
