@@ -24,6 +24,7 @@ class AppController extends Controller
             case 'get_doc_daily_list': return $this->getDocDailyList($request);
             case 'apply_attendance': return $this->applyAttendance($request);
             case 'apply_leave_work': return $this->applyLeaveWork($request);
+            case 'get_haccp_implementation_schedule': return $this->getHaccpImpSchedule($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -158,5 +159,45 @@ class AppController extends Controller
             'msg' => $worker->EMP_NM . '님 퇴근기록이 되었습니다.',
             'time' => now()->parse($offDtm)->format('Y-m-d H:i'),
         ], 200);
+    }
+
+    public function getHaccpImpSchedule(Request $request)
+    {
+        $items = EdocFile::query();
+
+        $sort = $request->input('sort', 'DOC_ID');
+        $order = $request->input('order', 'ASC');
+
+        $items = $items->where('PERIOD_CD', 'ED');
+        $items = $items->where('USE_YN', 'Y');
+        $items = $items->orderBy($sort, $order)->get();
+        
+        $periods = [
+            ['label' => "월", 'value' => 0],
+            ['label' => "화", 'value' => 1],
+            ['label' => "수", 'value' => 2],
+            ['label' => "목", 'value' => 3],
+            ['label' => "금", 'value' => 4],
+            ['label' => "토", 'value' => 5],
+            ['label' => "일", 'value' => 6],
+        ];
+
+        $itemsParsed = [];
+        foreach ($periods as $period) {
+            $periodDocs = ["period" => $period['label'], "docs" => []];
+            foreach ($items as $item) {
+                // filter here later
+                array_push($periodDocs["docs"], $item->DOC_NM);
+            }
+
+            array_push($itemsParsed, $periodDocs);
+        }
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => $itemsParsed
+        ]);
     }
 }
