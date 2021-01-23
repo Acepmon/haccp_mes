@@ -10,6 +10,7 @@ use App\WorkerAttn;
 use App\Http\Resources\AppGetDocDailyListResource;
 use App\Http\Resources\AppGetCcpDocResource;
 use App\Http\Resources\AppChecklistDetailResource;
+use App\Http\Resources\AppGetDocListDetailResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -41,6 +42,11 @@ class AppController extends Controller
             case 'get_checklist_detail': return $this->getChecklistDetail($request);
             case 'write_checklist_detail_temp': return $this->writeChecklistDetailTemp($request);
             case 'write_checklist_detail_complete': return $this->writeChecklistDetailComplete($request);
+            case 'get_doc_list_detail': return $this->getDocListDetail($request);
+            case 'search_doc_list_date': return $this->searchDocListDate($request);
+            case 'search_doc_list_state_progress': return $this->searchDocListStateProgress($request);
+            case 'search_doc_list_state_request': return $this->searchDocListStateRequest($request);
+            case 'search_doc_list_state_completion': return $this->searchDocListStateCompletion($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -398,6 +404,102 @@ class AppController extends Controller
             'request_type' => $request->input('request_type'),
             'status' => 'success',
             'msg' => 'Successfully inserted haccp doc file complete',
+        ]);
+    }
+
+    public function getDocListDetail(Request $request)
+    {
+        $idx = $request->input('idx');
+
+        $items = EdocFileHaccp::where('DOC_ID', $idx)
+            ->orderBy('WORK_DTM', 'DESC')
+            ->with(['apr'])
+            ->get();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'data' => AppGetDocListDetailResource::collection($items)
+        ]);
+    }
+
+    public function searchDocListDate(Request $request)
+    {
+        $idx = $request->input('idx');
+        $search = $request->input('search');
+        $search = now()->parse($search)->format('Ymd');
+
+        $items = EdocFileHaccp::where('DOC_ID', $idx)
+            ->where('WORK_DTM', 'LIKE', $search . '%')
+            ->orderBy('WORK_DTM', 'DESC')
+            ->with(['apr'])
+            ->get();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'data' => AppGetDocListDetailResource::collection($items)
+        ]);
+    }
+
+    public function searchDocListStateProgress(Request $request)
+    {
+        $idx = $request->input('idx');
+
+        $items = EdocFileHaccp::where('DOC_ID', $idx)
+            ->where('APR_CD', 'TEMP')
+            ->orderBy('WORK_DTM', 'DESC')
+            ->with(['apr'])
+            ->get();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'data' => AppGetDocListDetailResource::collection($items)
+        ]);
+    }
+
+    public function searchDocListStateRequest(Request $request)
+    {
+        $idx = $request->input('idx');
+
+        $items = EdocFileHaccp::where('DOC_ID', $idx)
+            ->where('APR_CD', '10')
+            ->orderBy('WORK_DTM', 'DESC')
+            ->with(['apr'])
+            ->get();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'data' => AppGetDocListDetailResource::collection($items)
+        ]);
+    }
+
+    public function searchDocListStateCompletion(Request $request)
+    {
+        $idx = $request->input('idx');
+
+        $items = EdocFileHaccp::where('DOC_ID', $idx)
+            ->where('APR_CD', '20')
+            ->orderBy('WORK_DTM', 'DESC')
+            ->with(['apr'])
+            ->get();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'data' => AppGetDocListDetailResource::collection($items)
         ]);
     }
 
