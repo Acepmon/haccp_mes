@@ -35,7 +35,7 @@ class LoginController extends Controller
         // Authentication failed...
         return response([
             'success' => false,
-            'result' => __('User ID or password is wrong')
+            'result' => __('사용자 ID 나 비밀번호가 틀렸습니다.')
         ]);
     }
 

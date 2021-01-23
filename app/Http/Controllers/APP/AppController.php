@@ -95,7 +95,7 @@ class AppController extends Controller
             return $this->jsonResponse([
                 'request_type' => $request->input('request_type'),
                 'status' => 'error',
-                'msg' => $worker->EMP_NM . '님은 오늘날짜 출근기록이 이미 기록되이있습니다.'
+                'msg' => $worker->EMP_NM . '님은 오늘날짜 출근기록이 이미 되이있습니다.'
             ], 422);
         }
 
@@ -143,7 +143,7 @@ class AppController extends Controller
             return $this->jsonResponse([
                 'request_type' => $request->input('request_type'),
                 'status' => 'error',
-                'msg' => $worker->EMP_NM . '님은 오늘날짜 퇴근기록이 이미 기록되이있습니다.'
+                'msg' => $worker->EMP_NM . '님은 오늘날짜 퇴근기록이 이미 되이있습니다.'
             ], 422);
         }
 

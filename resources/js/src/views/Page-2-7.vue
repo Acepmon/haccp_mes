@@ -143,9 +143,9 @@ export default {
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '사번', field: 'worker_attn:emp_id', filter: false, editable: false, width: 200 },
         { headerName: '이름', field: 'worker_attn:emp_nm', filter: false, editable: false, width: 200 },
-        { headerName: '출근일시', field: 'worker_attn:on_dtm_parsed', filter: false, editable: false, width: 200 },
-        { headerName: '퇴근일시', field: 'worker_attn:off_dtm_parsed', filter: false, editable: false, width: 200 },
-        { headerName: '근무시간', field: 'worker_attn:duration', filter: false, editable: false, width: 200 },
+        { headerName: '출근일시', field: 'worker_attn:on_dtm_parsed', cellStyle: {textAlign: 'center'}, width: 200 },
+        { headerName: '퇴근일시', field: 'worker_attn:off_dtm_parsed', cellStyle: {textAlign: 'center'}, width: 200 },
+        { headerName: '근무시간', field: 'worker_attn:duration', cellStyle: {textAlign: 'center'}, width: 200 },
       ],
     }
   },

@@ -152,8 +152,8 @@ export default {
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '장비명', field: 'device_nm', filter: false, width: 300 },
-        { headerName: '데이터', field: 'data', filter: false, width: 300 },
-        { headerName: '일시', field: 'reg_dtm_parsed', filter: false, width: 300 },
+        { headerName: '데이터', field: 'data', cellStyle: {textAlign: 'center'}, width: 300 },
+        { headerName: '일시', field: 'reg_dtm_parsed', cellStyle: {textAlign: 'center'}, width: 300 },
       ],
       pagination: {
         total: 0,

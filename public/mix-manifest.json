@@ -1,6 +1,6 @@
 {
-    "/js/app.js": "/js/app.js?id=ac44d96a6907f55417a9",
-    "/css/app.css": "/css/app.css?id=08bf09a263e888785269",
+    "/js/app.js": "/js/app.js?id=e610e4179c3282c9b48b",
+    "/css/app.css": "/css/app.css?id=87601f6db8ada594cb43",
     "/css/main.css": "/css/main.css?id=59224701a25ecaff8be3",
     "/js/chunks/empty.chunk.63a6f69246ed5fd10cea.js": "/js/chunks/empty.chunk.63a6f69246ed5fd10cea.js?id=18199a5154c4cb454444",
     "/js/chunks/example.chunk.1a1da9b1066e50e11e89.js": "/js/chunks/example.chunk.1a1da9b1066e50e11e89.js?id=259550786be0a015a014",
@@ -63,5 +63,7 @@
     "/js/chunks/page-4-3.chunk.8692d68f60ea87980c80.js": "/js/chunks/page-4-3.chunk.8692d68f60ea87980c80.js?id=7b345af1c081e939270c",
     "/js/chunks/page-4-3.chunk.d961656f3208181a2809.js": "/js/chunks/page-4-3.chunk.d961656f3208181a2809.js?id=8aec8ab9c17c1b939702",
     "/js/chunks/page-4-3.chunk.159d825887c99dfb9489.js": "/js/chunks/page-4-3.chunk.159d825887c99dfb9489.js?id=c4fa68a74c21d21d44e1",
-    "/js/chunks/page-4-3.chunk.7cd715cd21829916c118.js": "/js/chunks/page-4-3.chunk.7cd715cd21829916c118.js?id=e694667f75856ef5887e"
+    "/js/chunks/page-4-3.chunk.7cd715cd21829916c118.js": "/js/chunks/page-4-3.chunk.7cd715cd21829916c118.js?id=e694667f75856ef5887e",
+    "/js/chunks/page-6-4.chunk.d8e9978e90e4001272c2.js": "/js/chunks/page-6-4.chunk.d8e9978e90e4001272c2.js?id=7cd9d320cc70053aa798",
+    "/js/chunks/page-2-7.chunk.74d093b913996f91b3b1.js": "/js/chunks/page-2-7.chunk.74d093b913996f91b3b1.js?id=9b7674f44bb6e5ee1c82"
 }
