@@ -8,6 +8,7 @@ use App\Worker;
 use App\WorkerAttn;
 use App\Http\Resources\AppGetDocDailyListResource;
 use App\Http\Resources\AppGetCcpDocResource;
+use App\Http\Resources\AppChecklistDetailResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -36,6 +37,7 @@ class AppController extends Controller
             case 'get_haccp_doc_list_month': return $this->getHaccpDocListMonth($request);
             case 'get_haccp_doc_list_quarter': return $this->getHaccpDocListQuarter($request);
             case 'get_haccp_doc_list_year': return $this->getHaccpDocListYear($request);
+            case 'get_checklist_detail': return $this->getChecklistDetail($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -329,6 +331,28 @@ class AppController extends Controller
             'status' => 'success',
             'msg' => '',
             'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    public function getChecklistDetail(Request $request)
+    {
+        $docIdx = $request->input('doc_idx');
+        $item = EdocFile::where('DOC_ID', $docIdx);
+
+        if ($request->has('doc_approval_idx')) {
+            $docApprovalIdx = $request->input('doc_approval_idx');
+            $item = $item->where('APP_ID', $docApprovalIdx);
+        }
+
+        $item = $item->first();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'document' => [
+                "appdata" => $item != null ? new AppChecklistDetailResource($item) : null
+            ]
         ]);
     }
 
