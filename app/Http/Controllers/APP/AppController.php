@@ -17,8 +17,11 @@ use App\Http\Resources\AppGetDocListDetailResource;
 use App\Http\Resources\AppGetApprovalDocResource;
 use App\Http\Resources\AppGetDayProductionListResource;
 use App\Http\Resources\AppGetDayProductionListDetailResource;
+use App\Http\Resources\AppGetRawMaterialForwardResource;
+use App\Http\Resources\AppGetRawMaterialForwardDetailResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AppController extends Controller
 {
@@ -58,6 +61,8 @@ class AppController extends Controller
             case 'write_approval_doc': return $this->writeApprovalDoc($request);
             case 'get_day_production_list': return $this->getDayProductionList($request);
             case 'get_day_production_list_detail': return $this->getDayProductionListDetail($request);
+            case 'get_raw_material_forwarding': return $this->getRawMaterialForwarding($request);
+            case 'get_raw_material_forwarding_detail': return $this->getRawMaterialForwardingDetail($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -629,7 +634,45 @@ class AppController extends Controller
             'status' => 'success',
             'msg' => '',
             'rows' => $items->count(),
+            'idx' => $idx,
             'data' => AppGetDayProductionListDetailResource::collection($items)
+        ]);
+    }
+
+    public function getRawMaterialForwarding(Request $request)
+    {
+        $items = JobOrd::get();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'data' => AppGetRawMaterialForwardResource::collection($items)
+        ]);
+    }
+
+    public function getRawMaterialForwardingDetail(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required',
+        ]);
+
+        $idx = $request->input('idx');
+        $items = JobOrd::where('JOB_NO', $idx)->get();
+        $details = $this->queryJobOrdBomDetails($items);
+        $merged = [];
+        foreach ($details as $detail) {
+            $merged = array_merge($merged, $detail['subdetails']->toArray());
+        }
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => count($merged),
+            'idx' => $idx,
+            'data' => AppGetRawMaterialForwardDetailResource::collection($merged)
         ]);
     }
 
@@ -659,6 +702,40 @@ class AppController extends Controller
         ]);
 
         return $item;
+    }
+
+    private function queryJobOrdBomDetails($items)
+    {
+        $details = [];
+
+        foreach ($items as $jobOrd) {
+            $subdetails = DB::table('JOB_ORD_BOM')
+                ->select('JOB_ORD_BOM.ITEM2_ID AS ITEM_ID', 'JOB_ORD_BOM.ITEM2_NM AS ITEM_NM', DB::raw('(JOB_ORD.ORD_QTY * JOB_ORD_BOM.USE_QTY / JOB_ORD_BOM.PROD_QTY) AS REQ'))
+                ->join('JOB_ORD', 'JOB_ORD_BOM.ITEM_ID', '=', 'JOB_ORD.ITEM_ID')
+                ->where('JOB_ORD_BOM.ITEM_ID', $jobOrd->ITEM_ID)
+                ->get();
+
+            $sum = $subdetails->sum('REQ');
+
+            array_push($details, [
+                'reqSum' => number_format($sum),
+                'ratio' => 100,
+                'origin' => '',
+                'item_id' => $jobOrd->ITEM_ID,
+                'subdetails' => $subdetails->map(function ($subdetail) use ($sum) {
+                    $ratio = 100 / $sum * intval($subdetail->REQ);
+                    return [
+                        'item_id' => $subdetail->ITEM_ID,
+                        'item_nm' => $subdetail->ITEM_NM,
+                        'req' => number_format(intval($subdetail->REQ)),
+                        'ratio' => number_format((float) $ratio, 2, '.', ''),
+                        'origin' => ''
+                    ];
+                })
+            ]);
+        }
+
+        return $details;
     }
 
 }

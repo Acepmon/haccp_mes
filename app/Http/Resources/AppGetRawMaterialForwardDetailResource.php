@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AppGetDayProductionListDetailResource extends JsonResource
+class AppGetRawMaterialForwardDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +15,8 @@ class AppGetDayProductionListDetailResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'proc_nm' => $this->PROC_NM . '[' . $this->PROC_TIME . '분]',
-            'emp_nm' => $this->EMP_NM,
+            'item_nm' => $this['item_nm'],
+            'req' => $this['req'],
         ];
     }
 }
