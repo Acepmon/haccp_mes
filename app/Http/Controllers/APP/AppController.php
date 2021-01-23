@@ -11,6 +11,7 @@ use App\Http\Resources\AppGetDocDailyListResource;
 use App\Http\Resources\AppGetCcpDocResource;
 use App\Http\Resources\AppChecklistDetailResource;
 use App\Http\Resources\AppGetDocListDetailResource;
+use App\Http\Resources\AppGetApprovalDocResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -47,6 +48,9 @@ class AppController extends Controller
             case 'search_doc_list_state_progress': return $this->searchDocListStateProgress($request);
             case 'search_doc_list_state_request': return $this->searchDocListStateRequest($request);
             case 'search_doc_list_state_completion': return $this->searchDocListStateCompletion($request);
+            case 'get_approval_list': return $this->getApprovalList($request);
+            case 'get_approval_doc': return $this->getApprovalDoc($request);
+            case 'write_approval_doc': return $this->writeApprovalDoc($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -500,6 +504,79 @@ class AppController extends Controller
             'msg' => '',
             'rows' => $items->count(),
             'data' => AppGetDocListDetailResource::collection($items)
+        ]);
+    }
+
+    public function getApprovalList(Request $request)
+    {
+        $search = $request->input('search');
+        $search = now()->parse($search)->format('Ymd');
+        $search = $search . '000000';
+
+        $items = EdocFileHaccp::query()
+            ->where('APR_CD', '10')
+            ->whereRaw('CAST(WORK_DTM AS SIGNED) >= ' . intval($search))
+            ->orderBy('WORK_DTM', 'DESC')
+            ->with(['apr'])
+            ->get();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'data' => AppGetDocListDetailResource::collection($items)
+        ]);
+    }
+
+    public function getApprovalDoc(Request $request)
+    {
+        $docIdx = $request->input('doc_idx');
+
+        $item = EdocFileHaccp::where('DOC_ID', $docIdx)->where('APR_CD', '10');
+
+        if ($request->has('doc_approval_idx')) {
+            $docApprovalIdx = $request->input('doc_approval_idx');
+            $item = $item->where('APP_ID', $docApprovalIdx);
+        }
+
+        $item = $item->first();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => new AppGetApprovalDocResource($item)
+        ]);
+    }
+
+    public function writeApprovalDoc(Request $request)
+    {
+        $haccpSeq = $request->input('haccp_seq');
+        $appData = $request->input('app_data');
+        $docApprovalIdx = $request->input('doc_approval_idx');
+
+        $item = EdocFileHaccp::where('HACCP_SEQ', $haccpSeq)->where('APR_CD', '10')->first();
+
+        if ($item == null) {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => 'Document not found',
+            ], 422);
+        }
+
+        $item->update([
+            'APR_CD' => '20',
+            'APP_DATA' => $appData,
+            'APP_ID' => $docApprovalIdx,
+            'APP_DTM' => now()->format('YmdHis'),
+        ]);
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => 'Successfully approved'
         ]);
     }
 
