@@ -7,6 +7,7 @@ use App\CommCd;
 use App\Worker;
 use App\WorkerAttn;
 use App\Http\Resources\AppGetDocDailyListResource;
+use App\Http\Resources\AppGetCcpDocResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -25,6 +26,11 @@ class AppController extends Controller
             case 'apply_attendance': return $this->applyAttendance($request);
             case 'apply_leave_work': return $this->applyLeaveWork($request);
             case 'get_haccp_implementation_schedule': return $this->getHaccpImpSchedule($request);
+            case 'get_ccp_doc_list_daily': return $this->getCcpDocListDaily($request);
+            case 'get_ccp_doc_list_week': return $this->getCcpDocListWeek($request);
+            case 'get_ccp_doc_list_month': return $this->getCcpDocListMonth($request);
+            case 'get_ccp_doc_list_quarter': return $this->getCcpDocListQuarter($request);
+            case 'get_ccp_doc_list_year': return $this->getCcpDocListYear($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -200,4 +206,76 @@ class AppController extends Controller
             'data' => $itemsParsed
         ]);
     }
+
+    public function getCcpDocListDaily(Request $request)
+    {
+        $typeCd = 10;
+        $periodCd = 'ED';
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    public function getCcpDocListWeek(Request $request)
+    {
+        $typeCd = 10;
+        $periodCd = 'WK';
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    public function getCcpDocListMonth(Request $request)
+    {
+        $typeCd = 10;
+        $periodCd = 'MM';
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    public function getCcpDocListQuarter(Request $request)
+    {
+        $typeCd = 10;
+        $periodCd = 'QT';
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    public function getCcpDocListYear(Request $request)
+    {
+        $typeCd = 10;
+        $periodCd = 'YR';
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetCcpDocResource::collection($this->queryEdocFile($typeCd, $periodCd))
+        ]);
+    }
+
+    private function queryEdocFile($typeCd, $periodCd)
+    {
+        $items = EdocFile::where('USE_YN', 'Y')
+            ->where('TYPE_CD', $typeCd)
+            ->where('PERIOD_CD', $periodCd)
+            ->orderBy('DOC_ID', 'ASC')
+            ->get();
+
+        return $items;
+    }
+
 }
