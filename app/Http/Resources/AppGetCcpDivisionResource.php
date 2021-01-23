@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AppChecklistDetailResource extends JsonResource
+class AppGetCcpDivisionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,8 @@ class AppChecklistDetailResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'appdata' => json_decode($this->APP_DATA),
-            'subject' => $this->DOC_NM,
-            'reporter_qrcode_idx' => $this->WORK_ID,
-            'work_dtm' => $this->WORK_DTM,
+            'ccp_cd' => $this->CCP_CD,
+            'ccp_nm' => $this->CCP_NM,
         ];
     }
 }

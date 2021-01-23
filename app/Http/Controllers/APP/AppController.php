@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\APP;
 
+use App\CcpCdInfo;
+use App\CcpData;
 use App\JobOrd;
 use App\JobOrdDtl;
 use App\JobOrdDtlWork;
@@ -21,6 +23,8 @@ use App\Http\Resources\AppGetRawMaterialForwardResource;
 use App\Http\Resources\AppGetRawMaterialForwardDetailResource;
 use App\Http\Resources\AppGetProcessStatusResource;
 use App\Http\Resources\AppGetProcessStatusDetailResource;
+use App\Http\Resources\AppGetCcpDivisionResource;
+use App\Http\Resources\AppGetCcpRequestInfoResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -69,6 +73,9 @@ class AppController extends Controller
             case 'get_process_status_detail': return $this->getProcessStatusDetail($request);
             case 'write_process_status_start': return $this->writeProcessStatusStart($request);
             case 'write_process_status_end': return $this->writeProcessStatusEnd($request);
+            case 'get_ccp_division': return $this->getCcpDivision($request);
+            case 'get_ccp_request_info': return $this->getCcpRequestInfo($request);
+            case 'write_ccp_info': return $this->writeCcpInfo($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -368,12 +375,12 @@ class AppController extends Controller
     public function getChecklistDetail(Request $request)
     {
         $docIdx = $request->input('doc_idx');
-        $item = EdocFile::where('DOC_ID', $docIdx);
+        $item = EdocFileHaccp::where('HACCP_SEQ', $docIdx);
 
-        if ($request->has('doc_approval_idx')) {
-            $docApprovalIdx = $request->input('doc_approval_idx');
-            $item = $item->where('APP_ID', $docApprovalIdx);
-        }
+        // if ($request->has('doc_approval_idx')) {
+        //     $docApprovalIdx = $request->input('doc_approval_idx');
+        //     $item = $item->where('APP_ID', $docApprovalIdx);
+        // }
 
         $item = $item->first();
 
@@ -381,9 +388,7 @@ class AppController extends Controller
             'request_type' => $request->input('request_type'),
             'status' => 'success',
             'msg' => '',
-            'document' => [
-                "appdata" => $item != null ? new AppChecklistDetailResource($item) : null
-            ]
+            'document' => new AppChecklistDetailResource($item)
         ]);
     }
 
@@ -788,6 +793,112 @@ class AppController extends Controller
             'request_type' => $request->input('request_type'),
             'status' => 'success',
             'msg' => 'Successfully updated process',
+        ]);
+    }
+
+    public function getCcpDivision(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required',
+            'process_idx' => 'required'
+        ]);
+        $idx = $request->input('idx');
+        $processIdx = $request->input('process_idx');
+        $items = CcpCdInfo::get();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'idx' => $idx,
+            'process_idx' => $processIdx,
+            'data' => AppGetCcpDivisionResource::collection($items),
+            'devices' => CommCd::where('COMM1_CD', 'C00')->whereNotIn('COMM2_CD', ['$$'])->get()->map(function ($device) {
+                return [
+                    'device_cd' => $device->COMM2_CD,
+                    'device_nm' => $device->COMM2_NM,
+                ];
+            })
+        ]);
+    }
+
+    public function getCcpRequestInfo(Request $request)
+    {
+        $request->validate([
+            'type' => 'required',
+            'device_id' => 'required',
+            'idx' => 'required',
+            'process_idx' => 'required'
+        ]);
+        $type = $request->input('type');
+        $deviceId = $request->input('device_id');
+        $idx = $request->input('idx');
+        $processIdx = $request->input('process_idx');
+
+        $item = CcpData::where('DEVICE_ID', $deviceId)->orderBy('REG_DTM', 'DESC')->first();
+
+        if ($item == null) {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => 'Ccp data not found',
+            ], 422);
+        }
+
+        $item->idx = $idx;
+        $item->processIdx = $processIdx;
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => new AppGetCcpRequestInfoResource($item)
+        ]);
+    }
+
+    public function writeCcpInfo(Request $request)
+    {
+        $request->validate([
+            'type' => 'required',
+            'device_id' => 'required',
+            'idx' => 'required',
+            'process_idx' => 'required',
+            'time' => 'required',
+            'temperature' => 'required',
+            'heating_time' => 'required',
+            'poom_temperature' => 'required',
+        ]);
+        $type = $request->input('type');
+        $deviceId = $request->input('device_id');
+        $idx = $request->input('idx');
+        $processIdx = $request->input('process_idx');
+        $time = $request->input('time');
+        $temp = $request->input('temperature');
+        $heat = $request->input('heating_time');
+        $poom = $request->input('poom_temperature');
+
+        $item = JobOrdDtl::where('JOB_NO', $idx)->where('SEQ_NO', $processIdx)->first();
+
+        if ($item == null) {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => 'Job Order detail not found',
+            ], 422);
+        }
+
+        $item->update([
+            'CHK1_DTM' => $time,
+            'CHK_TEMP' => intval($temp),
+            'CHK2_TIME' => intval($heat),
+            'CHK2_TEMP' => intval($poom),
+            'CCP_CD' => $type,
+        ]);
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => 'Successfully updated job order detail',
         ]);
     }
 
