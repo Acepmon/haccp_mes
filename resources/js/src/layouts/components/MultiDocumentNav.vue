@@ -41,10 +41,10 @@
       <vue-context ref="menu">
         <li>
           <a href="#" @click="contextClose()" class="flex items-center text-sm">
-            <span class="ml-2">Close</span>
+            <span class="ml-2">{{ $t('Close') }}</span>
           </a>
         </li>
-        <li>
+        <!-- <li>
           <a
             href="#"
             @click="contextCloseOther()"
@@ -61,14 +61,14 @@
           >
             <span class="ml-2">Close to the right</span>
           </a>
-        </li>
+        </li> -->
         <li>
           <a
             href="#"
             @click="contextCloseAll()"
             class="flex items-center text-sm"
           >
-            <span class="ml-2">Close all</span>
+            <span class="ml-2">{{ $t('CloseAll') }}</span>
           </a>
         </li>
       </vue-context>
@@ -391,7 +391,7 @@ export default {
         type: "confirm",
         color: "dark",
         title: this.$t("Confirmation"),
-        text: this.$t("CloseDocument"),
+        text: this.$t("CloseDocumentAll"),
         acceptText: this.$t("Accept"),
         cancelText: this.$t("Cancel"),
         accept: () => {

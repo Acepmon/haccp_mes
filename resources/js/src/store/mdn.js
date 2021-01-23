@@ -127,7 +127,7 @@ const mdn = {
                     path: getters.getLastTab.path
                 }).catch(() => {})
             } else {
-                router.push({ path: '/1' }).catch(() => {})
+                router.push({ path: '/information' }).catch(() => {})
             }
         },
 
@@ -141,7 +141,7 @@ const mdn = {
                     path: getters.getLastTab.path
                 }).catch(() => {})
             } else {
-                router.push({ path: '/1' }).catch(() => {})
+                router.push({ path: '/information' }).catch(() => {})
             }
         },
 

@@ -21,345 +21,249 @@
 
 export default [
   {
-    url: "/1",
+    url: "/information",
     name: "정보관리", //company-info
     slug: "정보관리", 
-    showSubmenuOn: '/1',
+    showSubmenuOn: '/information',
     submenu: [
       {
-        url: "/1/1",
+        url: "/information/company",
         name: "회사정보등록",
         slug: "회사정보등록",
-        showSubmenuOn: '/1',
+        showSubmenuOn: '/information',
       },
       {
-        url: "/1/2",
+        url: "/information/user",
         name: "HACCP담당자 관리",
         slug: "HACCP담당자 관리",
-        showSubmenuOn: '/1',
+        showSubmenuOn: '/information',
       },
       {
-        url: "/1/3",
+        url: "/information/worker",
         name: "생산담당자 관리",
         slug: "생산담당자 관리",
-        showSubmenuOn: '/1',
+        showSubmenuOn: '/information',
       },
       {
-        url: "/1/4",
+        url: "/information/haccp",
         name: "HACCP서류등록",
         slug: "HACCP서류등록",
-        showSubmenuOn: '/1',
+        showSubmenuOn: '/information',
         submenu: [
           {
-            url: "/1/4/1",
+            url: "/information/haccp/standard-doc",
             name: "HACCP 기준서 등록",
             slug: "HACCP 기준서 등록",
-            showSubmenuOn: '/1',
+            showSubmenuOn: '/information',
           },
           {
-            url: "/1/4/2",
+            url: "/information/haccp/food-doc",
             name: "식품위생서류 등록",
             slug: "식품위생서류 등록",
-            showSubmenuOn: '/1',
+            showSubmenuOn: '/information',
           },
           {
-            url: "/1/4/3",
+            url: "/information/haccp/haccp-doc",
             name: "HACCP 이행점검표",
             slug: "HACCP 이행점검표",
-            showSubmenuOn: '/1',
+            showSubmenuOn: '/information',
           }
         ]
       },
-      // {
-      //   url: "/1/5",
-      //   name: "원/부자재 기준",
-      //   slug: "원/부자재 기준",
-      //   showSubmenuOn: '/1',
-      //   submenu: [
-      //     {
-      //       url: "/1/5/1",
-      //       name: "가공원료 기준등록",
-      //       slug: "가공원료 기준등록",
-      //       showSubmenuOn: '/1',
-      //     },
-      //     {
-      //       url: "/1/5/2",
-      //       name: "원료 기준등록",
-      //       slug: "원료 기준등록",
-      //       showSubmenuOn: '/1',
-      //     },
-      //     {
-      //       url: "/1/5/3",
-      //       name: "부자재 기준등록",
-      //       slug: "부자재 기준등록",
-      //       showSubmenuOn: '/1',
-      //     }
-      //   ]
-      // },
       {
-        url: "/1/6",
+        url: "/information/material",
         name: "원/부자재 관리",
         slug: "원/부자재 관리",
-        showSubmenuOn: '/1',
+        showSubmenuOn: '/information',
       },
       {
-        url: "/1/6/1",
+        url: "/information/material-unit",
         name: "원/부자재 단위관리",
         slug: "원/부자재 단위관리",
-        showSubmenuOn: '/1',
+        showSubmenuOn: '/information',
       },
       {
-        url: "/1/7",
+        url: "/information/bom",
         name: "BOM 관리",
         slug: "BOM 관리",
-        showSubmenuOn: '/1',
+        showSubmenuOn: '/information',
       },
-      // {
-      //   url: "/1/8",
-      //   name: "공정순서관리",
-      //   slug: "공정순서관리",
-      //   showSubmenuOn: '/1',
-      //   submenu: [
-      //     {
-      //       url: "/1/8/1",
-      //       name: "전처리공정등록",
-      //       slug: "전처리공정등록",
-      //       showSubmenuOn: '/1',
-      //     },
-      //     {
-      //       url: "/1/8/2",
-      //       name: "제조공정등록",
-      //       slug: "제조공정등록",
-      //       showSubmenuOn: '/1',
-      //     }
-      //   ]
-      // },
-      // {
-      //   url: "/1/9",
-      //   name: "구매기업정보등록",
-      //   slug: "구매기업정보등록",
-      //   showSubmenuOn: '/1',
-      // },
-      // {
-      //   url: "/1/10",
-      //   name: "납품기업정보등록",
-      //   slug: "납품기업정보등록",
-      //   showSubmenuOn: '/1',
-      // },
       {
-        url: "/1/11",
+        url: "/information/security",
         name: "정보보호관리",
         slug: "정보보호관리",
-        showSubmenuOn: '/1',
+        showSubmenuOn: '/information',
       },
       {
-        url: "/1/12",
+        url: "/information/app-version",
         name: "App Version",
         slug: "App Version",
-        showSubmenuOn: '/1',
+        showSubmenuOn: '/information',
       },
     ]
   },
   {
-    url: "/2",
+    url: "/product",
     name: "생산관리",
     slug: "생산관리",
-    showSubmenuOn: '/2',
+    showSubmenuOn: '/product',
     submenu: [
       {
-        url: "/2/1",
+        url: "/product/standard",
         name: "제품별 표준공정등록",
         slug: "제품별 표준공정등록",
-        showSubmenuOn: '/2',
+        showSubmenuOn: '/product',
       },
       {
-        url: "/2/2",
+        url: "/product/job-order",
         name: "생산지시 등록",
         slug: "생산지시 등록",
-        showSubmenuOn: '/2',
+        showSubmenuOn: '/product',
       },
       {
-        url: "/2/3",
+        url: "/product/job-order-query",
         name: "생산지시 조회",
         slug: "생산지시 조회",
-        showSubmenuOn: '/2',
+        showSubmenuOn: '/product',
       },
       {
-        url: "/2/4",
+        url: "/product/job-order-worker",
         name: "작업자 배치",
         slug: "작업자 배치",
-        showSubmenuOn: '/2',
+        showSubmenuOn: '/product',
       },
       {
-        url: "/2/5",
+        url: "/product/5",
         name: "생산공정모티터링",
         slug: "생산공정모티터링",
-        showSubmenuOn: '/2',
+        showSubmenuOn: '/product',
         popup: true,
         popupComponent: 'page-2-5'
       },
       {
-        url: "/2/6",
+        url: "/product/6",
         name: "CCP 장비모니터링",
         slug: "CCP 장비모니터링",
-        showSubmenuOn: '/2',
+        showSubmenuOn: '/product',
         popup: true,
         popupComponent: 'page-2-6'
       },
       {
-        url: "/2/7",
+        url: "/product/job-order-attendance",
         name: "생산자 근태기록",
         slug: "생산자 근태기록",
-        showSubmenuOn: '/2',
+        showSubmenuOn: '/product',
       }
     ]
   },
   {
-    url: "/3",
-    name: "거래처관리",
-    slug: "거래처관리",
-    showSubmenuOn: '/3',
+    url: "/customer",
+    name: "거래처정보",
+    slug: "거래처정보",
+    showSubmenuOn: '/customer',
     submenu: [
       {
-        url: "/3/1",
+        url: "/customer/customer",
         name: "거래처 등록",
         slug: "거래처 등록",
-        showSubmenuOn: '/3',
+        showSubmenuOn: '/customer',
       },
       {
-        url: "/3/2",
+        url: "/customer/customer-query",
         name: "거래처 조회",
         slug: "거래처 조회",
-        showSubmenuOn: '/3',
+        showSubmenuOn: '/customer',
       }
     ]
   },
   {
-    url: "/4",
+    url: "/stock",
     name: "재고관리",
     slug: "재고관리",
-    showSubmenuOn: '/4',
+    showSubmenuOn: '/stock',
     submenu: [
       {
-        url: "/4/1",
+        url: "/stock/serial-lot",
         name: "시리얼/Lot 등록",
         slug: "시리얼/Lot 등록",
-        showSubmenuOn: '/4',
+        showSubmenuOn: '/stock',
       },
       {
-        url: "/4/2",
+        url: "/stock/product-delivery",
         name: "생산불출 등록",
         slug: "생산불출 등록",
-        showSubmenuOn: '/4',
+        showSubmenuOn: '/stock',
       },
       {
-        url: "/4/3",
+        url: "/stock/statistics",
         name: "창고별 재고현황",
         slug: "창고별 재고현황",
-        showSubmenuOn: '/4',
+        showSubmenuOn: '/stock',
       },
       {
-        url: "/4/4",
+        url: "/stock/unit-cost",
         name: "품목별 단가정보",
         slug: "품목별 단가정보",
-        showSubmenuOn: '/4',
+        showSubmenuOn: '/stock',
       }
     ]
   },
-  // {
-  //   url: "/5",
-  //   name: "출하관리",
-  //   slug: "출하관리",
-  //   showSubmenuOn: '/5',
-  //   submenu: [
-  //     {
-  //       url: "/5/1",
-  //       name: "제품재고현황",
-  //       slug: "제품재고현황",
-  //       showSubmenuOn: '/5',
-  //     },
-  //     {
-  //       url: "/5/2",
-  //       name: "출하관리",
-  //       slug: "출하관리",
-  //       showSubmenuOn: '/5',
-  //     }
-  //   ]
-  // },
   {
-    url: "/6",
+    url: "/haccp",
     name: "HACCP모니터링",
     slug: "HACCP모니터링",
-    showSubmenuOn: '/6',
+    showSubmenuOn: '/haccp',
     submenu: [
       {
-        url: "/6/1",
+        url: "/haccp/ccp-monitoring",
         name: "CCP 모니터링",
         slug: "CCP 모니터링",
-        showSubmenuOn: '/6',
+        showSubmenuOn: '/haccp',
       },
       {
-        url: "/6/2",
+        url: "/haccp/ccp-limit",
         name: "CCP 이탈한계설정",
         slug: "CCP 이탈한계설정",
-        showSubmenuOn: '/6',
+        showSubmenuOn: '/haccp',
       },
       {
-        url: "/6/3",
+        url: "/haccp/ccp-escape",
         name: "CCP 이탈정보",
         slug: "CCP 이탈정보",
-        showSubmenuOn: '/6',
+        showSubmenuOn: '/haccp',
       },
       {
-        url: "/6/4",
+        url: "/haccp/ccp-data-query",
         name: "CCP 자료 조회",
         slug: "CCP 자료 조회",
-        showSubmenuOn: '/6',
+        showSubmenuOn: '/haccp',
       },
       {
-        url: "/6/5",
+        url: "/haccp/haccp-result",
         name: "HACCP 점검결과",
         slug: "HACCP 점검결과",
-        showSubmenuOn: '/6',
+        showSubmenuOn: '/haccp',
       },
-      // {
-      //   url: "/6/6",
-      //   name: "시험검사관리",
-      //   slug: "시험검사관리",
-      //   showSubmenuOn: '/6',
-      // }
     ]
   },
   {
-    url: "/7",
+    url: "/data",
     name: "자료관리",
     slug: "자료관리",
-    showSubmenuOn: '/7',
+    showSubmenuOn: '/data',
     submenu: [
       {
-        url: "/7/1",
+        url: "/data/code",
         name: "공통코드 관리",
         slug: "공통코드 관리",
-        showSubmenuOn: '/7',
+        showSubmenuOn: '/data',
       },
       {
-        url: "/7/2",
+        url: "/data/log-history",
         name: "사용자 로그이력",
         slug: "사용자 로그이력",
-        showSubmenuOn: '/7',
+        showSubmenuOn: '/data',
       },
-      // {
-      //   url: "/7/3",
-      //   name: "A Management",
-      //   slug: "A Management",
-      //   showSubmenuOn: '/7',
-      // },
-      // {
-      //   url: "/7/4",
-      //   name: "B Management",
-      //   slug: "B Management",
-      //   showSubmenuOn: '/7',
-      // }
     ]
   },
   {
