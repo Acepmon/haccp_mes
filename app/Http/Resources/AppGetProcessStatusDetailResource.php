@@ -15,6 +15,7 @@ class AppGetProcessStatusDetailResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'seq_no' => $this->SEQ_NO,
             'proc_nm' => $this->PROC_NM,
             'proc_dtl' => $this->PROC_DTL,
             'proc_time' => $this->PROC_TIME,

@@ -67,6 +67,8 @@ class AppController extends Controller
             case 'get_raw_material_forwarding_detail': return $this->getRawMaterialForwardingDetail($request);
             case 'get_process_status': return $this->getProcessStatus($request);
             case 'get_process_status_detail': return $this->getProcessStatusDetail($request);
+            case 'write_process_status_start': return $this->writeProcessStatusStart($request);
+            case 'write_process_status_end': return $this->writeProcessStatusEnd($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -724,6 +726,68 @@ class AppController extends Controller
             'rows' => $items->count(),
             'idx' => $idx,
             'data' => AppGetProcessStatusDetailResource::collection($items)
+        ]);
+    }
+
+    public function writeProcessStatusStart(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required',
+            'process_idx' => 'required',
+        ]);
+
+        $idx = $request->input('idx');
+        $process_idx = $request->input('process_idx');
+
+        $item = JobOrdDtl::where('JOB_NO', $idx)->where('SEQ_NO', $process_idx)->first();
+
+        if ($item == null) {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => 'Process not found',
+            ], 422);
+        }
+
+        $item->update([
+            'SRT_DTM' => now()->format('YmdHis')
+        ]);
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => 'Successfully updated process',
+        ]);
+    }
+
+    public function writeProcessStatusEnd(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required',
+            'process_idx' => 'required',
+        ]);
+
+        $idx = $request->input('idx');
+        $process_idx = $request->input('process_idx');
+
+        $item = JobOrdDtl::where('JOB_NO', $idx)->where('SEQ_NO', $process_idx)->first();
+
+        if ($item == null) {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => 'Process not found',
+            ], 422);
+        }
+
+        $item->update([
+            'END_DTM' => now()->format('YmdHis')
+        ]);
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => 'Successfully updated process',
         ]);
     }
 
