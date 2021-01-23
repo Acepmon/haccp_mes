@@ -19,6 +19,8 @@ use App\Http\Resources\AppGetDayProductionListResource;
 use App\Http\Resources\AppGetDayProductionListDetailResource;
 use App\Http\Resources\AppGetRawMaterialForwardResource;
 use App\Http\Resources\AppGetRawMaterialForwardDetailResource;
+use App\Http\Resources\AppGetProcessStatusResource;
+use App\Http\Resources\AppGetProcessStatusDetailResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +65,8 @@ class AppController extends Controller
             case 'get_day_production_list_detail': return $this->getDayProductionListDetail($request);
             case 'get_raw_material_forwarding': return $this->getRawMaterialForwarding($request);
             case 'get_raw_material_forwarding_detail': return $this->getRawMaterialForwardingDetail($request);
+            case 'get_process_status': return $this->getProcessStatus($request);
+            case 'get_process_status_detail': return $this->getProcessStatusDetail($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -673,6 +677,53 @@ class AppController extends Controller
             'rows' => count($merged),
             'idx' => $idx,
             'data' => AppGetRawMaterialForwardDetailResource::collection($merged)
+        ]);
+    }
+
+    public function getProcessStatus(Request $request)
+    {
+        $items = JobOrd::get();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'data' => AppGetProcessStatusResource::collection($items)
+        ]);
+    }
+
+    public function getProcessStatusDetail(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required',
+        ]);
+
+        $idx = $request->input('idx');
+        $items = JobOrdDtl::where('JOB_NO', $idx)->get();
+        $items = $items->map(function ($item) {
+            $jobOrdDtlWorkers = JobOrdDtlWork::where('JOB_NO', $item->JOB_NO)
+                ->where('ITEM_ID', $item->ITEM_ID)
+                ->where('SEQ_NO', $item->SEQ_NO)
+                ->with(['worker'])
+                ->get();
+
+            $empNms = [];
+            foreach ($jobOrdDtlWorkers as $key => $jobOrdDtlWorker) {
+                array_push($empNms, $jobOrdDtlWorker->worker->EMP_NM);
+            }
+
+            $item->EMP_NM = implode(',', $empNms);
+            return $item;
+        });
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'idx' => $idx,
+            'data' => AppGetProcessStatusDetailResource::collection($items)
         ]);
     }
 
