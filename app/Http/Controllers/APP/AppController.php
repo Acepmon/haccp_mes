@@ -25,6 +25,7 @@ use App\Http\Resources\AppGetProcessStatusResource;
 use App\Http\Resources\AppGetProcessStatusDetailResource;
 use App\Http\Resources\AppGetCcpDivisionResource;
 use App\Http\Resources\AppGetCcpRequestInfoResource;
+use App\Http\Resources\AppGetAllCcpMonitoringResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -76,6 +77,7 @@ class AppController extends Controller
             case 'get_ccp_division': return $this->getCcpDivision($request);
             case 'get_ccp_request_info': return $this->getCcpRequestInfo($request);
             case 'write_ccp_info': return $this->writeCcpInfo($request);
+            case 'get_all_ccp_monitoring': return $this->getAllCcpMonitoring($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -899,6 +901,30 @@ class AppController extends Controller
             'request_type' => $request->input('request_type'),
             'status' => 'success',
             'msg' => 'Successfully updated job order detail',
+        ]);
+    }
+
+    public function getAllCcpMonitoring(Request $request)
+    {
+        $deviceCds = CommCd::where('COMM1_CD', 'C00')->whereNotIn('COMM2_CD', ['$$'])->get();
+        $device_id = implode(',', $deviceCds->pluck('COMM2_CD')->toArray());
+        $items = DB::connection('haccp_server')
+            ->table('CCP_DATA')
+            ->select(
+                'DEVICE_ID AS DEVICE', 
+                DB::raw('(SELECT CAST(DATA AS DECIMAL(10,2)) FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE ORDER BY B.REG_DTM DESC LIMIT 1) AS DATA'), 
+                DB::raw('(SELECT REG_DTM FROM CCP_DATA B WHERE B.DEVICE_ID = DEVICE ORDER BY B.REG_DTM DESC LIMIT 1) AS REG_DTM'), 
+            )
+            ->whereIn('DEVICE_ID', array_filter(explode(',', $device_id)))
+            ->groupBy('DEVICE_ID')
+            ->orderBy('DEVICE', 'ASC')
+            ->get();
+        
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetAllCcpMonitoringResource::collection($items),
         ]);
     }
 
