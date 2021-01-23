@@ -30,6 +30,10 @@ class ProdInfoController extends Controller
             ->orWhere('ITEM_NM', 'LIKE', '%'.$keyWord.'%')->orWhere('SPEC', 'LIKE', '%'.$keyWord.'%')->orWhere('LOT_NO', 'LIKE', '%'.$keyWord.'%');
         }
 
+        if ($request->has('acc_no')) {
+            $items = $items->where('ACC_NO', $request->input('acc_no'));
+        }
+
         if ($limit == -1) {
             $items = $items->orderBy($sort, $order)->get();
         } else {

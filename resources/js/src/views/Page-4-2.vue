@@ -54,6 +54,7 @@
         ref="agGridTable"
         :localeText="localeText"
         :gridOptions="gridOptions"
+        rowSelection="single"
         class="ag-theme-material w-100 my-4 ag-grid-table"
         style="max-height: 100%;"
         :columnDefs="columnDefs"
@@ -110,6 +111,31 @@
         </template>
       </vs-table>
     </vs-popup>
+
+    <vs-popup title="" :active.sync="lotInfoDialog" button-close-hidden id="div-with-loading2" class="vs-con-loading__container preview-dialog">
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="lotInfoDialog = false"
+            class="mx-1"
+            color="primary"
+            type="border"
+            >{{ $t("Close") }}</vs-button
+          >
+        </template>
+      </app-control>
+
+      <ag-grid-vue
+        ref="agGridTable"
+        :localeText="localeText"
+        :gridOptions="gridOptions2"
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        style="max-height: 100%;"
+        :columnDefs="columnDefs2"
+        :defaultColDef="defaultColDef"
+        :rowData="items2Comp">
+      </ag-grid-vue>
+    </vs-popup>
   </div>
 </template>
 
@@ -117,6 +143,7 @@
 import axios from "axios";
 // import comm_cd from "@/services/comm_cd";
 import api from "@/services/prod_info";
+import lot_info from "@/services/lot_info";
 import { mapActions } from "vuex";
 import ImportExcel from '@/components/excel/ImportExcel.vue'
 import { AgGridVue } from 'ag-grid-vue'
@@ -139,7 +166,9 @@ export default {
 
   data () {
     return {
+      item: {},
       items: [],
+      items2: [],
       types: [],
       searchBy: 'key_word',
       searchKeyword: null,
@@ -156,6 +185,8 @@ export default {
         order: "ASC",
       },
 
+      lotInfoDialog: false,
+
       tableData: [],
       header: [],
       sheetName: '',
@@ -164,7 +195,8 @@ export default {
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
-        headerHeight: 40
+        headerHeight: 40,
+        onCellDoubleClicked: this.handleDblClick
       },
       gridApi: null,
       defaultColDef: {
@@ -172,6 +204,12 @@ export default {
         resizable: true,
         suppressMenu: false
       },
+
+      gridOptions2: {
+        rowHeight: 40,
+        headerHeight: 40
+      },
+      gridApi2: null,
 
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50},
@@ -184,12 +222,32 @@ export default {
         { headerName: '수량', field: 'prod_info:qty', type: 'numericColumn', width: 100,},
         { headerName: '시리얼/Lot No', field: 'prod_info:lot_no', width: 100,},
       ],
+
+      columnDefs2: [
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
+        { headerName: '일자-No', field: 'lot_info:dt_no', width: 100 },
+        { headerName: '연결전표-No', field: 'lot_info:acc_no', width: 100 },
+        { headerName: '품목코드', field: 'lot_info:item_id', width: 100 },
+        { headerName: '품목이름', field: 'lot_info:item_nm', width: 200 },
+        { headerName: '규격', field: 'lot_info:spec', width: 100 },
+        { headerName: '시리얼/Lot No', field: 'lot_info:lot_no', width: 100 },
+        { headerName: '수량', field: 'lot_info:qty', type: 'numericColumn', width: 100 },
+      ],
     }
   },
 
   computed: {
     itemsComp: function () {
       return this.items.map((item, index) => {
+        return {
+          'no': (index + 1),
+          ...item
+        } 
+      })
+    },
+
+    items2Comp: function () {
+      return this.items2.map((item, index) => {
         return {
           'no': (index + 1),
           ...item
@@ -233,6 +291,7 @@ export default {
 
   mounted () {
     this.gridApi = this.gridOptions.api
+    this.gridApi2 = this.gridOptions2.api
   },
 
   methods: {
@@ -248,6 +307,17 @@ export default {
         });
       } else {
         this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+      }
+    },
+
+    spinner2(loading = true) {
+      if (loading) {
+        this.$vs.loading({
+          container: "#div-with-loading2",
+          scale: 0.6,
+        });
+      } else {
+        this.$vs.loading.close("#div-with-loading2 > .con-vs-loading");
       }
     },
 
@@ -313,6 +383,46 @@ export default {
               : null
           );
           this.spinner(false);
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        });
+    },
+
+    handleDblClick () {
+      let rows = this.gridApi.getSelectedRows()
+
+      if (rows.length > 0) {
+        this.$set(this, 'lotInfoDialog', true)
+        this.$set(this, 'item', rows[0])
+        this.query2()
+      }
+    },
+
+    query2() {
+      this.spinner2();
+
+      lot_info
+        .fetch({
+          acc_cd: this.item['prod_info:acc_no'],
+          limit: -1,
+          sort: 'DT_NO',
+          order: 'DESC',
+          with: '',
+        })
+        .then((res) => {
+          this.spinner2(false);
+          if (res.data) {
+            this.$set(this, 'items2', res.data.data)
+          }
+        })
+        .catch((err) => {
+          this.spinner2(false);
           this.$vs.notify({
             title: this.$t("Error"),
             position: "top-right",
