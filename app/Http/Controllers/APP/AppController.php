@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\APP;
 
+use App\JobOrd;
+use App\JobOrdDtl;
+use App\JobOrdDtlWork;
 use App\EdocFile;
 use App\EdocFileHaccp;
 use App\CommCd;
@@ -12,6 +15,8 @@ use App\Http\Resources\AppGetCcpDocResource;
 use App\Http\Resources\AppChecklistDetailResource;
 use App\Http\Resources\AppGetDocListDetailResource;
 use App\Http\Resources\AppGetApprovalDocResource;
+use App\Http\Resources\AppGetDayProductionListResource;
+use App\Http\Resources\AppGetDayProductionListDetailResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -51,6 +56,8 @@ class AppController extends Controller
             case 'get_approval_list': return $this->getApprovalList($request);
             case 'get_approval_doc': return $this->getApprovalDoc($request);
             case 'write_approval_doc': return $this->writeApprovalDoc($request);
+            case 'get_day_production_list': return $this->getDayProductionList($request);
+            case 'get_day_production_list_detail': return $this->getDayProductionListDetail($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -577,6 +584,52 @@ class AppController extends Controller
             'request_type' => $request->input('request_type'),
             'status' => 'success',
             'msg' => 'Successfully approved'
+        ]);
+    }
+
+    public function getDayProductionList(Request $request)
+    {
+        $items = JobOrd::get();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'data' => AppGetDayProductionListResource::collection($items)
+        ]);
+    }
+
+    public function getDayProductionListDetail(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required',
+        ]);
+
+        $idx = $request->input('idx');
+        $items = JobOrdDtl::where('JOB_NO', $idx)->get();
+        $items = $items->map(function ($item) {
+            $jobOrdDtlWorkers = JobOrdDtlWork::where('JOB_NO', $item->JOB_NO)
+                ->where('ITEM_ID', $item->ITEM_ID)
+                ->where('SEQ_NO', $item->SEQ_NO)
+                ->with(['worker'])
+                ->get();
+
+            $empNms = [];
+            foreach ($jobOrdDtlWorkers as $key => $jobOrdDtlWorker) {
+                array_push($empNms, $jobOrdDtlWorker->worker->EMP_NM);
+            }
+
+            $item->EMP_NM = implode(',', $empNms);
+            return $item;
+        });
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'rows' => $items->count(),
+            'data' => AppGetDayProductionListDetailResource::collection($items)
         ]);
     }
 
