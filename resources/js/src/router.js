@@ -218,22 +218,22 @@ const router = new Router({
               {
                 path: '/profile',
                 name: 'Profile',
-                redirect: '/profile/general'
+                redirect: '/profile/password'
               },
-              {
-                path: '/profile/general',
-                name: 'Profile General',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/general', value: 'profile-general', label: 'Profile General', component: 'profile-general'}) } }
-              },
+              // {
+              //   path: '/profile/general',
+              //   name: 'Profile General',
+              //   component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/general', value: 'profile-general', label: 'Profile General', component: 'profile-general'}) } }
+              // },
               {
                 path: '/profile/password',
-                name: 'Change Password',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/password', value: 'profile-password', label: 'Change Password', component: 'profile-password'}) } }
+                name: '비밀번호 변경',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/password', value: 'profile-password', label: '비밀번호 변경', component: 'profile-password'}) } }
               },
               {
                 path: '/profile/notifications',
-                name: 'Notifications',
-                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/notifications', value: 'profile-notifications', label: 'Notifications', component: 'profile-notifications'}) } }
+                name: '알림',
+                component: { created () { this.$store.dispatch('mdn/addTab', {path: '/profile/notifications', value: 'profile-notifications', label: '알림', component: 'profile-notifications'}) } }
               },
               {
                 path: '/user-entry',

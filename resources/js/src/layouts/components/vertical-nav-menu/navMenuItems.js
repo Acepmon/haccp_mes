@@ -273,22 +273,22 @@ export default [
     showSubmenuOn: '/profile',
     hideMenu: true,
     submenu: [
-      {
-        url: "/profile/general",
-        name: "Profile General",
-        slug: "Profile General",
-        showSubmenuOn: '/profile',
-      },
+      // {
+      //   url: "/profile/general",
+      //   name: "Profile General",
+      //   slug: "Profile General",
+      //   showSubmenuOn: '/profile',
+      // },
       {
         url: "/profile/password",
-        name: "Change Password",
-        slug: "Change Password",
+        name: "비밀번호 변경",
+        slug: "비밀번호 변경",
         showSubmenuOn: '/profile',
       },
       {
         url: "/profile/notifications",
-        name: "Notifications",
-        slug: "Notifications",
+        name: "알림",
+        slug: "알림",
         showSubmenuOn: '/profile',
       }
     ]

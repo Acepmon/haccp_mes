@@ -15,14 +15,14 @@
           class="mx-1"
           color="dark"
           type="border"
-          >{{ $t("ReadAll") }}</vs-button
+          >{{ $t("NotifReadAll") }}</vs-button
         >
         <vs-button
           @click="deleteAll()"
           class="mx-1"
           color="dark"
           type="border"
-          >{{ $t("DeleteAll") }}</vs-button
+          >{{ $t("NotifDeleteAll") }}</vs-button
         >
         <vs-button
           @click="closeDialog()"
@@ -97,9 +97,9 @@ export default {
       },
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: 'Title', field: 'title', filter: false, width: 200 },
-        { headerName: 'Message', field: 'msg', filter: false, width: 400 },
-        { headerName: 'Time', field: 'time', filter: false, width: 200 },
+        { headerName: '제목', field: 'title', filter: false, width: 200 },
+        { headerName: '알림 내용', field: 'msg', filter: false, width: 400 },
+        { headerName: '알림 시간', field: 'time', filter: false, width: 200 },
       ]
     };
   },

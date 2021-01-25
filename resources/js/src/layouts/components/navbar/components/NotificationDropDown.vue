@@ -5,12 +5,11 @@
 
     <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
 
-      <div class="notification-top text-center p-5 bg-primary text-white">
-        <h3 class="text-white">{{ unreadNotifications.length }} New</h3>
-        <p class="opacity-75">App Notifications</p>
+      <div class="notification-top text-center p-3 bg-primary text-white">
+        <h3 class="text-white">{{ unreadNotifications.length }} 새알림</h3>
       </div>
 
-      <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings" :key="$vs.rtl">
+      <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings" :key="$vs.rtl" v-if="unreadNotifications.length > 0">
         <ul class="bordered-items">
           <li v-for="ntf in unreadNotifications" :key="ntf.index" class="flex justify-between px-4 py-4 notification cursor-pointer">
             <div class="flex items-start">
@@ -27,12 +26,11 @@
 
       <div class="
         checkout-footer
-        fixed
         bottom-0
         rounded-b-lg
         text-primary
         w-full
-        p-2
+        p-5
         font-semibold
         text-center
         border
@@ -42,7 +40,7 @@
         border-solid
         d-theme-border-grey-light
         cursor-pointer">
-        <router-link to="/profile/notifications">View All Notifications</router-link>
+        <router-link to="/profile/notifications">전체 알림보기</router-link>
       </div>
     </vs-dropdown-menu>
   </vs-dropdown>

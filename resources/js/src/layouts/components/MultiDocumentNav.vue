@@ -271,10 +271,10 @@ export default {
       lazyLoadView(
         import(/* webpackChunkName: "page-7-2" */ "@/views/Page-7-2.vue")
       ),
-    "tab-profile-general": () =>
-      lazyLoadView(
-        import(/* webpackChunkName: "profile-general" */ "@/views/ProfileGeneral.vue")
-      ),
+    // "tab-profile-general": () =>
+    //   lazyLoadView(
+    //     import(/* webpackChunkName: "profile-general" */ "@/views/ProfileGeneral.vue")
+    //   ),
     "tab-profile-password": () =>
       lazyLoadView(
         import(/* webpackChunkName: "profile-password" */ "@/views/ProfilePassword.vue")

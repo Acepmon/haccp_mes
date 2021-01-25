@@ -23,8 +23,8 @@
     <vs-divider />
 
     <app-form>
-      <app-form-group required>
-        <template v-slot:label>Old Password</template>
+      <app-form-group required full class="mb-10">
+        <template v-slot:label>현재 비밀번호</template>
 
         <vs-input
           type="password"
@@ -34,10 +34,8 @@
         />
       </app-form-group>
 
-      <app-form-group></app-form-group>
-
-      <app-form-group required>
-        <template v-slot:label>New Password</template>
+      <app-form-group required full>
+        <template v-slot:label>변경 비밀번호</template>
 
         <vs-input
           type="password"
@@ -48,7 +46,7 @@
       </app-form-group>
 
       <app-form-group required>
-        <template v-slot:label>Confirm Password</template>
+        <template v-slot:label>비밀번호 확인</template>
 
         <vs-input
           type="password"

@@ -22,6 +22,9 @@ export default {
     Off: 'Off',
     Error: 'Error',
 
+    NotifReadAll: 'Read All',
+    NotifDeleteAll: 'Delete All',
+
     AllCcpToggleOn: "Are you sure start all device?",
     AllCcpToggleOff: "Are you sure shutdown all device?",
     CcpToggleOn: "Are you sure start this device?",
@@ -68,6 +71,9 @@ export default {
     On: 'On',
     Off: 'Off',
     Error: 'Error',
+
+    NotifReadAll: '전체읽음',
+    NotifDeleteAll: '전체삭제',
 
     AllCcpToggleOn: "모든 장비를 켜시겠습니다까?",
     AllCcpToggleOff: "모든 장비를 끄겠습니까?",
