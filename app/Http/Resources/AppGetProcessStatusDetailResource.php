@@ -19,6 +19,8 @@ class AppGetProcessStatusDetailResource extends JsonResource
             'proc_nm' => $this->PROC_NM,
             'proc_dtl' => $this->PROC_DTL,
             'proc_time' => $this->PROC_TIME,
+            'srt_dtm' => $this->SRT_DTM,
+            'end_dtm' => $this->END_DTM,
             'ccp_yn' => $this->CCP_YN,
             'emp_nm' => $this->EMP_NM,
         ];
