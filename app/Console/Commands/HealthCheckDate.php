@@ -49,9 +49,7 @@ class HealthCheckDate extends Command
         $admins = User::whereIn('USER_ID', $ids)->get();
 
         foreach ($admins as $admin) {
-            foreach ($workers as $worker) {
-                $admin->notify(new RemindHealthCheck($worker));
-            }
+            $admin->notify(new RemindHealthCheck($workers));
         }
 
         return 0;

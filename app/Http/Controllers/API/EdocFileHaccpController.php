@@ -93,4 +93,26 @@ class EdocFileHaccpController extends Controller
     {
         //
     }
+
+    public function qrWrite($haccpSeq) {
+        $edocFileHaccp = EdocFileHaccp::where('HACCP_SEQ', $haccpSeq)->firstOrFail();
+        $qrData = $edocFileHaccp->WORK_DTM . '-' . $edocFileHaccp->WORK_ID;
+        return QRCode::text($qrData)->png();
+    }
+
+    public function qrApproval($haccpSeq) {
+        $edocFileHaccp = EdocFileHaccp::where('HACCP_SEQ', $haccpSeq)->firstOrFail();
+        $qrData = $edocFileHaccp->APP_DTM . '-' . $edocFileHaccp->APP_ID;
+        return QRCode::text($qrData)->png();
+    }
+
+    public function preview($haccpSeq)
+    {
+        $edocFileHaccp = EdocFileHaccp::where('HACCP_SEQ', $haccpSeq)->firstOrFail();
+        $preview = $edocFileHaccp->previewHtml();
+
+        return view('edoc_file_preview', [
+            'preview' => $preview,
+        ]);
+    }
 }

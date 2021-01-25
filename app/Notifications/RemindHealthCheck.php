@@ -13,7 +13,7 @@ class RemindHealthCheck extends Notification
 {
     use Queueable;
 
-    public $worker;
+    public $workers;
     public $title;
     public $message;
     public $url;
@@ -23,12 +23,16 @@ class RemindHealthCheck extends Notification
      *
      * @return void
      */
-    public function __construct(Worker $worker)
+    public function __construct($workers)
     {
-        $this->worker = $worker;
-        $this->title = 'Health check alert';
-        $this->message = 'Worker ' . $this->worker->EMP_NM . ' health check is due at ' . now()->parse($this->worker->HEALTH_CHK_DT)->format('Y-m-d') . '.';
-        $this->url = url('/information/worker?emp_id=' . $this->worker->EMP_ID);
+        $chkDt = $workers->first()->HEALTH_CHK_DT;
+        $names = $workers->pluck('EMP_NM')->toArray();
+        $names = implode(',', $names);
+
+        $this->workers = $workers; // a, b, c
+        $this->title = '보건증 갱신 알림';
+        $this->message = '작업자 이름: ' . $names . '님의 보건증 갱신일자는 다음과 같습니다.' . now()->parse($chkDt)->format('Y-m-d') . '.';
+        $this->url = url('/information/worker');
     }
 
     /**
@@ -53,8 +57,7 @@ class RemindHealthCheck extends Notification
         return (new MailMessage)
                     ->subject($this->title)
                     ->greeting('Hello ' . $notifiable->USER_NM)
-                    ->line($this->message)
-                    ->action('View worker record', $this->url);
+                    ->line($this->message);
     }
 
     /**
@@ -70,8 +73,7 @@ class RemindHealthCheck extends Notification
             'msg' => $this->message,
             'time' => now()->format('Y-m-d H:i:s'),
             'icon' => '',
-            'url' => $this->url,
-            'data' => new WorkerResource($this->worker)
+            'url' => $this->url
         ];
     }
 }

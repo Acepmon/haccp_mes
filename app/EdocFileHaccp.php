@@ -6,6 +6,7 @@ use App\Events\EdocFileHaccpCreated;
 use App\Events\EdocFileHaccpDeleted;
 use App\Events\EdocFileHaccpUpdated;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class EdocFileHaccp extends Model
 {
@@ -37,5 +38,24 @@ class EdocFileHaccp extends Model
     public function apr()
     {
         return $this->belongsTo('App\CommCd', 'APR_CD', 'COMM2_CD')->where('COMM1_CD', 'C10')->whereNotIn('COMM2_CD', ['$$']);
+    }
+
+    public function previewHtml()
+    {
+        $preview = $this->DOC_HTML;
+        $qrWrite = "";
+        $qrApproval = "";
+
+        if (!empty($this->WORK_ID) && !empty($this->WORK_DTM)) {
+            $qrWrite = "<img src='".route('api.edoc_file_haccp.qr_write', $this->HACCP_SEQ)."' class='blank_box' />";
+        }
+
+        if (!empty($this->APP_ID) && !empty($this->APP_DTM)) {
+            $qrApproval = "<img src='".route('api.edoc_file_haccp.qr_approval', $this->HACCP_SEQ)."' class='blank_box' />";
+        }
+
+        $preview = Str::replaceFirst("{qr_write}", $qrWrite, $preview);
+        $preview = Str::replaceFirst("{qr_approval}", $qrApproval, $preview);
+        return $preview;
     }
 }

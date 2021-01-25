@@ -36,6 +36,12 @@
 
       <vs-divider />
 
+      <app-control>
+        <template v-slot:filter>
+          <span class="pl-5">생산불출 내역을 보려면 해당 열을 더블클릭하세요!</span>
+        </template>
+      </app-control>
+
       <ag-grid-vue
         ref="agGridTable"
         :localeText="localeText"

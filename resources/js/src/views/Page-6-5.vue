@@ -65,6 +65,12 @@
 
     <vs-divider />
 
+    <app-control>
+      <template v-slot:filter>
+        <span class="pl-5">문서내용을 보려면 해당 열에서 더블클릭하세요!</span>
+      </template>
+    </app-control>
+
     <ag-grid-vue
       ref="agGridTable"
       :localeText="localeText"
@@ -87,7 +93,16 @@
       v-model="currentPage" />
 
     <vs-popup title="문서확인" :active.sync="previewDialog" class="preview-dialog">
-      <iframe style="width: 100%; height: calc(100vh - 150px);" class="iframe-placeholder" v-if="item['edoc_file_haccp:doc_id'] != null" :src="previewUrl" frameborder="0"></iframe>
+      <app-control>
+        <template v-slot:action>
+          <vs-button
+            @click="printPreview()"
+            color="primary"
+            icon="print"
+          >{{ $t("Print") }}</vs-button>
+        </template>
+      </app-control>
+      <iframe style="width: 100%; height: calc(100vh - 150px);" class="iframe-placeholder" v-if="item['edoc_file_haccp:doc_id'] != null" :src="previewUrl" frameborder="0" id="printf" name="printf">></iframe>
     </vs-popup>
   </vx-card>
 </template>
@@ -157,7 +172,8 @@ export default {
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
-        headerHeight: 40
+        headerHeight: 40,
+        onCellDoubleClicked: this.handleDblClick
       },
       gridApi: null,
       defaultColDef: {
@@ -208,7 +224,12 @@ export default {
     },
 
     previewUrl () {
-      return edoc_file.previewUrl(this.item['edoc_file_haccp:doc_id'])
+      return edoc_file_haccp.previewUrl(this.item['edoc_file_haccp:haccp_seq'])
+    },
+
+    printPreview() {
+      window.frames["printf"].focus();
+      window.frames["printf"].print();
     }
   },
 
@@ -243,6 +264,10 @@ export default {
 
     onToChange(selectedDates, dateStr, instance) {
       this.$set(this.configFromdateTimePicker, "maxDate", dateStr);
+    },
+
+    handleDblClick () {
+      this.$set(this, 'previewDialog', true)
     },
 
     query () {

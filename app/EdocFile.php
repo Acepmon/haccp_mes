@@ -40,8 +40,8 @@ class EdocFile extends Model
     public function previewHtml()
     {
         $preview = $this->DOC_HTML;
-        $preview = Str::replaceFirst("{qr_write}", "<img src='".route('api.edoc_file.qr_write', $this->DOC_ID)."' class='blank_box' />", $preview);
-        $preview = Str::replaceFirst("{qr_approval}", "<img src='".route('api.edoc_file.qr_approval', $this->DOC_ID)."' class='blank_box' />", $preview);
+        $preview = Str::replaceFirst("{qr_write}", "", $preview);
+        $preview = Str::replaceFirst("{qr_approval}", "", $preview);
         return $preview;
     }
 

@@ -53,6 +53,8 @@
         </template>
       </app-control>
 
+      <vs-divider />
+
       <app-control>
         <template v-slot:filter>
           <span class="pl-5">작업지시전표(BOM 함량정보 등)를 보려면 해당 열을 더블클릭하세요!</span>

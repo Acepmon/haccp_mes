@@ -165,6 +165,9 @@ Route::group([
 
     Route::apiResource('ccp_esc_data', 'CcpEscDataController');
 
+    Route::get('edoc_file_haccp/{HACCP_SEQ}/preview', 'EdocFileHaccpController@preview')->name('edoc_file_haccp.preview');
+    Route::get('edoc_file_haccp/{HACCP_SEQ}/qr_write', 'EdocFileHaccpController@qrWrite')->name('edoc_file_haccp.qr_write');
+    Route::get('edoc_file_haccp/{HACCP_SEQ}/qr_approval', 'EdocFileHaccpController@qrApproval')->name('edoc_file_haccp.qr_approval');
     Route::apiResource('edoc_file_haccp', 'EdocFileHaccpController');
 
     Route::get('app_version', 'AppVersionController@index');

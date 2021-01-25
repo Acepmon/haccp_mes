@@ -38,6 +38,9 @@
       <vs-divider />
 
       <app-control>
+        <template v-slot:filter>
+          <span class="pl-5">시리얼/LOT 내역을 보려면 해당 열을 더블클릭하세요!</span>
+        </template>
         <!-- <template v-slot:action>
           <vs-button
             @click="exportExcel()"
