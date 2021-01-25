@@ -1,6 +1,6 @@
 <template>
   <div class="job-ord-monitor">
-    <div class="flex flex-row items-center justify-center my-32">
+    <div class="flex flex-row items-center justify-center my-32 mt-0">
       <div class="text-center" style="font-size: 5rem; padding: 15px; background: #0970D2; color: white;">품목별 생산공정 진행현황 : {{ monitorDate }}</div>
     </div>
 

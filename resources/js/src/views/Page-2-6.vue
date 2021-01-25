@@ -1,6 +1,6 @@
 <template>
   <div class="job-ord-monitor">
-    <div class="flex flex-row items-center justify-center my-32">
+    <div class="flex flex-row items-center justify-center my-32 mt-0">
       <div class="text-center" style="font-size: 5rem; padding: 15px; background: #0970D2; color: white;">CCP 장비 모니터링 현황</div>
     </div>
 
