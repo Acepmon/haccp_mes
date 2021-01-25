@@ -86,7 +86,12 @@ export default {
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
-        headerHeight: 40
+        headerHeight: 40,
+        getRowClass: (params) => {
+          if (params.data['read_at'] == '' || params.data['read_at'] == null || params.data['read_at'] == undefined) {
+            return 'unread-row';
+          }
+        }
       },
       gridApi: null,
       defaultColDef: {
@@ -113,7 +118,8 @@ export default {
       return this.items.map((item, index) => {
         return {
           'no': (index + 1),
-          ...item.data
+          'read_at': item.read_at,
+          ...item.data,
         } 
       })
     },
@@ -177,7 +183,7 @@ export default {
     query () {
       this.spinner();
       axios.get('/sanctum/csrf-cookie').then(() => {
-        axios.get('/api/auth/user/notifications/unread').then((res) => {
+        axios.get('/api/auth/user/notifications').then((res) => {
           this.spinner(false)
           this.items = res.data.data
         })
@@ -273,3 +279,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.unread-row > .ag-cell {
+  background: rgba(18, 156, 233, 0.15) !important;
+}
+</style>

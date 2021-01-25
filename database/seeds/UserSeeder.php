@@ -23,14 +23,14 @@ class UserSeeder extends Seeder
                 'ROLE_CD' => 'AA',
                 'USER_STS_YN' => 'Y',
             ],
-            // [
-            //     'USER_ID' => 'kenny',
-            //     'USER_PW' => Hash::make('password'),
-            //     'USER_NM' => 'Kwon Yoon',
-            //     'EMAIL' => 'power747@gmail.com',
-            //     'ROLE_CD' => 'AA',
-            //     'USER_STS_YN' => 'Y',
-            // ]
+            [
+                'USER_ID' => 'kenny',
+                'USER_PW' => Hash::make('password'),
+                'USER_NM' => 'Kwon Yoon',
+                'EMAIL' => 'power747@gmail.com',
+                'ROLE_CD' => 'AA',
+                'USER_STS_YN' => 'Y',
+            ]
         ]);
     }
 }

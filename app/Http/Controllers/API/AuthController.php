@@ -129,7 +129,7 @@ class AuthController extends Controller
     public function notifications(Request $request)
     {
         $user = User::find(Auth::id());
-        $items = $user->notifications->sortBy('created_at');
+        $items = $user->notifications()->orderBy('created_at', 'desc')->get();
 
         return NotificationResource::collection($items);
     }
@@ -137,7 +137,7 @@ class AuthController extends Controller
     public function unreadNotifications(Request $request)
     {
         $user = User::find(Auth::id());
-        $items = $user->unreadNotifications->sortBy('created_at');
+        $items = $user->unreadNotifications()->orderBy('created_at', 'desc')->get();
 
         return NotificationResource::collection($items);
     }

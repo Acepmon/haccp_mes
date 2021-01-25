@@ -30,6 +30,8 @@ class Kernel extends ConsoleKernel
         if (false) {
             $schedule->command('ccp:check')->everyMinute();
         }
+
+        $schedule->command('health:check')->dailyAt('13:00');
     }
 
     /**

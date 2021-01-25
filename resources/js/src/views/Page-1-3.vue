@@ -249,6 +249,9 @@ export default {
     return {
       configdateTimePicker: {
         locale: KoreanLocale,
+        dateFormat: 'Ymd',
+        altFormat: 'Y-m-d',
+        altInput: true
       },
       worker: {
         "worker:emp_id": null,
@@ -340,10 +343,10 @@ export default {
         { headerName: '부서명', field: 'worker:dept_cd_nm', filter: false, width: 100 },
         { headerName: '전화번호', field: 'worker:mob_no', filter: false, width: 100 },
         { headerName: '비밀번호', field: 'worker:pass_no', filter: false, width: 100 },
-        { headerName: '입사일자', field: 'worker:in_dt', filter: false, width: 100 },
-        { headerName: '퇴사일자', field: 'worker:out_dt', filter: false, width: 100 },
+        { headerName: '입사일자', field: 'worker:in_dt_parsed', filter: false, width: 100 },
+        { headerName: '퇴사일자', field: 'worker:out_dt_parsed', filter: false, width: 100 },
         { headerName: '주민번호', field: 'worker:jumin_no', filter: false, width: 100 },
-        { headerName: '생년월일', field: 'worker:birth_dt', filter: false, width: 100 },
+        { headerName: '생년월일', field: 'worker:birth_dt_parsed', filter: false, width: 100 },
         { headerName: '은행명', field: 'worker:bank_nm', filter: false, width: 100 },
         { headerName: '계좌번호', field: 'worker:acct_no', filter: false, width: 100 },
         { headerName: '주소', field: 'worker:address', filter: false, width: 150 },
@@ -543,7 +546,7 @@ export default {
         });
     },
 
-    query() {
+    query(callback = Function) {
       this.spinner();
 
       api
@@ -554,6 +557,7 @@ export default {
         .then((res) => {
           this.spinner(false);
           this.workers = res.data.data;
+          callback(this.workers)
         })
         .catch((err) => {
           this.displayErrors(
@@ -704,7 +708,15 @@ export default {
     });
 
     setTimeout(() => {
-      this.query();
+      this.query((workers) => {
+        if (this.$route.query.emp_id) {
+          let emp_id = this.$route.query.emp_id
+          let filtered = this.workers.filter(worker => worker['worker:emp_id'] == emp_id)
+          if (filtered.length > 0) {
+            this.$set(this, 'worker', filtered[0])
+          }
+        }
+      });
     }, 500);
   },
 };

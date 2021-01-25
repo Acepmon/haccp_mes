@@ -164,7 +164,6 @@ export default {
         rowHeight: 40,
         headerHeight: 40,
         getRowClass: (params) => {
-          console.log(params.data)
           if (params.data['lot_info_wh:acc_cd'] == '현재재고') {
             return 'lot-info-stripe-row';
           }

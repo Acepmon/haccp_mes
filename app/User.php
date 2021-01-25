@@ -84,6 +84,12 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function routeNotificationForMail($notification)
+    {
+        // Return email address and name...
+        return [$this->EMAIL => $this->USER_NM];
+    }
+
     public function role()
     {
         return $this->hasMany('App\CommCd', 'COMM2_CD', 'ROLE_CD')->where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$']);
