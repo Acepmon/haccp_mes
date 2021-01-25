@@ -3,7 +3,7 @@
     <vx-card class="main-card mt-5">
       <app-control filterClass="sm:w-3/4" actionClass="sm:w-1/4">
         <template v-slot:filter>
-          <span class="flex items-center px-5">검색일자</span>
+          <span class="flex items-center px-5 pt-2">검색일자</span>
           <flat-pickr
             :config="configFromdateTimePicker"
             v-model="from"
@@ -12,7 +12,7 @@
             class="control-field-dtm mx-1"
             style="width: 100px"
           />
-          <span class="flex items-center px-2">~</span>
+          <span class="flex items-center px-2 pt-2">~</span>
           <flat-pickr
             :config="configTodateTimePicker"
             v-model="to"
@@ -21,8 +21,8 @@
             class="control-field-dtm mx-1"
             style="width: 100px"
           />
-          <span class="flex items-center px-5">사용자 ID/이름</span>
-          <vs-input v-model="keyword" class="control-field" />
+          <span class="flex items-center px-5 pt-2">검색조건</span>
+          <vs-input v-model="keyword" class="control-field" placeholder="사용자ID 이름 IP주소"/>
         </template>
 
         <template v-slot:action>
@@ -129,7 +129,7 @@ export default {
       },
       sorting: {
         sort: "login_dtm",
-        order: "asc",
+        order: "desc",
       },
       datas: [],
     };

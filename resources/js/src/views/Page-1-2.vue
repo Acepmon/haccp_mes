@@ -108,7 +108,7 @@
           />
         </app-form-group>
 
-        <app-form-group required full>
+        <app-form-group full>
           <template v-slot:label>메뉴접근권한</template>
 
           <div class="flex flex-row flex-wrap">
@@ -176,7 +176,7 @@
           </div>
         </app-form-group>
 
-        <app-form-group required>
+        <app-form-group>
           <template v-slot:label>업무권한</template>
 
           <v-select
@@ -385,9 +385,9 @@ export default {
         "user:user_id": "휴대폰번호(ID)",
         "user:user_pw": "비밀번호",
         "user:user_nm": "이름",
-        "user:role_cd": "메뉴접근권한",
+        // "user:role_cd": "메뉴접근권한",
         // "user:appr_cd": "담당업무",
-        "user:job_cd": "업무권한",
+        // "user:job_cd": "업무권한",
         "user:user_sts_yn": "사용여부",
       },
 

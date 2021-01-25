@@ -27,6 +27,7 @@ class LoginHistController extends Controller
         if ($request->has('keyword') && !empty($request->input('keyword'))) {
             $keyword = $request->input('keyword');
             $items = $items->where('USER_ID', 'LIKE', '%' . $keyword . '%');
+            $items = $items->orWhere('IP_ADDR', 'LIKE', '%' . $keyword . '%');
             $items = $items->orWhereHas('user', function ($query) use ($keyword) {
                 return $query->where('USER_NM', 'LIKE', '%' . $keyword . '%');
             });

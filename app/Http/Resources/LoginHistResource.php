@@ -20,8 +20,8 @@ class LoginHistResource extends JsonResource
             'user_nm' => $this->whenLoaded('user', function () {
                 return $this->user->USER_NM;
             }),
-            'login_dtm' => Carbon::parse($this->LOGIN_DTM)->format('Y-m-d'),
-            'logout_dtm' => Carbon::parse($this->LOGOUT_DTM)->format('Y-m-d'),
+            'login_dtm' => Carbon::parse($this->LOGIN_DTM)->format('Y-m-d H:i:s'),
+            'logout_dtm' => Carbon::parse($this->LOGOUT_DTM)->format('Y-m-d H:i:s'),
             'ip_addr' => $this->IP_ADDR,
         ];
     }

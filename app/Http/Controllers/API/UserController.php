@@ -58,9 +58,9 @@ class UserController extends Controller
             'user:user_pw' => 'required|string|confirmed|max:100',
             'user:user_nm' => 'required|string|max:20',
             'user:email' => 'nullable|string|email|max:50',
-            'user:role_cd' => 'required|array',
-            'user:appr_cd' => 'required|array',
-            'user:job_cd' => 'required|string|max:20',
+            'user:role_cd' => 'nullable|array',
+            'user:appr_cd' => 'nullable|array',
+            'user:job_cd' => 'nullable|string|max:20',
             'user:user_sts_yn' => 'required|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
 
@@ -147,9 +147,9 @@ class UserController extends Controller
             'user:user_pw' => 'nullable|string|confirmed|max:100',
             'user:user_nm' => 'required|string|max:20',
             'user:email' => 'nullable|string|email|max:50',
-            'user:role_cd' => 'required|array',
-            'user:appr_cd' => 'required|array',
-            'user:job_cd' => 'required|string|max:20',
+            'user:role_cd' => 'nullable|array',
+            'user:appr_cd' => 'nullable|array',
+            'user:job_cd' => 'nullable|string|max:20',
             'user:user_sts_yn' => 'required|string|in:' . implode(',', User::STATUS_ARRAY),
         ]);
 
