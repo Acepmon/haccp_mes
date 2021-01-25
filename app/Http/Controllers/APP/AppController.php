@@ -399,7 +399,7 @@ class AppController extends Controller
         $request->validate([
             'doc_idx' => 'required',
             'appdata' => 'required',
-            'doc_approval_idx' => 'required',
+            'doc_approval_idx' => 'nullable',
         ]);
 
         $docIdx = $request->input('doc_idx');
