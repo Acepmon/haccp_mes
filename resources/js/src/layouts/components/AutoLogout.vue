@@ -16,7 +16,7 @@ export default {
 
             dialogActive: false,
             warningTimer: null,
-            sessionTimeoutMin: 10,
+            sessionTimeoutMin: 60,
             countdownTimer: 10,
             refreshIntervalId: null
         }
