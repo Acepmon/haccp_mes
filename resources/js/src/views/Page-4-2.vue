@@ -409,7 +409,7 @@ export default {
 
       lot_info
         .fetch({
-          acc_cd: this.item['prod_info:acc_no'],
+          acc_no: this.item['prod_info:acc_no'],
           limit: -1,
           sort: 'DT_NO',
           order: 'DESC',

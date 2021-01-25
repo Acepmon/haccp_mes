@@ -31,8 +31,8 @@ class LotInfoController extends Controller
             ->orWhere('ACC_NO', 'LIKE', '%'.$keyWord.'%');
         }
 
-        if ($request->has('acc_cd')) {
-            $items = $items->where('ACC_CD', $request->input('acc_cd'));
+        if ($request->has('acc_no')) {
+            $items = $items->where('ACC_NO', $request->input('acc_no'));
         }
 
         if ($limit == -1) {
