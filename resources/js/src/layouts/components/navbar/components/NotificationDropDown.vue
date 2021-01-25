@@ -9,7 +9,7 @@
         <h3 class="text-white">{{ unreadNotifications.length }} 새알림</h3>
       </div>
 
-      <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings" :key="$vs.rtl" v-if="unreadNotifications.length > 0">
+      <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-16" :settings="settings" :key="$vs.rtl" v-if="unreadNotifications.length > 0">
         <ul class="bordered-items">
           <li v-for="ntf in unreadNotifications" :key="ntf.index" class="flex justify-between px-4 py-4 notification cursor-pointer">
             <div class="flex items-start">
@@ -26,6 +26,7 @@
 
       <div class="
         checkout-footer
+        fixed
         bottom-0
         rounded-b-lg
         text-primary
