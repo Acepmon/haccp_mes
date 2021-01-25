@@ -77,6 +77,11 @@ export default {
     ProfileDropDown
   },
   computed: {
+    currUserRoleCd () {
+      let loggedIn = localStorage.getItem('loggedIn')
+      let json = JSON.parse(loggedIn)
+      return json['ROLE_CD'].split(",")
+    },
     loggedIn () {
       return JSON.parse(localStorage.getItem('loggedIn'))
     },
@@ -112,7 +117,12 @@ export default {
         }
       }
 
-      return clone
+      return clone.filter(item => {
+        if (item.roleCd) {
+          return this.currUserRoleCd.includes(item.roleCd)
+        }
+        return true
+      })
     },
   },
   methods: {

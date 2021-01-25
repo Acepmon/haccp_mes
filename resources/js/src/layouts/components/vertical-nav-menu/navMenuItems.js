@@ -22,9 +22,10 @@
 export default [
   {
     url: "/information",
-    name: "정보관리", //company-info
+    name: "정보관리",
     slug: "정보관리", 
     showSubmenuOn: '/information',
+    roleCd: '10',
     submenu: [
       {
         url: "/information/company",
@@ -107,6 +108,7 @@ export default [
     name: "생산관리",
     slug: "생산관리",
     showSubmenuOn: '/product',
+    roleCd: '20',
     submenu: [
       {
         url: "/product/standard",
@@ -161,6 +163,7 @@ export default [
     name: "거래처정보",
     slug: "거래처정보",
     showSubmenuOn: '/customer',
+    roleCd: '30',
     submenu: [
       {
         url: "/customer/customer",
@@ -181,6 +184,7 @@ export default [
     name: "재고관리",
     slug: "재고관리",
     showSubmenuOn: '/stock',
+    roleCd: '40',
     submenu: [
       {
         url: "/stock/serial-lot",
@@ -213,6 +217,7 @@ export default [
     name: "HACCP모니터링",
     slug: "HACCP모니터링",
     showSubmenuOn: '/haccp',
+    roleCd: '50',
     submenu: [
       {
         url: "/haccp/ccp-monitoring",
@@ -251,6 +256,7 @@ export default [
     name: "자료관리",
     slug: "자료관리",
     showSubmenuOn: '/data',
+    roleCd: '60',
     submenu: [
       {
         url: "/data/code",

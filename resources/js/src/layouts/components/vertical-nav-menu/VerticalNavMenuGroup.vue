@@ -53,27 +53,29 @@
       <ul ref="items" :style="styleItems" class="vs-sidebar-group-items">
         <li v-for="(groupItem, index) in group.submenu" :key="index">
 
-          <!-- If item is group -->
-          <v-nav-menu-group
-            v-if        = "groupItem.submenu"
-            :group      = "groupItem"
-            :groupIndex = "Number(`${groupIndex}.${index+1}`)"
-            :open       = "isGroupActive(groupItem)"
-            :openHover  = "openHover" />
+          <template v-if="groupItem.roleCd ? currUserRoleCd.includes(groupItem.roleCd) : true">
+            <!-- If item is group -->
+            <v-nav-menu-group
+              v-if        = "groupItem.submenu"
+              :group      = "groupItem"
+              :groupIndex = "Number(`${groupIndex}.${index+1}`)"
+              :open       = "isGroupActive(groupItem)"
+              :openHover  = "openHover" />
 
-          <!-- Else: Item -->
-          <v-nav-menu-item
-            v-else
-            icon-small
-            :index  = "groupIndex + '.' + index"
-            :to="groupItem.slug !== 'external' ? groupItem.url : null"
-            :href="groupItem.slug === 'external' ? groupItem.url : null"
-            :icon   = "itemIcon(groupIndex + '.' + index)"
-            :slug   = "groupItem.slug"
-            :target = "groupItem.target">
-              <span class="truncate">{{ groupItem.name }}</span>
-              <vs-chip class="ml-auto" :color="groupItem.tagColor" v-if="groupItem.tag">{{ groupItem.tag }}</vs-chip>
-          </v-nav-menu-item>
+            <!-- Else: Item -->
+            <v-nav-menu-item
+              v-else
+              icon-small
+              :index  = "groupIndex + '.' + index"
+              :to="groupItem.slug !== 'external' ? groupItem.url : null"
+              :href="groupItem.slug === 'external' ? groupItem.url : null"
+              :icon   = "itemIcon(groupIndex + '.' + index)"
+              :slug   = "groupItem.slug"
+              :target = "groupItem.target">
+                <span class="truncate">{{ groupItem.name }}</span>
+                <vs-chip class="ml-auto" :color="groupItem.tagColor" v-if="groupItem.tag">{{ groupItem.tag }}</vs-chip>
+            </v-nav-menu-item>
+          </template>
 
         </li>
       </ul>
@@ -101,6 +103,11 @@ export default {
     openItems : false
   }),
   computed: {
+    currUserRoleCd () {
+      let loggedIn = localStorage.getItem('loggedIn')
+      let json = JSON.parse(loggedIn)
+      return json['ROLE_CD'].split(",")
+    },
     verticalNavMenuItemsMin () { return this.$store.state.verticalNavMenuItemsMin },
     styleItems () {
       return { maxHeight: this.maxHeight }

@@ -76,33 +76,34 @@
             <!-- /Group Header -->
 
             <template v-else-if="!item.header">
+              <template v-if="item.roleCd ? currUserRoleCd.includes(item.roleCd) : true">
+                <!-- Nav-Item -->
+                <v-nav-menu-item
+                  v-if="!item.submenu"
+                  :key="`item-${index}`"
+                  :index="index"
+                  :to="item.slug !== 'external' ? item.url : null"
+                  :href="item.slug === 'external' ? item.url : null"
+                  :icon="item.icon" :target="item.target"
+                  :isDisabled="item.isDisabled"
+                  :popup="item.popup"
+                  :popupComponent="item.popup ? item.popupComponent: null"
+                  :slug="item.slug">
+                    <span v-show="!verticalNavMenuItemsMin" class="truncate">{{ item.name }}</span>
+                    <vs-chip class="ml-auto" :color="item.tagColor" v-if="item.tag && (isMouseEnter || !reduce)">{{ item.tag }}</vs-chip>
+                </v-nav-menu-item>
 
-              <!-- Nav-Item -->
-              <v-nav-menu-item
-                v-if="!item.submenu"
-                :key="`item-${index}`"
-                :index="index"
-                :to="item.slug !== 'external' ? item.url : null"
-                :href="item.slug === 'external' ? item.url : null"
-                :icon="item.icon" :target="item.target"
-                :isDisabled="item.isDisabled"
-                :popup="item.popup"
-                :popupComponent="item.popup ? item.popupComponent: null"
-                :slug="item.slug">
-                  <span v-show="!verticalNavMenuItemsMin" class="truncate">{{ item.name }}</span>
-                  <vs-chip class="ml-auto" :color="item.tagColor" v-if="item.tag && (isMouseEnter || !reduce)">{{ item.tag }}</vs-chip>
-              </v-nav-menu-item>
-
-              <!-- Nav-Group -->
-              <template v-else>
-                <v-nav-menu-group
-                  :key="`group-${index}`"
-                  :openHover="openGroupHover"
-                  :group="item"
-                  :groupIndex="index"
-                  :open="isGroupActive(item)" />
+                <!-- Nav-Group -->
+                <template v-else>
+                  <v-nav-menu-group
+                    :key="`group-${index}`"
+                    :openHover="openGroupHover"
+                    :group="item"
+                    :groupIndex="index"
+                    :open="isGroupActive(item)" />
+                </template>
+                <!-- /Nav-Group -->
               </template>
-              <!-- /Nav-Group -->
             </template>
           </template>
         </component>
@@ -156,6 +157,11 @@ export default {
     showShadowBottom    : false
   }),
   computed: {
+    currUserRoleCd () {
+      let loggedIn = localStorage.getItem('loggedIn')
+      let json = JSON.parse(loggedIn)
+      return json['ROLE_CD'].split(",")
+    },
     isGroupActive () {
       return (item) => {
         const path        = this.$route.fullPath
