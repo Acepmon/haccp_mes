@@ -21,7 +21,7 @@
 
       <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0" :settings="settings" :key="$vs.rtl" v-if="unreadNotifications.length > 0">
         <ul class="bordered-items">
-          <li v-for="ntf in unreadNotifications" :key="ntf.index" class="flex justify-between px-4 py-4 notification cursor-pointer">
+          <li v-for="ntf in unreadNotifications" :key="ntf.index" class="flex justify-between px-4 py-4 notification" :class="{'cursor-pointer': ntf.url}" @click="notifClick(ntf)">
             <div class="flex items-start">
               <!-- <feather-icon :icon="ntf.icon" :svgClasses="[`text-${ntf.category}`, 'stroke-current mr-1 h-6 w-6']"></feather-icon> -->
               <div class="mx-2">
@@ -125,6 +125,13 @@ export default {
       if (sec) date.setSeconds(date.getSeconds() - sec)
 
       return date
+    },
+
+    notifClick(ntf) {
+      if (ntf.url && ntf.url != null) {
+        let url = new URL(ntf.url)
+        this.$router.push({ path: url.pathname })
+      }
     },
 
     ...mapActions({
