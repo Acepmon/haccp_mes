@@ -67,10 +67,15 @@
       </template>
     </app-control>
 
+    <vs-divider />
+
+    <vue-apex-charts type="area" height="350" :options="chartOptions" :series="chartSeries" v-if="item != null && chartSeries.length > 0"></vue-apex-charts>
+
     <ag-grid-vue
       ref="agGridTable"
       :localeText="localeText"
       :gridOptions="gridOptions"
+      rowSelection="single"
       class="ag-theme-material w-100 my-4 ag-grid-table"
       style="max-height: 100%;"
       :columnDefs="columnDefs"
@@ -108,6 +113,8 @@ import { Korean as KoreanLocale } from "flatpickr/dist/l10n/ko.js"
 
 import moment from 'moment';
 
+import VueApexCharts from 'vue-apexcharts'
+
 export default {
   name: 'page-6-4',
 
@@ -117,6 +124,7 @@ export default {
     AppFormGroup,
     AgGridVue,
     flatPickr,
+    VueApexCharts
   },
 
   data () {
@@ -134,13 +142,15 @@ export default {
         locale: KoreanLocale,
       },
 
+      item: null,
       devices: [],
       items: [],
       localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
-        headerHeight: 40
+        headerHeight: 40,
+        onCellDoubleClicked: this.handleDoubleClick
       },
       gridApi: null,
       defaultColDef: {
@@ -160,7 +170,10 @@ export default {
         totalPages: 0,
         pageSize: 50,
         currentPage: 1
-      }
+      },
+
+      chartData: [],
+      chartCategories: [],
     }
   },
 
@@ -192,6 +205,35 @@ export default {
         this.query(false)
       }
     },
+
+    chartSeries () {
+      return [{
+        name: this.item['ccp_esc_data:device_id'],
+        data: this.chartData
+      }]
+    },
+    chartOptions () {
+      return {
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        colors: this.themeColors,
+        xaxis: {
+          type: 'datetime',
+          categories: this.chartCategories,
+          labels: {
+            formatter: function (val, timestamp) {
+              return moment(timestamp).utcOffset('+0900').format('MM-DD hh:mm');
+            },
+            datetimeUTC: true
+          },
+          tickAmount: 12
+        },
+      }
+    }
   },
 
   methods: {
@@ -216,6 +258,50 @@ export default {
 
     onToChange(selectedDates, dateStr, instance) {
       this.$set(this.configFromdateTimePicker, "maxDate", dateStr);
+    },
+
+    handleDoubleClick () {
+      let rows = this.gridApi.getSelectedRows()
+      this.$set(this, 'chartData', [])
+      this.$set(this, 'chartCategories', [])
+
+      if (rows.length > 0) {
+        this.$set(this, 'item', rows[0]);
+        this.widgetRefresh(rows[0]['device_id'])
+      }
+    },
+
+    widgetRefresh (deviceId) {
+      this.spinner()
+
+      ccp_data
+        .details(deviceId, {
+          from: moment().subtract(24, 'hours').format('YYYYMMDDHHmmss'),
+          sort: 'REG_DTM',
+          order: 'ASC',
+          limit: -1
+        })
+        .then((res) => {
+          this.spinner(false)
+          if (res.data.data.length > 0) {
+            let chartData = res.data.data.map(i => i.data)
+            let chartCats = res.data.data.map(i => i.reg_dtm_parsed)
+            this.$set(this, 'chartData', chartData)
+            this.$set(this, 'chartCategories', chartCats)
+          }
+        })
+        .catch((err) => {
+          this.spinner(false)
+          console.log(err)
+          this.$vs.notify({
+            title: this.$t("Error"),
+            position: "top-right",
+            color: "warning",
+            iconPack: "feather",
+            icon: "icon-alert-circle",
+            text: err.response.data.message,
+          });
+        })
     },
 
     query() {
