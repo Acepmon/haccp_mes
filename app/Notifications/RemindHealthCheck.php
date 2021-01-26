@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Database\Eloquent\Collection;
 
 class RemindHealthCheck extends Notification
 {
@@ -24,7 +25,7 @@ class RemindHealthCheck extends Notification
      *
      * @return void
      */
-    public function __construct($workers)
+    public function __construct(Collection $workers)
     {
         $chkDt = $workers->first()->HEALTH_CHK_DT;
         $names = $workers->pluck('EMP_NM')->toArray();

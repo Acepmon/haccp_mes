@@ -202,7 +202,7 @@
         @selection-changed="handleSelected"
         :gridOptions="gridOptions"
         class="ag-theme-material w-100 my-4 ag-grid-table"
-        style="max-height: 100%;"
+        style="height: auto;"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
@@ -326,7 +326,8 @@ export default {
       maxPageNumbers: 7,
       gridOptions: {
         rowHeight: 40,
-        headerHeight: 40
+        headerHeight: 40,
+        domLayout: 'autoHeight'
       },
       gridApi: null,
       defaultColDef: {
