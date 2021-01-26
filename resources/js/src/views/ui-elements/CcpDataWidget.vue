@@ -1,7 +1,7 @@
 <template>
   <div>
-    <vx-card class="bg-primary-gradient cursor-pointer ccp-data-widget" @click="data.chart_dialog = true; onPopupOpen(data);">
-      <div class="h3 py-1 font-bold text-white text-center">
+    <vx-card class="cursor-pointer ccp-data-widget" :class="{'ccp-data-widget-blink': ccpEscDataBlink, 'bg-primary-gradient': !ccpEscDataBlink}" @click="data.chart_dialog = true; onPopupOpen(data);">
+      <div class="h3 py-1 font-bold text-center" :class="{'blink-text': ccpEscDataBlink, 'text-white': !ccpEscDataBlink}">
         {{ data.device_nm }}: <span class="px-8">{{ data.data }}{{ unit }}</span>
       </div>
       <div class="h3 py-1 text-warning text-right">
@@ -9,7 +9,7 @@
         <span class="pl-2">최대: {{ data.max }}</span>
         <span class="pl-2">평균: {{ data.avg }}</span>
       </div>
-      <div class="h4 py-1 text-white text-right">
+      <div class="h4 py-1 text-right" :class="{'blink-text': ccpEscDataBlink, 'text-white': !ccpEscDataBlink}">
         <span>최종측정시간: {{ data.reg_dtm_parsed }}</span>
       </div>
     </vx-card>
@@ -149,6 +149,10 @@ export default {
     onLimitSelected: {
       type: Function,
       default: () => {}
+    },
+    blink: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -189,13 +193,53 @@ export default {
     handleLimitSelect () {
       this.$emit('input', this.selected_limit)
       this.onLimitSelected(this.selected_limit)
+    },
+    ccpEscDataBlink () {
+      if (this.blink) {
+        if (this.data.ccp_esc_data && this.data.ccp_esc_data != null) {
+          let srt_dtm = this.data.ccp_esc_data['ccp_esc_data:srt_dtm']
+          srt_dtm = srt_dtm.substring(0, 10)
+          if (this.data.reg_dtm.substring(0, 10) == srt_dtm) {
+            return true
+          }
+        }
+      }
+      return false
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
+@-webkit-keyframes ccpDataWidgetBlink {
+  0%, 49% {
+    background: linear-gradient(118deg, rgba(var(--vs-primary), 1), rgba(var(--vs-primary), .7));
+  }
+  50%, 100% {
+    background: #ffffff;
+  }
+}
+@-webkit-keyframes ccpDataWidgetBlinkColor {
+  0%, 49% {
+    color: white;
+  }
+  50%, 100% {
+    color: #129CE9;
+  }
+}
 .ccp-data-widget .vx-card__body {
   padding: 0.5rem !important;
+}
+.ccp-data-widget-blink {
+  -webkit-animation: ccpDataWidgetBlink 1.5s infinite;  /* Safari 4+ */
+  -moz-animation: ccpDataWidgetBlink 1.5s infinite;  /* Fx 5+ */
+  -o-animation: ccpDataWidgetBlink 1.5s infinite;  /* Opera 12+ */
+  animation: ccpDataWidgetBlink 1.5s infinite;  /* IE 10+, Fx 29+ */
+}
+.ccp-data-widget-blink .blink-text {
+  -webkit-animation: ccpDataWidgetBlinkColor 1.5s infinite;  /* Safari 4+ */
+  -moz-animation: ccpDataWidgetBlinkColor 1.5s infinite;  /* Fx 5+ */
+  -o-animation: ccpDataWidgetBlinkColor 1.5s infinite;  /* Opera 12+ */
+  animation: ccpDataWidgetBlinkColor 1.5s infinite;  /* IE 10+, Fx 29+ */
 }
 </style>

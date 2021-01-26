@@ -7,7 +7,7 @@
     <div class="flex flex-wrap mt-5">
       <div class="w-full md:w-1/3 px-4 my-1" v-for="(item, index) in itemsComp" :key="index">
         <div class="w-full flex flex-row">
-          <ccp-data-widget :data="item" style="flex: 1; pointer-events: none;" class="ccp-data-monitor-popup-widget"></ccp-data-widget>
+          <ccp-data-widget :data="item" style="flex: 1; pointer-events: none;" class="ccp-data-monitor-popup-widget" blink></ccp-data-widget>
         </div>
       </div>
     </div>

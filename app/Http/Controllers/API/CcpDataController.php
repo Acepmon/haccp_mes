@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\CcpData;
+use App\CcpEscData;
 use App\CcpLimit;
 use App\CommCd;
 use App\Exports\CcpDataExport;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\CcpEscData;
 use App\CcpLimit;
 use App\CommCd;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -32,6 +33,7 @@ class CcpDataResource extends JsonResource
             'reg_dtm' => $this->REG_DTM,
             'reg_dtm_parsed' => now()->parse($this->REG_DTM)->format('Y-m-d H:i:s'),
             'ccp_limit' => CcpLimitResource::collection(CcpLimit::where('DEVICE_ID', $this->DEVICE)->get()),
+            'ccp_esc_data' => new CcpEscDataResource(CcpEscData::where('DEVICE_ID', $this->DEVICE)->orderBy('SRT_DTM', 'DESC')->first())
         ];
     }
 }
