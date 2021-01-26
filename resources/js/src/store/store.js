@@ -16,6 +16,7 @@ import getters from "./getters"
 import mutations from "./mutations"
 import actions from "./actions"
 import mdn from './mdn'
+import notif from './notif'
 
 Vue.use(Vuex)
 
@@ -25,7 +26,8 @@ export default new Vuex.Store({
     state,
     actions,
     modules: {
-      mdn: mdn
+      mdn: mdn,
+      notif: notif
     },
     strict: process.env.NODE_ENV !== 'production'
 })

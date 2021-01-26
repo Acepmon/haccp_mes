@@ -145,6 +145,7 @@ export default {
   methods: {
     ...mapActions({
       removeTab: "mdn/removeTab",
+      fetchNotifications: "notif/fetchNotifications",
     }),
 
     spinner(loading = true) {
@@ -207,6 +208,7 @@ export default {
         axios.post('/api/auth/user/notifications', {_method: 'DELETE'}).then((res) => {
           this.spinner(false)
           this.query()
+          this.fetchNotifications()
         })
         .catch((err) => {
           this.spinner(false);
@@ -228,6 +230,7 @@ export default {
         axios.post('/api/auth/user/notifications').then((res) => {
           this.spinner(false)
           this.query()
+          this.fetchNotifications()
         })
         .catch((err) => {
           this.spinner(false);

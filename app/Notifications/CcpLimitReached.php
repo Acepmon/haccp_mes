@@ -62,7 +62,6 @@ class CcpLimitReached extends Notification
             'title' => __('Temperature alert'),
             'msg' => 'Device: '.$this->ccpEscData->DEVICE_ID.'. Temperature: ' . $this->ccpEscData->ESC_DATA,
             'time' => now()->format('Y-m-d H:i:s'),
-            'icon' => '',
             'data' => new CcpEscDataResource($this->ccpEscData)
         ];
     }

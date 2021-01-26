@@ -1,21 +1,31 @@
 <template>
   <!-- NOTIFICATIONS -->
   <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-    <feather-icon icon="BellIcon" class="cursor-pointer mt-1 sm:mr-6 mr-2" :badge="unreadNotifications.length" />
+    <feather-icon icon="BellIcon" class="cursor-pointer mt-1 sm:mr-6 mr-2" :badge="unreadCount" />
 
     <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
 
       <div class="notification-top text-center p-3 bg-primary text-white">
-        <h3 class="text-white">{{ unreadNotifications.length }} 새알림</h3>
+        <div class="flex flex-row flex-wrap">
+          <h3 class="text-white text-left flex-1 pl-3 pt-2">
+            <span>{{ unreadCount }} 새알림</span>
+          </h3>
+          <vs-button
+            @click="markAsRead()"
+            color="light"
+            type="border"
+            >{{ $t("NotifReadAll") }}</vs-button
+          >
+        </div>
       </div>
 
-      <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-16" :settings="settings" :key="$vs.rtl" v-if="unreadNotifications.length > 0">
+      <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0" :settings="settings" :key="$vs.rtl" v-if="unreadNotifications.length > 0">
         <ul class="bordered-items">
           <li v-for="ntf in unreadNotifications" :key="ntf.index" class="flex justify-between px-4 py-4 notification cursor-pointer">
             <div class="flex items-start">
-              <feather-icon :icon="ntf.icon" :svgClasses="[`text-${ntf.category}`, 'stroke-current mr-1 h-6 w-6']"></feather-icon>
+              <!-- <feather-icon :icon="ntf.icon" :svgClasses="[`text-${ntf.category}`, 'stroke-current mr-1 h-6 w-6']"></feather-icon> -->
               <div class="mx-2">
-                <span class="font-medium block notification-title" :class="[`text-${ntf.category}`]">{{ ntf.title }}</span>
+                <span class="font-medium font-semibold block notification-title" :class="[`text-${ntf.category}`]">{{ ntf.title }}</span>
                 <small>{{ ntf.msg }}</small>
               </div>
             </div>
@@ -26,7 +36,6 @@
 
       <div class="
         checkout-footer
-        fixed
         bottom-0
         rounded-b-lg
         text-primary
@@ -49,8 +58,8 @@
 
 <script>
 import axios from 'axios'
-import user from "@/services/user";
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -67,14 +76,10 @@ export default {
   },
   computed: {
     scrollbarTag () { return this.$store.getters.scrollbarTag },
-    unreadNotifications () {
-      return this.notifications.map((item, index) => {
-        return {
-          'no': (index + 1),
-          ...item.data
-        } 
-      })
-    }
+    ...mapGetters({
+      unreadNotifications: 'notif/unreadNotifications',
+      unreadCount: 'notif/unreadCount',
+    })
   },
   methods: {
     elapsedTime (startTime) {
@@ -122,18 +127,36 @@ export default {
       return date
     },
 
-    fetchUnreadNotifications () {
-      let loggedIn = localStorage.getItem('loggedIn')
-      let json = JSON.parse(loggedIn)
-      axios.get('/sanctum/csrf-cookie').then(() => {
-        axios.get('/api/auth/user/notifications/unread').then((res) => {
-          this.$set(this, 'notifications', res.data.data)
-        })
-      })
-    }
+    ...mapActions({
+      playNotification: "notif/playNotification",
+      fetchNotifications: "notif/fetchNotifications",
+      markAsRead: 'notif/markAsRead'
+    }),
   },
+
+  mounted () {
+    let loggedIn = localStorage.getItem('loggedIn')
+    let json = JSON.parse(loggedIn)
+    let userId = json.USER_ID
+
+    window.Echo.private('App.User.' + userId)
+      .notification((notification) => {
+        this.playNotification()
+        this.fetchNotifications()
+
+        this.$vs.notify({
+          title: notification.title,
+          position: "top-right",
+          color: "primary",
+          iconPack: "feather",
+          icon: "icon-alert-circle",
+          text: notification.msg,
+        });
+      })
+  },
+
   created () {
-    this.fetchUnreadNotifications()
+    this.fetchNotifications()
   }
 }
 

@@ -60,6 +60,16 @@ import vSelect from 'vue-select'
 
 Vue.component('v-select', vSelect)
 
+import Pusher from "pusher-js"
+import Echo from "laravel-echo"
+
+window.Echo = new Echo({
+  broadcaster: 'pusher',
+  key: '6da0f8a33a7fd0f225c5',
+  cluster: 'ap3',
+  forceTLS: false,
+})
+
 Vue.config.productionTip = false
 
 new Vue({

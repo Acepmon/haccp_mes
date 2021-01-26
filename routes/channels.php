@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 Broadcast::channel('App.User.{id}', function ($user, $id) {
-    return $user->USER_ID === $id;
+    // return true;
+    return $user->USER_ID == $id;
 });

@@ -7,6 +7,7 @@ use App\Worker;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 class RemindHealthCheck extends Notification
@@ -31,7 +32,7 @@ class RemindHealthCheck extends Notification
 
         $this->workers = $workers; // a, b, c
         $this->title = '보건증 갱신 알림';
-        $this->message = '작업자 이름: ' . $names . '님의 보건증 갱신일자는 다음과 같습니다.' . now()->parse($chkDt)->format('Y-m-d') . '.';
+        $this->message = '작업자 이름: ' . $names . '님의 보건증 갱신일자는 다음과 같습니다. ' . now()->parse($chkDt)->format('Y-m-d') . '.';
         $this->url = url('/information/worker');
     }
 
@@ -43,7 +44,7 @@ class RemindHealthCheck extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['broadcast', 'database', 'mail'];
     }
 
     /**
@@ -72,8 +73,23 @@ class RemindHealthCheck extends Notification
             'title' => $this->title,
             'msg' => $this->message,
             'time' => now()->format('Y-m-d H:i:s'),
-            'icon' => '',
             'url' => $this->url
         ];
+    }
+
+    /**
+     * Get the broadcastable representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return BroadcastMessage
+     */
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'title' => $this->title,
+            'msg' => $this->message,
+            'time' => now()->format('Y-m-d H:i:s'),
+            'url' => $this->url
+        ]);
     }
 }
