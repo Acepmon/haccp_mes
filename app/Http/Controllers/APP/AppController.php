@@ -558,7 +558,7 @@ class AppController extends Controller
     {
         $docIdx = $request->input('doc_idx');
 
-        $item = EdocFileHaccp::where('DOC_ID', $docIdx)->where('APR_CD', '10');
+        $item = EdocFileHaccp::where('HACCP_SEQ', $docIdx)->where('APR_CD', '10');
 
         if ($request->has('doc_approval_idx')) {
             $docApprovalIdx = $request->input('doc_approval_idx');
@@ -566,6 +566,14 @@ class AppController extends Controller
         }
 
         $item = $item->first();
+
+        if ($item == null) {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => 'Document not found',
+            ], 422);
+        }
 
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
