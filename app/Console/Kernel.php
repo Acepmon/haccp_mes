@@ -27,6 +27,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
+        $schedule->command('auth:clear-resets')->daily();
+
         $schedule->command('ccp:check')->everyMinute();
 
         $schedule->command('health:check')->dailyAt('13:00'); // Everyday at 1pm

@@ -29,6 +29,6 @@ class SendUserInfoToOwner implements ShouldQueue
     public function handle(UserPasswordUpdated $event)
     {
         Mail::to($event->user->EMAIL)
-            ->queue(new NewUserInfo($event->user, $event->password, $event->introMessage));
+            ->send(new NewUserInfo($event->user, $event->password, $event->introMessage));
     }
 }

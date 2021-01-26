@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class NewUserInfo extends Mailable
+class NewUserInfo extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -49,7 +49,7 @@ class NewUserInfo extends Mailable
             'roles' => CommCd::where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$'])->whereIn('COMM2_CD', explode(',', $this->user->ROLE_CD))->get(),
             'approvals' => CommCd::where('COMM1_CD', 'B10')->whereNotIn('COMM2_CD', ['$$'])->whereIn('COMM2_CD', explode(',', $this->user->APPR_CD))->get(),
             'url' => $url,
-        ]);
+        ])->subject($this->introMessage);
     }
 
     private function getToken($email)

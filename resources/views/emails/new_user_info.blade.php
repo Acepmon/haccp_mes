@@ -13,6 +13,6 @@ Here is your login information
 Change Password
 @endcomponent
 
-Thanks,<br>
+감사합니다.<br>
 {{ config('app.name') }}
 @endcomponent
