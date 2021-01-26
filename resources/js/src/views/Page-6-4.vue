@@ -43,11 +43,12 @@
           >{{ $t("Save") }}</vs-button
         >
         <vs-button
-          @click="removeDialog()"
+          @click="toGraph()"
           class="mx-1"
-          color="primary invisible"
+          color="primary"
           type="border"
-          >{{ $t("Delete") }}</vs-button
+          :disabled="searchDeviceId == ''"
+          >{{ $t("ToGraph") }}</vs-button
         >
         <vs-button
           @click="exportExcel()"
@@ -269,6 +270,13 @@ export default {
         this.$set(this, 'item', rows[0]);
         this.widgetRefresh(rows[0]['device_id'])
       }
+    },
+
+    toGraph () {
+      this.$set(this, 'item', {
+        device_id: this.searchDeviceId
+      });
+      this.widgetRefresh(this.searchDeviceId)
     },
 
     widgetRefresh (deviceId) {
