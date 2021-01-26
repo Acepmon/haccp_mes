@@ -45,7 +45,7 @@ class CcpLimitReached extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->markdown('emails.ccp_limit_reached', [
+        return (new MailMessage)->subject('Temperature alert')->markdown('emails.ccp_limit_reached', [
             'ccpEscData' => $this->ccpEscData
         ]);
     }
@@ -59,7 +59,7 @@ class CcpLimitReached extends Notification
     public function toArray($notifiable)
     {
         return [
-            'title' => __('Temperature alert'),
+            'title' => 'Temperature alert',
             'msg' => 'Device: '.$this->ccpEscData->DEVICE_ID.'. Temperature: ' . $this->ccpEscData->ESC_DATA,
             'time' => now()->format('Y-m-d H:i:s'),
             'data' => new CcpEscDataResource($this->ccpEscData)

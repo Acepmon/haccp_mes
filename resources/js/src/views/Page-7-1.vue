@@ -146,7 +146,8 @@ export default {
         rowHeight: 40,
         headerHeight: 40,
         domLayout: 'autoHeight',
-        singleClickEdit: true
+        singleClickEdit: true,
+        stopEditingWhenGridLosesFocus: true
       },
       defaultColDef: {
         sortable: true,

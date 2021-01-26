@@ -83,14 +83,16 @@ class CommCdController extends Controller
                 'COMM2_NM' => $item['comm_cd:comm2_nm'],
             ];
         })->each(function ($item) use ($comm1cd) {
-            DB::table('COMM_CD')
-                ->where('COMM1_CD', $comm1cd)
-                ->whereNotIn('COMM2_CD', ['$$'])
-                ->where('COMM2_CD', $item['COMM2_CD'])
-                ->updateOrInsert(
-                    ['COMM1_CD' => $item['COMM1_CD'], 'COMM2_CD' => $item['COMM2_CD']],
-                    $item
-                );
+            if (!empty($item['COMM1_CD']) && !empty($item['COMM2_CD'])) {
+                DB::table('COMM_CD')
+                    ->where('COMM1_CD', $comm1cd)
+                    ->whereNotIn('COMM2_CD', ['$$'])
+                    ->where('COMM2_CD', $item['COMM2_CD'])
+                    ->updateOrInsert(
+                        ['COMM1_CD' => $item['COMM1_CD'], 'COMM2_CD' => $item['COMM2_CD']],
+                        $item
+                    );
+            }
         });
 
         return response()->json([

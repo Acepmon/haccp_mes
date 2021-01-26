@@ -52,7 +52,10 @@ class CheckCcpLimit extends Command
 
         // dd($from, $ccpDatas->first()->REG_DTM, $ccpDatas->last()->REG_DTM, $ccpDatas->last()->DEVICE_ID);
 
-        foreach (CcpLimit::whereNotNull('LMT_UP')->whereNotNull('LMT_DN')->orderBy('DEVICE_ID', 'ASC')->get() as $limit) {
+        // $limits = CcpLimit::whereNotNull('LMT_UP')->whereNotNull('LMT_DN')->where('USE_YN', 'Y')->orderBy('DEVICE_ID', 'ASC')->get();
+        $limits = CcpLimit::whereNotNull('LMT_UP')->whereNotNull('LMT_DN')->where('USE_YN', 'Y')->whereIn('DEVICE_ID', ['FREZFS', 'QUFRE1'])->orderBy('DEVICE_ID', 'ASC')->get();
+
+        foreach ($limits as $limit) {
             if (empty($limit->LMT_UP) && empty($limit->LMT_DN)) {
                 continue;
             }
@@ -73,10 +76,11 @@ class CheckCcpLimit extends Command
                 // if BU update
 
                 if ($flag == null) {
-                    if ($val > $up) {
+                    if ($val > $up && $up != 0) {
                         if (!CcpEscData::where('DEVICE_ID', $data->DEVICE_ID)->where('SRT_DTM', $data->REG_DTM)->exists()) {
                             $flag = CcpEscData::create([
                                 'DEVICE_ID' => $data->DEVICE_ID,
+                                'SRC_CD' => $limit->SRC_CD,
                                 'SRT_DTM' => $data->REG_DTM,
                                 'END_DTM' => null,
                                 'ESC_DATA' => (float) number_format($data->DATA, 3),
@@ -84,10 +88,12 @@ class CheckCcpLimit extends Command
     
                             event(new CcpLimitUpExceeded($flag));
                         }
-                    } else if ($val < $dn) {
+                    }
+                    else if ($val < $dn && $dn != 0) {
                         if (!CcpEscData::where('DEVICE_ID', $data->DEVICE_ID)->where('SRT_DTM', $data->REG_DTM)->exists()) {
                             $flag = CcpEscData::create([
                                 'DEVICE_ID' => $data->DEVICE_ID,
+                                'SRC_CD' => $limit->SRC_CD,
                                 'SRT_DTM' => $data->REG_DTM,
                                 'END_DTM' => null,
                                 'ESC_DATA' => (float) number_format($data->DATA, 3),
@@ -97,16 +103,17 @@ class CheckCcpLimit extends Command
                         }
                     }
                 } else {
-                    if ($val < $up) {
+                    if ($val < $up && $up != 0) {
                         $flag->update(['END_DTM' => $data->REG_DTM]);
 
-                        event(new CcpLimitUpExceeded($flag));
+                        // event(new CcpLimitUpExceeded($flag));
 
                         $flag = null;
-                    } else if ($val > $dn) {
+                    } 
+                    else if ($val > $dn && $dn != 0) {
                         $flag->update(['END_DTM' => $data->REG_DTM]);
 
-                        event(new CcpLimitDnExceeded($flag));
+                        // event(new CcpLimitDnExceeded($flag));
 
                         $flag = null;
                     }
