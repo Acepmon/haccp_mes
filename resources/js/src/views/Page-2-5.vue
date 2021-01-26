@@ -113,9 +113,9 @@ export default {
   created () {
     this.query()
 
-    setInterval(() => {
-      this.query()
-    }, 1000 * 60 * 1)
+    // setInterval(() => {
+    //   this.query()
+    // }, 1000 * 60 * 1)
   }
 }
 </script>

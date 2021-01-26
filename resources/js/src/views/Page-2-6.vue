@@ -51,7 +51,7 @@ export default {
       removeTab: "mdn/removeTab",
     }),
 
-    init () {
+    init (callback = Function) {
       ccp_data
         .dashboard({
           device_id: this.devices.map(item => item.comm2_cd).join(','),
@@ -62,27 +62,31 @@ export default {
         })
         .then((res) => {
           if (res.data.data.length > 0) {
-            res.data.data.forEach(device => {
-              let device_nm = this.devices.filter(d => d.comm2_cd == device.device_id)
+            this.$set(this, 'items', res.data.data)
+            // res.data.data.forEach(device => {
+            //   let device_nm = this.devices.filter(d => d.comm2_cd == device.device_id)
 
-              this.$set(this.items, device.device_id, {
-                'device_id': device.device_id,
-                'device_nm': device_nm[0].comm2_nm,
-                'chart_dialog': false,
-                'data': device.data.toFixed(2),
-                'min': device.min.toFixed(2),
-                'max': device.max.toFixed(2),
-                'avg': device.avg.toFixed(2),
-                'reg_dtm': device.reg_dtm,
-                'reg_dtm_parsed': device.reg_dtm_parsed,
-                'chartData': [],
-                'chartCats': [],
-                'limits': []
-              })
-            });
+            //   this.$set(this.items, device.device_id, {
+            //     'device_id': device.device_id,
+            //     'device_nm': device_nm[0].comm2_nm,
+            //     'chart_dialog': false,
+            //     'data': device.data.toFixed(2),
+            //     'min': device.min.toFixed(2),
+            //     'max': device.max.toFixed(2),
+            //     'avg': device.avg.toFixed(2),
+            //     'reg_dtm': device.reg_dtm,
+            //     'reg_dtm_parsed': device.reg_dtm_parsed,
+            //     'chartData': [],
+            //     'chartCats': [],
+            //     'limits': []
+            //   })
+            // });
+
+            callback()
           }
         })
         .catch((err) => {
+          console.log(err)
           this.$vs.notify({
             title: this.$t("Error"),
             position: "top-right",
@@ -105,17 +109,20 @@ export default {
         })
         .then((res) => {
           if (res.data.data.length > 0) {
-            res.data.data.forEach(device => {
+            for (let index = 0; index < res.data.data.length; index++) {
+              const device = res.data.data[index];
+              console.log(device);
               this.$set(this.items[device.device_id], 'data', device.data.toFixed(2))
               this.$set(this.items[device.device_id], 'min', device.min.toFixed(2))
               this.$set(this.items[device.device_id], 'max', device.max.toFixed(2))
               this.$set(this.items[device.device_id], 'avg', device.avg.toFixed(2))
               this.$set(this.items[device.device_id], 'reg_dtm', device.reg_dtm)
-              this.$set(this.items[device.device_id], 'reg_dtm_parsed', device.reg_dtm_parsed)
-            });
+              this.$set(this.items[device.device_id], 'reg_dtm_parsed', device.reg_dtm_parsed) 
+            }
           }
         })
         .catch((err) => {
+          console.log(err)
           this.$vs.notify({
             title: this.$t("Error"),
             position: "top-right",
@@ -131,18 +138,26 @@ export default {
   created () {
     comm_cd.fetch({cd1: 'C00'}).then((res) => {
       this.$set(this, 'devices', res.data)
-      this.init()
+
+      let cache = localStorage.getItem('page-2-6-cache')
+      if (cache != null) {
+        this.$set(this, 'items', JSON.parse(cache))
+      }
+
+      this.init(() => {
+        localStorage.setItem('page-2-6-cache', JSON.stringify(this.items))
+      })
     })
 
-    setInterval(() => {
-      this.refresh(() => {
-        this.itemsComp.forEach((data) => {
-          if (data.chart_dialog) {
-            this.widgetRefresh(data)
-          }
-        })
-      })
-    }, 1000 * 60 * 1)
+    // setInterval(() => {
+    //   this.refresh(() => {
+    //     this.itemsComp.forEach((data) => {
+    //       if (data.chart_dialog) {
+    //         this.widgetRefresh(data)
+    //       }
+    //     })
+    //   })
+    // }, 1000 * 60 * 1)
   }
 }
 </script>
