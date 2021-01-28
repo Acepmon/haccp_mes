@@ -107,7 +107,8 @@
         <app-form-group>
           <template v-slot:label>주민번호</template>
 
-          <vs-input class="control-field" maxlength="20" v-model="worker['worker:jumin_no']" :danger="errors['worker:jumin_no'] != null" :danger-text="errors['worker:jumin_no']" />
+          <vs-input 
+            class="control-field" @focus="juminNoFocused = true" @blur="juminNoFocused = false" maxlength="20" :value="getJuminNo()" @input="setJuminNo" :danger="errors['worker:jumin_no'] != null" :danger-text="errors['worker:jumin_no']" />
         </app-form-group>
 
         <app-form-group>
@@ -254,6 +255,7 @@ export default {
         altFormat: 'Y-m-d',
         altInput: true
       },
+      juminNoFocused: false,
       worker: {
         "worker:emp_id": null,
         "worker:emp_nm": null,
@@ -347,7 +349,15 @@ export default {
         { headerName: '비밀번호', field: 'worker:pass_no', filter: false, /* width: 100 */ },
         { headerName: '입사일자', field: 'worker:in_dt_parsed', filter: false, /* width: 100 */ },
         { headerName: '퇴사일자', field: 'worker:out_dt_parsed', filter: false, /* width: 100 */ },
-        { headerName: '주민번호', field: 'worker:jumin_no', filter: false, /* width: 100 */ },
+        { 
+          headerName: '주민번호', 
+          field: 'worker:jumin_no', 
+          filter: false, 
+          valueGetter: function (params) {
+            return params.data['worker:jumin_no'].substring(0, 8) + '******'
+          }
+          /* width: 100 */ 
+        },
         { headerName: '생년월일', field: 'worker:birth_dt_parsed', filter: false, /* width: 100 */ },
         { headerName: '은행명', field: 'worker:bank_nm', filter: false, /* width: 100 */ },
         { headerName: '계좌번호', field: 'worker:acct_no', filter: false, /* width: 100 */ },
@@ -423,6 +433,22 @@ export default {
       }
 
       return passed
+    },
+    
+    getJuminNo () {
+      if (this.juminNoFocused) {
+        return "" + this.worker['worker:jumin_no']
+      } else {
+        if (this.worker['worker:jumin_no']) {
+          return "" + this.worker['worker:jumin_no'].substring(0, 8) + '******'
+        } else {
+          return this.worker['worker:jumin_no']
+        }
+      }
+    },
+
+    setJuminNo (val) {
+      this.worker['worker:jumin_no'] = val
     },
 
     spinner(loading = true) {

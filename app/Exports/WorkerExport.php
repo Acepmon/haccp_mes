@@ -31,7 +31,7 @@ class WorkerExport implements FromCollection, WithHeadings, WithStyles, WithMapp
             $worker->MOB_NO,
             $worker->IN_DT,
             $worker->OUT_DT,
-            $worker->JUMIN_NO,
+            substr($worker->JUMIN_NO, 0, 8) . '******',
             $worker->BIRTH_DT,
             $worker->BANK_NM,
             $worker->ACCT_NO,
