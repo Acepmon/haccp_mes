@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/monitor', 'LoginController@monitor')->name('monitor');
 Route::get('/login', 'LoginController@login')->name('login');
 Route::get('/reset-password', 'LoginController@resetPassword')->name('reset-password');
 Route::post('/auth', 'LoginController@authenticate')->name('auth');

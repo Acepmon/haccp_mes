@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    public function monitor () {
+        return view('application');
+    }
+
     public function login () {
         return view('application');
     }

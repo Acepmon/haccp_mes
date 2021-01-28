@@ -56,6 +56,15 @@ Route::group([
 
 Route::group([
     'namespace' => 'API',
+    'as' => 'api.'
+], function () {
+    Route::get('code', 'CommCdController@code')->name('code');
+    Route::get('job_ord/monitor', 'JobOrdController@monitor')->name('job_ord.monitor');
+    Route::get('ccp_data/dashboard', 'CcpDataController@dashboard')->name('ccp_data.dashboard');
+});
+
+Route::group([
+    'namespace' => 'API',
     'as' => 'api.',
     'middleware' => 'auth:sanctum',
 ], function () {
@@ -66,7 +75,6 @@ Route::group([
 
     Route::apiResource('login_hist', 'LoginHistController');
 
-    Route::get('code', 'CommCdController@code')->name('code');
     Route::post('comm_cd/{comm1cd}/sync', 'CommCdController@sync');
     Route::apiResource('comm_cd', 'CommCdController')->except(['show', 'store', 'update']);
 
@@ -145,7 +153,6 @@ Route::group([
     Route::get('job_ord/summary_details', 'JobOrdController@summaryDetails')->name('job_ord.summary_details');
     Route::post('job_ord/import', 'JobOrdController@import')->name('job_ord.import');
     Route::post('job_ord/sync', 'JobOrdController@sync')->name('job_ord.sync');
-    Route::get('job_ord/monitor', 'JobOrdController@monitor')->name('job_ord.monitor');
     Route::apiResource('job_ord', 'JobOrdController');
 
     Route::get('job_ord_dtl/export', 'JobOrdDtlController@export')->name('job_ord_dtl.export');
@@ -157,7 +164,6 @@ Route::group([
     Route::apiResource('job_ord_dtl_work', 'JobOrdDtlWorkController');
 
     Route::get('ccp_data', 'CcpDataController@index');
-    Route::get('ccp_data/dashboard', 'CcpDataController@dashboard');
     Route::get('ccp_data/export', 'CcpDataController@export');
     Route::get('ccp_data/{DEVICE_ID}', 'CcpDataController@details');
 

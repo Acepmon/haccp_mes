@@ -263,6 +263,11 @@ const router = new Router({
                 component: () => import('@/views/pages/ResetPassword.vue')
               },
               {
+                path: '/monitor',
+                name: 'Monitor',
+                component: () => import('@/views/pages/Monitor.vue')
+              },
+              {
                 path: '/error-404',
                 name: 'error-404',
                 component: () => import('@/views/pages/Error404.vue')

@@ -65,6 +65,16 @@
 
       <vs-popup v-if="popup" fullscreen title="" :active.sync="popupDialog" button-close-hidden>
         <app-control>
+          <template v-slot:filter>
+            <vs-button
+              @click="openStandaloneWindow"
+              class="mx-1"
+              color="primary"
+              type="border"
+              size="large"
+              >{{ $t("Standalone Window") }}</vs-button
+            >
+          </template>
           <template v-slot:action>
             <vs-button
               @click="activeComponent = 'page-2-6';countdownTimer = 30;"
@@ -185,6 +195,10 @@ export default {
 
       this.refreshIntervalId = intervalId
     },
+
+    openStandaloneWindow () {
+      window.open('/monitor', '_blank')
+    }
   },
 
   created () {
