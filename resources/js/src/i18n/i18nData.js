@@ -25,6 +25,7 @@ export default {
     NotifReadAll: 'Read All',
     NotifDeleteAll: 'Delete All',
 
+    ToGraph: 'To Graph',
     SwitchToCcpMonitor: 'Switch to CCP Monitoring',
     SwitchToJobOrd: 'Switch to job order monitoring',
 
@@ -78,6 +79,7 @@ export default {
     NotifReadAll: '전체읽음',
     NotifDeleteAll: '전체삭제',
 
+    ToGraph: 'To Graph',
     SwitchToCcpMonitor: 'Switch to CCP Monitoring',
     SwitchToJobOrd: 'Switch to job order monitoring',
 

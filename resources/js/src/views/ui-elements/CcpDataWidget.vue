@@ -182,7 +182,7 @@ export default {
           categories: this.chartCategories,
           labels: {
             formatter: function (val, timestamp) {
-              return moment(timestamp).utcOffset('+0900').format('MM-DD hh:mm');
+              return moment(timestamp).utcOffset('+0900').format('MM-DD HH:mm');
             },
             datetimeUTC: true
           },

@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CcpDataResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CcpDataController extends Controller
@@ -28,17 +29,31 @@ class CcpDataController extends Controller
         }
 
         if ($request->has('from') && !empty($request->input('from'))) {
-            $from = now()->parse($request->input('from'))->format('YmdHis');
+            if (Str::contains($request->input('from'), '-')) {
+                $from = now()->parse($request->input('from'))->format('YmdHis');
+            } else {
+                $from = $request->input('from');
+            }
             $items = $items->whereRaw('CAST(REG_DTM AS SIGNED) >= ' . intval($from));
         }
 
         if ($request->has('to') && !empty($request->input('to'))) {
-            $to = now()->parse($request->input('to') . '235959')->format('YmdHis');
+            if (Str::contains($request->input('to'), '-')) {
+                $to = now()->parse($request->input('to') . '235959')->format('YmdHis');
+            } else {
+                $to = $request->input('to');
+            }
             $items = $items->whereRaw('CAST(REG_DTM AS SIGNED) <= ' . intval($to));
         }
 
         if ($request->has('reg_dtm') && !empty($request->input('reg_dtm'))) {
             $items = $items->where('REG_DTM', 'LIKE', $request->input('reg_dtm') . '%');
+        }
+
+        $latestItem = null;
+        if ($request->has('latest_item')) {
+            $clone = clone $items;
+            $latestItem = $clone->orderBy('REG_DTM', 'ASC')->first();
         }
 
         if ($limit == -1) {
@@ -47,7 +62,11 @@ class CcpDataController extends Controller
             $items = $items->orderBy($sort, $order)->paginate($limit);
         }
 
-        return CcpDataResource::collection($items);
+        return CcpDataResource::collection($items)->additional([
+            'meta' => [
+                'latest_item' => $latestItem ? $latestItem : null
+            ]
+        ]);
     }
 
     public function dashboard(Request $request)

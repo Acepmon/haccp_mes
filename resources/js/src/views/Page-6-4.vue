@@ -29,7 +29,7 @@
       </template>
       <template v-slot:action>
         <vs-button
-          @click="pagination.currentPage = 1; query()"
+          @click="pagination.currentPage = 1; item = null; query()"
           class="mx-1 mr-16"
           color="primary"
           type="border"
@@ -132,6 +132,7 @@ export default {
     return {
       format: "yyyy-MM-dd",
       from: moment().startOf('month').format('YYYY-MM-DD'),
+      fromSuffix: '000000',
       to: moment().format('YYYY-MM-DD'),
       searchDeviceId: '',
       configFromdateTimePicker: {
@@ -227,7 +228,7 @@ export default {
           categories: this.chartCategories,
           labels: {
             formatter: function (val, timestamp) {
-              return moment(timestamp).utcOffset('+0900').format('MM-DD hh:mm');
+              return moment(timestamp).utcOffset('+0900').format('MM-DD HH:mm');
             },
             datetimeUTC: true
           },
@@ -284,7 +285,8 @@ export default {
 
       ccp_data
         .details(deviceId, {
-          from: moment().subtract(24, 'hours').format('YYYYMMDDHHmmss'),
+          from: moment(this.from).format('YYYYMMDD') + this.fromSuffix,
+          to: moment(this.to).format('YYYYMMDD') + '235959',
           sort: 'REG_DTM',
           order: 'ASC',
           limit: -1
@@ -335,7 +337,8 @@ export default {
           order: 'DESC',
           ...search_params,
           limit: this.pagination.pageSize,
-          page: this.pagination.currentPage
+          page: this.pagination.currentPage,
+          latest_item: true
         })
         .then((res) => {
           this.spinner(false);
@@ -343,6 +346,14 @@ export default {
             this.$set(this.pagination, 'total', res.data.meta.total)
             this.$set(this.pagination, 'totalPages', Math.round(res.data.meta.total / res.data.meta.per_page))
             this.$set(this, 'items', res.data.data)
+
+            if (res.data.meta) {
+              if (res.data.meta.latest_item) {
+                let latestRegDtm = res.data.meta.latest_item['REG_DTM']
+                // 20210104161243
+                this.fromSuffix = latestRegDtm.substring(8)
+              }
+            }
           }
         })
         .catch((err) => {
