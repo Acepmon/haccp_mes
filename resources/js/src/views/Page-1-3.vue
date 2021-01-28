@@ -206,6 +206,7 @@
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="itemsComp"
+        @first-data-rendered="onFirstDataRendered"
         :pagination="true"
         :paginationPageSize="paginationPageSize"
         :suppressPaginationPanel="true">
@@ -337,26 +338,26 @@ export default {
         suppressMenu: false
       },
       columnDefs: [
-        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '사원번호', field: 'worker:emp_id', filter: false, width: 100 },
-        { headerName: '이름', field: 'worker:emp_nm', filter: false, width: 100 },
-        { headerName: '직책', field: 'worker:duty_cd_nm', filter: false, width: 100 },
-        { headerName: '부서명', field: 'worker:dept_cd_nm', filter: false, width: 100 },
-        { headerName: '전화번호', field: 'worker:mob_no', filter: false, width: 100 },
-        { headerName: '비밀번호', field: 'worker:pass_no', filter: false, width: 100 },
-        { headerName: '입사일자', field: 'worker:in_dt_parsed', filter: false, width: 100 },
-        { headerName: '퇴사일자', field: 'worker:out_dt_parsed', filter: false, width: 100 },
-        { headerName: '주민번호', field: 'worker:jumin_no', filter: false, width: 100 },
-        { headerName: '생년월일', field: 'worker:birth_dt_parsed', filter: false, width: 100 },
-        { headerName: '은행명', field: 'worker:bank_nm', filter: false, width: 100 },
-        { headerName: '계좌번호', field: 'worker:acct_no', filter: false, width: 100 },
-        { headerName: '주소', field: 'worker:address', filter: false, width: 150 },
-        { headerName: '이메일', field: 'worker:email', filter: false, width: 100 },
-        { headerName: '주요업무', field: 'worker:main_job', filter: false, width: 100 },
-        { headerName: '보건증일자', field: 'worker:health_chk_dt_parsed', filter: false, width: 100 },
-        { headerName: 'HACCP 문서관리', field: 'worker:haccp_doc', filter: false, width: 100 },
-        { headerName: '정/부구분', field: 'worker:role_cd_nm', filter: false, width: 100 },
-        { headerName: 'HACCP 담당역할', field: 'worker:haccp_role', filter: false, width: 100 },
+        { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, /* width: 50 */ },
+        { headerName: '사원번호', field: 'worker:emp_id', filter: false, /* width: 100 */ },
+        { headerName: '이름', field: 'worker:emp_nm', filter: false, /* width: 100 */ },
+        { headerName: '직책', field: 'worker:duty_cd_nm', filter: false, /* width: 100 */ },
+        { headerName: '부서명', field: 'worker:dept_cd_nm', filter: false, /* width: 100 */ },
+        { headerName: '전화번호', field: 'worker:mob_no', filter: false, /* width: 100 */ },
+        { headerName: '비밀번호', field: 'worker:pass_no', filter: false, /* width: 100 */ },
+        { headerName: '입사일자', field: 'worker:in_dt_parsed', filter: false, /* width: 100 */ },
+        { headerName: '퇴사일자', field: 'worker:out_dt_parsed', filter: false, /* width: 100 */ },
+        { headerName: '주민번호', field: 'worker:jumin_no', filter: false, /* width: 100 */ },
+        { headerName: '생년월일', field: 'worker:birth_dt_parsed', filter: false, /* width: 100 */ },
+        { headerName: '은행명', field: 'worker:bank_nm', filter: false, /* width: 100 */ },
+        { headerName: '계좌번호', field: 'worker:acct_no', filter: false, /* width: 100 */ },
+        { headerName: '주소', field: 'worker:address', filter: false, /* width: 150 */ },
+        { headerName: '이메일', field: 'worker:email', filter: false, /* width: 100 */ },
+        { headerName: '주요업무', field: 'worker:main_job', filter: false, /* width: 100 */ },
+        { headerName: '보건증일자', field: 'worker:health_chk_dt_parsed', filter: false, /* width: 100 */ },
+        { headerName: 'HACCP 문서관리', field: 'worker:haccp_doc', filter: false, /* width: 100 */ },
+        { headerName: '정/부구분', field: 'worker:role_cd_nm', filter: false, /* width: 100 */ },
+        { headerName: 'HACCP 담당역할', field: 'worker:haccp_role', filter: false, /* width: 100 */ },
         //{ headerName: 'reg_id', field: 'worker:reg_id', filter: false, width: 100 },
         //{ headerName: 'reg_dtm', field: 'worker:reg_dtm_parsed', filter: false, width: 100 },
       ]
@@ -451,6 +452,15 @@ export default {
       for (const [key, value] of Object.entries(errors)) {
         this.$set(this.errors, key, Array.isArray(value) ? value[0] : value);
       }
+    },
+
+    onFirstDataRendered(params) {
+      params.api.sizeColumnsToFit()
+      setTimeout(() => {
+        const colIds = params.columnApi.getAllColumns().map(c => c.colId)
+        const skipHeader = true
+        params.columnApi.autoSizeColumns(colIds, skipHeader)
+      }, 50)
     },
 
     add() {
