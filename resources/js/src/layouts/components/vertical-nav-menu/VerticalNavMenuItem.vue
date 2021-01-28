@@ -67,10 +67,29 @@
         <app-control>
           <template v-slot:action>
             <vs-button
+              @click="activeComponent = 'page-2-6';countdownTimer = 30;"
+              class="mx-1"
+              color="primary"
+              type="border"
+              size="large"
+              v-if="activeComponent == 'page-2-5'"
+              >{{ $t("SwitchToCcpMonitor") }}</vs-button
+            >
+            <vs-button
+              @click="activeComponent = 'page-2-5';countdownTimer = 30;"
+              class="mx-1"
+              color="primary"
+              type="border"
+              size="large"
+              v-if="activeComponent == 'page-2-6'"
+              >{{ $t("SwitchToJobOrd") }}</vs-button
+            >
+            <vs-button
               @click="popupDialog = false"
               class="mx-1"
               color="primary"
               type="border"
+              size="large"
               >{{ $t("Close") }}</vs-button
             >
           </template>
@@ -95,7 +114,10 @@ export default {
   data () {
     return {
       popupDialog: false,
-      activeComponent: this.popupComponent
+      activeComponent: this.popupComponent,
+
+      countdownTimer: 30,
+      refreshIntervalId: null
     }
   },
   props: {
@@ -118,7 +140,10 @@ export default {
     },
     ...mapGetters({
       tabExceeded: 'mdn/tabExceeded',
-    })
+    }),
+    countdown () {
+      return this.countdownTimer
+    }
   },
   methods: {
     showExceededDialog () {
@@ -133,17 +158,44 @@ export default {
     showPopupDialog (popupComponent) {
       this.activeComponent = popupComponent
       this.$set(this, 'popupDialog', true)
+      this.countdownTimer = 30
     },
-  },
 
-  created () {
-    setInterval(() => {
+    resetTimer () {
+      clearInterval(this.refreshIntervalId)
+
       if (this.activeComponent == 'page-2-5') {
         this.$set(this, 'activeComponent', 'page-2-6')
       } else if (this.activeComponent == 'page-2-6') {
         this.$set(this, 'activeComponent', 'page-2-5')
       }
-    }, 1000 * 30)
+
+      this.countdownTimer = 30
+    },
+
+    startCountdown () {
+      let intervalId = setInterval(() => {
+        if (this.countdownTimer == 1) {
+          this.resetTimer()
+          this.startCountdown()
+        } else {
+          this.countdownTimer = this.countdownTimer - 1
+        }
+      }, 1000)
+
+      this.refreshIntervalId = intervalId
+    },
+  },
+
+  created () {
+    // setInterval(() => {
+    //   if (this.activeComponent == 'page-2-5') {
+    //     this.$set(this, 'activeComponent', 'page-2-6')
+    //   } else if (this.activeComponent == 'page-2-6') {
+    //     this.$set(this, 'activeComponent', 'page-2-5')
+    //   }
+    // }, 1000 * 30)
+    this.startCountdown()
   }
 }
 

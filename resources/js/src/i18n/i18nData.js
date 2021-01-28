@@ -25,6 +25,9 @@ export default {
     NotifReadAll: 'Read All',
     NotifDeleteAll: 'Delete All',
 
+    SwitchToCcpMonitor: 'Switch to CCP Monitoring',
+    SwitchToJobOrd: 'Switch to job order monitoring',
+
     AllCcpToggleOn: "Are you sure start all device?",
     AllCcpToggleOff: "Are you sure shutdown all device?",
     CcpToggleOn: "Are you sure start this device?",
@@ -74,6 +77,9 @@ export default {
 
     NotifReadAll: '전체읽음',
     NotifDeleteAll: '전체삭제',
+
+    SwitchToCcpMonitor: 'Switch to CCP Monitoring',
+    SwitchToJobOrd: 'Switch to job order monitoring',
 
     AllCcpToggleOn: "모든 장비를 켜시겠습니다까?",
     AllCcpToggleOff: "모든 장비를 끄겠습니까?",
