@@ -38,6 +38,7 @@ export default [
         name: "HACCP담당자 관리",
         slug: "HACCP담당자 관리",
         showSubmenuOn: '/information',
+        roleCd: '10,20,30,40,50,60'
       },
       {
         url: "/information/worker",

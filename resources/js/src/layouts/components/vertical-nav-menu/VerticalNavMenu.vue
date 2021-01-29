@@ -76,7 +76,7 @@
             <!-- /Group Header -->
 
             <template v-else-if="!item.header">
-              <template v-if="item.roleCd ? currUserRoleCd.includes(item.roleCd) : true">
+              <template v-if="checkAuthorization(item)">
                 <!-- Nav-Item -->
                 <v-nav-menu-item
                   v-if="!item.submenu"
@@ -352,6 +352,25 @@ export default {
     toggleReduce (val) {
       this.reduceButton = val
       this.setVerticalNavMenuWidth()
+    },
+    checkAuthorization (item) {
+      // item.roleCd ? currUserRoleCd.includes(item.roleCd) : true
+      if (item && item.roleCd) {
+        if (item.roleCd.includes(',')) {
+          let roleCdArr = item.roleCd.split(',')
+          let trueCnt = 0
+          roleCdArr.forEach(currRole => {
+            if (this.currUserRoleCd.includes(currRole)) {
+              trueCnt++;
+            }
+          });
+
+          return trueCnt == roleCdArr.length
+        } else {
+          return this.currUserRoleCd.includes(item.roleCd)
+        }
+      }
+      return true
     }
   },
   mounted () {

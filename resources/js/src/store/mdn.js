@@ -46,6 +46,12 @@ const mdn = {
             if (state.tabs.length > 0) {
                 state.activeTab = state.tabs[0].value
             }
+        },
+
+        SET_DEFAULT (state) {
+            state.activeTab = 0
+            state.tabs = []
+            state.maxTabs = 7
         }
     },
 

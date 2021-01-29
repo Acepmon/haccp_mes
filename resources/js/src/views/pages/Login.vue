@@ -117,7 +117,7 @@ export default{
             this.resError = false
 
             localStorage.setItem('loggedIn', JSON.stringify(res.data.result))
-
+            this.$store.commit('mdn/SET_DEFAULT')
             this.$router.push({path: '/'})
           } else {
             this.resError = true
