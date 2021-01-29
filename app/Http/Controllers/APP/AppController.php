@@ -4,6 +4,7 @@ namespace App\Http\Controllers\APP;
 
 use App\CcpCdInfo;
 use App\CcpData;
+use App\CcpEscData;
 use App\JobOrd;
 use App\JobOrdDtl;
 use App\JobOrdDtlWork;
@@ -26,6 +27,8 @@ use App\Http\Resources\AppGetProcessStatusDetailResource;
 use App\Http\Resources\AppGetCcpDivisionResource;
 use App\Http\Resources\AppGetCcpRequestInfoResource;
 use App\Http\Resources\AppGetAllCcpMonitoringResource;
+use App\Http\Resources\AppGetAllCcpBreakawayResource;
+use App\Http\Resources\AppGetCcpBreakawayInfoResource;
 use App\Http\Resources\AppVersionResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -84,6 +87,9 @@ class AppController extends Controller
             case 'get_ccp_request_info': return $this->getCcpRequestInfo($request);
             case 'write_ccp_info': return $this->writeCcpInfo($request);
             case 'get_all_ccp_monitoring': return $this->getAllCcpMonitoring($request);
+            case 'get_all_ccp_breakaway': return $this->getAllCcpBreakaway($request);
+            case 'get_ccp_breakaway_info': return $this->getCcpBreakawayInfo($request);
+            case 'write_ccp_breakaway': return $this->writeCcpBreakaway($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -1017,6 +1023,100 @@ class AppController extends Controller
             'msg' => '',
             'data' => AppGetAllCcpMonitoringResource::collection($items),
         ]);
+    }
+
+    public function getAllCcpBreakaway(Request $request)
+    {
+        $items = CcpEscData::all();
+        $items = $items->map(function ($item) {
+            return [
+                'device_nm' => CommCd::where('COMM1_CD', 'C00')->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $item->DEVICE_ID)->value('COMM2_NM'),
+                'idx' => $item->DEVICE_ID . '-' . $item->SRC_CD . '-' . $item->SRT_DTM,
+                'srt_dtm' => now()->parse($item->SRT_DTM)->format('Y-m-d'),
+                'esc_data' => $item->ESC_DATA . $this->unit($item->DEVICE_ID),
+                'status' => !empty($item->REASON) ? 'YES' : 'NO'
+            ];
+        });
+        $items = $items->groupBy('srt_dtm');
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => AppGetAllCcpBreakawayResource::collection($items),
+        ]);
+    }
+
+    public function getCcpBreakawayInfo(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required'
+        ]);
+        $idx = $request->input('idx');
+        $idx = explode('-', $idx);
+
+        $deviceId = array_key_exists(0, $idx) ? $idx[0] : null;
+        $srcCd = array_key_exists(1, $idx) ? $idx[1] : null;
+        $srtDtm = array_key_exists(2, $idx) ? $idx[2] : null;
+
+        $item = CcpEscData::where('DEVICE_ID', $deviceId)->where('SRC_CD', $srcCd)->where('SRT_DTM', $srtDtm)->first();
+        if ($item == null) {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => '해당자료가 없습니다.',
+            ], 422);
+        }
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'data' => new AppGetCcpBreakawayInfoResource($item),
+        ]);
+    }
+
+    public function writeCcpBreakaway(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required',
+            'cause' => 'nullable',
+            'action' => 'nullable'
+        ]);
+
+        $idx = $request->input('idx');
+        $idx = explode('-', $idx);
+
+        $deviceId = array_key_exists(0, $idx) ? $idx[0] : null;
+        $srcCd = array_key_exists(1, $idx) ? $idx[1] : null;
+        $srtDtm = array_key_exists(2, $idx) ? $idx[2] : null;
+
+        $item = CcpEscData::where('DEVICE_ID', $deviceId)->where('SRC_CD', $srcCd)->where('SRT_DTM', $srtDtm)->first();
+        if ($item == null) {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => '해당자료가 없습니다.',
+            ], 422);
+        }
+
+        $item->update([
+            'REASON' => '발생원인: ' . $request->input('cause') . '조치결과: ' . $request->input('action')
+        ]);
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => 'Success',
+        ]);
+    }
+
+    private function unit($device)
+    {
+        if (in_array($device, ['CHUMI1', 'RHUMI1', 'SIRIH1'])) {
+            return '%';
+        }
+        return '℃';
     }
 
     private function queryEdocFile($typeCd, $periodCd)
