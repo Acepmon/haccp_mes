@@ -336,7 +336,7 @@ export default {
       gridOptions: {
         rowHeight: 40,
         headerHeight: 40,
-        onCellDoubleClicked: this.handleDoubleClick
+        // onCellDoubleClicked: this.handleDoubleClick
       },
       gridApi: null,
       defaultColDef: {
@@ -351,8 +351,8 @@ export default {
       },
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '작업번호', field: 'job_ord:job_no', filter: false, editable: false, width: 120, cellStyle: {'text-decoration': 'underline', 'cursor': 'pointer'} },
-        { headerName: '품목ID', field: 'job_ord:item_id', filter: false, editable: false, width: 120, cellStyle: {'text-decoration': 'underline', 'cursor': 'pointer'} },
+        { headerName: '작업번호', field: 'job_ord:job_no', filter: false, editable: false, width: 120, /* cellStyle: {'text-decoration': 'underline', 'cursor': 'pointer'} */ },
+        { headerName: '품목ID', field: 'job_ord:item_id', filter: false, editable: false, width: 120, /* cellStyle: {'text-decoration': 'underline', 'cursor': 'pointer'} */ },
         { headerName: '품목명', field: 'job_ord:item_nm', filter: false, editable: false, width: 150 },
         { headerName: '지시수량', field: 'job_ord:ord_qty', type: 'numericColumn', filter: false, editable: false, width: 120 },
         { headerName: '생산수량', field: 'job_ord:prod_qty', type: 'numericColumn', filter: false, editable: false, width: 120 },

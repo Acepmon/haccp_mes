@@ -60,29 +60,30 @@ class JobOrdExport2 implements FromView
         $details = [];
 
         foreach ($items as $jobOrd) {
-            $subdetails = DB::table('JOB_ORD_BOM')
-                ->select('JOB_ORD_BOM.ITEM2_ID AS ITEM_ID', 'JOB_ORD_BOM.ITEM2_NM AS ITEM_NM', DB::raw('(JOB_ORD.ORD_QTY * JOB_ORD_BOM.USE_QTY / JOB_ORD_BOM.PROD_QTY) AS REQ'))
-                ->join('JOB_ORD', 'JOB_ORD_BOM.ITEM_ID', '=', 'JOB_ORD.ITEM_ID')
-                ->where('JOB_ORD_BOM.ITEM_ID', $jobOrd->ITEM_ID)
-                ->get();
+            $subdetails = DB::select(DB::raw("select A.`JOB_NO`, A.`ITEM2_ID` as `ITEM_ID`, A.`ITEM2_NM` AS ITEM_NM, (B.ORD_QTY * A.USE_QTY / A.PROD_QTY) AS REQ 
+from `JOB_ORD_BOM` A, `JOB_ORD` B where A.`ITEM_ID` = B.`ITEM_ID` 
+and A.`JOB_NO` = B.`JOB_NO` and B.`JOB_NO` = '".$jobOrd->JOB_NO."' and B.ITEM_ID = '".$jobOrd->ITEM_ID."'"));
+            $subdetails = collect($subdetails);
 
             $sum = $subdetails->sum('REQ');
+            $mappedSubDetails = $subdetails->map(function ($subdetail) use ($sum) {
+                $ratio = 100 / $sum * intval($subdetail->REQ);
+                return [
+                    'job_no' => $subdetail->JOB_NO,
+                    'item_id' => $subdetail->ITEM_ID,
+                    'item_nm' => $subdetail->ITEM_NM,
+                    'req' => number_format(intval($subdetail->REQ)),
+                    'ratio' => number_format((float) $ratio, 2, '.', ''),
+                    'origin' => ''
+                ];
+            });
 
             array_push($details, [
                 'reqSum' => number_format($sum),
                 'ratio' => 100,
                 'origin' => '',
                 'item_id' => $jobOrd->ITEM_ID,
-                'subdetails' => $subdetails->map(function ($subdetail) use ($sum) {
-                    $ratio = 100 / $sum * intval($subdetail->REQ);
-                    return [
-                        'item_id' => $subdetail->ITEM_ID,
-                        'item_nm' => $subdetail->ITEM_NM,
-                        'req' => number_format(intval($subdetail->REQ)),
-                        'ratio' => number_format((float) $ratio, 2, '.', ''),
-                        'origin' => ''
-                    ];
-                })
+                'subdetails' => $mappedSubDetails
             ]);
         }
 
