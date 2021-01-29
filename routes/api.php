@@ -25,6 +25,7 @@ Route::group([
     'as' => 'app.',
 ], function () {
     Route::post('haccp/attendance', 'AppController@apprequest')->name('haccp.attendance');
+    Route::post('haccp/version', 'AppController@version')->name('haccp.version');
 });
 
 Route::group([

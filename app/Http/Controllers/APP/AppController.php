@@ -26,9 +26,11 @@ use App\Http\Resources\AppGetProcessStatusDetailResource;
 use App\Http\Resources\AppGetCcpDivisionResource;
 use App\Http\Resources\AppGetCcpRequestInfoResource;
 use App\Http\Resources\AppGetAllCcpMonitoringResource;
+use App\Http\Resources\AppVersionResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AppController extends Controller
 {
@@ -44,6 +46,10 @@ class AppController extends Controller
             case 'get_doc_daily_list': return $this->getDocDailyList($request);
             case 'apply_attendance': return $this->applyAttendance($request);
             case 'apply_leave_work': return $this->applyLeaveWork($request);
+            case 'apply_attendance_yes': return $this->applyAttendanceYes($request);
+            case 'apply_attendance_no': return $this->applyAttendanceNo($request);
+            case 'apply_leave_work_yes': return $this->applyLeaveWorkYes($request);
+            case 'apply_leave_work_no': return $this->applyLeaveWorkNo($request);
             case 'get_haccp_implementation_schedule': return $this->getHaccpImpSchedule($request);
             case 'get_ccp_doc_list_daily': return $this->getCcpDocListDaily($request);
             case 'get_ccp_doc_list_week': return $this->getCcpDocListWeek($request);
@@ -85,6 +91,17 @@ class AppController extends Controller
                     'msg' => 'Request type incorrect'
                 ], 422);
         }
+    }
+
+    public function version(Request $request)
+    {
+        $appVer = $this->getAppVer();
+
+        return $this->jsonResponse([
+            // 'os' => $appVer->os,
+            // 'app_id' => $appVer->app_id,
+            'version' => $appVer->version,
+        ]);
     }
 
     public function getDocDailyList(Request $request)
@@ -149,20 +166,20 @@ class AppController extends Controller
             return $this->jsonResponse([
                 'request_type' => $request->input('request_type'),
                 'status' => 'error',
-                'msg' => $worker->EMP_NM . '님은 오늘날짜 출근기록이 이미 되이있습니다.'
+                'msg' => $worker->EMP_NM . '님은 오늘날짜 출근기록이 이미 있습니다.'
             ], 422);
         }
 
-        $workerAttn = WorkerAttn::create([
-            'EMP_ID' => $worker->EMP_ID,
-            'ON_DTM' => now()->format('Ymdhis'),
-        ]);
+        // $workerAttn = WorkerAttn::create([
+        //     'EMP_ID' => $worker->EMP_ID,
+        //     'ON_DTM' => now()->format('Ymdhis'),
+        // ]);
 
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
             'status' => 'success',
-            'msg' => $worker->EMP_NM . '님 출근기록이 되었습니다.',
-            'time' => now()->parse($workerAttn->ON_DTM)->format('Y-m-d H:i'),
+            'msg' => $worker->EMP_NM . '님 본인 출근 기록이 맞습니까?.',
+            // 'time' => now()->parse($workerAttn->ON_DTM)->format('Y-m-d H:i'),
         ], 200);
     }
 
@@ -197,9 +214,66 @@ class AppController extends Controller
             return $this->jsonResponse([
                 'request_type' => $request->input('request_type'),
                 'status' => 'error',
-                'msg' => $worker->EMP_NM . '님은 오늘날짜 퇴근기록이 이미 되이있습니다.'
+                'msg' => $worker->EMP_NM . '님은 오늘날짜 퇴근기록이 이미 있습니다.'
             ], 422);
         }
+
+        // $offDtm = now()->format('Ymdhis');
+        // WorkerAttn::where('EMP_ID', $worker->EMP_ID)->where('ON_DTM', 'LIKE', $today . '%')->update([
+        //     'OFF_DTM' => $offDtm
+        // ]);
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => $worker->EMP_NM . '님 본인 퇴근기록이 맞습니까?',
+            //'time' => now()->parse($offDtm)->format('Y-m-d H:i'),
+        ], 200);
+    }
+
+    public function applyAttendanceYes(Request $request)
+    {
+        $request->validate([
+            'input' => 'required|numeric'
+        ]);
+
+        $input = $request->input('input');
+
+        $worker = Worker::where('PASS_NO', $input)->first();
+        $today = now()->format('Ymd');
+
+        $workerAttn = WorkerAttn::create([
+            'EMP_ID' => $worker->EMP_ID,
+            'ON_DTM' => now()->format('Ymdhis'),
+        ]);
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => $worker->EMP_NM . '님 출근 처리되었습니다.',
+            'time' => now()->parse($workerAttn->ON_DTM)->format('Y-m-d H:i'),
+        ], 200);
+    }
+
+    public function applyAttendanceNo(Request $request)
+    {
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '취소되었습니다.',
+        ], 200);
+    }
+
+    public function applyLeaveWorkYes(Request $request)
+    {
+        $request->validate([
+            'input' => 'required|numeric'
+        ]);
+
+        $input = $request->input('input');
+
+        $worker = Worker::where('PASS_NO', $input)->first();
+        $today = now()->format('Ymd');
 
         $offDtm = now()->format('Ymdhis');
         WorkerAttn::where('EMP_ID', $worker->EMP_ID)->where('ON_DTM', 'LIKE', $today . '%')->update([
@@ -209,8 +283,17 @@ class AppController extends Controller
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
             'status' => 'success',
-            'msg' => $worker->EMP_NM . '님 퇴근기록이 되었습니다.',
+            'msg' => $worker->EMP_NM . '님 퇴근 처리되었습니다.',
             'time' => now()->parse($offDtm)->format('Y-m-d H:i'),
+        ], 200);
+    }
+
+    public function applyLeaveWorkNo(Request $request)
+    {
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '취소되었습니다.',
         ], 200);
     }
 
@@ -996,6 +1079,28 @@ class AppController extends Controller
         }
 
         return $details;
+    }
+
+    private function getAppVer()
+    {
+        if (!Storage::exists('app_version.json')) {
+            Storage::put('app_version.json', '{"os": "AOS","app_id": "com.bokmansa.imasic","version": "1.0.0"}');
+        }
+
+        $content = file_get_contents(storage_path('app/app_version.json'));
+        $json = json_decode($content);
+        return $json;
+    }
+
+    private function setAppVer($os, $appId, $version)
+    {
+        Storage::put('app_version.json', json_encode([
+            'os' => $os,
+            'app_id' => $appId,
+            'version' => $version,
+        ]));
+
+        return $this->getAppVer();
     }
 
 }

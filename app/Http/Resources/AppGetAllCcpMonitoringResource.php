@@ -16,6 +16,7 @@ class AppGetAllCcpMonitoringResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'idx' => $this->DEVICE,
             'device_nm' => CommCd::where('COMM1_CD', 'C00')->whereNotIn('COMM2_CD', ['$$'])->where('COMM2_CD', $this->DEVICE)->value('COMM2_NM'),
             'data' => $this->DATA . $this->unit($this->DEVICE),
             'reg_dtm' => $this->REG_DTM

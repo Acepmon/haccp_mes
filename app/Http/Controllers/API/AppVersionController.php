@@ -35,7 +35,7 @@ class AppVersionController extends Controller
     private function getAppVer()
     {
         if (!Storage::exists('app_version.json')) {
-            Storage::put('app_version.json', '{"os": "AOS","app_id": "com.bokmansa.imasic","version": "1.0"}');
+            Storage::put('app_version.json', '{"os": "AOS","app_id": "com.bokmansa.imasic","version": "1.0.0"}');
         }
 
         $content = file_get_contents(storage_path('app/app_version.json'));
