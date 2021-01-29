@@ -4,6 +4,7 @@ namespace App\Http\Controllers\APP;
 
 use App\CcpCdInfo;
 use App\CcpData;
+use App\CcpEscYn;
 use App\CcpEscData;
 use App\JobOrd;
 use App\JobOrdDtl;
@@ -27,6 +28,7 @@ use App\Http\Resources\AppGetProcessStatusDetailResource;
 use App\Http\Resources\AppGetCcpDivisionResource;
 use App\Http\Resources\AppGetCcpRequestInfoResource;
 use App\Http\Resources\AppGetAllCcpMonitoringResource;
+use App\Http\Resources\AppGetCcpMonitoringDetailResource;
 use App\Http\Resources\AppGetAllCcpBreakawayResource;
 use App\Http\Resources\AppGetCcpBreakawayInfoResource;
 use App\Http\Resources\AppVersionResource;
@@ -90,6 +92,9 @@ class AppController extends Controller
             case 'get_all_ccp_breakaway': return $this->getAllCcpBreakaway($request);
             case 'get_ccp_breakaway_info': return $this->getCcpBreakawayInfo($request);
             case 'write_ccp_breakaway': return $this->writeCcpBreakaway($request);
+            case 'get_ccp_monitoring_detail': return $this->getCcpMonitoringDetail($request);
+            case 'apply_ccp_monitoring_exception_on': return $this->applyCcpMonitoringExceptionOn($request);
+            case 'apply_ccp_monitoring_exception_off': return $this->applyCcpMonitoringExceptionOff($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -1102,6 +1107,92 @@ class AppController extends Controller
 
         $item->update([
             'REASON' => '발생원인: ' . $request->input('cause') . '조치결과: ' . $request->input('action')
+        ]);
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => 'Success',
+        ]);
+    }
+
+    public function getCcpMonitoringDetail(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required'
+        ]);
+        $idx = $request->input('idx');
+        $idxArr = explode('-', $idx);
+
+        $deviceId = array_key_exists(0, $idxArr) ? $idxArr[0] : null;
+        $srcCd = array_key_exists(1, $idxArr) ? $idxArr[1] : null;
+        $srtDtm = array_key_exists(2, $idxArr) ? $idxArr[2] : null;
+
+        $items = CcpData::select('DEVICE_ID', 'DATA', 'REG_DTM')->where('DEVICE_ID', $deviceId);
+        $from = now()->subHours(24)->format('YmdHis');
+        $items = $items->whereRaw('CAST(REG_DTM AS SIGNED) >= ' . intval($from));
+        $items = $items->orderBy('REG_DTM', 'ASC')->get();
+        $useYn = CcpEscYn::where('DEVICE_ID', $deviceId)->value('USE_YN');
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
+            'idx' => $idx,
+            'exception' => !empty($useYn) ? $useYn : null,
+            'current_dtm' => $items->last()->REG_DTM,
+            'current_data' => $items->last()->DATA . $this->unit($deviceId),
+            'min' => $items->min('DATA') . $this->unit($deviceId),
+            'max' => $items->max('DATA') . $this->unit($deviceId),
+            'data' => AppGetCcpMonitoringDetailResource::collection($items)
+        ]);
+    }
+
+    public function applyCcpMonitoringExceptionOn(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required'
+        ]);
+        $idx = $request->input('idx');
+        $idxArr = explode('-', $idx);
+
+        $deviceId = array_key_exists(0, $idxArr) ? $idxArr[0] : null;
+        $srcCd = array_key_exists(1, $idxArr) ? $idxArr[1] : null;
+        $srtDtm = array_key_exists(2, $idxArr) ? $idxArr[2] : null;
+
+        CcpEscYn::updateOrInsert(
+        [
+            'DEVICE_ID' => $deviceId,
+        ],
+        [
+            'USE_YN' => 'Y'
+        ]);
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => 'Success',
+        ]);
+    }
+
+    public function applyCcpMonitoringExceptionOff(Request $request)
+    {
+        $request->validate([
+            'idx' => 'required'
+        ]);
+        $idx = $request->input('idx');
+        $idxArr = explode('-', $idx);
+
+        $deviceId = array_key_exists(0, $idxArr) ? $idxArr[0] : null;
+        $srcCd = array_key_exists(1, $idxArr) ? $idxArr[1] : null;
+        $srtDtm = array_key_exists(2, $idxArr) ? $idxArr[2] : null;
+
+        CcpEscYn::updateOrInsert(
+        [
+            'DEVICE_ID' => $deviceId,
+        ],
+        [
+            'USE_YN' => 'N'
         ]);
 
         return $this->jsonResponse([

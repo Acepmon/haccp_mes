@@ -17,7 +17,7 @@ class CcpEscData extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
-    // protected $connection = 'haccp_server';
+    protected $connection = 'haccp_server';
 
     protected $guarded = [];
 
