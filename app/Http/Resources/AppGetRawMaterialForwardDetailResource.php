@@ -14,9 +14,10 @@ class AppGetRawMaterialForwardDetailResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'item_nm' => $this['item_nm'],
-            'req' => $this['req'],
-        ];
+        // return [
+        //     'item_nm' => $this['item_nm'],
+        //     'req' => $this['req'],
+        // ];
+        return parent::toArray($request);
     }
 }

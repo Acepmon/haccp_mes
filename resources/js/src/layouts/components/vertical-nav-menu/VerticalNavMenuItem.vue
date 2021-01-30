@@ -72,7 +72,7 @@
               color="primary"
               type="border"
               size="large"
-              >{{ $t("Standalone Window") }}</vs-button
+              >{{ $t("StandaloneWindow") }}</vs-button
             >
           </template>
           <template v-slot:action>

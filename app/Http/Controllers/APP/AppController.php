@@ -109,8 +109,8 @@ class AppController extends Controller
         $appVer = $this->getAppVer();
 
         return $this->jsonResponse([
-            // 'os' => $appVer->os,
-            // 'app_id' => $appVer->app_id,
+            'os' => $appVer->os,
+            'app_id' => $appVer->app_id,
             'version' => $appVer->version,
         ]);
     }
@@ -709,7 +709,13 @@ class AppController extends Controller
 
     public function getDayProductionList(Request $request)
     {
-        $items = JobOrd::get();
+        $request->validate([
+            'search_date' => 'required'
+        ]);
+        $searchDate = $request->input('search_date');
+        $searchDate = now()->parse($searchDate)->format('Ymd');
+
+        $items = JobOrd::where('JOB_NO', 'LIKE', $searchDate . '%')->get();
 
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
@@ -756,7 +762,13 @@ class AppController extends Controller
 
     public function getRawMaterialForwarding(Request $request)
     {
-        $items = JobOrd::get();
+        $request->validate([
+            'search_date' => 'required'
+        ]);
+        $searchDate = $request->input('search_date');
+        $searchDate = now()->parse($searchDate)->format('Ymd');
+
+        $items = JobOrd::where('JOB_NO', 'LIKE', $searchDate . '%')->get();
 
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
@@ -775,25 +787,39 @@ class AppController extends Controller
 
         $idx = $request->input('idx');
         $items = JobOrd::where('JOB_NO', $idx)->get();
-        $details = $this->queryJobOrdBomDetails($items);
-        $merged = [];
-        foreach ($details as $detail) {
-            $merged = array_merge($merged, $detail['subdetails']->toArray());
-        }
+        $details = collect($this->queryJobOrdBomDetails($items));
+        $details = $details->map(function ($detail) {
+            return [
+                'item_nm' => $detail['item_nm'],
+                //'item_id' => $detail['item_id'],
+                'subdetails' => collect($detail['subdetails'])->map(function ($subdetail) {
+                    return [
+                        'item_nm' => $subdetail['item_nm'],
+                        'ord_qty' => $subdetail['req']
+                    ];
+                }),
+            ];
+        });
 
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
             'status' => 'success',
             'msg' => '',
-            'rows' => count($merged),
+            'rows' => count($details),
             'idx' => $idx,
-            'data' => AppGetRawMaterialForwardDetailResource::collection($merged)
+            'data' => AppGetRawMaterialForwardDetailResource::collection($details)
         ]);
     }
 
     public function getProcessStatus(Request $request)
     {
-        $items = JobOrd::get();
+        $request->validate([
+            'search_date' => 'required'
+        ]);
+        $searchDate = $request->input('search_date');
+        $searchDate = now()->parse($searchDate)->format('Ymd');
+
+        $items = JobOrd::where('JOB_NO', 'LIKE', $searchDate . '%')->get();
 
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
@@ -1243,29 +1269,31 @@ class AppController extends Controller
         $details = [];
 
         foreach ($items as $jobOrd) {
-            $subdetails = DB::table('JOB_ORD_BOM')
-                ->select('JOB_ORD_BOM.ITEM2_ID AS ITEM_ID', 'JOB_ORD_BOM.ITEM2_NM AS ITEM_NM', DB::raw('(JOB_ORD.ORD_QTY * JOB_ORD_BOM.USE_QTY / JOB_ORD_BOM.PROD_QTY) AS REQ'))
-                ->join('JOB_ORD', 'JOB_ORD_BOM.ITEM_ID', '=', 'JOB_ORD.ITEM_ID')
-                ->where('JOB_ORD_BOM.ITEM_ID', $jobOrd->ITEM_ID)
-                ->get();
+            $subdetails = DB::select(DB::raw("select A.`JOB_NO`, A.`ITEM2_ID` as `ITEM_ID`, A.`ITEM2_NM` AS ITEM_NM, (B.ORD_QTY * A.USE_QTY / A.PROD_QTY) AS REQ 
+from `JOB_ORD_BOM` A, `JOB_ORD` B where A.`ITEM_ID` = B.`ITEM_ID` 
+and A.`JOB_NO` = B.`JOB_NO` and B.`JOB_NO` = '".$jobOrd->JOB_NO."' and B.ITEM_ID = '".$jobOrd->ITEM_ID."'"));
+            $subdetails = collect($subdetails);
 
             $sum = $subdetails->sum('REQ');
+            $mappedSubDetails = $subdetails->map(function ($subdetail) use ($sum) {
+                $ratio = 100 / $sum * intval($subdetail->REQ);
+                return [
+                    'job_no' => $subdetail->JOB_NO,
+                    'item_id' => $subdetail->ITEM_ID,
+                    'item_nm' => $subdetail->ITEM_NM,
+                    'req' => number_format(intval($subdetail->REQ)),
+                    'ratio' => number_format((float) $ratio, 2, '.', ''),
+                    'origin' => ''
+                ];
+            });
 
             array_push($details, [
                 'reqSum' => number_format($sum),
                 'ratio' => 100,
                 'origin' => '',
                 'item_id' => $jobOrd->ITEM_ID,
-                'subdetails' => $subdetails->map(function ($subdetail) use ($sum) {
-                    $ratio = 100 / $sum * intval($subdetail->REQ);
-                    return [
-                        'item_id' => $subdetail->ITEM_ID,
-                        'item_nm' => $subdetail->ITEM_NM,
-                        'req' => number_format(intval($subdetail->REQ)),
-                        'ratio' => number_format((float) $ratio, 2, '.', ''),
-                        'origin' => ''
-                    ];
-                })
+                'item_nm' => $jobOrd->ITEM_NM,
+                'subdetails' => $mappedSubDetails
             ]);
         }
 

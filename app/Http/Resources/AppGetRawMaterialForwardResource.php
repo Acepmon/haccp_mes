@@ -16,7 +16,7 @@ class AppGetRawMaterialForwardResource extends JsonResource
     {
         return [
             'item_nm' => $this->ITEM_NM,
-            // 'ord_qty' => $this->ORD_QTY,
+            'ord_qty' => $this->ORD_QTY,
             'idx' => $this->JOB_NO,
         ];
     }

@@ -25,6 +25,7 @@ export default {
     NotifReadAll: 'Read All',
     NotifDeleteAll: 'Delete All',
 
+    StandaloneWindow: 'Standalone Window',
     ToGraph: 'To Graph',
     SwitchToCcpMonitor: 'Switch to CCP Monitoring',
     SwitchToJobOrd: 'Switch to job order monitoring',
@@ -79,9 +80,10 @@ export default {
     NotifReadAll: '전체읽음',
     NotifDeleteAll: '전체삭제',
 
-    ToGraph: 'To Graph',
-    SwitchToCcpMonitor: 'Switch to CCP Monitoring',
-    SwitchToJobOrd: 'Switch to job order monitoring',
+    StandaloneWindow: '독립화면으로 전환',
+    ToGraph: '그래프 보기',
+    SwitchToCcpMonitor: 'CCP 모니터링으로 전환',
+    SwitchToJobOrd: '작업지시 모니터링으로 전환',
 
     AllCcpToggleOn: "모든 장비를 켜시겠습니다까?",
     AllCcpToggleOff: "모든 장비를 끄겠습니까?",
