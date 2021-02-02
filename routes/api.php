@@ -51,6 +51,7 @@ Route::group([
         Route::get('user/notifications/unread', 'AuthController@unreadNotifications');
         Route::post('user/notifications', 'AuthController@readAllNotifications');
         Route::delete('user/notifications', 'AuthController@deleteNotifications');
+        Route::post('user/sendNotice', 'AuthController@sendNotice');
         Route::post('logout', 'AuthController@logout');
     });
 });

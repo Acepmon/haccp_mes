@@ -11,6 +11,13 @@
           >{{ $t("Query") }}</vs-button
         >
         <vs-button
+          @click="sendNotice()"
+          class="mx-1"
+          color="dark"
+          type="border"
+          >{{ $t("SendNotice") }}</vs-button
+        >
+        <vs-button
           @click="readAll()"
           class="mx-1"
           color="dark"
@@ -36,10 +43,25 @@
 
     <vs-divider />
 
+    <app-form>
+      <app-form-group required full>
+        <template v-slot:label>알림제목</template>
+        <vs-input class="control-field" v-model="notice.title" />
+      </app-form-group>
+      <app-form-group required full>
+        <template v-slot:label>알림내용</template>
+        <vs-textarea class="control-field-lg" v-model="notice.msg" />
+      </app-form-group>
+    </app-form>
+
+    <vs-divider />
+
     <ag-grid-vue
       ref="agGridTable"
       :localeText="localeText"
       :gridOptions="gridOptions"
+      rowSelection="single"
+      @selection-changed="handleSelected"
       class="ag-theme-material w-100 my-4 ag-grid-table"
       style="max-height: 100%;"
       :columnDefs="columnDefs"
@@ -81,6 +103,10 @@ export default {
   },
   data() {
     return {
+      notice: {
+        title: null,
+        msg: null
+      },
       items: [],
       localeText: AG_GRID_LOCALE_KR,
       maxPageNumbers: 7,
@@ -103,7 +129,7 @@ export default {
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
         { headerName: '제목', field: 'title', filter: false, width: 200 },
-        { headerName: '알림 내용', field: 'msg', filter: false, width: 400 },
+        { headerName: '알림 내용', field: 'msg', filter: false, width: 600 },
         { headerName: '알림 시간', field: 'time', filter: false, width: 200 },
       ]
     };
@@ -179,6 +205,25 @@ export default {
       for (const [key, value] of Object.entries(errors)) {
         this.$set(this.errors, key, Array.isArray(value) ? value[0] : value);
       }
+    },
+
+    handleSelected () {
+      let rows = this.gridApi.getSelectedRows()
+      if (rows.length > 0) {
+        this.$set(this, 'notice', rows[0])
+      }
+    },
+
+    sendNotice () {
+      axios.get('/sanctum/csrf-cookie').then(() => {
+        axios.post('/api/auth/user/sendNotice', this.notice).then((res) => {
+          this.$vs.notify({
+            title: this.$t("Success"),
+            position: "top-right",
+            color: "success"
+          });
+        })
+      });
     },
 
     query () {

@@ -6,12 +6,14 @@ use App\Events\UserPasswordUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserResource;
+use App\Notifications\Notice;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Notification;
 
 class AuthController extends Controller
 {
@@ -158,6 +160,23 @@ class AuthController extends Controller
         $user = User::find(Auth::id());
 
         $user->notifications()->delete();
+
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
+    public function sendNotice(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'msg' => 'required'
+        ]);
+
+        $users = User::all();
+        $notice = new Notice($request->input('title'), $request->input('msg'));
+
+        Notification::send($users, $notice);
 
         return response()->json([
             'status' => 'success'

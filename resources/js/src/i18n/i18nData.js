@@ -22,6 +22,7 @@ export default {
     Off: 'Off',
     Error: 'Error',
 
+    SendNotice: 'Send Notice',
     NotifReadAll: 'Read All',
     NotifDeleteAll: 'Delete All',
 
@@ -77,6 +78,7 @@ export default {
     Off: 'Off',
     Error: 'Error',
 
+    SendNotice: '알림',
     NotifReadAll: '전체읽음',
     NotifDeleteAll: '전체삭제',
 
