@@ -8,6 +8,8 @@
     <!-- <link rel="icon" href="<%= BASE_URL %>favicon.ico"> -->
 
     <title>HACCP MES</title>
+
+    <link rel="manifest" href="manifest.json">
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset(mix('css/main.css')) }}">
     <link rel="stylesheet" href="{{ asset(mix('css/iconfont.css')) }}">
