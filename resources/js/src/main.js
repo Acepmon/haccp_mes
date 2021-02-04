@@ -70,29 +70,6 @@ window.Echo = new Echo({
   forceTLS: false,
 })
 
-import * as firebase from 'firebase/app'
-import 'firebase/messaging'
-
-var config = {
-  apiKey: "AIzaSyCME99yTOTC4LKPIqUqSOuyxsLSqGRIUg8",
-  authDomain: "haccp-mes.firebaseapp.com",
-  projectId: "haccp-mes",
-  storageBucket: "haccp-mes.appspot.com",
-  messagingSenderId: "518404578173",
-  appId: "1:518404578173:web:3a85c5553012e22826ca14",
-  measurementId: "G-NJTD4RD45T"
-}
-firebase.initializeApp(config)
-
-navigator.serviceWorker.register('firebase-messaging-sw.js', {
-  scope: 'firebase-cloud-messaging-push-scope'
-}).then((registration) => {
-  const messaging = firebase.messaging();
-  messaging.useServiceWorker(registration)
-}).catch(err => {
-  console.log(err)
-})
-
 Vue.config.productionTip = false
 
 new Vue({

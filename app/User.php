@@ -95,6 +95,12 @@ class User extends Authenticatable implements JWTSubject
         return $this->DEVICE_TOKEN;
     }
 
+    public function removeDeviceToken()
+    {
+        $this->DEVICE_TOKEN = null;
+        $this->save();
+    }
+
     public function role()
     {
         return $this->hasMany('App\CommCd', 'COMM2_CD', 'ROLE_CD')->where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$']);

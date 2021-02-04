@@ -61,7 +61,6 @@ import axios from 'axios'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import { mapActions, mapGetters } from "vuex";
 import firebase from 'firebase/app'
-import 'firebase/app'
 import 'firebase/messaging'
 
 export default {
@@ -200,11 +199,21 @@ export default {
         });
       })
 
-    const messaging = firebase.messaging()
+    firebase.initializeApp({
+        apiKey: "AIzaSyCME99yTOTC4LKPIqUqSOuyxsLSqGRIUg8",
+        authDomain: "haccp-mes.firebaseapp.com",
+        projectId: "haccp-mes",
+        storageBucket: "haccp-mes.appspot.com",
+        messagingSenderId: "518404578173",
+        appId: "1:518404578173:web:3a85c5553012e22826ca14",
+        measurementId: "G-NJTD4RD45T"
+    });
+
+    const messaging = firebase.messaging();
 
     messaging.usePublicVapidKey("BIPX6O-78pp9Ftw4rBEEaXB4c5JciYDcB22_y-ZlYgJemT1MkkESk5Qwt3wCk89Ey1SIvb8OITQVNVaWW5VHgqQ")
 
-    messaging.requestPermission().then(() => {
+    Notification.requestPermission().then(() => {
       console.log('Notification permission granted.')
       messaging.getToken().then((token) => {
         console.log('New token created: ', token)
@@ -212,15 +221,6 @@ export default {
       })
     }).catch((err) => {
       console.log('Unable to get permission to notify.', err)
-    })
-
-    messaging.onTokenRefresh(function () {
-      messaging.getToken().then(function (newToken) {
-        console.log('Token refreshed: ', newToken)
-        this.saveNotificationToken(newToken)
-      }).catch(function (err) {
-        console.log('Unable to retrieve refreshed token ', err)
-      })
     })
   },
 

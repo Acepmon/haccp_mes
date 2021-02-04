@@ -11,7 +11,9 @@
     measurementId: "G-NJTD4RD45T"
 });
 
-const messaging = firebase.messaging();
+const messaging = firebase.messaging()
+
+messaging.usePublicVapidKey('BIPX6O-78pp9Ftw4rBEEaXB4c5JciYDcB22_y-ZlYgJemT1MkkESk5Qwt3wCk89Ey1SIvb8OITQVNVaWW5VHgqQ');
 
 // If you would like to customize notifications that are received in the
 // background (Web app is closed or not in browser focus) then you should

@@ -1,7 +1,12 @@
 {
     "name": "HACCP MES",
     "short_name": "HACCP MES",
-    "version": "1.0",
-    "manifest_version": 2,
+    "icons": [{
+        "src": "images/logo/logo.png",
+        "sizes": "55x55",
+        "type": "image/png"
+    }],
+    "start_url": "/",
+    "display": "standalone",
     "gcm_sender_id": "518404578173"
-}
+  }

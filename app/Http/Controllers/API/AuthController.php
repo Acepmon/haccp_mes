@@ -176,7 +176,13 @@ class AuthController extends Controller
         $users = User::all();
         $notice = new Notice($request->input('title'), $request->input('msg'));
 
-        Notification::send($users, $notice);
+        foreach ($users as $user) {
+            try {
+                Notification::send($user, $notice);
+            } catch (\Exception $ex) {
+                continue;
+            }
+        }
 
         return response()->json([
             'status' => 'success'
