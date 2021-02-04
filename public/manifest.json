@@ -1,5 +1,7 @@
 {
     "name": "HACCP MES",
+    "short_name": "HACCP MES",
     "version": "1.0",
-    "manifest_version": 2
+    "manifest_version": 2,
+    "gcm_sender_id": "518404578173"
 }

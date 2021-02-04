@@ -200,17 +200,6 @@ export default {
         });
       })
 
-    var config = {
-      apiKey: "AIzaSyCME99yTOTC4LKPIqUqSOuyxsLSqGRIUg8",
-      authDomain: "haccp-mes.firebaseapp.com",
-      projectId: "haccp-mes",
-      storageBucket: "haccp-mes.appspot.com",
-      messagingSenderId: "518404578173",
-      appId: "1:518404578173:web:3a85c5553012e22826ca14",
-      measurementId: "G-NJTD4RD45T"
-    }
-    firebase.initializeApp(config)
-
     const messaging = firebase.messaging()
 
     messaging.usePublicVapidKey("BIPX6O-78pp9Ftw4rBEEaXB4c5JciYDcB22_y-ZlYgJemT1MkkESk5Qwt3wCk89Ey1SIvb8OITQVNVaWW5VHgqQ")
