@@ -182,4 +182,20 @@ class AuthController extends Controller
             'status' => 'success'
         ]);
     }
+
+    public function saveDeviceToken(Request $request)
+    {
+        $request->validate([
+            'registration_id' => 'required',
+            'type' => 'nullable'
+        ]);
+
+        $user = User::find(Auth::id());
+        $user->DEVICE_TOKEN = $request->input('registration_id');
+        $user->save();
+
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
 }

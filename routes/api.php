@@ -52,6 +52,7 @@ Route::group([
         Route::post('user/notifications', 'AuthController@readAllNotifications');
         Route::delete('user/notifications', 'AuthController@deleteNotifications');
         Route::post('user/sendNotice', 'AuthController@sendNotice');
+        Route::post('user/device_token', 'AuthController@saveDeviceToken');
         Route::post('logout', 'AuthController@logout');
     });
 });

@@ -218,7 +218,7 @@ export default {
       axios.get('/sanctum/csrf-cookie').then(() => {
         axios.post('/api/auth/user/sendNotice', this.notice).then((res) => {
           this.$vs.notify({
-            title: this.$t("Success"),
+            title: this.$t("SuccessAddData"),
             position: "top-right",
             color: "success"
           });

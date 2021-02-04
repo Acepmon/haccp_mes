@@ -11,7 +11,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Database\Eloquent\Collection;
 
-class RemindHealthCheck extends Notification
+class RemindHealthCheck extends Notification implements ShouldQueue
 {
     use Queueable;
 

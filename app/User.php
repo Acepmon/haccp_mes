@@ -90,6 +90,11 @@ class User extends Authenticatable implements JWTSubject
         return [$this->EMAIL => $this->USER_NM];
     }
 
+    public function routeNotificationForFcm()
+    {
+        return $this->device_token;
+    }
+
     public function role()
     {
         return $this->hasMany('App\CommCd', 'COMM2_CD', 'ROLE_CD')->where('COMM1_CD', 'A10')->whereNotIn('COMM2_CD', ['$$']);
