@@ -33,7 +33,9 @@ use App\Http\Resources\AppGetAllCcpBreakawayResource;
 use App\Http\Resources\AppGetCcpBreakawayInfoResource;
 use App\Http\Resources\AppVersionResource;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -48,6 +50,7 @@ class AppController extends Controller
         $type = $request->input('request_type');
 
         switch ($type) {
+            case 'write_device_token': return $this->writeDeviceToken($request);
             case 'get_doc_daily_list': return $this->getDocDailyList($request);
             case 'apply_attendance': return $this->applyAttendance($request);
             case 'apply_leave_work': return $this->applyLeaveWork($request);
@@ -112,6 +115,23 @@ class AppController extends Controller
             'os' => $appVer->os,
             'app_id' => $appVer->app_id,
             'version' => $appVer->version,
+        ]);
+    }
+
+    public function writeDeviceToken(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+        ]);
+
+        $user = User::where('USER_ID', Auth::id())->first();
+        $user->DEVICE_TOKEN = $request->input('token');
+        $user->save();
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => '',
         ]);
     }
 

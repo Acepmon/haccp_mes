@@ -92,7 +92,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function routeNotificationForFcm()
     {
-        return $this->device_token;
+        return $this->DEVICE_TOKEN;
     }
 
     public function role()
