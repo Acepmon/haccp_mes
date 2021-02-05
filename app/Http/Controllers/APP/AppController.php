@@ -14,6 +14,7 @@ use App\EdocFileHaccp;
 use App\CommCd;
 use App\Worker;
 use App\WorkerAttn;
+use App\AttFile;
 use App\Http\Resources\AppGetDocDailyListResource;
 use App\Http\Resources\AppGetCcpDocResource;
 use App\Http\Resources\AppChecklistDetailResource;
@@ -98,6 +99,7 @@ class AppController extends Controller
             case 'get_ccp_monitoring_detail': return $this->getCcpMonitoringDetail($request);
             case 'apply_ccp_monitoring_exception_on': return $this->applyCcpMonitoringExceptionOn($request);
             case 'apply_ccp_monitoring_exception_off': return $this->applyCcpMonitoringExceptionOff($request);
+            case 'upload_doc_file': return $this->uploadDocFile($request);
             default:
                 return $this->jsonResponse([
                     'request_type' => $request->input('request_type'),
@@ -1245,6 +1247,77 @@ class AppController extends Controller
             'request_type' => $request->input('request_type'),
             'status' => 'success',
             'msg' => 'Success',
+        ]);
+    }
+
+    public function uploadDocFile(Request $request)
+    {
+        $request->validate([
+            'doc_idx' => 'required',
+            'upload_doc_file' => 'required|file',
+        ]);
+
+        $dtm = now()->format('Ymdhis');
+
+        if (!EdocFileHaccp::where('HACCP_SEQ', $request->input('doc_idx'))->exists()) {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => 'Document not found',
+            ], 422);
+        }
+
+        if ($request->hasFile('upload_doc_file')) {
+            $file = $request->file('upload_doc_file');
+
+            // foreach ($files as $index => $file) {
+                $path = $file->store('files');
+
+                $att = AttFile::create([
+                    'ATT_DTM' => $dtm,
+                    'ATT_SEQ' => 1,
+                    'ATT_NM' => $file->getClientOriginalName(),
+                    'ATT_PATH' => $path,
+                    'FILE_SZ' => Storage::size($path),
+                    'RMK' => null,
+                ]);
+            // }
+        } else {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => 'Upload Failed',
+            ], 422);
+        }
+
+        $item = EdocFileHaccp::where('HACCP_SEQ', $request->input('doc_idx'))->first();
+
+        if ($item->att_file->count() > 0) {
+            if ($item->att_file->count() > 0) {
+                $item->att_file->each(function ($att) {
+                    if (Storage::exists($att->ATT_PATH)) {
+                        Storage::delete($att->ATT_PATH);
+                    }
+                });
+                $item->att_file()->delete();
+            }
+        }
+
+        $item->update([
+            'ATT_DTM' => $request->hasFile('upload_doc_file') ? $dtm : null,
+        ]);
+
+        return $this->jsonResponse([
+            'request_type' => $request->input('request_type'),
+            'status' => 'success',
+            'msg' => 'Success',
+            'data' => [
+                'server_name' => 'bokmansa.com',
+                'path' => $att->ATT_PATH,
+                'size' => $att->FILE_SZ,
+                'type' => 'image/png',
+                'file_title' => $att->ATT_NM
+            ]
         ]);
     }
 

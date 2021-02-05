@@ -369,7 +369,7 @@ export default {
       api
         .fetch({
           ...this.paginationParam,
-          sort: 'ACC_NO',
+          sort: 'ITEM_ID',
           order: 'DESC',
           limit: -1,
           ...search_params,
@@ -413,6 +413,7 @@ export default {
       lot_info
         .fetch({
           acc_no: this.item['prod_info:acc_no'],
+          item_id: this.item['prod_info:item_id'],
           limit: -1,
           sort: 'DT_NO',
           order: 'DESC',

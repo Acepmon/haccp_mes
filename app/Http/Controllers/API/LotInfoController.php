@@ -35,6 +35,10 @@ class LotInfoController extends Controller
             $items = $items->where('ACC_NO', $request->input('acc_no'));
         }
 
+        if ($request->has('item_id')) {
+            $items = $items->where('ITEM_ID', $request->input('item_id'));
+        }
+
         if ($limit == -1) {
             $items = $items->orderBy($sort, $order)->get();
         } else {

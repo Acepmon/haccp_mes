@@ -40,6 +40,10 @@ class EdocFileHaccp extends Model
         return $this->belongsTo('App\CommCd', 'APR_CD', 'COMM2_CD')->where('COMM1_CD', 'C10')->whereNotIn('COMM2_CD', ['$$']);
     }
 
+    public function att_file() {
+        return $this->hasMany('App\AttFile', 'ATT_DTM', 'ATT_DTM');
+    }
+
     public function previewHtml()
     {
         $preview = $this->DOC_HTML;
