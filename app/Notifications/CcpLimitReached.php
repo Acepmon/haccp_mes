@@ -41,7 +41,7 @@ class CcpLimitReached extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail', 'database', FcmChannel::class];
+        return ['mail', 'database', 'broadcast', FcmChannel::class];
     }
 
     /**
