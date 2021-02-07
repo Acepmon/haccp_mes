@@ -1257,8 +1257,6 @@ class AppController extends Controller
             'upload_doc_file' => 'required|file',
         ]);
 
-        $dtm = now()->format('Ymdhis');
-
         if (!EdocFileHaccp::where('HACCP_SEQ', $request->input('doc_idx'))->exists()) {
             return $this->jsonResponse([
                 'request_type' => $request->input('request_type'),
@@ -1267,15 +1265,19 @@ class AppController extends Controller
             ], 422);
         }
 
+        $item = EdocFileHaccp::where('HACCP_SEQ', $request->input('doc_idx'))->first();
+        $attFiles = $item->att_file;
+        $dtm = $attFiles->count() > 0 ? $attFiles->first()->ATT_DTM : now()->format('Ymdhis');
+
         if ($request->hasFile('upload_doc_file')) {
             $file = $request->file('upload_doc_file');
 
             // foreach ($files as $index => $file) {
                 $path = $file->store('files');
-
+                $seq = $attFiles->count() > 0 ? $attFiles->count() + 1 : 1;
                 $att = AttFile::create([
                     'ATT_DTM' => $dtm,
-                    'ATT_SEQ' => 1,
+                    'ATT_SEQ' => $seq,
                     'ATT_NM' => $file->getClientOriginalName(),
                     'ATT_PATH' => $path,
                     'FILE_SZ' => Storage::size($path),
@@ -1290,21 +1292,19 @@ class AppController extends Controller
             ], 422);
         }
 
-        $item = EdocFileHaccp::where('HACCP_SEQ', $request->input('doc_idx'))->first();
-
-        if ($item->att_file->count() > 0) {
-            if ($item->att_file->count() > 0) {
-                $item->att_file->each(function ($att) {
-                    if (Storage::exists($att->ATT_PATH)) {
-                        Storage::delete($att->ATT_PATH);
-                    }
-                });
-                $item->att_file()->delete();
-            }
-        }
+        // if ($item->att_file->count() > 0) {
+        //     if ($item->att_file->count() > 0) {
+        //         $item->att_file->each(function ($att) {
+        //             if (Storage::exists($att->ATT_PATH)) {
+        //                 Storage::delete($att->ATT_PATH);
+        //             }
+        //         });
+        //         $item->att_file()->delete();
+        //     }
+        // }
 
         $item->update([
-            'ATT_DTM' => $request->hasFile('upload_doc_file') ? $dtm : null,
+            'ATT_DTM' => $dtm,
         ]);
 
         return $this->jsonResponse([
@@ -1314,8 +1314,9 @@ class AppController extends Controller
             'data' => [
                 'server_name' => 'bokmansa.com',
                 'path' => $att->ATT_PATH,
+                // 'path' => Storage::url($att->ATT_PATH),
                 'size' => $att->FILE_SZ,
-                'type' => 'image/png',
+                'type' => Storage::mimeType($att->ATT_PATH),
                 'file_title' => $att->ATT_NM
             ]
         ]);
