@@ -502,6 +502,14 @@ class AppController extends Controller
 
         $item = $item->first();
 
+        if ($item == null) {
+            return $this->jsonResponse([
+                'request_type' => $request->input('request_type'),
+                'status' => 'error',
+                'msg' => 'Document not found',
+            ], 422);
+        }
+
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
             'status' => 'success',
