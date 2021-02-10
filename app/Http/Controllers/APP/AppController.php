@@ -493,7 +493,7 @@ class AppController extends Controller
     public function getChecklistDetail(Request $request)
     {
         $docIdx = $request->input('doc_idx');
-        $item = EdocFileHaccp::where('HACCP_SEQ', $docIdx);
+        $item = EdocFile::where('DOC_ID', $docIdx);
 
         // if ($request->has('doc_approval_idx')) {
         //     $docApprovalIdx = $request->input('doc_approval_idx');
@@ -523,6 +523,7 @@ class AppController extends Controller
         $request->validate([
             'doc_idx' => 'required',
             'appdata' => 'required',
+            'upload_doc_file' => 'nullable|file',
             'doc_approval_idx' => 'nullable',
         ]);
 
@@ -531,6 +532,30 @@ class AppController extends Controller
         $docApprovalIdx = $request->input('doc_approval_idx');
 
         $item = $this->insertEdocFileHaccp($docIdx, $appdata, $docApprovalIdx, 'TEMP');
+
+        $attFiles = $item->att_file;
+        $dtm = $attFiles->count() > 0 ? $attFiles->first()->ATT_DTM : now()->format('Ymdhis');
+
+        if ($request->hasFile('upload_doc_file')) {
+            $file = $request->file('upload_doc_file');
+
+            // foreach ($files as $index => $file) {
+                $path = $file->store('files');
+                $seq = $attFiles->count() > 0 ? $attFiles->count() + 1 : 1;
+                $att = AttFile::create([
+                    'ATT_DTM' => $dtm,
+                    'ATT_SEQ' => $seq,
+                    'ATT_NM' => $file->getClientOriginalName(),
+                    'ATT_PATH' => $path,
+                    'FILE_SZ' => Storage::size($path),
+                    'RMK' => null,
+                ]);
+            // }
+
+            $item->update([
+                'ATT_DTM' => $dtm,
+            ]);
+        }
 
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
@@ -545,6 +570,7 @@ class AppController extends Controller
             'doc_idx' => 'required',
             'appdata' => 'required',
             'doc_approval_idx' => 'required',
+            'upload_doc_file' => 'nullable|file',
         ]);
 
         $docIdx = $request->input('doc_idx');
@@ -552,6 +578,30 @@ class AppController extends Controller
         $docApprovalIdx = $request->input('doc_approval_idx');
 
         $item = $this->insertEdocFileHaccp($docIdx, $appdata, $docApprovalIdx, '10');
+
+        $attFiles = $item->att_file;
+        $dtm = $attFiles->count() > 0 ? $attFiles->first()->ATT_DTM : now()->format('Ymdhis');
+
+        if ($request->hasFile('upload_doc_file')) {
+            $file = $request->file('upload_doc_file');
+
+            // foreach ($files as $index => $file) {
+                $path = $file->store('files');
+                $seq = $attFiles->count() > 0 ? $attFiles->count() + 1 : 1;
+                $att = AttFile::create([
+                    'ATT_DTM' => $dtm,
+                    'ATT_SEQ' => $seq,
+                    'ATT_NM' => $file->getClientOriginalName(),
+                    'ATT_PATH' => $path,
+                    'FILE_SZ' => Storage::size($path),
+                    'RMK' => null,
+                ]);
+            // }
+
+            $item->update([
+                'ATT_DTM' => $dtm,
+            ]);
+        }
 
         return $this->jsonResponse([
             'request_type' => $request->input('request_type'),
