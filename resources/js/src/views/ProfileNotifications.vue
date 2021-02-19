@@ -186,10 +186,9 @@ export default {
     },
 
     clear() {
-      this.$set(this, "item", {
-        "user:user_id": null,
-        "user:user_nm": null,
-        "user:email": null,
+      this.$set(this, "notice", {
+        title: null,
+        msg: null
       });
     },
 
@@ -222,6 +221,7 @@ export default {
             position: "top-right",
             color: "success"
           });
+          this.clear()
         })
       });
     },
@@ -232,6 +232,7 @@ export default {
         axios.get('/api/auth/user/notifications').then((res) => {
           this.spinner(false)
           this.items = res.data.data
+          this.clear()
         })
         .catch((err) => {
           this.spinner(false);
@@ -254,6 +255,7 @@ export default {
           this.spinner(false)
           this.query()
           this.fetchNotifications()
+          this.clear()
         })
         .catch((err) => {
           this.spinner(false);
@@ -276,6 +278,7 @@ export default {
           this.spinner(false)
           this.query()
           this.fetchNotifications()
+          this.clear()
         })
         .catch((err) => {
           this.spinner(false);

@@ -104,7 +104,7 @@
       </vs-table>
     </vs-popup>
 
-    <vs-popup title="" :active.sync="prodInfoDialog" button-close-hidden id="div-with-loading2" class="vs-con-loading__container preview-dialog">
+    <vs-popup title="연결전표 No별 생산불출 내역" :active.sync="prodInfoDialog" button-close-hidden id="div-with-loading2" class="vs-con-loading__container preview-dialog">
       <app-control>
         <template v-slot:action>
           <vs-button
@@ -235,7 +235,7 @@ export default {
 
       columnDefs2: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50 },
-        { headerName: '일자-No', field: 'prod_info:acc_no', width: 100 },
+        { headerName: '연결전표-No', field: 'prod_info:acc_no', width: 100 },
         { headerName: '품목코드', field: 'prod_info:item_id', width: 100 },
         { headerName: '품목이름', field: 'prod_info:item_nm', width: 100 },
         { headerName: '규격', field: 'prod_info:spec', width: 100 },

@@ -43,7 +43,7 @@
 @if (! empty($salutation))
 {{ $salutation }}
 @else
-감사합니다.<br>
+점검바랍니다!.<br>
 {{ config('app.name') }}
 @endif
 

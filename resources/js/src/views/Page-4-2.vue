@@ -41,16 +41,6 @@
         <template v-slot:filter>
           <span class="pl-5">시리얼/LOT 내역을 보려면 해당 열을 더블클릭하세요!</span>
         </template>
-        <!-- <template v-slot:action>
-          <vs-button
-            @click="exportExcel()"
-            class="mx-1"
-            color="primary"
-            type="border"
-            :disabled="items.length <= 0"
-            >{{ $t("ToExcel") }}</vs-button
-          >
-        </template> -->
       </app-control>
 
       <ag-grid-vue
@@ -115,7 +105,7 @@
       </vs-table>
     </vs-popup>
 
-    <vs-popup title="" :active.sync="lotInfoDialog" button-close-hidden id="div-with-loading2" class="vs-con-loading__container preview-dialog">
+    <vs-popup title="연결전표-No 별 시리얼 Lot 정보" :active.sync="lotInfoDialog" button-close-hidden id="div-with-loading2" class="vs-con-loading__container preview-dialog">
       <app-control>
         <template v-slot:action>
           <vs-button
@@ -216,7 +206,7 @@ export default {
 
       columnDefs: [
         { headerName: 'No', field: 'no', cellStyle: {textAlign: 'center'}, width: 50},
-        { headerName: '일자-No', field: 'prod_info:acc_no', width: 100,},
+        { headerName: '연결전표-No', field: 'prod_info:acc_no', width: 100,},
         { headerName: '품목코드', field: 'prod_info:item_id', filter: true, width: 100,},
         { headerName: '품목이름', field: 'prod_info:item_nm', width: 300,},
         { headerName: '출고창고', field: 'prod_info:out_wh_nm', width: 100,},
@@ -236,6 +226,13 @@ export default {
         { headerName: '시리얼/Lot No', field: 'lot_info:lot_no', width: 100 },
         { headerName: '수량', field: 'lot_info:qty', type: 'numericColumn', width: 100 },
       ],
+
+      pagination: {
+        total: 0,
+        totalPages: 0,
+        pageSize: 50,
+        currentPage: 1
+      }
     }
   },
 
@@ -243,7 +240,7 @@ export default {
     itemsComp: function () {
       return this.items.map((item, index) => {
         return {
-          'no': (index + 1),
+          'no': (this.pagination.currentPage - 1) * this.pagination.pageSize + (index + 1),
           ...item
         } 
       })
@@ -258,12 +255,12 @@ export default {
       })
     },
 
-    paginationParam: function () {
-      return {
-        page: this.pagination.page,
-        limit: this.pagination.limit,
-      };
-    },
+    // paginationParam: function () {
+    //   return {
+    //     page: this.pagination.page,
+    //     limit: this.pagination.limit,
+    //   };
+    // },
 
     // sortParam: function () {
     //   return {
@@ -273,24 +270,50 @@ export default {
     // },
 
 
-    totalPages () {
-      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
-      else return 0
+  //   totalPages () {
+  //     if (this.gridApi) return this.gridApi.paginationGetTotalPages()
+  //     else return 0
+  //   },
+  //   paginationPageSize () {
+  //     if (this.gridApi) return this.gridApi.paginationGetPageSize()
+  //     else return 50
+  //   },
+  //   currentPage: {
+  //     get () {
+  //       if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
+  //       else return 1
+  //     },
+  //     set (val) {
+  //       this.gridApi.paginationGoToPage(val - 1)
+  //     }
+  //   }
+  // },
+  paginationParam: function () {
+    return {
+      page: this.pagination.page,
+      limit: this.pagination.limit,
+    };
+  },
+    
+  totalPages () {
+    if (this.pagination) return this.pagination.totalPages
+    else return 0
+  },
+  paginationPageSize () {
+    if (this.pagination) return this.pagination.pageSize
+    else return 50
+  },
+  currentPage: {
+    get () {
+      if (this.pagination) return this.pagination.currentPage
+      else return 1
     },
-    paginationPageSize () {
-      if (this.gridApi) return this.gridApi.paginationGetPageSize()
-      else return 50
-    },
-    currentPage: {
-      get () {
-        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
-        else return 1
-      },
-      set (val) {
-        this.gridApi.paginationGoToPage(val - 1)
-      }
+    set (val) {
+      this.pagination.currentPage = val
+      this.query(false)
     }
   },
+},
 
   mounted () {
     this.gridApi = this.gridOptions.api
@@ -371,12 +394,16 @@ export default {
           ...this.paginationParam,
           sort: 'ITEM_ID',
           order: 'DESC',
-          limit: -1,
+          // limit: -1,
+          limit: this.pagination.pageSize,
+          page: this.pagination.currentPage,
           ...search_params,
           with: '' // example: disable like this
         })
         .then((res) => {
           this.spinner(false);
+          this.$set(this.pagination, 'total', res.data.meta.total)
+          this.$set(this.pagination, 'totalPages', Math.round(res.data.meta.total / res.data.meta.per_page))
           this.items = res.data.data;
         })
         .catch((err) => {
@@ -413,7 +440,7 @@ export default {
       lot_info
         .fetch({
           acc_no: this.item['prod_info:acc_no'],
-          item_id: this.item['prod_info:item_id'],
+          //item_id: this.item['prod_info:item_id'],
           limit: -1,
           sort: 'DT_NO',
           order: 'DESC',

@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class CcpEscData extends Model
 {
-    use HasCompositePrimaryKey;
+    // use HasCompositePrimaryKey;
 
     protected $table = 'CCP_ESC_DATA';
-    protected $primaryKey = ['DEVICE_ID', 'SRT_DTM'];
+    protected $primaryKey = 'DEVICE_ID';
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;

@@ -22,6 +22,9 @@ class CcpLimitReached extends Notification implements ShouldQueue
     use Queueable;
 
     public $ccpEscData;
+    public $device;
+    public $data;
+    public $msg;
 
     /**
      * Create a new notification instance.
@@ -31,6 +34,9 @@ class CcpLimitReached extends Notification implements ShouldQueue
     public function __construct(CcpEscData $ccpEscData)
     {
         $this->ccpEscData = $ccpEscData;
+        $this->device = $this->ccpEscData->device ? $this->ccpEscData->device->COMM2_NM : $this->ccpEscData->DEVICE_ID;
+        $this->data = $this->ccpEscData->ESC_DATA;
+        $this->msg = '한계이탈장비: '.$this->device.'. 온도: ' . $this->data;
     }
 
     /**
@@ -41,7 +47,7 @@ class CcpLimitReached extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail', 'database', 'broadcast', FcmChannel::class];
+        return ['broadcast', 'database', 'mail', FcmChannel::class];
     }
 
     /**
@@ -52,9 +58,12 @@ class CcpLimitReached extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->subject('Temperature alert')->markdown('emails.ccp_limit_reached', [
-            'ccpEscData' => $this->ccpEscData
-        ]);
+        return (new MailMessage)
+            ->subject('한계이탈 경고')
+            ->markdown('emails.ccp_limit_reached', [
+                'ccpEscData' => $this->ccpEscData
+            ]
+        );
     }
 
     /**
@@ -66,20 +75,21 @@ class CcpLimitReached extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'title' => 'Temperature alert',
-            'msg' => 'Device: '.$this->ccpEscData->DEVICE_ID.'. Temperature: ' . $this->ccpEscData->ESC_DATA,
+            'title' => '한계이탈 경고',
+            'msg' => $this->msg,
             'time' => now()->format('Y-m-d H:i:s'),
-            'data' => new CcpEscDataResource($this->ccpEscData)
+            'url' => null,
+            // 'data' => new CcpEscDataResource($this->ccpEscData)
         ];
     }
 
     public function toFcm($notifiable)
     {
         return FcmMessage::create()
-            ->setData(['ccp_esc_data' => new CcpEscDataResource($this->ccpEscData)])
+            // ->setData(['ccp_esc_data' => new CcpEscDataResource($this->ccpEscData)])
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                ->setTitle('Temperature alert')
-                ->setBody('Device: '.$this->ccpEscData->DEVICE_ID.'. Temperature: ' . $this->ccpEscData->ESC_DATA,))
+                ->setTitle('한계이탈 경고')
+                ->setBody('한계이탈장비: '.$this->device.'. 온도: ' . $this->data,))
             ->setAndroid(
                 AndroidConfig::create()
                     ->setFcmOptions(AndroidFcmOptions::create()->setAnalyticsLabel('analytics'))
