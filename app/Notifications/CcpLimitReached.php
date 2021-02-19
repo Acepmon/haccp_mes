@@ -88,8 +88,8 @@ class CcpLimitReached extends Notification implements ShouldQueue
         return FcmMessage::create()
             // ->setData(['ccp_esc_data' => new CcpEscDataResource($this->ccpEscData)])
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                ->setTitle('한계이탈 경고')
-                ->setBody('한계이탈장비: '.$this->device.'. 온도: ' . $this->data,))
+                ->setTitle('[CCP_NOTI] 한계이탈 경고')
+                ->setBody('[CCP_NOTI] 한계이탈장비: '.$this->device.'. 온도: ' . $this->data,))
             ->setAndroid(
                 AndroidConfig::create()
                     ->setFcmOptions(AndroidFcmOptions::create()->setAnalyticsLabel('analytics'))
