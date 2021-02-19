@@ -15,6 +15,7 @@ class SanctumController extends Controller
         $request->validate([
             'user_id' => 'required',
             'user_pw' => 'required',
+            'user_token' => 'nullable|string', // fcm token
         ]);
 
         $user = User::where('user_id', $request->input('user_id'))->first();
@@ -25,6 +26,9 @@ class SanctumController extends Controller
                 'msg' => '사용자 ID나 비밀번호가 틀렸습니다.'
             ], 422);
         }
+
+        $user->DEVICE_TOKEN = $request->input('user_token');
+        $user->save();
 
         $token = $user->createToken($user->USER_ID)->plainTextToken;
 
